@@ -94,7 +94,7 @@ const form = useFormik({
    
   return (
     <>
-     <main className='bg-white sm:border-[0.4px] sm:border-foundation-darkPurple form-margin rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
+     <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple form-margin rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
          <h2 className='text-2xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>Create new password</h2>
           <p className='text-base xs:mb-4 md:mb-8 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
           Kindly set up your account password</p>
@@ -148,7 +148,8 @@ const form = useFormik({
           </FormikProvider>
        
           <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
-                  <img alt="Client Portal powered by Profitall" src="/client-asset/Client_logo.svg" width={58} height={20} />
+                  <img alt='Client logo'
+                src='/client-asset/Logo_Landmark.svg' width={58} height={20} />
           </div>
     </main>
     <LoadingModal isOpen={isOpen} closeModal={closeModal} />

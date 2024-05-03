@@ -59,9 +59,9 @@ import  useOnClickOutside  from "../../hooks/useClickOutside";
     }
   return (
     <>
-     <main className='bg-white sm:border-[0.4px] sm:border-foundation-darkPurple form-margin rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
-         <h2 className='text-2xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>Password Set Up </h2>
-          <p className='text-base xs:mb-4 md:mb-8 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
+     <main className='bg-white sm:border-[0.4px] sm:mt-8 sm:border-foundation-darkPurple form-margin rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
+         <h2 className='text-xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>Password Set Up </h2>
+          <p className='text-xs sm:text-sm xs:mb-4  font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
           Kindly set up your account password</p>
           <Formik
             validationSchema={validationSchema}
@@ -75,7 +75,7 @@ import  useOnClickOutside  from "../../hooks/useClickOutside";
               }}>
                 {({handleChange}) =>{
                     return(
-                        <Form className='flex flex-col gap-4 mt-1'>
+                        <Form className='flex flex-col gap-2  '>
                                     <Input
                                     name='password'
                                     type={showPassword ? "text" : "password"}
@@ -126,7 +126,7 @@ import  useOnClickOutside  from "../../hooks/useClickOutside";
                              <button
                                 type='submit'
                                 disabled={false}
-                                className='bg-primary w-full rounded-lg text-white text-base mt-4 inline-flex gap-2 items-center justify-center text-center p-3 font-normal disabled:bg-opacity-50 disabled:cursor-not-allowed'
+                                className='bg-primary w-full rounded-lg text-white text-sm mt-4  inline-flex gap-2 items-center justify-center text-center p-3 font-normal disabled:bg-opacity-50 disabled:cursor-not-allowed'
                             >
                                 Set Up Account
                             </button>
@@ -134,8 +134,9 @@ import  useOnClickOutside  from "../../hooks/useClickOutside";
                     )
                 }}
           </Formik>
-          <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
-                  <img alt="Client Portal powered by Profitall" src="/client-asset/Client_logo.svg" width={58} height={20} />
+          <div className="w-full p-2 mt-8 hidden sm:flex  items-center justify-center">
+                  <img alt='Client logo'
+                src='/client-asset/Logo_Landmark.svg' width={68} height={20} />
           </div>
     </main>
     <LoadingModal isOpen={isOpen} closeModal={closeModal} />

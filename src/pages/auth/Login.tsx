@@ -72,11 +72,11 @@ export default function Login() {
 
  
   return (
-        <main className='bg-white sm:border-[0.4px] sm:border-foundation-darkPurple rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
-          <h2 className='text-2xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>
+        <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
+          <h2 className='text-xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>
             Login
           </h2>
-          <p className='text-base xs:mb-4 md:mb-8 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
+          <p className='text-sm xs:mb-4  font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
           Confirm your credentials to proceed
           </p>
           <FormikProvider   value={form}>
@@ -117,7 +117,7 @@ export default function Login() {
                       <input
                         id='remember-me'
                         type='checkbox'
-                        className='w-5 h-5 bg-transparent outline-none'
+                        className='w-3 h-3 bg-transparent outline-none'
                       />
                       <label htmlFor='remember-me' className='text-xs font-normal text-[#6F7174] '>
                       Remember me for the next 30 days
@@ -133,7 +133,7 @@ export default function Login() {
                     type='button'
                     disabled={form.isSubmitting}
                     onClick={() => form.handleSubmit()} 
-                    className='bg-primary w-full rounded-lg text-white text-base inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed'
+                    className='bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed'
                   >
                     {form.isSubmitting ? <Spinner /> : <>
                     Proceed <span><MdOutlineArrowForward size={16}  /></span>
@@ -177,7 +177,8 @@ export default function Login() {
                     Continue with Google
                   </button> */}
                   <div className="w-full bottom-logo p-4 hidden  items-center justify-center">
-                  <img alt="Client Portal powered by Profitall" src="/images/ClientPoweredByProfitall.svg" width={118}
+                  <img alt='Client logo'
+                src='/client-asset/Logo_Landmark.svg' width={118}
                             height={40} />
                   </div>
 

@@ -53,15 +53,15 @@ export const RequestPasswordReset  = () => {
      
       
   return (
-    <main className='bg-white sm:border-[0.4px] sm:border-foundation-darkPurple h-auto  rounded-lg  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[413px]'>
-            <h2 className='text-2xl font-gooperBlack font-extrabold sm:text-center  text-black mb-2'> Password Recovery </h2>
-            <p className='text-base mb-12 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
+    <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple h-auto  rounded-lg  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[413px]'>
+            <h2 className='text-xl font-gooperBlack font-extrabold sm:text-center  text-black mb-2'> Password Recovery </h2>
+            <p className='text-sm mb-4 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
             Lorem ipsum dolor sit amet consectetur. Urna eget lobortis rhoncus suspendisse cursus tristique eu turpis.
             </p>
            <FormikProvider
            value={form}
            >
-            <form className='flex flex-col gap-4'>
+            <form className='flex flex-col '>
             <TextInput
              {...form.getFieldProps("email")}
               name='email'
@@ -74,10 +74,10 @@ export const RequestPasswordReset  = () => {
                     type='button'
                     disabled={form.isSubmitting}
                     onClick={() => form.handleSubmit()}  
-                    className='bg-primary w-full rounded-lg text-white text-base inline-flex gap-2 mt-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed'
+                    className='bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 mt-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed'
                   >
                     {form.isSubmitting ? <Spinner /> : <>
-                    Proceed <span><MdOutlineArrowForward size={16}  /></span>
+                    Proceed <span><MdOutlineArrowForward size={12}  /></span>
                     </>}
                       
                   </button>
@@ -86,7 +86,7 @@ export const RequestPasswordReset  = () => {
 
            </FormikProvider>
           <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
-                  <img alt="Client Portal powered by Profitall" src="/client-asset/Client_logo.svg" width={58} height={20} />
+                  <img alt='Client logo' src='/client-asset/Logo_Landmark.svg' width={58} height={20} />
                   </div>
     </main>
   )
