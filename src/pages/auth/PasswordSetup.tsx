@@ -1,33 +1,30 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { MdMailOutline, MdOutlineLock } from "react-icons/md";
+import { MdOutlineLock, MdOutlineArrowForward  } from "react-icons/md";
 import * as Yup from "yup";
-import { Form, Formik, ErrorMessage } from "formik";
-import { useNavigate, Link } from "react-router-dom";
+import { Form, Formik } from "formik";
+import { useNavigate} from "react-router-dom";
 import usePasswordToggle from "../../hooks/usePasswordToggle";
 import TextInput from "../../components/FormInputs/TextInput2";
 import Input from "../../components/FormInputs/Input";
-import { Modal } from "../../components/Modal/StaffModal";
+import { LoadingModal, SetUp2FAModal, Select2FAMethodModal } from "../../components/Modal/AuthModel";
 
-import { LoadingModal } from "../../components/Modal/AuthModel";
+
+
 
 
  export const PasswordSetup = () => {
     const { showPassword, handleClickShowPassword } = usePasswordToggle();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     
 
-    const openModal = () => {
-      setIsOpen(true);
-    };
+  
   
     const closeModal = () => {
       setIsOpen(false);
     };
 
-    const handlePasswordChange = (e: any) => {
-        const password = e.target.value;
-      };
+ 
 
     const navigate = useNavigate();
 
@@ -52,11 +49,11 @@ import { LoadingModal } from "../../components/Modal/AuthModel";
     }
 
     const handleSubmit = (values: any) => {
-      openModal();
-      console.log(values);
-      setTimeout(() => {
-        navigate('/login');
-      }, 5000);
+      setIsOpen(true);
+      console.log(isOpen);
+      // setTimeout(() => {
+      //   navigate('/login');
+      // }, 5000);
     }
   return (
     <>
@@ -68,7 +65,7 @@ import { LoadingModal } from "../../components/Modal/AuthModel";
             validationSchema={validationSchema}
             initialValues={userPassword}
             onSubmit={(values, formikActions) => {
-              console.log("hello")
+              
                 if (values) {
                  
                   handleSubmit(values);
@@ -129,7 +126,7 @@ import { LoadingModal } from "../../components/Modal/AuthModel";
                                 disabled={false}
                                 className='bg-primary w-full rounded-lg text-white text-sm mt-4  inline-flex gap-2 items-center justify-center text-center p-3 font-normal disabled:bg-opacity-50 disabled:cursor-not-allowed'
                             >
-                                Set Up Account
+                               Proceed <span><MdOutlineArrowForward size={16}  /></span>
                             </button>
                         </Form>
                     )
@@ -139,8 +136,10 @@ import { LoadingModal } from "../../components/Modal/AuthModel";
                   <img alt='Client logo'
                 src='/client-asset/Logo_Landmark.svg' width={68} height={20} />
           </div>
+          {/* <LoadingModal isOpen={isOpen} closeModal={closeModal} type="account" /> */}
+          <Select2FAMethodModal isOpen={isOpen} closeModal={closeModal} />
     </main>
-    <LoadingModal isOpen={isOpen} closeModal={closeModal} />
+    
     
     </>
    
