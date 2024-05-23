@@ -4,6 +4,7 @@ import { paramsObjectToQueryString } from "../utils/functions";
 export const MerchantService = {
   getallMerchants: (payload: any) => createApiClient(false).get(`/merchant${paramsObjectToQueryString(payload)}`, payload),
   getMercharntDetails: (payload: any) => createApiClient(false).get(`/merchant/${payload.id}`),
-  getMerchantRequest: (payload:any) => createApiClient(false).get(`/merchant-request`)
+  getMerchantRequest: (payload:any) => createApiClient(false).get(`/merchant-request`),
+  getMerchantDiscovery: (payload:any) => createApiClient(false).get(`/external-api/get-all-merchants/${paramsObjectToQueryString(payload)}`)
 
 }

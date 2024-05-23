@@ -24,7 +24,7 @@ export const ViewProductModal = ({product, closeViewModal, isOpen}: any) => {
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8'>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                <ProductImageCarousel images={product.images} />
+                <ProductImageCarousel images={product.gallery_image} />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -109,7 +109,7 @@ export const ViewProductDiscoveryModal = ({product, closeViewModal, isOpen}: any
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8 '>
                  <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                     <ProductImageCarousel images={product.images} />
+                     <ProductImageCarousel images={product.gallery_image} />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -127,8 +127,8 @@ export const ViewProductDiscoveryModal = ({product, closeViewModal, isOpen}: any
                         <div>
                             <h2 className='font-bold font-satoshiBold text-sm text-primary-subtext'>Categories</h2>
                             <div className='w-auto flex gap-2 mt-2'>
-                            {product && product.categories &&product.categories.map((category:string, index:number) => (
-                                    <p  key={category} className='text-primary text-xs bg-foundation-lightPurple px-2 py-1'>{category}</p>
+                            {product && product.categories &&product.categories.map((category:any, index:number) => (
+                                    <p  key={category} className='text-primary text-xs bg-foundation-lightPurple px-2 py-1'>{category.title}</p>
                                 ))}
                             </div>
                             
@@ -198,9 +198,9 @@ interface Props {
 const Categories: React.FC<Props> = ({ categories }) => {
     return (
         <div className='flex gap-1 mt-1'>
-            { categories && categories.map((category, index) => (
+            { categories && categories.map((category:any, index) => (
                 <React.Fragment key={index}>
-                    <p className='text-primary-text text-base font-medum font-satoshiMedium'>{category}</p>
+                    <p className='text-primary-text text-base font-medum font-satoshiMedium'>{category.title}</p>
                     {index !== categories.length - 1 && <div className='border-r-[1px] pr-1'></div>}
                 </React.Fragment>
             ))}

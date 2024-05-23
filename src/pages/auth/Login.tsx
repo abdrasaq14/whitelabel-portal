@@ -38,6 +38,7 @@ export default function Login() {
     },
     validationSchema,
     onSubmit: (values: any) => {
+      sessionStorage.setItem("loginRequest", JSON.stringify(values))
       handleSubmit.mutate(values);
     },
   });
@@ -49,17 +50,10 @@ export default function Login() {
     },
     {
       onSuccess: (response) => {
-        AuthActions.setToken(response.data.authToken);
-        if(response.data.user.role) {
-          AuthActions.setProfile(response.data.user)
-          toast.success("login successful");
-          form.setSubmitting(false)
-          requestAnimationFrame(() => {
-            router("/dashboard");
-          });
-        }else{
-          toast.error("You do no not have access to this platform")
-        }
+       toast.success(response.data.result.otpMessage)
+       requestAnimationFrame(() => {
+        router("/authenticate");
+    });
 
       },
       onError: (err: any) => {

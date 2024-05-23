@@ -7,6 +7,7 @@ import StarRating from '../Rating.tsx';
 import CopyToClipboard from '../CopytoClipboard/Copy';
 import { MdOutlineArrowForward } from "react-icons/md";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { fDate } from '../../utils/formatTime';
 
 export const ViewAddMerchantModal = ({merchant, closeViewModal, isOpen}: any) => {
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -51,18 +52,18 @@ export const ViewAddMerchantModal = ({merchant, closeViewModal, isOpen}: any) =>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Name</p>
-                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.storeName}</p>
+                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.businessName}</p>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Link</p>
                 <div className=' flex justify-between w-full'>
-                    <p className='text-primary-text text-base font-medum font-satoshiMedium'>{merchant.storeLink}</p>
-                    <CopyToClipboard text={merchant.storeLink} />
+                    <p className='text-primary-text text-base font-medum font-satoshiMedium'>{merchant?.storeLink}</p>
+                    <CopyToClipboard text={merchant?.storeLink} />
                 </div>
             </div>
             <div className='mt-2 w-full'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Product  Categories</p>
-                <Categories categories={merchant.categories} />
+                <h3>{merchant?.category}</h3>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Products</p>
@@ -70,15 +71,15 @@ export const ViewAddMerchantModal = ({merchant, closeViewModal, isOpen}: any) =>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Location</p>
-                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.location}</p>
+                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '></p>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Address</p>
-                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.storeAddress}</p>
+                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.businessName}</p>
             </div>
             <div className='mt-2'>
                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Date Joined</p>
-                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.dateJoined}</p>
+                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.createdAt && fDate(merchant?.createdAt)}</p>
             </div>
             </div>
             <div className='w-full mt-4 flex justify-end'>

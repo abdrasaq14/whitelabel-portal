@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchInput from '../../../components/FormInputs/SearchInput'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
 import { mockProductList } from '../../../utils/ProductList'
@@ -14,6 +14,8 @@ const AllProducts = () => {
   const [product, setProduct] = useState({})
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [showFilter, setShowFilter] = useState<boolean>(false)
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row)
@@ -23,6 +25,22 @@ const AllProducts = () => {
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
+
+
+  useEffect(() => {
+    // refetch()
+ },[])
+
+const handlePageSize = (val: any) => {
+    setPageSize(val);
+    // setFilterParams({ ...filterParams, pageSize: val });
+};
+
+const handleCurrentPage = (val: any) => {
+    setCurrentPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+};
+
   return (
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
