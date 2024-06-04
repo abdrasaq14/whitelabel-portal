@@ -146,10 +146,10 @@ interface Props {
 const Categories: React.FC<Props> = ({ categories }) => {
   return (
     <div className='flex flex-nowrap items-center gap-1'>
-      {categories && categories.map((category:any, index:number) => (
+      {categories && categories.map((category: any, index: number) => (
         <div className='flex flex-nowrap items-center gap-1' key={index}>
           <p>{category?.title}</p>
-          {index !== (categories.length - 1) && "|"} 
+          {index !== (categories.length - 1) && "|"}
         </div>
       ))}
     </div>

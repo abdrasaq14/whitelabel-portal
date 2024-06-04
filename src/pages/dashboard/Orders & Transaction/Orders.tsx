@@ -7,11 +7,62 @@ import { Modal } from '../../../components/Modal/StaffModal';
 import { formatAmount } from '../../../utils/Helpfunctions';
 import CopyToClipboard from '../../../components/CopytoClipboard/Copy';
 import { InfoCard } from '../../../components/InfoCard/InfoCard';
+import useFetchWithParams from '../../../hooks/useFetchWithParams';
+import { OrderService } from '../../../services/order.service';
+import { fDateTime } from '../../../utils/formatTime';
+
+interface PaginationInfo {
+  currentPage: number;
+  pageSize: number;
+}
 
 
 const Orders = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [order, setOrder] = useState({})
+
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("")
+
+  const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
+    const { currentPage, pageSize } = pageInfo;
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
+
+  const { data: allOrders, isLoading, refetch } = useFetchWithParams(
+    ["query-all-orders", {
+      page: currentPage, limit: pageSize, search, platform:'landmark'
+    }],
+    OrderService.getOrders,
+    {
+      onSuccess: (data: any) => {
+        // console.log(data.data);
+      },
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    }
+  )
+
+  console.log(allOrders && allOrders.result.results)
+
+
+  useEffect(() => {
+    refetch()
+  }, [])
+
+  const handlePageSize = (val: any) => {
+    setPageSize(val);
+    // setFilterParams({ ...filterParams, pageSize: val });
+  };
+
+  const handleCurrentPage = (val: any) => {
+    setCurrentPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+  };
+
 
 
 
@@ -41,9 +92,9 @@ const Orders = () => {
               </div>
         </div>
           {
-             OrderDetailsMockData && OrderDetailsMockData.data.length > 0 ? (
+             allOrders && allOrders.result.results.length > 0 ? (
               <div className='h-auto flex-grow '>
-              <Table data={OrderDetailsMockData?.data}
+              <Table data={ allOrders && allOrders.result.results}
               hideActionName={true}
                 rowActions={(row: any) => [
                   {
@@ -57,20 +108,23 @@ const Orders = () => {
                 columns={[
                   {
                     header: "S/N",
-                    view: (row: any) => <div className="pc-text-blue">{row.id}</div>
+                    view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
+                      currentPage,
+                      pageSize
+                    })}</div>
                   },
                   {
                     header: "Order Id",
-                    view: (row: any) => <div>{row.OrderId}</div>,
+                    view: (row: any) => <div>{row.orderReference}</div>,
                   },
                   {
                     header: "Amount",
                     view: (row: any) => <div>  
-                      {formatAmount(row.amount)}</div>,
+                      {formatAmount(row.totalPrice)}</div>,
                   },
                   {
                     header: "Date",
-                    view: (row: any) => <div>{row.Date}</div>,
+                    view: (row: any) => <div>{fDateTime(row.orderedAt)}</div>,
                   },
                   {
                     header: "Status",
@@ -78,8 +132,16 @@ const Orders = () => {
                   },
                  
                 ]}
-                loading={false}
-                pagination={OrderDetailsMockData.pagination}
+                loading={isLoading}
+                pagination={
+                  {
+                    page: currentPage,
+                    pageSize: pageSize,
+                    totalRows: allOrders?.result.totalPages,
+                    setPageSize: handlePageSize,
+                    setPage: handleCurrentPage
+                  }
+                }
   
               />
               <OrderModal isOpen={isViewModalOpen} order={order} closeViewModal={closeViewModal} />
@@ -104,7 +166,7 @@ export default Orders
 
 const Label =({status}: any) => {
   return(
-    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${status === "pending"  && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered"  && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled"  && "text-red-600 bg-red-200"} `}>{status}</p>
+    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${status === "pending" || status =="NEW"  && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered"  && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled"  && "text-red-600 bg-red-200"} `}>{status}</p>
   )
 }
 
@@ -115,7 +177,7 @@ const OrderModal = ({order, closeViewModal, isOpen,}: any) => {
       <div className='bg-primary px-4 py-2 rounded-t-md flex justify-between items-center'>
         <div>
           <h1 className='text-white text-base font-medium font-satoshiMedium'>Order Details</h1>
-          <p className='text-white text-sm font-bold mt-1 font-satoshiBold'>{order.OrderId}</p>
+          <p className='text-white text-sm font-bold mt-1 font-satoshiBold'>{order.orderReference}</p>
         </div>
         <Label status={order?.status} />
       </div>
@@ -123,42 +185,42 @@ const OrderModal = ({order, closeViewModal, isOpen,}: any) => {
       <div className='flex justify-between w-full'>
             <div className='flex gap-2'>
               <img alt='Customer Name' src='/icons/profile-2user.svg'/>
-              <div>
-              <p className='text-[#4D5154] text-base font-medium font-sashoshiMedium'> Customer Name</p>
-              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.customerInfo?.name}</p>
+              <div className=''>
+              <p className='text-[#4D5154] text-base whitespace-nowrap  font-medium font-sashoshiMedium'> Customer Name</p>
+              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.delivery_name}</p>
               </div>
            
            </div>
-            <CopyToClipboard text={order?.customerInfo?.name} />
+            <CopyToClipboard text={order?.delivery_name} />
           </div>
           <div className='flex justify-between w-full'>
             <div className='flex gap-2'>
               <img alt='Customer Phone Number' src='/icons/call.svg'/>
               <div>
-              <p className='text-[#4D5154] text-base font-medium font-sashoshiMedium'> Customer Phone Number</p>
-              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.customerInfo?.phone}</p>
+              <p className='text-[#4D5154] text-base whitespace-nowrap font-medium font-sashoshiMedium'> Customer Phone Number</p>
+              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.phone}</p>
               </div>
            
            </div>
-            <CopyToClipboard text={order?.customerInfo?.phone} />
+            <CopyToClipboard text={order?.phone} />
           </div>
           <div className='flex justify-between w-full'>
             <div className='flex gap-2'>
               <img alt='Date of Order' src='/icons/calendar-2.svg'/>
               <div>
-              <p className='text-[#4D5154] text-base font-medium font-sashoshiMedium'>Date of order</p>
-              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.Date}</p>
+              <p className='text-[#4D5154] whitespace-nowrap text-base font-medium font-sashoshiMedium'>Date of order</p>
+              <p className='text-[#2B2C34] whitespace-nowrap text-sm font-medium font-sashoshiMedium'>{order?.orderedAt && fDateTime(order?.orderedAt)}</p>
               </div>
            
            </div>
-            <CopyToClipboard text={order?.Date} />
+            <CopyToClipboard text={order?.orderedAt} />
           </div>
           <div className='flex justify-between w-full'>
             <div className='flex gap-2'>
               <img alt='Number of Items' src='/icons/note.svg'/>
               <div>
-              <p className='text-[#4D5154] text-base font-medium font-sashoshiMedium'>NO. OF ITEMS</p>
-              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.quantity}</p>
+              <p className='text-[#4D5154] text-base whitespace-nowrap font-medium font-sashoshiMedium'>NO. OF ITEMS</p>
+              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.products && order?.products.length}</p>
               </div>
            
            </div>
@@ -169,7 +231,7 @@ const OrderModal = ({order, closeViewModal, isOpen,}: any) => {
               <img alt='Order Amount' src='/icons/moneys.svg'/>
               <div>
               <p className='text-[#4D5154] text-base font-medium font-sashoshiMedium'>Amount</p>
-              <p className='text-[#2B2C34] text-base font-medium font-sashoshiMedium'>{order?.amount}</p>
+              <p className='text-[#2B2C34] text-sm font-medium font-sashoshiMedium'>{order?.totalPrice && formatAmount(order?.totalPrice)}</p>
               </div>
            
            </div>
