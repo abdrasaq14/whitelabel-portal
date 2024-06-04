@@ -1,15 +1,13 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { MdMailOutline, MdOutlineLock } from "react-icons/md";
+import { MdOutlineLock, MdOutlineArrowForward  } from "react-icons/md";
 import * as Yup from "yup";
 import { Form, Formik, ErrorMessage } from "formik";
 import { useNavigate, Link, useParams, useSearchParams } from "react-router-dom";
 import usePasswordToggle from "../../hooks/usePasswordToggle";
 import TextInput from "../../components/FormInputs/TextInput2";
 import Input from "../../components/FormInputs/Input";
-import { Modal } from "../../components/Modal/StaffModal";
-
-import { LoadingModal } from "../../components/Modal/AuthModel";
+import { LoadingModal, SetUp2FAModal, Select2FAMethodModal } from "../../components/Modal/AuthModel";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../zustand/auth.store";
 import { useMutation } from "react-query";
