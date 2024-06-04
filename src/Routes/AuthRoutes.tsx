@@ -7,6 +7,7 @@ import { PasswordSetup } from "../pages/auth/PasswordSetup";
 import { IModuleRouter } from "./index";
 import OnboardingLayout from "../pages/auth/layout/onboardingLayout";
 import { PasswordRecovery } from "../pages/auth/PasswordRecovery";
+import Authenticate from "../pages/auth/Authenticate";
 
 export const AuthRouter: IModuleRouter = {
   key: "auth",
@@ -29,6 +30,10 @@ export const AuthRouter: IModuleRouter = {
     {
       path: "/password-setup",
       element: <PasswordSetup />,
+    },
+    {
+      path: "/authenticate",
+      element: <Authenticate />,
     },
     {
       path: "/reset-password",

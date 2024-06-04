@@ -58,14 +58,14 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
     <div>
       <Slider ref={mainCarouselRef} {...mainCarouselSettings}>
         {images.map((image, index) => (
-          <div key={index} className='w-full h-[150px]  '>
+          <div key={index} className='w-full flex h-[150px]  '>
             <img src={image} alt={`Product ${index + 1}`} className='object-cover h-full w-full' />
           </div>
         ))}
       </Slider>
       <Slider {...thumbnailCarouselSettings}>
         {images.map((image, index) => (
-          <div className='grid grid-cols-4 h-28 w-14 gap-1 ' key={index} onClick={() => handleThumbnailClick(index)}>
+          <div className='grid grid-cols-4 h-28 w-14 gap-2 ' key={index} onClick={() => handleThumbnailClick(index)}>
             <img className='col-span-1 object-cover h-full w-full ' src={image} alt={`Thumbnail ${index + 1}`} />
           </div>
         ))}

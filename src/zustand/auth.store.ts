@@ -2,7 +2,7 @@ import { AxiosBasicCredentials } from "axios";
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
 
-type ROLE = "IBILE_ADMIN" | "IBILE_AMBASSADOR" | "IBILE_AGENT"
+type ROLE = "ADMIN" | "STAFF"
 
 interface Auth {
   username: string;
@@ -38,7 +38,7 @@ export const useAuth = create(
             profile: null,
             role: null,
           });
-          if(useAuth.getState().loggedIn) window.location.replace("/login")
+          if(useAuth.getState().loggedIn === false) window.location.replace("/login")
         },
       })
     ),

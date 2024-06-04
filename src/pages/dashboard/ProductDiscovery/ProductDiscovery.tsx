@@ -54,13 +54,6 @@ const ProductDiscovery = () => {
                 </Button>
               ))}</p>
             </div>
-            <div className='flex justify-between items-center'>
-                <div className='max-w-[200px]'>
-                <SearchInput placeholder='Search for products' />
-                </div>
-                
-                <p>Filter</p>
-            </div>
             <div className='mt-4'>{displayAccountContent(tabIndex)}</div>
         </div>
         </div>
