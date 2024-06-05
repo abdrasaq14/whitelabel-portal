@@ -8,6 +8,8 @@ import { sampleVendorData } from '../../utils/ProductList'
 import SelectDropdown from '../../components/FormInputs/Select'
 import HelpDesk from '../../components/HelpDesk/Helpdesk'
 import { useAuth } from '../../zustand/auth.store'
+import { useQuery } from 'react-query'
+import { DashboardService } from '../../services/dashboard.service'
 
 const Dashboard = () => {
   const timeline =[ "All", "Last Month", "This Month"]
@@ -30,9 +32,58 @@ const Dashboard = () => {
     { value: 'merchants', label: 'Merchants' },
   ];
  
+
+  const { data: monthlySales, } = useQuery(
+    "query-dashboard-monthlty-sales",
+   async () => {
+     return await DashboardService.getMonthleySales();
+   },
+   {
+     enabled: true,
+     onSuccess: (res) => {
+     },
+     onError: (err: any) => {
+       console.log("Error Occured:", err.response);
+     },
+
+   }
+ );
+
+ const { data: infoCardDetails, refetch, } = useQuery(
+  "query-dashboard-dashboard-stats",
+ async () => {
+   return await DashboardService.getDashboardstat();
+ },
+ {
+   enabled: true,
+   onSuccess: (res) => {
+   },
+   onError: (err: any) => {
+     console.log("Error Occured:", err.response);
+   },
+
+ }
+);
+
+const { data: topVentures, } = useQuery(
+  "query-dashboard-Top-5-Revenue-Generation-Ventures",
+ async () => {
+   return await DashboardService.getTopVentures();
+ },
+ {
+   enabled: true,
+   onSuccess: (res) => {
+   },
+   onError: (err: any) => {
+     console.log("Error Occured:", err.response);
+   },
+
+ }
+);
   // const profile = useAuth((state) => state.profile);
   // console.log(profile)
 
+  console.log(infoCardDetails)
 
   const handleSelectChange = (selectedValue: string) => {
     setSelectedOption(selectedValue);

@@ -36,7 +36,7 @@ const ProductDiscovery = () => {
   },[tabIndex])
   return (
     <div className='px-4 pt-8 h-full'>
-         <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
+        <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
             <div className='flex  justify-between items-center'>
             <BreadCrumbClient backText="Dashboard" currentPath="Product Discovery" brand='Jumia' />
             <p className='border border-primary rounded-xl bg-[#C8CCD0] '>{accountTabTitle.map((val,index) => (
@@ -53,13 +53,6 @@ const ProductDiscovery = () => {
                   {val.title}
                 </Button>
               ))}</p>
-            </div>
-            <div className='flex justify-between items-center'>
-                <div className='max-w-[200px]'>
-                <SearchInput placeholder='Search for products' />
-                </div>
-                
-                <p>Filter</p>
             </div>
             <div className='mt-4'>{displayAccountContent(tabIndex)}</div>
         </div>

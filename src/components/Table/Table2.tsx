@@ -27,7 +27,7 @@ export interface ITableProps<TRow> {
   data?: NonNullable<TRow[]> | undefined;
   loading: boolean;
   emptyMessage?: React.ReactNode;
-  onSelectRows?: (e:any) => any;
+  onSelectRows?: (e: any) => any;
   columns: Array<{
     header: React.ReactNode;
     view: (
@@ -76,7 +76,7 @@ export function Table<TRow extends {}>({
     };
   }, []);
 
-  // console.log(selectedRows)
+  // console.log(data)
 
   useEffect(() => {
     if (selectAll) {
@@ -90,22 +90,22 @@ export function Table<TRow extends {}>({
       setSelectedRows(new Map());
     }
 
-  
+
   }, [selectAll, data]);
 
-  console.log(selectedRows)
+  // console.log(selectedRows)
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
   };
 
   useEffect(() => {
-   onSelectRows && onSelectRows(selectedRows)
+    onSelectRows && onSelectRows(selectedRows)
   }, [selectedRows])
 
 
   const handleRowSelect = (rowIndex: number, row: TRow) => {
-    
+
     setSelectedRows((prevSelectedRows) => {
       const newSelectedRows = new Map(prevSelectedRows);
       if (newSelectedRows.has(rowIndex)) {
@@ -152,9 +152,9 @@ export function Table<TRow extends {}>({
         {/* <!-- body --> */}
         <div className="flex-1 overflow-hidden relative px-4">
           {props.loading && (
-            <div className="absolute top-0 w-full  z-10 text-center">
+            <div className="absolute flex justify-center items-center top-0 w-full h-full  z-10 text-center">
               {/* <Loader type="bar" /> */}
-              <Spinner />
+              <Spinner color="#000000" />
             </div>
           )}
           <div className="flex justify-between py-6">
@@ -179,133 +179,132 @@ export function Table<TRow extends {}>({
           <div>
             {props.topSlot && <div className="px-3  py-3">{props.topSlot}</div>}
           </div>
-          <div className="h-full w-full overflow-x-hidden hover:overflow-x-auto custom-scrollbar relative">
-            <table className="table  table-auto w-full border-collapse border-[#E4E7EC] ">
-              <thead className=" sticky top-0">
-                <tr className="py-1  border-b !border-[#E4E7EC] h-[2.813rem]">
-                  {props.bulkAction && <th></th>}
-                  <th className="px-4 mx-2 bg-[#F4F5F6] w-0">
-                    <input
-
-                      type="checkbox"
-                      checked={selectAll}
-                      onChange={handleSelectAll}
-                      name=""
-                      id=""
-                      className="w-4 h-4 bg-red-500"
-                    />
-                  </th>
-                  {columns.map((col) => {
-                    const view = data[0] && col.view(data[0], 0);
-                    const isAnObject =
-                      typeof view !== "string" &&
-                      typeof view !== "boolean" &&
-                      typeof view !== "number" &&
-                      view &&
-                      "desktop" in view;
-                    if (id) {
-                      return null;
-                    }
-                    if (
-                      isMobile.get &&
-                      isAnObject &&
-                      view &&
-                      view?.mobile === false
-                    )
-                      return null;
-                    return (
-                      <th
-                        key={`${col.header}-head`}
-                        className="text-mid-night-80 whitespace-nowrap text-[12px] capitalize font-normal text-left px-5 py-3 bg-[#F4F5F6]   max-w-sm"
-                      >
-                        <span>{col.header}</span>
-                      </th>
-                    );
-                  })}
-                  {props.rowActions &&
-                    props.rowActions({} as any, 0).length > 0 && (
-                      <th
-                        className="text-mid-night-80 text-[14px] font-normal bg-[#F4F5F6]  text-right px-6 py-3 whitespace-nowrap
-                      pc-bg-gray-2  first:rounded-tl-lg last:rounded-tr-lg max-w-sm"
-                      >
-                        {hideActionName ? "" : "Action"}
-                      </th>
-                    )}
-                </tr>
-              </thead>
-              <tbody className="px-4 mt-5 text-mid-night-80/80 ">
-                {data.length < 1 && !props.loading && (
-                  <tr className=" text-base">
-                    <td colSpan={columns.length + 1} className="py-40">
-                      <div className="w-full grid place-content-center">
-                        {props.emptyMessage ?? (
-                          <TableEmpty
-                            title="Nothing to see yet"
-                            subtitle="Records will be listed here"
-                          />
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                )}
-                {data.map((row, rowIndex) => (
-                  <tr
-                    key={`row-${rowIndex}`}
-                    className={clsx(
-                      "px-5 py-1 h-[4.5rem]",
-                      "text-sm",
-                      noDivider
-                        ? ""
-                        : "border-b last:border-b-0 border-[#E4E7EC]",
-                      "bg-white ",
-                      props.clickRowAction &&
-                      "hover:bg-fara-blue/10 cursor-pointer"
-                    )}
-                  >
-                    <td className="px-4">
+          {
+            !props.loading && <div className="h-full w-full overflow-x-hidden hover:overflow-x-auto custom-scrollbar relative">
+              <table className="table  table-auto w-full border-collapse !border-[#E4E7EC] ">
+                <thead className=" sticky top-0">
+                  <tr className="py-1  border-b !border-[#E4E7EC] h-[2.813rem]">
+                    {props.bulkAction && <th></th>}
+                    <th className="px-4 mx-2 bg-[#F4F5F6] w-0">
                       <input
+
                         type="checkbox"
+                        checked={selectAll}
+                        onChange={handleSelectAll}
                         name=""
                         id=""
-                        checked={selectedRows.has(rowIndex)}
-                        onChange={() => handleRowSelect(rowIndex, row)}
-                        className="w-4 h-4 checked:shadow-xl border border-gray-500"
+                        className="w-4 h-4 bg-red-500"
                       />
-                    </td>
-                    {columns.map((col, colIndex) => (
-                      <TableCol
-                        key={`row-${rowIndex} + col-${colIndex}`}
-                        {...{
-                          col,
-                          row,
-                          rowIndex,
-                          id,
-                          isMobile: isMobile.get,
-                          clickRowAction: props.clickRowAction,
-                        }}
-                      />
-                    ))}
+                    </th>
+                    {columns.map((col) => {
+                      const view = data[0] && col.view(data[0], 0);
+                      const isAnObject =
+                        typeof view !== "string" &&
+                        typeof view !== "boolean" &&
+                        typeof view !== "number" &&
+                        view &&
+                        "desktop" in view;
+                      if (id) {
+                        return null;
+                      }
+                      if (
+                        isMobile.get &&
+                        isAnObject &&
+                        view &&
+                        view?.mobile === false
+                      )
+                        return null;
+                      return (
+                        <th
+                          key={`${col.header}-head`}
+                          className="text-mid-night-80 whitespace-nowrap text-[12px] capitalize font-normal text-left px-5 py-3 bg-[#F4F5F6]   max-w-sm"
+                        >
+                          <span>{col.header}</span>
+                        </th>
+                      );
+                    })}
                     {props.rowActions &&
                       props.rowActions({} as any, 0).length > 0 && (
-                        <td className="px-2">
-                          <div className="flex justify-end pr-6 pl-5">
-                            <Action
-                              variant="vertical"
-                              options={props.rowActions(row, rowIndex)}
-                            />
-                          </div>
-                        </td>
+                        <th
+                          className="text-mid-night-80 text-[14px] font-normal bg-[#F4F5F6]  text-right px-6 py-3 whitespace-nowrap
+                      pc-bg-gray-2  first:rounded-tl-lg last:rounded-tr-lg max-w-sm"
+                        >
+                          {hideActionName ? "" : "Action"}
+                        </th>
                       )}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="px-4 mt-5 text-mid-night-80/80 ">
+                  {data.length < 1 && !props.loading && (
+                    <tr className=" text-base">
+                      <td colSpan={columns.length + 1} className="py-40">
+                        <div className="w-full grid place-content-center">
+                          {props.emptyMessage ?? props.emptyMessage}
+
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {data.map((row, rowIndex) => (
+                    <tr
+                      key={`row-${rowIndex}`}
+                      className={clsx(
+                        "px-5 py-1 h-[4.5rem]",
+                        "text-sm",
+                        noDivider
+                          ? ""
+                          : "border-b last:border-b-0 !border-[#E4E7EC]",
+                        "bg-white ",
+                        props.clickRowAction &&
+                        "hover:bg-fara-blue/10 cursor-pointer"
+                      )}
+                    >
+                      <td className="px-4">
+                        <input
+                          type="checkbox"
+                          name=""
+                          id=""
+                          checked={selectedRows.has(rowIndex)}
+                          onChange={() => handleRowSelect(rowIndex, row)}
+                          className="w-4 h-4 checked:shadow-xl border border-gray-500"
+                        />
+                      </td>
+                      {columns.map((col, colIndex) => (
+                        <TableCol
+                          key={`row-${rowIndex} + col-${colIndex}`}
+                          {...{
+                            col,
+                            row,
+                            rowIndex,
+                            id,
+                            isMobile: isMobile.get,
+                            clickRowAction: props.clickRowAction,
+                          }}
+                        />
+                      ))}
+                      {props.rowActions &&
+                        props.rowActions({} as any, 0).length > 0 && (
+                          <td className="px-2">
+                            <div className="flex justify-end pr-6 pl-5">
+                              <Action
+                                variant="vertical"
+                                options={props.rowActions(row, rowIndex)}
+                              />
+                            </div>
+                          </td>
+                        )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          }
+
         </div>
 
         {/* footer */}
         {props.pagination && (
-          <div className="border-t h-14 mx-4 border-[#E4E7EC] relative z-0 bg-white">
+          <div className="border-t h-14 mx-4 !border-[#E4E7EC] relative z-0 bg-white">
             {/* pagination */}
             <Pagination
               {...props.pagination}
