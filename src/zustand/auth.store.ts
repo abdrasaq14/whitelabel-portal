@@ -4,10 +4,10 @@ import { combine, persist } from "zustand/middleware";
 
 type ROLE = "ADMIN" | "STAFF"
 
-interface Auth {
-  username: string;
-  password: string;
-}
+// interface Auth {
+//   username: string;
+//   password: string;
+// }
 
 export const useAuth = create(
   persist(

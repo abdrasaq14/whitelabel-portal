@@ -58,7 +58,6 @@ export default function Authenticate() {
         {
           onSuccess: (response) => {
            toast.success(response.data.result.otpMessage)
-    
           },
           onError: (err: any) => {
             toast.error(err.response.data.message);

@@ -1,8 +1,8 @@
 import { createApiClient } from "../utils/api";
 import { paramsObjectToQueryString } from "../utils/functions";
 
-let profile:any = sessionStorage.getItem("profitall-client-auth")
- profile = JSON.parse(profile)
+// let profile:any = sessionStorage.getItem("profitall-client-auth")
+//  profile = JSON.parse(profile)
 // console.log(profile.state.profile.whiteLabelName)
 
 export const MerchantService = {
