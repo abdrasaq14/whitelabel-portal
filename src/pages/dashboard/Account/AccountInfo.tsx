@@ -25,7 +25,7 @@ const AccountInfo = () => {
   return (
     <div className='px-4 pt-8 h-full'>
     <div className='bg-white rounded-md h-auto w-full p-4  flex flex-col'>
-       <BreadCrumbClient backText="Dashboard" currentPath="Account" brand='Jumia' />
+       <BreadCrumbClient backText="Dashboard" currentPath="Account" brand='Landmark' />
 
         <div className="pt-4 pb-10 bg-white rounded-2xl mx-2">
           <div className="flex items-center mb-10 justify-between gap-10 border-b w-full">

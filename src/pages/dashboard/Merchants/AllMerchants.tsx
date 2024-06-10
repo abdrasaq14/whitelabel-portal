@@ -9,6 +9,7 @@ import { MdFilterList } from 'react-icons/md';
 import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import StarRating from '../../../components/Rating.tsx';
+import { useAuth } from '../../../zustand/auth.store';
 
 const MerchantList = []
 
@@ -111,10 +112,18 @@ interface PaginationInfo {
 const AllMerchants = () => {
   const navigate = useNavigate()
   const [showFilter, setShowFilter] = useState<boolean>(false)
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("")
+  const profile:any = useAuth((s) => s.profile)
+
+
+  console.log(profile)
+
 
   const { data: allMerchants, isLoading } = useFetchWithParams(
     ["query-all-merchants", {
-
+      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName
     }],
     MerchantService.getallMerchants,
     {
@@ -132,17 +141,27 @@ const AllMerchants = () => {
     return (currentPage - 1) * pageSize + index + 1;
   };
 
-  console.log(allMerchants)
+  const handlePageSize = (val: any) => {
+    setPageSize(val);
+    // setFilterParams({ ...filterParams, pageSize: val });
+  };
+
+  const handleCurrentPage = (val: any) => {
+    setCurrentPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+  };
+
+  // console.log(allMerchants)
   return (
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-        <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Jumia' />
+        <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
           <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{MerchantList.length}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput placeholder='Search' />
+              <SearchInput value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -152,9 +171,9 @@ const AllMerchants = () => {
         {
           mockData.data.length > 0 ? (
             <div className='h-full flex-grow '>
-              <Table data={allMerchants}
-                clickRowAction={(e:any) => navigate(`../merchant/profile/${e._id}`)}
-                onSelectRows={(e: any) => { console.log(e) }}
+              <Table data={allMerchants && allMerchants.result.results}
+                clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
+                // onSelectRows={(e: any) => { console.log(e) }}
                 hideActionName={true}
 
                 rowActions={(row) => [
@@ -171,8 +190,8 @@ const AllMerchants = () => {
                   {
                     header: "S/N",
                     view: (row: any, i) => <div className="pc-text-blue">{generateSerialNumber(i, {
-                      currentPage:1,
-                      pageSize:100
+                      currentPage: 1,
+                      pageSize: 100
                     })}</div>
                   },
                   {
@@ -185,20 +204,28 @@ const AllMerchants = () => {
                   },
                   {
                     header: "CATEGORY",
-                    view: (row: any) => <Label variant="success" >{row?.category} </Label>,
+                    view: (row: any) => <div>{row?.category}</div>,
                   },
                   {
-                    header: "COUNTRY",
+                    header: "Location",
                     view: (row: any) => <div>{row.country}</div>,
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) =><Label variant={row.status === "Active" ? "success" :"danger"} >{row?.status} </Label>,
+                    view: (row: any) => <Label variant={row.status === "Active" ? "success" : "danger"} >{row?.status} </Label>,
                   }
                 ]}
-                loading={false}
-                pagination={mockData.pagination}
+                loading={isLoading}
+                pagination={
+                  {
+                    page: currentPage,
+                    pageSize: pageSize,
+                    totalRows: allMerchants?.result.totalPages,
+                    setPageSize: handlePageSize,
+                    setPage: handleCurrentPage
+                  }
 
+                }
               />
 
 

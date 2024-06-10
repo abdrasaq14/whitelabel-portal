@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { NavLink, useMatch, useLocation, useResolvedPath } from "react-router-dom";
 import { ChevronRightIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { IoStorefrontOutline } from "react-icons/io5";
 import { useRef, useState, useContext } from "react";
 import { useSingleState } from "../../hooks/useSingleState";
 import { LogoutContext } from "../../context/LogoutContext";
@@ -36,13 +37,12 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         )}
       >
         <img
-          src={companyDetails?.companyLogo ? companyDetails?.companyLogo :  '/client-asset/Client_logo.svg'}
+          src={'/client-asset/landmark_logo.png'}
           className={clsx(
-            "transition-[width] w-auto  h-[37.5px] "
+            "transition-[width] w-auto  h-[64px] "
           )}
           alt="Brand_logo"
         />
-        <h3 className="flex items-center gap-2">Powered By <img src="/images/profitall-logo.svg" alt="client logo" /></h3>
       </div>
       <nav
         id="Sidebar-nav"
@@ -60,14 +60,16 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         }}
         className={clsx(
           isCollapsed ? "w-full" : "w-full",
-          "flex-1 overflow-y-hidden hover:overflow-y-auto   custom-scrollbar"
+          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto   custom-scrollbar"
         )}
       >
 
         <SidebarItem />
 
+        <NavLink className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to=""><IoStorefrontOutline /> Visit Marketplace</NavLink>
+        <div className="w-full absolute bottom-4 mb-4 2xl:bottom-8 h-16  gap-3.5  flex items-center px-6">
 
-        <div className=" w-full bottom-4 mb-4 2xl:bottom-16 h-16  gap-3.5  flex items-center px-6">
+          
           <div className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
 
 
@@ -77,7 +79,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
                 }`}
             >
               <img
-                src={companyDetails?.companyLogo ? companyDetails?.companyLogo :  '/client-asset/Client_logo.svg'}
+                src={'/client-asset/landmark_logo.png'}
                 className={clsx(
                   "transition-[width] w-auto  h-[24.5px] "
                 )}
@@ -92,6 +94,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
             />
           </div>
         </div>
+
       </nav>
     </aside>
   );
@@ -161,16 +164,16 @@ export const SubItem = ({ items }: { items: any }) => {
 
           clsx(
             "flex items-center gap-3 cursor-pointer text-sm  px-3 py-2",
-            pathname.includes(items.path) ? "bg-primary rounded  " : ""
+            pathname.includes(`/${items.path}`) ? "bg-primary rounded  " : ""
 
           )
         }>
         <img className={clsx(
-          pathname.includes(items.path) ? "invert-[100%] brightness-0 h-4 w-4" : ""
+          pathname.includes(`/${items.path}`) ? "invert-[100%] brightness-0 h-4 w-4" : ""
         )} src={`/icons/sidebar/${items.iconName}.svg`} alt={items.path} style={{ objectFit: "contain" }} />
-        <h3 className={clsx("capitalize", pathname.includes(items.path) ? "text-white" : "")}>{items.name}</h3>
+        <h3 className={clsx("capitalize", pathname.includes(`/${items.path}`) ? "text-white" : "")}>{items.name}</h3>
 
-        <img src="/icons/arrow-down.svg" alt="" className={clsx("capitalize ml-auto", isOpen && "rotate-180", pathname.includes(items.path) ? "invert-[100%] brightness-0" : "")} />
+        <img src="/icons/arrow-down.svg" alt="" className={clsx("capitalize ml-auto", isOpen && "rotate-180", pathname.includes(`/${items.path}`) ? "invert-[100%] brightness-0" : "")} />
       </div>
       {isOpen && <>
         {items.children.map((item: any) =>
