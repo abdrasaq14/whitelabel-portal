@@ -12,11 +12,13 @@ import { useAuth } from '../../zustand/auth.store';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import { MerchantService } from '../../services/merchant.service';
+import { useNavigate } from 'react-router-dom';
 
 export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) => {
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const profile: any = useAuth((s) => s.profile)
+    const navigate = useNavigate()
 
 
     const handleAddMerchant = () => {
@@ -33,8 +35,8 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
                     toast.error(res.data.message)
                 } else {
                     setIsConfirmModalOpen(false);
-                   toast.success("Request to add the this merchant has been sent.")
-                   closeViewModal()
+                    toast.success("Request to add the this merchant has been sent.")
+                    closeViewModal()
                 }
 
             },
@@ -122,16 +124,16 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
                 <div className='w-full mt-4 flex justify-end'>
                     <button
                         type='button'
-                        onClick={handleAddMerchant}
+                        onClick={() => navigate(`./details/${merchant.id}`)}
                         disabled={false}
                         className='border-none bg-primary border-[1px] rounded-lg text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium '>
-                        Invite Merchant
+                        View all product
                     </button>
                 </div>
             </div>
 
 
-            <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to invite this Merchant ???" confirmAddition={handleMerchantAddedSuccess} />
+            {/* <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to invite this Merchant ???" confirmAddition={handleMerchantAddedSuccess} /> */}
 
         </Modal>
 
@@ -206,6 +208,51 @@ export const ConfirmModal = ({ isOpen, closeModal, confirmAddition, caption }: a
                     className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
                 >
                     Yes <span><MdOutlineArrowForward size={12} /></span>
+                </button>
+            </div>
+        </Modal>
+    )
+}
+
+
+
+
+export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: any) => {
+    const modalRef = useRef<any>();
+    useOnClickOutside(modalRef, () => {
+        closeModal();
+    });
+
+    const handleConfirmDelete = async () => {
+        await confirmDelete();
+        closeModal();
+    }
+
+    return (
+        <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col p-4 sm:p-8 align-middle max-w-2xl items-center rounded z-24 bg-white w-[70%] sm:w-[400px] h-auto'>
+            <div className=''>
+                <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
+            </div>
+            <div>
+                <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to suspend this Account ???</p>
+            </div>
+            <div className='w-full flex mt-4 justify-between  '>
+                <button
+                    type='button'
+                    onClick={() => closeModal()}
+                    disabled={false}
+                    className='border-primary-subtext border-[1px] rounded-lg text-primary text-sm inline-flex gap-2  items-center justify-center text-center sm:w-[40%] px-8 py-3 font-medium hover:bg-purple-700 hover:text-white '
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type='button'
+                    onClick={handleConfirmDelete}
+                    disabled={false}
+                    className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
+                >
+                    Yes  <span><MdOutlineArrowForward size={12} /></span>
                 </button>
             </div>
         </Modal>

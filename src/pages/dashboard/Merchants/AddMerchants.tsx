@@ -113,7 +113,7 @@ const AddMerchants = () => {
       <div className='px-4 pt-8 h-full'>
 
         <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-          <BreadCrumbClient backText="Dashboard" currentPath="Add Merchants" brand='Jumia' />
+          <BreadCrumbClient backText="Dashboard" currentPath="Add Merchants" brand='Landmark' />
           <div className='flex justify-between'>
 
             <div>
@@ -150,16 +150,16 @@ const AddMerchants = () => {
                       view: (row: any) => <div>{row.name}</div>,
                     },
                     {
-                      header: "Customer Rating",
-                      view: (row: any) => <StarRating totalRatings={4} />,
-                    },
-                    {
                       header: "CATEGORY",
                       view: (row: any) => <div>{row.category}</div>,
                     },
                     {
-                      header: "COUNTRY",
-                      view: (row: any) => <div>{row.country}</div>,
+                      header: "Customer Rating",
+                      view: (row: any) => <StarRating totalRatings={4} />,
+                    },
+                    {
+                      header: "Location",
+                      view: (row: any) => <div>{row.Location}</div>,
                     },
 
                   ]}

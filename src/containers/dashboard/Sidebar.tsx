@@ -60,7 +60,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         }}
         className={clsx(
           isCollapsed ? "w-full" : "w-full",
-          "flex-1 overflow-y-hidden hover:overflow-y-auto   custom-scrollbar"
+          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto   custom-scrollbar"
         )}
       >
 
@@ -164,16 +164,16 @@ export const SubItem = ({ items }: { items: any }) => {
 
           clsx(
             "flex items-center gap-3 cursor-pointer text-sm  px-3 py-2",
-            pathname.includes(items.path) ? "bg-primary rounded  " : ""
+            pathname.includes(`/${items.path}`) ? "bg-primary rounded  " : ""
 
           )
         }>
         <img className={clsx(
-          pathname.includes(items.path) ? "invert-[100%] brightness-0 h-4 w-4" : ""
+          pathname.includes(`/${items.path}`) ? "invert-[100%] brightness-0 h-4 w-4" : ""
         )} src={`/icons/sidebar/${items.iconName}.svg`} alt={items.path} style={{ objectFit: "contain" }} />
-        <h3 className={clsx("capitalize", pathname.includes(items.path) ? "text-white" : "")}>{items.name}</h3>
+        <h3 className={clsx("capitalize", pathname.includes(`/${items.path}`) ? "text-white" : "")}>{items.name}</h3>
 
-        <img src="/icons/arrow-down.svg" alt="" className={clsx("capitalize ml-auto", isOpen && "rotate-180", pathname.includes(items.path) ? "invert-[100%] brightness-0" : "")} />
+        <img src="/icons/arrow-down.svg" alt="" className={clsx("capitalize ml-auto", isOpen && "rotate-180", pathname.includes(`/${items.path}`) ? "invert-[100%] brightness-0" : "")} />
       </div>
       {isOpen && <>
         {items.children.map((item: any) =>

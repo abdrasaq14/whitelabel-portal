@@ -25,16 +25,28 @@ export const AdminDashRouter: IModuleRouter = {
       },
       () => import("../pages/dashboard/ProductDiscovery/ProductDiscovery")
     ),
+    LazyRoute(
+      {
+        path: "/inventory",
+      },
+      () => import("../pages/dashboard/Inventory/Inventory")
+    ),
+    LazyRoute(
+      {
+        path: "/discover-products/details/:id",
+      },
+      () => import("../pages/dashboard/ProductDiscovery/MerchantDetails")
+    ),
     // products
     LazyRoute(
       {
-        path: "/products",
+        path: "/product/all-products",
       },
       () => import("../pages/dashboard/Products/AllProducts")
     ),
     LazyRoute(
       {
-        path: "/blocked-products",
+        path: "/product/blocked-products",
       },
       () => import("../pages/dashboard/Products/BlockedProducts")
     ),
