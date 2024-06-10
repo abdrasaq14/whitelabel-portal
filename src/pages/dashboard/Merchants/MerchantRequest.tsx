@@ -18,7 +18,7 @@ const MerchantRequest = () => {
     ["query-all-merchants-request", {
       page:currentPage,
       limit:pageSize,
-      whiteLabelId: '6640b1c7f2ca9fbc3b26a5cf'
+      whiteLabelId: profile._id
 
     }],
     MerchantService.getMerchantRequest,
@@ -45,7 +45,7 @@ const MerchantRequest = () => {
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-        <BreadCrumbClient backText="Dashboard" currentPath="Merchant Request" brand='Jumia' />
+        <BreadCrumbClient backText="Dashboard" currentPath="Merchant Request" brand='Landmark' />
         <div className='flex justify-between'>
           <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{1}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
@@ -56,7 +56,8 @@ const MerchantRequest = () => {
           </div>
         </div>
 
-        <div className='py-4'>
+        {
+          allRequest ? <div className='py-4'>
 
           {
             allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
@@ -69,7 +70,16 @@ const MerchantRequest = () => {
             <Paginator setPage={handleCurrentPage} loading={isLoading} currentLength={allRequest && allRequest.result.length} totalRows={1} page={currentPage} pageSize={pageSize} />
           </div>
 
+        </div> : 
+        <div className='w-full h-[60vh] flex  items-center justify-center'>
+          <div>
+            <h3>No request at the moment</h3>
+          </div>
+
         </div>
+        }
+
+        
 
 
 

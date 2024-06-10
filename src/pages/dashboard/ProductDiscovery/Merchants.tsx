@@ -5,6 +5,7 @@ import { ViewAddMerchantModal } from '../../../components/Modal/MerchantModal';
 import { MerchantService } from '../../../services/merchant.service';
 import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import SearchInput from '../../../components/FormInputs/SearchInput';
+import { useAuth } from '../../../zustand/auth.store';
 
 
 
@@ -19,6 +20,7 @@ const Merchants = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const profile:any = useAuth((s) => s.profile)
   const [search, setSearch] = useState("")
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
@@ -29,7 +31,7 @@ const Merchants = () => {
 
   const { data: allMerchants, isLoading, refetch } = useFetchWithParams(
     ["query-all-merchants-discovery", {
-      page: currentPage, limit: pageSize, search
+      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName
     }],
     MerchantService.getMerchantDiscovery,
     {
@@ -70,7 +72,7 @@ const Merchants = () => {
       <div className='h-full flex-grow '>
         <div className='flex justify-between items-center'>
           <div >
-            <SearchInput value={search} onChange={(e:any) => setSearch(e.target.value)} className='w-[200px]'  placeholder='Search for products' />
+            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e:any) => setSearch(e.target.value)} className='w-[200px]'  placeholder='Search for merchant' />
           </div>
 
           <p>Filter</p>
@@ -111,7 +113,7 @@ const Merchants = () => {
               view: (row: any) => row?.category,
             },
             {
-              header: "Country",
+              header: "Location",
               view: (row: any) => <div>{row?.location.country}</div>,
             },
 

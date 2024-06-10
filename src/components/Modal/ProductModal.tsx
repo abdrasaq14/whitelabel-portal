@@ -46,12 +46,45 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
                         <div>
                             <h2 className='font-bold font-satoshiBold text-sm text-primary-subtext'>Categories</h2>
                             <div className='w-auto flex gap-2 mt-2'>
-                                {product && product.categories && product.categories.map((category: string, index: number) => (
-                                    <p key={category} className='text-primary text-xs bg-foundation-lightPurple px-2 py-1'>{category}</p>
-                                ))}
+                                <Categories categories={product.categories} />
                             </div>
 
                         </div>
+
+                    </div>
+
+                </div>
+                <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
+                    <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
+                    <p className='text-primary-subtext font-normal text-sm'>
+                        {product.description}
+                    </p>
+                    <div>
+                        <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
+                        <div className='mt-4'>
+                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Name</p>
+                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.productOwner}</p>
+                        </div>
+                        <div className='mt-4'>
+                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Rating</p>
+                            <div className='flex gap-2 items-center mt-1'>
+                                <p className=' text-primary-text text-base font-medum font-satoshiMedium'>{product.rating}/5</p>
+                                <StarRating totalRatings={product.rating} />
+                            </div>
+                        </div>
+                        <div>
+                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Link</p>
+                            <div className=' flex justify-between w-full'>
+                                <p className='text-primary-text text-base font-medum font-satoshiMedium'>{product.storeLink}</p>
+                                <CopyToClipboard text={product.storeLink} />
+                            </div>
+                        </div>
+                        <div className='mt-4 w-full'>
+                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Product  Categories</p>
+                            <Categories categories={product.categories} />
+
+                        </div>
+                       
 
                     </div>
 
@@ -97,8 +130,6 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const profile: any = useAuth((s) => s.profile)
 
-    console.log(profile);
-
 
     const handleAddProduct = () => {
         setIsConfirmModalOpen(true)
@@ -115,8 +146,8 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
                     toast.error(res.data.message)
                 } else {
                     setIsConfirmModalOpen(false);
-                   toast.success("Request to add the this product has been sent.")
-                   closeViewModal()
+                    toast.success("Request to add the this product has been sent.")
+                    closeViewModal()
                 }
 
             },

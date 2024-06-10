@@ -9,6 +9,7 @@ import { MdFilterList } from 'react-icons/md';
 import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import StarRating from '../../../components/Rating.tsx';
+import { useAuth } from '../../../zustand/auth.store';
 
 const MerchantList = []
 
@@ -114,11 +115,15 @@ const AllMerchants = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
+  const profile:any = useAuth((s) => s.profile)
+
+
+  console.log(profile)
 
 
   const { data: allMerchants, isLoading } = useFetchWithParams(
     ["query-all-merchants", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: "landmark"
+      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName
     }],
     MerchantService.getallMerchants,
     {
@@ -151,7 +156,7 @@ const AllMerchants = () => {
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-        <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Jumia' />
+        <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
           <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{MerchantList.length}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
@@ -167,7 +172,7 @@ const AllMerchants = () => {
           mockData.data.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
-                clickRowAction={(e: any) => navigate(`../merchant/profile/${e._id}`)}
+                clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
                 // onSelectRows={(e: any) => { console.log(e) }}
                 hideActionName={true}
 
@@ -202,7 +207,7 @@ const AllMerchants = () => {
                     view: (row: any) => <div>{row?.category}</div>,
                   },
                   {
-                    header: "COUNTRY",
+                    header: "Location",
                     view: (row: any) => <div>{row.country}</div>,
                   },
                   {

@@ -7,35 +7,31 @@ import ApiIntegration from './ApiIntegration'
 import Promotion from './Promotion'
 
 const Settings = () => {
-  const accountTabTitle = ['security', 'API Integration', 'settings', 'Promotion & Discount']
+  const accountTabTitle = ['security', 'settings']
   const [tabIndex, setTabIndex] = useState<number>(0)
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {
       case 0:
         return <Security />
-        // return <BioProfile />
+      // return <BioProfile />
       case 1:
-        return <ApiIntegration />
-      case 2:
         return <OtherSettings />
-        case 3:
-          return <Promotion />
       default:
         return <Security />
-        // return <BioProfile />
+      // return <BioProfile />
     }
   }
-  useEffect(()=>{
-   
-  },[tabIndex])
+  useEffect(() => {
+
+  }, [tabIndex])
   return (
     <div className='px-4 pt-8 h-full'>
-    <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-       <BreadCrumbClient backText="Dashboard" currentPath="Settings" brand='Jumia' />
-       <div className="pt-4 pb-10 bg-white rounded-2xl mx-2">
+      <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
+        <BreadCrumbClient backText="Dashboard" currentPath="Settings" brand='Landmark' />
+        <div className="pt-4 pb-10 bg-white rounded-2xl mx-2">
           <div className="flex items-center mb-10 justify-between gap-10 border-b w-full">
             <div className="flex items-center w-5/6 gap-2 flex-wrap">
-              {accountTabTitle.map((val,index) => (
+              {accountTabTitle.map((val, index) => (
                 <Button
                   key={index}
                   type="button"
@@ -43,7 +39,7 @@ const Settings = () => {
                     ${tabIndex === index && 'text-[#470E81] !border-b-[#470E81]'}
                     ${tabIndex !== index && 'text-[#6C6C73]'}
                   `}
-                  onClick={()=>setTabIndex(index)}
+                  onClick={() => setTabIndex(index)}
                 >
                   {val}
                 </Button>
@@ -52,8 +48,8 @@ const Settings = () => {
           </div>
           {displayAccountContent(tabIndex)}
         </div>
+      </div>
     </div>
-  </div>
   )
 }
 
