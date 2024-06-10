@@ -94,10 +94,10 @@ const { data: topVentures, } = useQuery(
   return (
     <div className='z-1'>
       <div className='md:px-6 py-6 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 px-2 items-center gap-3 justify-center'>
-        <InfoCard header = "Total Sales" value="543"  iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
-        <InfoCard header='Total Merchants' value='200' iconName='people'  />
-        <InfoCard  header = "Total Products" value="3472892"  iconName='3dcube' className=''/>
-        <InfoCard header='Lead Conversion' value='20%'  iconName='trend-up'  timeline={timeline2} />
+        <InfoCard header = "Total Sales" value={infoCardDetails ? infoCardDetails.data?.result.totalSales.toString() : '0'}  iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
+        <InfoCard header='Total Merchants' value={infoCardDetails ? infoCardDetails.data?.result.totalMerchants.toString() : '0'} iconName='people'  />
+        <InfoCard  header = "Total Products"  value={infoCardDetails ? infoCardDetails.data?.result.totalProducts.toString() : '0'}  iconName='3dcube' className=''/>
+        <InfoCard header='Lead Conversion' value={infoCardDetails ? infoCardDetails.data?.result.leadConversion.toString()+"%" : '0'}  iconName='trend-up'  timeline={timeline2} />
 
       </div>
 

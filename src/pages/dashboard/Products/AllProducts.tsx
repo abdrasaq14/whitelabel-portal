@@ -8,6 +8,8 @@ import { MdFilterList } from "react-icons/md";
 import Filter from '../../../components/Filter/Filter'
 import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { ProductService } from '../../../services/product.service'
+import { useAuth } from '../../../zustand/auth.store'
+import { fDateTime } from '../../../utils/formatTime'
 
 
 interface PaginationInfo {
@@ -19,9 +21,11 @@ interface PaginationInfo {
 const AllProducts = () => {
   const [product, setProduct] = useState({})
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [search, setSearch] = useState("")
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const profile:any = useAuth((s) => s.profile)
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row)
@@ -33,8 +37,8 @@ const AllProducts = () => {
   };
 
   const { data: allProducts, isLoading } = useFetchWithParams(
-    ["query-all-merchants", {
-     whiteLabelName: "landmark"
+    ["query-all-products", {
+      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName
     }],
     ProductService.getallProducts,
     {
@@ -71,9 +75,9 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-        <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Jumia' />
+        <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{mockProductList.data.length}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allProducts ? allProducts.result.results.length : 0}</span></h1>
 
         </div>
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
@@ -82,11 +86,12 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
           </div>
           <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
         </div>
-        {
-          mockProductList.data.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allProducts && allProducts.result.results}
                 hideActionName={true}
+                emptyMessage={ <div className='h-full flex-grow flex justify-center items-center'>
+                <img src='/images/NoProduct.svg' alt='No Product Found' />
+              </div>}
                 rowActions={(row) => [
                   {
                     name: "View Product",
@@ -117,7 +122,7 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
                   },
                   {
                     header: "Product Id",
-                    view: (row: any) => <div>{row._id}</div>,
+                    view: (row: any) => <div>{row.productIdOnProfitAll}</div>,
                   },
                   {
                     header: "Merchant",
@@ -129,24 +134,25 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
                   },
                   {
                     header: "Date Listed",
-                    view: (row: any) => <div>{row.dateListed}</div>,
+                    view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
                   },
 
                 ]}
                 loading={isLoading}
-                pagination={mockProductList.pagination}
+                pagination={
+                  {
+                    page: currentPage,
+                    pageSize: pageSize,
+                    totalRows: allProducts?.result.totalPages,
+                    setPageSize: handlePageSize,
+                    setPage: handleCurrentPage
+                  }
+                }
 
               />
               <ViewProductModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
             </div>
-          )
-            : (
-              <div className='h-full flex-grow flex justify-center items-center'>
-                <img src='/images/NoProduct.svg' alt='No Product Found' />
-              </div>
-            )
-        }
       </div>
     </div>
   )

@@ -10,7 +10,7 @@ const Notifications = () => {
         <div className='px-4 pt-8 h-full  '>
             <div className='flex items-center gap-6'>
                 <button onClick={() => navigate(-1) } className='flex items-center -mt-6 text-primary gap-2'><img className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
-                <BreadCrumbClient backText="Dashboard" currentPath="Notifications" brand='Jumia' />
+                <BreadCrumbClient backText="Dashboard" currentPath="Notifications" brand='Landmark' />
 
 
 

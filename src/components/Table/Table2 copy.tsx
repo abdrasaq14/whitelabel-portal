@@ -237,7 +237,7 @@ export function Table<TRow extends {}>({
                 <tbody className="px-4 mt-5 text-mid-night-80/80 ">
                   {data.length < 1 && !props.loading && (
                     <tr className=" !border-[#E4E7EC] text-base">
-                      <td colSpan={columns.length + 1} className="py-40">
+                      <td colSpan={columns.length + 1} className="!border-[#E4E7EC] py-40">
                         <div className="w-full grid place-content-center">
                           {props.emptyMessage ?? props.emptyMessage}
 
