@@ -10,6 +10,7 @@ import { useMutation } from 'react-query'
 import { InventoryService } from '../../services/inventory.service'
 import toast from 'react-hot-toast'
 import { formatAmount } from '../../utils/Helpfunctions'
+import useFetchWithParams from '../../hooks/useFetchWithParams'
 
 export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
@@ -165,6 +166,121 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete }
 
       </Modal>
 
+    </div>
+  )
+}
+
+
+
+export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
+  const profile: any = useAuth((s) => s.profile)
+  const form = useFormik({
+    initialValues: {
+      "name": "",
+      "image": "",
+      "categoryName": "",
+      "quantityIn": 0,
+      "quantityOut": 0,
+      "unitPrice": 0,
+      "whiteLabelName": profile.whiteLabelName
+    },
+
+    onSubmit: async (val) => {
+
+      await form.setFieldValue("whiteLabelName", profile.whiteLabelName)
+      console.log(val);
+      handleAddInventory.mutate(val)
+
+
+    }
+
+
+  })
+
+  const { data, isLoading, refetch } = useFetchWithParams(
+    ["query-all-inventory", {
+
+    }],
+    InventoryService.getInventoroes,
+    {
+      onSuccess: (data: any) => {
+        // console.log(data.data);
+      },
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    }
+  )
+
+
+  const handleAddInventory = useMutation(
+    async (values: any) => {
+      return await InventoryService.createInventory(values)
+    },
+
+    {
+      onSuccess: (res) => {
+        console.log(res);
+
+
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+      }
+    }
+  )
+  return (
+    <div>
+      <Modal open={isOpen} onClick={closeViewModal}>
+
+
+        <div className='md:w-[552px] w-full px-4 h-auto'>
+          <FormikProvider value={form}>
+            <form onSubmit={form.handleSubmit}>
+              <h3 className='text-2xl  mb-4 font-semibold'>Add Inventory</h3>
+
+              <div className='flex-col flex gap-3'>
+                <div>
+                  <label
+
+                    className='text-sm font-normal font-satoshiRegular text-[#344054]'
+                  >
+                    Available Inventories
+                  </label>
+                  <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("categoryName")} name='categoryName' >
+                    <option>Select inventory</option>
+
+                    {
+                    data && data?.result.map((items: any, id:any) => <option key={id} value={items}>{items}</option>)
+                    }
+
+                  </select>
+                </div>
+
+                <TextInput placeholder="Item name" name='name' label='Item Name' />
+                <TextInput placeholder="Enter Quantity" name='quantityIn' label='Quantity' />
+                <TextInput {...form.getFieldProps("unitPrice")} placeholder="0.00" name='unitPrice' label='Unit Price' />
+
+                <div>
+                  <label>Attached Image</label>
+
+                  <FileUpload name='image' />
+                </div>
+
+              </div>
+
+              <Button isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
+
+
+
+
+            </form>
+
+          </FormikProvider>
+
+        </div>
+
+      </Modal>
     </div>
   )
 }

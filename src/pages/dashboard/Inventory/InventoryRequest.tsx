@@ -19,6 +19,8 @@ const InventoryRequest = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
+    console.log(profile)
+
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-request", {
             page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
