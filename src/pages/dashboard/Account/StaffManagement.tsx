@@ -33,11 +33,11 @@ export const StaffManagement = () => {
   return (
     <div>
       <div className='flex flex-wrap gap-8 '>
-        <div className='max-w-[300px] w-full'>
+        <div className='max-w-[350px] w-full'>
           <h2 className='text-base font-satoshiBold  font-semibold text-primary-text'>Team Members</h2>
           <p className='mt-2 text-sm font-satoshiRegular font-normal text-primary-subtext'>Invite your colleagues to work faster and collaborate together.</p>
           <div className='mt-4 flex gap-2'>
-            <button className='border-[1px] !border-[#470E81] px-4 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-primary-text text-center flex items-center gap-2'>
+            <button className='border-[1px] whitespace-nowrap !border-[#470E81] px-4 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-primary-text text-center flex items-center gap-2'>
               <img
                 src="/icons/export.svg"
                 className="w-5 h-5"
@@ -48,7 +48,7 @@ export const StaffManagement = () => {
             <button
               type='button'
               onClick={handleAddStaffInfo}
-              className=' bg-[#470E81] px-4 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-white '>
+              className=' bg-[#470E81] whitespace-nowrap px-4 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-white '>
 
               Invite new member
             </button>

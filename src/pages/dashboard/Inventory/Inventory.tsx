@@ -20,6 +20,8 @@ import InventoryRequest from './InventoryRequest'
 import History from './History'
 import AvailableInventory from './AvailableInventory'
 import RequestedInvetory from './RequestedInvetory'
+import { AddInventory } from '../../../components/Modal/InventoryModals'
+import { InventoryService } from '../../../services/inventory.service'
 
 interface PaginationInfo {
     currentPage: number;
@@ -27,20 +29,24 @@ interface PaginationInfo {
 }
 
 const Inventory = () => {
-    const role : any =  "admin"
+    const role: any = "admin"
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
     const accountTabTitle = role === "admin" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
     const [tabIndex, setTabIndex] = useState<number>(0)
-    const [isSuspendOpen, setIsSuspendOpen] = useState(false)
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+   
 
-  
+    console.log(profile);
+   
+
+
     const displayAccountContent = (tabIndex: number) => {
 
-        if(role === "admin") {
+        if (profile.role_id === "663a5c848b1a1f64469b98bf") {
             switch (tabIndex) {
                 case 0:
-                    return <AllInventory />
+                    return <AllInventory isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 case 1:
                     return <InventoryRequest />
                 case 2:
@@ -49,7 +55,7 @@ const Inventory = () => {
                     return <AllInventory />
                 // return <BioProfile />
             }
-        }else {
+        } else {
             switch (tabIndex) {
                 case 0:
                     return <AvailableInventory />
@@ -64,8 +70,10 @@ const Inventory = () => {
         }
 
 
-       
+
     }
+
+
 
 
     return (
@@ -74,7 +82,7 @@ const Inventory = () => {
             <div className="pt-4 bg-white pb-10 px-6 rounded-2xl mx-2">
                 <div className='flex item-center justify-between py-3'>
                     <BreadCrumbClient backText="Dashboard" currentPath="Inventory" brand='Landmark' />
-                    <Button label='Add Inventory' />
+                    <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' />
                 </div>
                 <div className="flex items-center justify-between gap-10 border-b w-full">
                     <div className="flex items-center w-5/6 gap-2 flex-wrap">
@@ -95,7 +103,9 @@ const Inventory = () => {
                 </div>
                 {displayAccountContent(tabIndex)}
             </div>
+
            
+
         </div>
     )
 }
