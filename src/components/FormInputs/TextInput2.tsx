@@ -74,7 +74,7 @@ const TextInput = ({
             }}
           />
         ): name === "select" ? <>
-        <select className='w-full mt-1 px-4 appearance-none text-xs h-12 py-2.5 focus:outline-none rounded bg-white border border-[#470e812b]' >
+        <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' >
           {children}
         </select> 
         <i

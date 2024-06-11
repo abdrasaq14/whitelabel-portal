@@ -1,10 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Table } from '../../../components/Table/Table2'
-import { Label } from '../../../components/Label/Label'
 import StarRating from '../../../components/Rating.tsx'
+import { Label } from '../../../components/Label/Label'
+import { currencyFormat } from '../../../utils/helpers'
+import { formatAmount } from '../../../utils/Helpfunctions'
+import { fDateTime } from '../../../utils/formatTime'
+import useFetchWithParams from '../../../hooks/useFetchWithParams'
+import { InventoryService } from '../../../services/inventory.service'
+import { useAuth } from '../../../zustand/auth.store'
+import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
 
 
 const History = () => {
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const profile: any = useAuth((s) => s.profile)
+    const [search, setSearch] = useState("")
+    const [selectedInventory, setSelectedInventory] = useState({})
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+    const { data, isLoading, refetch } = useFetchWithParams(
+        ["query-all-inventory", {
+            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+        }],
+        InventoryService.getInventoroes,
+        {
+            onSuccess: (data: any) => {
+                // console.log(data.data);
+            },
+            keepPreviousData: false,
+            refetchOnWindowFocus: false,
+            refetchOnMount: true,
+        }
+    )
     const mockData = {
         data: [
             {
@@ -88,18 +118,24 @@ const History = () => {
         <div>
 
             {
-                mockData.data.length > 0 ? (
+                data && data?.result.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={mockData?.data}
+                        <Table data={data?.result}
                             hideActionName={true}
                             // clickRowAction={(row) => setModalOpen(true)}
                             rowActions={(row) => [
                                 {
-                                    name: "View Hub",
-                                    action: () => { },
+                                    name: "View Item",
+                                    action: () => {
+                                        setSelectedInventory(row)
+                                        setIsViewModalOpen(true)
+                                    },
                                 },
                                 {
-                                    name: "Do Something",
+                                    name: "Update Item",
+                                    action: () => { },
+                                }, {
+                                    name: "Delete",
                                     action: () => { },
                                 },
                             ]}
@@ -114,19 +150,19 @@ const History = () => {
                                 },
                                 {
                                     header: "Quantity",
-                                    view: (row: any) => <div>{row.category}</div>,
+                                    view: (row: any) => <div>{row.quantityIn}</div>,
                                 },
                                 {
                                     header: "Category",
-                                    view: (row: any) => <StarRating totalRatings={4} />,
+                                    view: (row: any) => <div>{row.categoryName}</div>,
                                 },
                                 {
                                     header: "Unit Price",
-                                    view: (row: any) => <div>{row.Location}</div>,
+                                    view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
                                 },
                                 {
                                     header: "Date Listed",
-                                    view: (row: any) => <div>{row.Location}</div>,
+                                    view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
                                     view: (row: any) => <Label variant='success'>In stock</Label>,
@@ -142,7 +178,7 @@ const History = () => {
                 )
                     : (
                         <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/NoVendor.svg' alt='No Product Found' />
+                            <img src='/images/add-product.svg' alt='No Product Found' />
                             <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
                         </div>
                     )

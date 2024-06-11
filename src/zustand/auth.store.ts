@@ -2,7 +2,7 @@ import { AxiosBasicCredentials } from "axios";
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
 
-type ROLE = "ADMIN" | "STAFF"
+type ROLE = "663a5c848b1a1f64469b98bf" | "663a5c8a8b1a1f64469b98e4"
 
 // interface Auth {
 //   username: string;
