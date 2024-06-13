@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from './Modal'
 import { FormikProvider, useFormik } from 'formik'
 import TextInput from '../FormInputs/TextInput2'
@@ -174,28 +174,46 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete }
 
 export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
+  const [inventoryItems, setInventoryItems] = useState<any>([]);
+
+  console.log(inventoryItems)
+
   const form = useFormik({
     initialValues: {
-      "name": "",
-      "image": "",
-      "categoryName": "",
-      "quantityIn": 0,
-      "quantityOut": 0,
-      "unitPrice": 0,
-      "whiteLabelName": profile.whiteLabelName
+      "quantity": 0,
+      "itemId":null,
+      "whiteLabelName" : ""
+  
     },
-
     onSubmit: async (val) => {
-
-      await form.setFieldValue("whiteLabelName", profile.whiteLabelName)
-      console.log(val);
-      handleAddInventory.mutate(val)
-
-
+      // await form.setFieldValue("whiteLabelName", profile.whiteLabelName)
+      console.log(profile)
+      const itemsToSubmit = inventoryItems.map((item : any) => ({
+        itemId: item._id,
+        quantity: item.quantity
+      }));
+      const body = {
+        items: itemsToSubmit,
+        whiteLabelName:"landMark"
+      }
+      console.log(body)
+      handleAddInventory.mutate(body);
     }
 
 
   })
+
+  const handleAddMore = () => {
+    setInventoryItems([...inventoryItems, {
+      itemId: form.values.itemId,
+      quantity: form.values.quantity
+    }]);
+    form.resetForm({
+      values: {
+        ...form.initialValues,
+      }
+    });
+  };
 
   const { data, isLoading, refetch } = useFetchWithParams(
     ["query-all-inventory", {
@@ -215,7 +233,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
 
   const handleAddInventory = useMutation(
     async (values: any) => {
-      return await InventoryService.createInventory(values)
+      return await InventoryService.makeRequest(values)
     },
 
     {
@@ -247,26 +265,36 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
                   >
                     Available Inventories
                   </label>
-                  <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("categoryName")} name='categoryName' >
+                  <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("itemId")} name='itemId' >
                     <option>Select inventory</option>
 
                     {
-                    data && data?.result.map((items: any, id:any) => <option key={id} value={items}>{items}</option>)
+                    data && data?.result.map((items: any, id:any) => <option key={id} value={JSON.stringify(items)}>{items.name}</option>)
                     }
 
                   </select>
                 </div>
 
-                <TextInput placeholder="Item name" name='name' label='Item Name' />
-                <TextInput placeholder="Enter Quantity" name='quantityIn' label='Quantity' />
-                <TextInput {...form.getFieldProps("unitPrice")} placeholder="0.00" name='unitPrice' label='Unit Price' />
+                <TextInput placeholder="Enter Quantity" name='quantity' label='Quantity' />
+              </div>
 
-                <div>
-                  <label>Attached Image</label>
+              {/* <button type="button" onClick={handleAddMore} className='mt-4 mb-5 bg-white font-semibold  !text-primary border border-primary' label='Add More Inventory' /> */}
 
-                  <FileUpload name='image' />
-                </div>
+              <button onClick={handleAddMore} type='button' className='px-3 py-2 rounded border-primary border my-3 ml-auto block text-sm '>Add More Inventory</button>
 
+              <div className='mt-4'>
+                <h4 className='text-sm font-semibold mb-2'>Added Inventories</h4>
+                {inventoryItems.length === 0 ? (
+                  <p className='text-xs'>No inventories added yet.</p>
+                ) : (
+                  <ul className='list-disc pl-5'>
+                    {inventoryItems.map((item:any, index:number) => (
+                      <li key={index} className='mb-1'>
+                        <span className='font-semibold'>{item.itemName}</span> - Quantity: {item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <Button isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
