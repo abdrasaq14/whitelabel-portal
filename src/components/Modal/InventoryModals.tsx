@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from './Modal'
 import { FormikProvider, useFormik } from 'formik'
 import TextInput from '../FormInputs/TextInput2'
@@ -10,6 +10,11 @@ import { useMutation } from 'react-query'
 import { InventoryService } from '../../services/inventory.service'
 import toast from 'react-hot-toast'
 import { formatAmount } from '../../utils/Helpfunctions'
+import useFetchWithParams from '../../hooks/useFetchWithParams'
+import { Table } from '../Table/Table2'
+import { fDate } from '../../utils/formatTime'
+import { mergeItemsWithDetails } from '../../utils/functions'
+import { Label } from '../Label/Label'
 
 export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
@@ -109,7 +114,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
   )
 }
 
-export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete }: { isOpen: boolean, closeViewModal: any, data: any, onEdit?: any, onDelete?: any }) => {
+export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, isAdmin = true }: { isOpen: boolean, closeViewModal: any, data: any, onEdit?: any, onDelete?: any, isAdmin?: boolean }) => {
 
   return (
     <div>
@@ -145,19 +150,23 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete }
 
             </div>
 
-            <div className='flex items-center  gap-4 my-4 justify-end'>
-              <Button onClick={async () => {
-                await closeViewModal()
-                onDelete()
-              }} variant='outlined' className='bg-white border border-primary !text-primary' label='Delete Item' />
-              <Button onClick={async () => {
-                await closeViewModal()
-                onEdit()
-              }
+            {
+              isAdmin && <div className='flex items-center  gap-4 my-4 justify-end'>
+                <Button onClick={async () => {
+                  await closeViewModal()
+                  onDelete()
+                }} variant='outlined' className='bg-white border border-primary !text-primary' label='Delete Item' />
+                <Button onClick={async () => {
+                  await closeViewModal()
+                  onEdit()
+                }
 
-              } variant='outlined' label='Edit Item' />
+                } variant='outlined' label='Edit Item' />
 
-            </div>
+              </div>
+            }
+
+
 
           </div>
 
@@ -167,4 +176,274 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete }
 
     </div>
   )
+}
+
+
+
+export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
+  const profile: any = useAuth((s) => s.profile)
+  console.log(profile)
+  const [inventoryItems, setInventoryItems] = useState<any>([]);
+
+  console.log(inventoryItems)
+
+  const form = useFormik({
+    initialValues: {
+      quantity: "",
+      itemId: ""
+    },
+
+    onSubmit: async (val: any) => {
+      const currentFormItem = JSON.parse(val.itemId);
+      const itemsToSubmit = [
+        ...inventoryItems.map((item: any) => ({
+          itemId: item._id,
+          quantity: item.quantity
+        })),
+        ...(val.itemId && val.quantity ? [{
+          itemId: currentFormItem._id,
+          quantity: val.quantity
+        }] : [])
+      ];
+      const body: any = { whiteLabelName: profile.whiteLabelName, items: itemsToSubmit }
+      console.log("submit");
+
+      handleAddInventory.mutate(body);
+    }
+  });
+
+  const { data, isLoading, refetch } = useFetchWithParams(
+    ["query-all-inventory", {}],
+    InventoryService.getInventoroes,
+    {
+      onSuccess: () => {
+        // console.log(data.data);
+      },
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    }
+  );
+
+  const handleAddInventory = useMutation(
+    async (values) => {
+      return await InventoryService.makeRequest(values);
+    },
+    {
+      onSuccess: (res) => {
+        // console.log(res);
+        toast.success("Inventory Request Submitted")
+        closeViewModal()
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+      }
+    }
+  );
+
+  const handleAddMore = () => {
+    const selectedItem = JSON.parse(form.values.itemId);
+    setInventoryItems((prevItems: any) => {
+      const existingItemIndex = prevItems.findIndex((item: any) => item._id === selectedItem._id);
+      if (existingItemIndex !== -1) {
+        // Item already exists, update quantity
+        const updatedItems = [...prevItems];
+        updatedItems[existingItemIndex].quantity += form.values.quantity;
+        return updatedItems;
+      } else {
+        // Item does not exist, add new item
+        return [...prevItems, {
+          ...selectedItem,
+          quantity: form.values.quantity
+        }];
+      }
+    });
+    form.resetForm({
+      values: {
+        ...form.initialValues,
+      }
+    });
+  };
+
+  const handleRemoveItem = (index: any) => {
+    setInventoryItems(inventoryItems.filter((_: any, i: number) => i !== index));
+  };
+
+  return (
+    <div>
+      <Modal open={isOpen} onClick={closeViewModal}>
+
+
+        <div className='md:w-[552px] w-full px-4 h-auto'>
+          <FormikProvider value={form}>
+            <form onSubmit={form.handleSubmit}>
+              <h3 className='text-2xl  mb-4 font-semibold'>Add Inventory</h3>
+
+              <div className='flex-col flex gap-3'>
+                <div>
+                  <label
+
+                    className='text-sm font-normal font-satoshiRegular text-[#344054]'
+                  >
+                    Available Inventories
+                  </label>
+                  <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("itemId")} name='itemId' >
+                    <option>Select inventory</option>
+
+                    {
+                      data && data?.result.results.map((items: any, id: any) => <option key={id} value={JSON.stringify(items)}>{items.name}</option>)
+                    }
+
+                  </select>
+                </div>
+
+                <TextInput placeholder="Enter Quantity" name='quantity' label='Quantity' />
+              </div>
+
+              {/* <button type="button" onClick={handleAddMore} className='mt-4 mb-5 bg-white font-semibold  !text-primary border border-primary' label='Add More Inventory' /> */}
+
+              <button onClick={handleAddMore} type='button' className='px-3 py-2 rounded border-primary border my-3 ml-auto block text-sm '>Add More Inventory</button>
+
+              <div className='mt-4'>
+                <h4 className='text-sm font-semibold mb-2'>Added Inventories <span className='h-4 px-2  text-center rounded-full text-xs bg-primary text-white'>{inventoryItems.length}</span></h4>
+                {inventoryItems.length === 0 ? (
+                  <p className='text-xs'>No inventories added yet.</p>
+                ) : (
+                  <table className='w-full'>
+                    <thead>
+                      <tr className='text-left text-xs'>
+                        <th className='py-1'>Category</th>
+                        <th className='py-1'>Name</th>
+                        <th className='py-1'>Quantity</th>
+                        <th className='py-1'>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {inventoryItems.map((item: any, index: number) => (
+                        <tr key={index} className='text-sm'>
+                          <td className='py-1 mb-1'>{item.categoryName}</td>
+                          <td className='py-1 mb-1'>{item.name}</td>
+                          <td className='py-1 mb-1'>{item.quantity}</td>
+                          <td className='py-1 mb-1'>
+                            <button type='button' onClick={() => handleRemoveItem(index)} className='text-red-500'>Remove</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+
+              </div>
+
+              <Button onClick={form.handleSubmit} isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
+
+
+
+
+            </form>
+
+          </FormikProvider>
+
+        </div>
+
+      </Modal>
+    </div>
+  )
+}
+
+export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean }) => {
+
+  const handleApprove = useMutation(
+    async () => {
+      const values = {
+        "status": "APPROVED",
+        "requestId": details._id
+      }
+      return await InventoryService.updateInventoryRequest(values);
+    },
+    {
+      onSuccess: (res) => {
+        toast.success("Inventory Request Approved")
+        closeViewModal()
+
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+        closeViewModal()
+
+      }
+    }
+  )
+
+  const handleDecline = useMutation(
+    async () => {
+      const values = {
+        "status": "DECLINED",
+        "requestId": details._id
+      }
+      return await InventoryService.updateInventoryRequest(values);
+    },
+    {
+      onSuccess: (res) => {
+        toast.success("Inventory Request Declined")
+
+        closeViewModal()
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+        closeViewModal()
+
+      }
+    }
+  )
+
+  return (
+    <div>
+      <Modal open={isOpen} onClick={closeViewModal} >
+
+        <div className='md:w-[552px] w-full px-4 h-auto'>
+          <div className='flex items-center justify-between'>
+            <h3 className='text-xl font-semibold'>Inventory History</h3>
+            <Label variant='success' >{details.status}</Label>
+          </div>
+
+
+          <Table
+            data={details && mergeItemsWithDetails(details.items, details.itemDetails)}
+            columns={[
+              {
+                header: "S/N",
+                view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+              },
+              {
+                header: "Item",
+                view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} />{row.name}</div>,
+              },
+              {
+                header: "Quantity",
+                view: (row: any) => <div>{row.quantity}</div>,
+              }
+
+
+            ]}
+            loading={false}
+          />
+
+
+          {
+            isAdmin && <div className='grid my-3 grid-cols-2 gap-3 items-center'>
+              <button className='w-full text-center py-3 rounded bg-white border border-primary'>Decline</button>
+              <button onClick={() => handleApprove.mutate()} className='w-full text-center py-3 rounded text-white border bg-primary'>Approve</button>
+
+            </div>
+          }
+
+
+
+        </div>
+
+      </Modal>
+    </div>
+  )
+
 }

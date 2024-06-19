@@ -35,7 +35,7 @@ export const Button = ({
   return (
     <button
       {...rest}
-      type="submit"
+      type={"submit"}
       disabled={isLoading ? true : disabled}
       aria-label="button"
       onClick={onClick}

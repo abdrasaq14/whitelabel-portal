@@ -7,17 +7,20 @@ import { formatAmount } from '../../../utils/Helpfunctions'
 import { useAuth } from '../../../zustand/auth.store'
 import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
+import { AddInventory, InventoryRequestDetails } from '../../../components/Modal/InventoryModals'
 
 
-const InventoryRequest = () => {
+const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const profile: any = useAuth((s) => s.profile)
     const [search, setSearch] = useState("")
-    const [selectedInventory, setSelectedInventory] = useState({})
+    const [selectedInventory, setSelectedInventory] = useState()
     const [isViewModalOpen, setIsViewModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+    console.log(profile)
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-request", {
@@ -112,6 +115,30 @@ const InventoryRequest = () => {
             totalRows: 40,
         },
     }
+    const calculateTotalPrice = (items: any, itemDetails: any) => {
+        // Create a dictionary from itemDetails for quick lookup
+        const itemDetailsDict = itemDetails.reduce((dict: any, item: any) => {
+            dict[item._id] = item;
+            return dict;
+        }, {});
+
+        // Calculate total price
+        let totalPrice = 0;
+
+        items.forEach((item: any) => {
+            const itemId = item.itemId;
+            const quantity = item.quantity;
+
+            if (itemDetailsDict[itemId]) {
+                const unitPrice = itemDetailsDict[itemId].unitPrice;
+                totalPrice += unitPrice * quantity;
+            } else {
+                console.log(`Item with ID ${itemId} not found in itemDetails.`);
+            }
+        });
+
+        return totalPrice;
+    }
     return (
         <div>
 
@@ -120,7 +147,10 @@ const InventoryRequest = () => {
                     <div className='h-full flex-grow '>
                         <Table data={data?.result}
                             hideActionName={true}
-                            // clickRowAction={(row) => setModalOpen(true)}
+                            clickRowAction={(row) => {
+                                setSelectedInventory(row)
+                                setIsViewModalOpen(true)
+                            }}
                             rowActions={(row) => [
                                 {
                                     name: "View Item",
@@ -143,29 +173,21 @@ const InventoryRequest = () => {
                                     view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
                                 },
                                 {
-                                    header: "Item",
-                                    view: (row: any) => <div>{row.name}</div>,
+                                    header: "Request From",
+                                    view: (row: any) => <div>{row.requesterId}</div>,
                                 },
                                 {
-                                    header: "Quantity",
-                                    view: (row: any) => <div>{row.quantityIn}</div>,
+                                    header: "No of Item",
+                                    view: (row: any) => <div>{row.items.length}</div>,
                                 },
                                 {
-                                    header: "Category",
-                                    view: (row: any) => <div>{row.categoryName}</div>,
+                                    header: "Total Price",
+                                    view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
                                 },
                                 {
-                                    header: "Unit Price",
-                                    view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
-                                },
-                                {
-                                    header: "Date Listed",
+                                    header: "Date Requested",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
-                                }, {
-                                    header: "Status",
-                                    view: (row: any) => <Label variant='success'>In stock</Label>,
-                                },
-
+                                }
                             ]}
                             loading={false}
                             pagination={mockData.pagination}
@@ -181,7 +203,21 @@ const InventoryRequest = () => {
                         </div>
                     )
             }
-           
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
+                closeViewModal()
+                refetch()
+
+            }} />
+
+            {
+                selectedInventory && <InventoryRequestDetails details={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+                    setIsViewModalOpen(false)
+                    refetch()
+                }} />
+            }
+
+
+
         </div>
     )
 }
