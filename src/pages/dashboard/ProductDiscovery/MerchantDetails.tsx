@@ -234,15 +234,11 @@ const MerchantDetails = () => {
                             },
                             {
                                 header: "Product Id",
-                                view: (row: any) => <div>{row._id}</div>,
+                                view: (row: any) => <div>{row.id}</div>,
                             },
                             {
                                 header: "Product Name",
-                                view: (row: any) => <div>{row.name}</div>,
-                            },
-                            {
-                                header: "Merchant",
-                                view: (row: any) => <div>{row.productOwner}</div>,
+                                view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row.name}</div>,
                             },
                             {
                                 header: "Category",
