@@ -48,9 +48,9 @@ const Inventory = () => {
                 case 0:
                     return <AllInventory isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 case 1:
-                    return <InventoryRequest />
+                    return <InventoryRequest  isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 case 2:
-                    return <History />
+                    return <History isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 default:
                     return <AllInventory />
                 // return <BioProfile />
@@ -103,6 +103,8 @@ const Inventory = () => {
                 </div>
                 {displayAccountContent(tabIndex)}
             </div>
+
+            
 
             <MakeRequest isOpen={isMakeModalOpen} closeViewModal={() => {setIsMakeModalOpen(false)}} />
 

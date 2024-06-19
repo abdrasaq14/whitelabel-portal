@@ -40,6 +40,10 @@ export const AuthRouter: IModuleRouter = {
       element: <ResetPassword />,
     },
     {
+      path: "/create-password",
+      element: <ResetPassword />
+    },
+    {
       path: "/password-recovery",
       element: <PasswordRecovery />,
     },

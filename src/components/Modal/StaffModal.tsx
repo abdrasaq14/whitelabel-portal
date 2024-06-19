@@ -11,6 +11,7 @@ import { useMutation } from 'react-query';
 import { UserService } from '../../services/user';
 import toast from 'react-hot-toast';
 import FileUpload from '../FormInputs/FIleUpload2';
+import { useAuth } from '../../zustand/auth.store';
 
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
@@ -336,6 +337,7 @@ export const AddStaffModal = ({ isOpen, closeModal }: any) => {
 
 
 export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
+  const profile: any = useAuth((s) => s.profile)
   interface StaffInfoProps {
     companyName: string;
     staffEmail: string;
@@ -351,17 +353,17 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
   const StaffInfoInitialValues = {
     email: "",
-    role: "",
+    roleId: "",
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    image: ""
+    image: "",
   }
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Company name is required'),
     email: Yup.string().email('Invalid email').required('Staff email is required'),
-    role: Yup.string().required('role is required'),
+    roleId: Yup.string().required('role is required'),
   });
   const handleSubmit = (values: any) => {
     console.log('Form submitted with values:', values);
@@ -394,7 +396,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
   const form = useFormik({
     initialValues: StaffInfoInitialValues,
     onSubmit: async (values) => {
-      await handleAddUser.mutate(values)
+      handleAddUser.mutate({ whiteLabelName: profile.whiteLabelName, ...values })
       handleSubmit(values);
     }
   })
@@ -437,7 +439,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
           </div>
 
           <div className='col-span-1 sm:col-span-2 flex flex-col'>
-            <select {...form.getFieldProps("role")} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='role' >
+            <select {...form.getFieldProps("roleId")} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='roleId' >
               <option>Select Role</option>
 
               {

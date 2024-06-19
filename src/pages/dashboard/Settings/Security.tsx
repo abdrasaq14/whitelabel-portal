@@ -9,6 +9,9 @@ import { CiPercent } from "react-icons/ci"
 import { FiPercent } from "react-icons/fi";
 import { log } from "console";
 import { Button } from "../../../components/Button/Button";
+import { useMutation } from "react-query";
+import { UserService } from "../../../services/user";
+import toast from "react-hot-toast";
 
 
 const SecurityPassword = () => {
@@ -55,7 +58,20 @@ const SecurityPassword = () => {
   };
 
 
- 
+  const changePassword = useMutation(
+    async (values: any) => {
+      return await UserService.changePassword(values);
+    },
+    {
+      onSuccess: (response) => {
+        toast.success(response.data.result.message)
+      }
+
+
+    },
+  )
+
+
 
   return (
     <>
@@ -69,7 +85,8 @@ const SecurityPassword = () => {
         initialValues={passwordData}
         validationSchema={validationSchema}
         onSubmit={async (values, formikActions) => {
-          
+          await changePassword.mutate(values)
+          formikActions.resetForm()
         }}
       >
         {({
@@ -151,11 +168,12 @@ const SecurityPassword = () => {
               </div>
               <Button
                 type="submit"
-                disabled={false}
+                disabled={changePassword.isLoading}
+                isLoading={changePassword.isLoading}
                 label="Change Password"
                 className="bg-primary py-3 px-4 rounded-lg  text-center font-satoshiBold font-bold text-white text-sm disabled:bg-opacity-50"
               />
-               
+
             </Form>
           );
         }}

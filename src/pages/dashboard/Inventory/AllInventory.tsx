@@ -21,8 +21,8 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const { data, isLoading, refetch } = useFetchWithParams(
-        ["query-all-inventory", {
-            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+        ["query-all-inventory-page", {
+            // page: currentPage, limit: pageSize,
         }],
         InventoryService.getInventoroes,
         {
@@ -117,15 +117,15 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
         <div>
 
             {
-                data && data?.result.length > 0 ? (
+                data && data?.result.results.length ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result}
+                        <Table data={data.result.results && data?.result?.results}
                             hideActionName={true}
                             // clickRowAction={(row) => setModalOpen(true)}
                             rowActions={(row) => [
                                 {
                                     name: "View Item",
-                                    action: () => {
+                                    action: async () => {
                                         setSelectedInventory(row)
                                         setIsViewModalOpen(true)
                                     },
