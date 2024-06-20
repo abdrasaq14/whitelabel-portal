@@ -259,7 +259,7 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
 
 
             </div>
-            <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to add this Product ???" confirmAddition={handleProductAddedSuccess} />
+            <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to add this Product ?" confirmAddition={handleProductAddedSuccess} />
 
         </Modal>
 

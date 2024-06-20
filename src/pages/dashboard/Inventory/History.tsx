@@ -9,6 +9,7 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
+import { generateSerialNumber } from '../../../utils/functions'
 
 
 const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
@@ -23,7 +24,7 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-inventory-history", {
-            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, history: false
+            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, history: true
         }],
         InventoryService.getInventoryRequestHistory,
         {
@@ -167,7 +168,10 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                                    view: (row: any, index:number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                        currentPage,
+                                        pageSize
+                                    })}</div>
                                 },
                                 {
                                     header: "Request From",

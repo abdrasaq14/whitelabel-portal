@@ -8,6 +8,7 @@ import { useAuth } from '../../../zustand/auth.store'
 import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
 import { AddInventory, InventoryRequestDetails } from '../../../components/Modal/InventoryModals'
+import { generateSerialNumber } from '../../../utils/functions'
 
 
 const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
@@ -170,7 +171,10 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                                    view: (row: any, index:number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                        currentPage,
+                                        pageSize
+                                    })}</div>
                                 },
                                 {
                                     header: "Request From",

@@ -31,15 +31,16 @@ const MerchantDetails = () => {
     const [product, setProduct] = useState({})
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [pageSize, setPageSize] = useState(10);
-    const profile:any = useAuth((s) => s.profile)
+    const profile: any = useAuth((s) => s.profile)
+    const [search, setSearch] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { id }:any = useParams()
+    const { id }: any = useParams()
 
 
     const { data: allProducts, isLoading } = useFetchWithParams(
         ["query-all-products", {
-            merchantId: id,
+            merchantId: id, page: currentPage, search
         }],
         MerchantService.getMerchantProducts,
         {
@@ -92,13 +93,15 @@ const MerchantDetails = () => {
         }
     )
 
+    console.log(merchant)
+
 
     const AddAllProducts = useMutation(async () => {
         const body = {
             "merchant": {
-                "id": merchant.id,
-                "email": merchant.email,
-                "name": merchant.businessName
+                "id": merchant.result.id,
+                "email": merchant.result.email,
+                "name": merchant.result.businessName
             },
             "whiteLabelClient": {
                 "id": profile._id,
@@ -112,35 +115,39 @@ const MerchantDetails = () => {
         {
             onSuccess: () => {
                 toast.success("request sent successfully")
-               navigate(-1)
+                navigate(-1)
+            },
+            onError: (err: any) => {
+                toast.error(err.response.data.message)
+
             }
         }
     )
 
     const AddProducts = useMutation(async () => {
-        const formattedBody = selectedProducts.map((product:any) => ({
+        const formattedBody = selectedProducts.map((product: any) => ({
             product: {
-              productId: product.id,
-              productOwnerId: product.userId,
-              productName: product.name
+                productId: product.id,
+                productOwnerId: product.userId,
+                productName: product.name
             },
             whiteLabelClient: {
-              whiteLabelClientId: profile._id,
-              email: profile.email,
-              whiteLabelName: profile.whiteLabelName
+                whiteLabelClientId: profile._id,
+                email: profile.email,
+                whiteLabelName: profile.whiteLabelName
             }
-          }));
-          console.log(formattedBody, "body")
+        }));
+        console.log(formattedBody, "body")
         return await ProductService.sendProductRequest(formattedBody);
     },
         {
             onSuccess: () => {
                 toast.success("request sent successfully")
-            //    navigate(-1)
+                //    navigate(-1)
             },
-            onError(error:any) {
+            onError(error: any) {
                 toast.error(error.response.data.message);
-                
+
             },
         }
     )
@@ -200,10 +207,10 @@ const MerchantDetails = () => {
                     </div>
 
                     <div className='flex items-center gap-3'>
-                        <SearchInput placeholder='search product' />
+                        <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} className='w-[200px]' placeholder='Search for products' />
                         {
                             allProducts && (
-                                (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border '/>
+                                (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' disabled={AddAllProducts.isLoading} isLoading={AddAllProducts.isLoading} onClick={() => AddAllProducts.mutate()} className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border ' />
 
                             )
                         }
@@ -255,7 +262,7 @@ const MerchantDetails = () => {
 
                             page: currentPage,
                             pageSize: pageSize,
-                            totalRows: allProducts?.result.totalPages,
+                            totalRows: allProducts?.result.totalResults,
                             setPageSize: handlePageSize,
                             setPage: handleCurrentPage
                         }}

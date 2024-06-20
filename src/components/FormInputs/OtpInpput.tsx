@@ -26,8 +26,25 @@ const OtpInput = ({ length, onChange } : {length:number, onChange:any}) => {
     }
   };
 
+  const handlePaste = (e:any) => {
+    const pasteData = e.clipboardData.getData('text').slice(0, length).split('');
+    const newOtp = [...otp];
+
+    pasteData.forEach((char:any, index:number) => {
+      if (index < length) {
+        newOtp[index] = char;
+        const input:any = inputRefs.current[index];
+        input.value = char;
+      }
+    });
+
+    setOtp(newOtp);
+    onChange(newOtp.join(''));
+  };
+
+
   return (
-    <div className="flex w-full justify-between space-x-2">
+    <div onPaste={handlePaste} className="flex w-full justify-between space-x-2">
       {otp.map((digit, index) => (
         <input
           key={index}
