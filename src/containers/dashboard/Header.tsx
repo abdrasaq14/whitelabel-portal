@@ -35,7 +35,7 @@ const DashboardHeader = () => {
             <span className="font-medium font-satoshiRegular text-base text-[#464749] mr-1">
               Hi, 
             </span>
-           {companyDetails.representative?.fullName}
+           {companyDetails.whiteLabelName}
           </p>
         </div>
         <div className="flex items-center gap-4">

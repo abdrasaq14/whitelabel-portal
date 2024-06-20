@@ -67,9 +67,9 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         <SidebarItem />
 
         <NavLink className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to=""><IoStorefrontOutline /> Visit Marketplace</NavLink>
-        <div className="w-full absolute bottom-4 mb-4 2xl:bottom-8 h-16  gap-3.5  flex items-center px-6">
+        <div className="w-full bg-white absolute bottom-[0px]  2xl:bottom-8 h-[105px]  gap-3.5  flex items-center px-6">
 
-          
+
           <div className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
 
 

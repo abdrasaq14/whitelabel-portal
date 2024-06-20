@@ -49,8 +49,8 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
 
     {
       onSuccess: (res) => {
-        console.log(res);
-
+        toast.success("Inventory Added Successfully")
+        closeViewModal()
 
       },
       onError: (err: any) => {
@@ -74,7 +74,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
 
                     className='text-sm font-normal font-satoshiRegular text-[#344054]'
                   >
-                    Item Category
+                    Item Category*
                   </label>
                   <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("categoryName")} name='categoryName' >
                     <option>Select Category</option>
@@ -86,12 +86,12 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
                   </select>
                 </div>
 
-                <TextInput placeholder="Item name" name='name' label='Item Name' />
-                <TextInput placeholder="Enter Quantity" name='quantityIn' label='Quantity' />
-                <TextInput {...form.getFieldProps("unitPrice")} placeholder="0.00" name='unitPrice' label='Unit Price' />
+                <TextInput placeholder="Item name" name='name' label='Item Name*' />
+                <TextInput placeholder="Enter Quantity" name='quantityIn' label='Quantity*' />
+                <TextInput {...form.getFieldProps("unitPrice")} placeholder="0.00" name='unitPrice' label='Unit Price*' />
 
                 <div>
-                  <label>Attached Image</label>
+                  <label>Attach Image*</label>
 
                   <FileUpload name='image' />
                 </div>
@@ -150,7 +150,7 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
 
             </div>
 
-            {
+            {/* {
               isAdmin && <div className='flex items-center  gap-4 my-4 justify-end'>
                 <Button onClick={async () => {
                   await closeViewModal()
@@ -164,7 +164,7 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
                 } variant='outlined' label='Edit Item' />
 
               </div>
-            }
+            } */}
 
 
 
@@ -417,7 +417,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
               },
               {
                 header: "Item",
-                view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} />{row.name}</div>,
+                view: (row: any) => <div className='flex items-center gap-3'><img className='h-12 w-12 object-contain' src={row.image ?? ""} />{row.name}</div>,
               },
               {
                 header: "Quantity",

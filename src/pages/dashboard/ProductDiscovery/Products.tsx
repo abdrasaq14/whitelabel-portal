@@ -29,8 +29,8 @@ const Products = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
-    const profile:any = useAuth((s) => s.profile)
-    const [selectedProducts, setSelectedProducts] = useState<any>([])
+  const profile: any = useAuth((s) => s.profile)
+  const [selectedProducts, setSelectedProducts] = useState<any>([])
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
@@ -80,32 +80,32 @@ const Products = () => {
   };
 
   const AddProducts = useMutation(async () => {
-    const formattedBody = selectedProducts.map((product:any) => ({
-        product: {
-          productId: product.id,
-          productOwnerId: product.userId,
-          productName: product.name
-        },
-        whiteLabelClient: {
-          whiteLabelClientId: profile._id,
-          email: profile.email,
-          whiteLabelName: profile.whiteLabelName
-        }
-      }));
-      console.log(formattedBody, "body")
+    const formattedBody = selectedProducts.map((product: any) => ({
+      product: {
+        productId: product.id,
+        productOwnerId: product.userId,
+        productName: product.name
+      },
+      whiteLabelClient: {
+        whiteLabelClientId: profile._id,
+        email: profile.email,
+        whiteLabelName: profile.whiteLabelName
+      }
+    }));
+    console.log(formattedBody, "body")
     return await ProductService.sendProductRequest(formattedBody);
-},
+  },
     {
-        onSuccess: () => {
-            toast.success("request sent successfully")
+      onSuccess: () => {
+        toast.success("request sent successfully")
         //    navigate(-1)
-        },
-        onError(error:any) {
-            toast.error(error.response.data.message);
-            
-        },
+      },
+      onError(error: any) {
+        toast.error(error.response.data.message);
+
+      },
     }
-)
+  )
 
   return (
     <div className='h-full flex-grow'>
@@ -117,7 +117,7 @@ const Products = () => {
 
         {
           allProducts && (
-            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> :  <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
           )
         }
@@ -156,12 +156,12 @@ const Products = () => {
               view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row.name}</div>,
             },
             {
-              header: "Product Rating",
-              view: (row: any) => <StarRating totalRatings={5} />,
-            },
-            {
               header: "Category",
               view: (row: any) => <Categories categories={row.categories} />,
+            },
+            {
+              header: "Product Rating",
+              view: (row: any) => <StarRating totalRatings={5} />,
             },
             {
               header: "Listing Price",
