@@ -124,7 +124,7 @@ const Merchants = () => {
             {
               page: currentPage,
               pageSize: pageSize,
-              totalRows: allMerchants?.result.totalPages,
+              totalRows: allMerchants?.result.totalResults,
               setPageSize: handlePageSize,
               setPage: handleCurrentPage
             }

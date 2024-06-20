@@ -47,6 +47,11 @@ const MerchantDetails = () => {
         }
     )
 
+    // useEffect(() => {
+
+    //     refetch()
+    // },[])
+
     const getStatusById = (arr:any, id:string) => {
         const item = arr.find((element:any)  => element.platform == id);
         return item && item.status;
@@ -80,6 +85,9 @@ const MerchantDetails = () => {
             onSuccess: () => {
                 toast.success("account suspended")
                 refetch()
+            },
+            onError: () => {
+                refetch()
             }
         }
     )
@@ -100,7 +108,7 @@ const MerchantDetails = () => {
         }
     )
 
-    // console.log( merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase())),merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase(), profile )
+    console.log( merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase())),merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase(), profile )
 
 
     useEffect(() => {

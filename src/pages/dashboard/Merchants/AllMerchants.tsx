@@ -158,10 +158,10 @@ const AllMerchants = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{MerchantList.length}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
+              <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>

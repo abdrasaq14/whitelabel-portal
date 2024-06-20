@@ -36,7 +36,7 @@ const BlockedProducts = () => {
     setIsViewModalOpen(false);
   };
 
-  const { data: allProducts, isLoading } = useFetchWithParams(
+  const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-blocked-products", {
       page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName,status:'BLOCKED'
     }],
@@ -53,7 +53,7 @@ const BlockedProducts = () => {
 
 
   useEffect(() => {
-    // refetch()
+    refetch()
  },[])
 
 const handlePageSize = (val: any) => {
@@ -77,7 +77,7 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>Blocked Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allProducts ? allProducts.result.results.length : 0}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>Blocked Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allProducts ? allProducts.result.totalResults : 0}</span></h1>
 
         </div>
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
@@ -143,7 +143,7 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
                   {
                     page: currentPage,
                     pageSize: pageSize,
-                    totalRows: allProducts?.result.totalPages,
+                    totalRows: allProducts?.result.totalResults,
                     setPageSize: handlePageSize,
                     setPage: handleCurrentPage
                   }

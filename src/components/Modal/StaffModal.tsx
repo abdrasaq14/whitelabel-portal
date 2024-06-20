@@ -262,7 +262,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
         <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
       </div>
       <div>
-        <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to delete this Account ???</p>
+        <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to delete this Account ?</p>
       </div>
       <div className='w-full flex mt-4 justify-between  '>
         <button

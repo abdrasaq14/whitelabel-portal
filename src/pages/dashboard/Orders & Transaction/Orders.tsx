@@ -80,9 +80,9 @@ const Orders = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="Orders & Transaction" brand='Landmark' />
         <div className='flex justify-start bg-red-flex-wrap gap-8 w-full py-8'>
-          <InfoCard header="Total Orders" value="543" iconName='3dcube' className='flex flex-col justify-between' timeline={timeline} />
-          <InfoCard header="Pending Orders" value="543" iconName='clock' className='flex flex-col justify-between' timeline={timeline} />
-          <InfoCard header="Completed Orders" value="543" iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
+          <InfoCard header="Total Orders" value="0" iconName='3dcube' className='flex flex-col justify-between' timeline={timeline} />
+          <InfoCard header="Pending Orders" value="0" iconName='clock' className='flex flex-col justify-between' timeline={timeline} />
+          <InfoCard header="Completed Orders" value="0" iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
         </div>
         <div className='flex justify-between'>
           <h1 className='text-primary-text text-sm font-normal'>All Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{OrderDetailsMockData.data.length}</span></h1>
