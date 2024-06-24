@@ -7,7 +7,7 @@ import { fToNow } from '../../../utils/formatTime';
 import { io } from "socket.io-client";
 import Spinner from '../../../components/spinner/Spinner';
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
-const socket = io('http://localhost:5000');
+const socket = io('https://socket.profitall.co.uk');
 
 interface Conversation{
   id: string,
