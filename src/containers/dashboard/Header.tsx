@@ -5,6 +5,7 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { useAuth } from "../../zustand/auth.store";
 
 import { Link } from "react-router-dom";
+import Clock from "../../components/Clock";
 
 const _extractInitials = (val: string) => {
   const _first = val.split(" ")[0].slice(0, 1);
@@ -64,7 +65,7 @@ const DashboardHeader = () => {
           </div>
           <div>
                 <p className=" font-normal text-xs text-[#464749]">{user.location}</p>
-                <p className="font-satoshiBold text-xs text-[#464749] mt-1 text-end ">{user.time}</p>
+                <p className="font-satoshiBold text-xs text-[#464749] mt-1 text-end "><Clock /></p>
               </div>
         </div>
       </div>
