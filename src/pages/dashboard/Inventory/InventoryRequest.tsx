@@ -207,9 +207,9 @@ const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddMod
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
-                closeViewModal()
-                refetch()
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+               await refetch()
+               closeViewModal()
 
             }} />
 

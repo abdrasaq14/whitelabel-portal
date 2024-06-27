@@ -10,14 +10,14 @@ export const InventoryService = {
     getInventoroes: (payload: any) => createApiClient(false).get(`/inventory${paramsObjectToQueryString(payload)}`),
     getInventoryDetails: (payload: any) => createApiClient(false).get(``),
     getInventoryRequest: async (payload: any) => {
-        const { whiteLabelName, ...params } = payload;
-        console.log(whiteLabelName, params, payload)
-        return await createApiClient(false).get(`/inventory/request/${whiteLabelName}${paramsObjectToQueryString(params)}`,)
+        // const { whiteLabelName, ...params } = payload;
+        // console.log(whiteLabelName, params, payload)
+        return await createApiClient(false).get(`/inventory/request/${paramsObjectToQueryString(payload)}`,)
     },
     getInventoryRequestHistory: async (payload: any) => {
         const { whiteLabelName, ...params } = payload;
         console.log(whiteLabelName, params, payload)
-        return await createApiClient(false).get(`/inventory/request/${whiteLabelName}${paramsObjectToQueryString(params)}`,)
+        return await createApiClient(false).get(`/inventory/request/${paramsObjectToQueryString(payload)}`,)
     },
     getUsersRequest: async (payload: any) => {
         const { whiteLabelName, ...params } = payload;

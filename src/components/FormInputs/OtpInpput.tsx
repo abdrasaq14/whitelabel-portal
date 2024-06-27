@@ -1,8 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const OtpInput = ({ length, onChange } : {length:number, onChange:any}) => {
+const OtpInput = ({ length, onChange, error } : {length:number, onChange:any, error? : any}) => {
   const [otp, setOtp] = useState(Array(length).fill(''));
   const inputRefs = useRef(new Array(length));
+
+  useEffect(() => {
+    if (error) {
+      resetOtp();
+    }
+  }, [error]);
+
+  const resetOtp = () => {
+    setOtp(Array(length).fill(''));
+    inputRefs.current[0].focus();
+  };
+
 
   const handleChange = (e:any, index:number) => {
     const value = e.target.value;

@@ -114,6 +114,17 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
             totalRows: 40,
         },
     }
+
+
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
     return (
         <div>
 
@@ -122,7 +133,10 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                     <div className='h-full flex-grow '>
                         <Table data={data.result.results && data?.result?.results}
                             hideActionName={true}
-                            // clickRowAction={(row) => setModalOpen(true)}
+                            clickRowAction={(row) => {
+                                setSelectedInventory(row)
+                                setIsViewModalOpen(true)
+                            }}
                             rowActions={(row) => [
                                 {
                                     name: "View Item",
@@ -130,14 +144,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                         setSelectedInventory(row)
                                         setIsViewModalOpen(true)
                                     },
-                                },
-                                {
-                                    name: "Update Item",
-                                    action: () => { },
-                                }, {
-                                    name: "Delete",
-                                    action: () => { },
-                                },
+                                }
                             ]}
                             columns={[
                                 {
@@ -173,7 +180,15 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
 
                             ]}
                             loading={false}
-                            pagination={mockData.pagination}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
 
                         />
 
@@ -186,14 +201,14 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+                await refetch()
                 closeViewModal()
-                refetch()
 
             }} />
-            <ViewInventory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+            <ViewInventory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                await refetch()
                 setIsViewModalOpen(false)
-                refetch()
 
             }} />
         </div>

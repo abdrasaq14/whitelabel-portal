@@ -386,7 +386,6 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
     {
       onSuccess: (res) => {
         toast.success("Inventory Request Declined")
-
         closeViewModal()
       },
       onError: (err: any) => {
@@ -432,7 +431,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
 
           {
             isAdmin && <div className='grid my-3 grid-cols-2 gap-3 items-center'>
-              <button className='w-full text-center py-3 rounded bg-white border border-primary'>Decline</button>
+              <button onClick={() => handleDecline.mutate()} className='w-full text-center py-3 rounded bg-white border border-primary'>Decline</button>
               <button onClick={() => handleApprove.mutate()} className='w-full text-center py-3 rounded text-white border bg-primary'>Approve</button>
 
             </div>

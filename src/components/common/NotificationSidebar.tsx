@@ -107,10 +107,10 @@ const NotificationSidebar = ({
   return (
     <>
       {isNotificationOpen && (
-        <div className="modal-background fixed top-0 left-0 right-0 bottom-0 bg-purple-900 bg-opacity-70 z-100">
+        <div className="modal-background fixed top-0 left-0 right-0 bottom-0 bg-purple-900 bg-opacity-70 z-[100]">
           <section
             ref={sideNavRef}
-            className={`fixed   notification-sidebar transition-transform duration-500 ease-in-out ${isNotificationOpen ? 'transform  z-20 translate-x-0' : 'transform -translate-x-full'
+            className={`absolute notification-sidebar transition-transform duration-500 ease-in-out ${isNotificationOpen ? 'transform  z-[90] translate-x-0' : 'transform -translate-x-full'
               }
          rounded-tl rounded-bl transition-transform duration-[30001] h-full w-[388px]  top-0 shadow-md bg-white  right-0`}
           >

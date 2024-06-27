@@ -72,7 +72,10 @@ const Merchants = () => {
       <div className='h-full flex-grow '>
         <div className='flex justify-between items-center'>
           <div >
-            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e:any) => setSearch(e.target.value)} className='w-[200px]'  placeholder='Search for merchant' />
+            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} className='w-[200px]'  placeholder='Search for merchant' />
           </div>
 
           <p>Filter</p>

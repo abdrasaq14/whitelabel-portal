@@ -70,11 +70,11 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         <div className="w-full bg-white absolute bottom-[0px]  2xl:bottom-8 h-[105px]  gap-3.5  flex items-center px-6">
 
 
-          <div className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
+          <div onClick={() => logout?.toggleLogout()} className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
 
 
             <div
-              onClick={() => logout?.toggleLogout()}
+
               className={`whitespace-nowrap pc-text-danger flex-grow ${isCollapsed ? "hidden" : ""
                 }`}
             >

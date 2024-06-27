@@ -12,6 +12,7 @@ import { Button } from "../../../components/Button/Button";
 import { useMutation } from "react-query";
 import { UserService } from "../../../services/user";
 import toast from "react-hot-toast";
+import { AuthActions } from "../../../zustand/auth.store";
 
 
 const SecurityPassword = () => {
@@ -65,6 +66,7 @@ const SecurityPassword = () => {
     {
       onSuccess: (response) => {
         toast.success(response.data.result.message)
+        AuthActions.logout()
       }
 
 

@@ -207,7 +207,10 @@ const MerchantDetails = () => {
                     </div>
 
                     <div className='flex items-center gap-3'>
-                        <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} className='w-[200px]' placeholder='Search for products' />
+                        <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} className='w-[200px]' placeholder='Search for products' />
                         {
                             allProducts && (
                                 (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' disabled={AddAllProducts.isLoading} isLoading={AddAllProducts.isLoading} onClick={() => AddAllProducts.mutate()} className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border ' />

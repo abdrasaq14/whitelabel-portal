@@ -62,6 +62,7 @@ export default function Authenticate() {
           onError: (err: any) => {
             toast.error(err.response.data.message);
             form.setSubmitting(false)
+            form.resetForm()
           },
         }
       );
@@ -105,7 +106,7 @@ export default function Authenticate() {
             </p>
             <FormikProvider value={form}>
                 <form className="flex flex-col gap-4">
-                    <OtpInput onChange={(e:any) => form.setFieldValue('otp', e)} length={6} />
+                    <OtpInput error={handleSubmit.isError} onChange={(e:any) => form.setFieldValue('otp', e)} length={6} />
 
                     <h3 className="text-sm font-normal text-[#6F7174] ">Enter the verification code sent to your email address {loginRequest.email}</h3>
 

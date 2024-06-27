@@ -180,9 +180,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                 refetch()
 
             }} />
-            <ViewInventory isAdmin={false} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+            <ViewInventory isAdmin={false} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                await refetch()
                 setIsViewModalOpen(false)
-                refetch()
+
 
             }} />
         </div>

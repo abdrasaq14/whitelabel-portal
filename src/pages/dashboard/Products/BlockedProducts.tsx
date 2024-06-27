@@ -82,7 +82,13 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
         </div>
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
           <div>
-            <SearchInput placeholder='Search' />
+            <SearchInput onClear={() => {
+              setSearch("")
+              setCurrentPage(1)
+            }} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} placeholder='Search' />
           </div>
           <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
         </div>

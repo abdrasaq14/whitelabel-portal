@@ -116,20 +116,20 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
         },
     }
 
-    const calculateTotalPrice = (items:any, itemDetails:any) => {
+    const calculateTotalPrice = (items: any, itemDetails: any) => {
         // Create a dictionary from itemDetails for quick lookup
-        const itemDetailsDict = itemDetails.reduce((dict:any, item:any) => {
+        const itemDetailsDict = itemDetails.reduce((dict: any, item: any) => {
             dict[item._id] = item;
             return dict;
         }, {});
-    
+
         // Calculate total price
         let totalPrice = 0;
-    
-        items.forEach((item : any) => {
+
+        items.forEach((item: any) => {
             const itemId = item.itemId;
             const quantity = item.quantity;
-            
+
             if (itemDetailsDict[itemId]) {
                 const unitPrice = itemDetailsDict[itemId].unitPrice;
                 totalPrice += unitPrice * quantity;
@@ -137,7 +137,7 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                 console.log(`Item with ID ${itemId} not found in itemDetails.`);
             }
         });
-    
+
         return totalPrice;
     }
     return (
@@ -149,26 +149,26 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                         <Table data={data?.result}
                             hideActionName={true}
                             // clickRowAction={(row) => setModalOpen(true)}
-                            rowActions={(row) => [
-                                {
-                                    name: "View Item",
-                                    action: () => {
-                                        setSelectedInventory(row)
-                                        setIsViewModalOpen(true)
-                                    },
-                                },
-                                {
-                                    name: "Update Item",
-                                    action: () => { },
-                                }, {
-                                    name: "Delete",
-                                    action: () => { },
-                                },
-                            ]}
+                            // rowActions={(row) => [
+                            //     {
+                            //         name: "View Item",
+                            //         action: () => {
+                            //             setSelectedInventory(row)
+                            //             setIsViewModalOpen(true)
+                            //         },
+                            //     },
+                            //     {
+                            //         name: "Update Item",
+                            //         action: () => { },
+                            //     }, {
+                            //         name: "Delete",
+                            //         action: () => { },
+                            //     },
+                            // ]}
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any, index:number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                    view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
                                         currentPage,
                                         pageSize
                                     })}</div>
@@ -190,7 +190,7 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
-                                    view: (row: any) => <Label variant='warning'>{row.status}</Label>,
+                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" :'warning'}>{row.status}</Label>,
                                 },
 
                             ]}
@@ -208,9 +208,10 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+                await refetch()
                 closeViewModal()
-                refetch()
+
 
             }} />
         </div>

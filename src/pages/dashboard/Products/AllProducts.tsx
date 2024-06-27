@@ -36,7 +36,7 @@ const AllProducts = () => {
     setIsViewModalOpen(false);
   };
 
-  const { data: allProducts, isLoading } = useFetchWithParams(
+  const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products", {
       page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
     }],
@@ -82,7 +82,10 @@ const AllProducts = () => {
         </div>
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
           <div>
-            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
+            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} placeholder='Search' />
           </div>
           <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
         </div>
@@ -99,18 +102,18 @@ const AllProducts = () => {
                   handleViewProductInfo(row)
                 },
               },
-              {
-                name: "Ban product",
-                action: () => {
-                  handleViewProductInfo(row)
-                },
-              },
-              {
-                name: "View Seller",
-                action: () => {
-                  handleViewProductInfo(row)
-                },
-              },
+              // {
+              //   name: "Ban product",
+              //   action: () => {
+              //     handleViewProductInfo(row)
+              //   },
+              // },
+              // {
+              //   name: "View Seller",
+              //   action: () => {
+              //     handleViewProductInfo(row)
+              //   },
+              // },
             ]}
             columns={[
               {
@@ -150,7 +153,7 @@ const AllProducts = () => {
             }
 
           />
-          <ViewProductModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
+          <ViewProductModal isOpen={isViewModalOpen} product={product} refetch={refetch} closeViewModal={closeViewModal} />
 
         </div>
       </div>

@@ -71,7 +71,7 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[90%] sm:w-full h-auto gap-4">
             <div className='w-full'>
                 <div className='flex w-full justify-between items-center p-2 border-b-[#C8CCD0] border-b-[1px]'>
-                    <UserProfile name={merchant.storeName} url={merchant.avatar_url} dateJoined={merchant.dateJoined} />
+                    <UserProfile name={merchant.businessName} url={merchant.image} dateJoined={merchant.createdAt} />
                     <button onClick={closeViewModal} className='text-primary-text'><IoCloseCircleOutline size={24} /></button>
 
                 </div>
@@ -161,10 +161,10 @@ const Categories: React.FC<Props> = ({ categories }) => {
 const UserProfile = ({ url, name, dateJoined }: any) => {
     return (
         <div className='flex gap-4 items-center '>
-            <img alt='Employee ' src={url} />
-            <div>
+            <img alt='' src={url} />
+            <div className=''>
                 <p className='font-satoshiMedium text-base text-primary-text'>{name}</p>
-                <p className='text-sm font-satoshiMedium text-primary-subtext mt-1'>Joined on {dateJoined}</p>
+                <p className='text-sm font-satoshiMedium text-primary-subtext mt-1'>Joined on {fDate(dateJoined)}</p>
             </div>
         </div>
     )

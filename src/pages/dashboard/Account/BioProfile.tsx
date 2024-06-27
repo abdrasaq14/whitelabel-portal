@@ -105,6 +105,8 @@ const BioProfile = () => {
     }
   )
 
+  console.log(companyDetails)
+
 
 
   return (
@@ -129,7 +131,7 @@ const BioProfile = () => {
 
         {/* Client Logo Section */}
         <div>
-          <img src={'/client-asset/landmark_logo.png'} className='w-auto h-20' alt='brand_logo' />
+          <img src={companyDetails.companyLogo ??'/client-asset/landmark_logo.png'} className='w-auto h-20' alt='brand_logo' />
           <p className='text-base font-satoshiMedium font-medium text-primary-text text-center'>Administrator</p>
         </div>
       </div>

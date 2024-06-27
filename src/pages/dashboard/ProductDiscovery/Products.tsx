@@ -112,7 +112,10 @@ const Products = () => {
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='flex justify-between items-center'>
         <div >
-          <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} className='w-[200px]' placeholder='Search for products' />
+          <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} className='w-[200px]' placeholder='Search for products' />
         </div>
 
         {

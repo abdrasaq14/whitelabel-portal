@@ -210,9 +210,10 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
             
 
             {
-                selectedInventory && <InventoryRequestDetails isAdmin={false} details={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+                selectedInventory && <InventoryRequestDetails isAdmin={false} details={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                   await refetch()
                     setIsViewModalOpen(false)
-                    refetch()
+                   
                 }} />
             }
 
