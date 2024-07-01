@@ -31,19 +31,19 @@ interface PaginationInfo {
 const Inventory = () => {
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
-    const accountTabTitle = profile.role_id === "663a5c848b1a1f64469b98bf" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
+    const accountTabTitle = profile.roleId === "663a5c848b1a1f64469b98bf" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [isAddModalOpen, setIsAddModalOpen] = useState(false) 
     const [isMakeModalOpen, setIsMakeModalOpen] = useState(false) 
    
 
-    console.log(profile.role_id);
+    // console.log(profile.role_id);
    
 
 
     const displayAccountContent = (tabIndex: number) => {
 
-        if (profile.role_id === "663a5c848b1a1f64469b98bf") {
+        if (profile.roleId === "663a5c848b1a1f64469b98bf") {
             switch (tabIndex) {
                 case 0:
                     return <AllInventory isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
