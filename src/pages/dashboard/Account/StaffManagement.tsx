@@ -37,7 +37,7 @@ export const StaffManagement = () => {
     }
   )
 
-  console.log(data)
+  // console.log(data)
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
@@ -92,7 +92,7 @@ export const StaffManagement = () => {
 
         <div className=' flex-grow w-auto overflow-x-auto'>
           {
-            data.result.results.length > 0 ? (
+            data && data.result.results.length > 0 ? (
               <>
                 <Table data={data?.result.results}
                   hideActionName={true}
