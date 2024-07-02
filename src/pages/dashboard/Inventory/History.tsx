@@ -204,7 +204,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
-                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" : 'warning'}>{row.status}</Label>,
+                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" : 'danger'}>{row.status}</Label>,
                                 },
 
                             ]}
