@@ -60,9 +60,9 @@ const Inventory = () => {
                 case 0:
                     return <AvailableInventory />
                 case 1:
-                    return <RequestedInvetory />
+                    return <RequestedInvetory isMakeModalOpen={isMakeModalOpen}/>
                 case 2:
-                    return <History />
+                    return <History isMakeModalOpen={isMakeModalOpen} />
                 default:
                     return <AvailableInventory />
                 // return <BioProfile />
@@ -82,7 +82,7 @@ const Inventory = () => {
             <div className="pt-4 bg-white pb-10 px-6 rounded-2xl mx-2">
                 <div className='flex item-center justify-between py-3'>
                     <BreadCrumbClient backText="Dashboard" currentPath="Inventory" brand='Landmark' />
-                   { profile.role_id === "663a5c848b1a1f64469b98bf" ?  <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' /> : <Button onClick={() => setIsMakeModalOpen(true)} label='Make Request' /> }
+                   { profile.roleId === "663a5c848b1a1f64469b98bf" ?  <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' /> : <Button onClick={() => setIsMakeModalOpen(true)} label='Make Request' /> }
                 </div>
                 <div className="flex items-center justify-between gap-10 border-b w-full">
                     <div className="flex items-center w-5/6 gap-2 flex-wrap">

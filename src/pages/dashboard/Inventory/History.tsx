@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from '../../../components/Table/Table2'
 import StarRating from '../../../components/Rating.tsx'
 import { Label } from '../../../components/Label/Label'
@@ -12,7 +12,7 @@ import { AddInventory, ViewInventory } from '../../../components/Modal/Inventory
 import { generateSerialNumber } from '../../../utils/functions'
 
 
-const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
+const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const profile: any = useAuth((s) => s.profile)
@@ -140,13 +140,27 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
 
         return totalPrice;
     }
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
+
+    useEffect(() => {
+        console.log(isMakeModalOpen)
+        refetch()
+    }, [isMakeModalOpen])
     return (
         <div>
 
             {
-                data && data?.result.length > 0 ? (
+                data && data?.result.requests.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result}
+                        <Table data={data?.result.requests}
                             hideActionName={true}
                             // clickRowAction={(row) => setModalOpen(true)}
                             // rowActions={(row) => [
@@ -175,7 +189,7 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                                 },
                                 {
                                     header: "Request From",
-                                    view: (row: any) => <div>{row.requesterId}</div>,
+                                    view: (row: any) => <div>{row.requesterName ?? row.requesterId}</div>,
                                 },
                                 {
                                     header: "No of Item",
@@ -190,12 +204,20 @@ const History = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: 
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
-                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" :'warning'}>{row.status}</Label>,
+                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" : 'warning'}>{row.status}</Label>,
                                 },
 
                             ]}
                             loading={false}
-                            pagination={mockData.pagination}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
 
                         />
 

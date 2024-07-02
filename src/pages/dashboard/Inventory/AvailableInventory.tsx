@@ -22,7 +22,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-page", {
-            // page: currentPage, limit: pageSize,
+            page: currentPage, limit: pageSize,
         }],
         InventoryService.getInventoroes,
         {
@@ -113,6 +113,17 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
             totalRows: 40,
         },
     }
+
+
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
     return (
         <div>
 
@@ -162,7 +173,15 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
 
                             ]}
                             loading={false}
-                            pagination={mockData.pagination}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
 
                         />
 
@@ -175,9 +194,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+                await refetch()
                 closeViewModal()
-                refetch()
+
 
             }} />
             <ViewInventory isAdmin={false} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {

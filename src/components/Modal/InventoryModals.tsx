@@ -213,7 +213,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   });
 
   const { data, isLoading, refetch } = useFetchWithParams(
-    ["query-all-inventory", {}],
+    ["query-all-inventory", {page:1, limit:1000}],
     InventoryService.getInventoroes,
     {
       onSuccess: () => {

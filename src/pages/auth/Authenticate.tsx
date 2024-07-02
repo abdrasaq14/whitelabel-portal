@@ -30,7 +30,7 @@ export default function Authenticate() {
 
     const { showPassword, handleClickShowPassword } = usePasswordToggle();
     const router = useNavigate();
-    const [loginRequest, setLoginRequest] = useState<any>({}) 
+    const [loginRequest, setLoginRequest] = useState<any>({})
     const form = useFormik<Yup.Asserts<typeof validationSchema>>({
         initialValues: {
             otp: "",
@@ -47,25 +47,25 @@ export default function Authenticate() {
 
     useEffect(() => {
 
-       const data:any =  sessionStorage.getItem("loginRequest")
-       setLoginRequest(JSON.parse(data))
-    },[])
+        const data: any = sessionStorage.getItem("loginRequest")
+        setLoginRequest(JSON.parse(data))
+    }, [])
 
     const handleResendOtp = useMutation(
         async (values: { email: string; password: string }) => {
-          return await AuthService.login(values);
+            return await AuthService.login(values);
         },
         {
-          onSuccess: (response) => {
-           toast.success(response.data.result.otpMessage)
-          },
-          onError: (err: any) => {
-            toast.error(err.response.data.message);
-            form.setSubmitting(false)
-            form.resetForm()
-          },
+            onSuccess: (response) => {
+                toast.success(response.data.result.otpMessage)
+            },
+            onError: (err: any) => {
+                toast.error(err.response.data.message);
+                form.setSubmitting(false)
+                form.resetForm()
+            },
         }
-      );
+    );
 
 
     const handleSubmit = useMutation(
@@ -99,14 +99,14 @@ export default function Authenticate() {
     return (
         <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
             <h2 className='text-xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>
-            Account Aunthentication
+                Account Aunthentication
             </h2>
             <p className='text-sm xs:mb-4  font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
                 Enter your OTP to proceed
             </p>
             <FormikProvider value={form}>
                 <form className="flex flex-col gap-4">
-                    <OtpInput error={handleSubmit.isError} onChange={(e:any) => form.setFieldValue('otp', e)} length={6} />
+                    <OtpInput error={handleSubmit.isError} onChange={(e: any) => form.setFieldValue('otp', e)} length={6} />
 
                     <h3 className="text-sm font-normal text-[#6F7174] ">Enter the verification code sent to your email address {loginRequest.email}</h3>
 

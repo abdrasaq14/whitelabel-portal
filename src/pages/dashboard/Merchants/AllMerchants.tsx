@@ -163,7 +163,7 @@ const AllMerchants = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants.result.totalResults : 0}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
               <SearchInput onClear={() => {
@@ -181,7 +181,7 @@ const AllMerchants = () => {
 
 
         {
-          mockData.data.length > 0 ? (
+       allMerchants &&  allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
                 clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
