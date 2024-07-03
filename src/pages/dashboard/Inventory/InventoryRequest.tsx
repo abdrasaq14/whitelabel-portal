@@ -193,16 +193,16 @@ const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddMod
                                     header: "No of Item",
                                     view: (row: any) => <div>{row.items.length}</div>,
                                 },
-                                {
-                                    header: "Total Price",
-                                    view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
-                                },
+                                // {
+                                //     header: "Total Price",
+                                //     view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
+                                // },
                                 {
                                     header: "Date Requested",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }
                             ]}
-                            loading={false}
+                            loading={isLoading}
                             pagination={
                                 {
                                     page: currentPage,

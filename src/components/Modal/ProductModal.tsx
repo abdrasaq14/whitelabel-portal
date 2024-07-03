@@ -26,14 +26,14 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
     const toggleProductBan = () => {
         if (product.status === "ACTIVE") {
             const body = {
-                "id": product.productIdOnProfitAll,
+                "id": product._id,
                 "status": "block",
                 "platform": profile.whiteLabelName
             }
             handleToggleBan.mutate(body)
         } else {
             const body = {
-                "id": product.productIdOnProfitAll,
+                "id": product._id,
                 "status": "unblock",
                 "platform": profile.whiteLabelName
             }
@@ -47,9 +47,8 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
         },
 
         {
-            onSuccess: (res: any) => {
-                toast.success(res.data.message)
-                refetch()
+            onSuccess: async (res: any) => {
+                await refetch()
                 closeViewModal()
 
             },

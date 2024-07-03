@@ -103,18 +103,6 @@ export const StaffManagement = () => {
                         handleViewAccountInfo(row)
                       },
                     },
-                    {
-                      name: "Suspend Account",
-                      action: () => {
-                        handleViewAccountInfo(row)
-                      },
-                    },
-                    {
-                      name: "Change Account Permission",
-                      action: () => {
-                        handleViewAccountInfo(row)
-                      },
-                    },
                   ]}
                   columns={[
                     {
@@ -172,6 +160,7 @@ export const StaffManagement = () => {
     </div>
   )
 }
+
 
 
 const UserProfile = ({ url, name, email }: any) => {

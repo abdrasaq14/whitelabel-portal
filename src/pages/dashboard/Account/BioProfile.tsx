@@ -92,14 +92,14 @@ const BioProfile = () => {
   const handleSubmitStaff = useMutation(
     async (values: any) => {
 
-      return await UserService.updateStaff(values);
+      return await UserService.editAdminDetails(values);
     },
     {
       onSuccess: (response) => {
         toast.success('Account Information Updated Successfully');
         form.setSubmitting(false);
         console.log(response)
-        // AuthActions.setProfile(response.data.user)
+        AuthActions.setProfile(response.data.user)
 
       },
       onError: (err: any) => {
@@ -227,7 +227,7 @@ const BioProfile = () => {
 
             <div className='flex-grow'>
               <FormikProvider value={form}>
-                <form className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <form onSubmit={form.handleSubmit} className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <TextInput
                     name='companyName'
                     type='text'

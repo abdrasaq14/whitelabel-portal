@@ -130,7 +130,7 @@ const AllProducts = () => {
                 },
                 {
                   header: "Merchant",
-                  view: (row: any) => <div>{row.merchantId}</div>,
+                  view: (row: any) => <div>{row.merchantName}</div>,
                 },
                 {
                   header: "Product Name",

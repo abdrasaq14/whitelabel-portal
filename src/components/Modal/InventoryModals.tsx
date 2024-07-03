@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import * as Yup from "yup";
 import Modal from './Modal'
 import { FormikProvider, useFormik } from 'formik'
 import TextInput from '../FormInputs/TextInput2'
@@ -18,6 +19,25 @@ import { Label } from '../Label/Label'
 
 export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required('Name is required')
+      .min(2, 'Name must be at least 2 characters long'),
+    image: Yup.string()
+      .url('Image must be a valid URL')
+      .required('Image URL is required'),
+    categoryName: Yup.string()
+      .required('Category name is required')
+      .min(2, 'Category name must be at least 2 characters long'),
+    quantityIn: Yup.number()
+      .required('Quantity In is required')
+      .integer('Quantity In must be an integer')
+      .min(1, 'Quantity In cannot be less than 1'),
+    unitPrice: Yup.number()
+      .required('Unit Price is required')
+      .positive('Unit Price must be greater than zero')
+      .min(1, 'Unit Price cannot be less than 1')
+  });
   const form = useFormik({
     initialValues: {
       "name": "",
@@ -28,7 +48,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
       "unitPrice": 0,
       "whiteLabelName": profile.whiteLabelName
     },
-
+    validationSchema,
     onSubmit: async (val) => {
 
       await form.setFieldValue("whiteLabelName", profile.whiteLabelName)
@@ -187,12 +207,20 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
 
   console.log(inventoryItems)
 
+  const validationSchema = Yup.object({
+    quantity: Yup.number()
+      .required('Quantity is required')
+      .positive('Quantity must be greater than zero')
+      .min(1, 'Quantity must be greater than one'),
+    itemId: Yup.string().required('Item is required'),
+  });
+
   const form = useFormik({
     initialValues: {
       quantity: "",
       itemId: ""
     },
-
+    validationSchema,
     onSubmit: async (val: any) => {
       const currentFormItem = JSON.parse(val.itemId);
       const itemsToSubmit = [
@@ -213,7 +241,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   });
 
   const { data, isLoading, refetch } = useFetchWithParams(
-    ["query-all-inventory", {page:1, limit:1000}],
+    ["query-all-inventory", { page: 1, limit: 1000 }],
     InventoryService.getInventoroes,
     {
       onSuccess: () => {
@@ -232,6 +260,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
     {
       onSuccess: (res) => {
         // console.log(res);
+        form.resetForm()
         toast.success("Inventory Request Submitted")
         closeViewModal()
       },
@@ -277,7 +306,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
         <div className='md:w-[552px] w-full px-4 h-auto'>
           <FormikProvider value={form}>
             <form onSubmit={form.handleSubmit}>
-              <h3 className='text-2xl  mb-4 font-semibold'>Add Inventory</h3>
+              <h3 className='text-2xl  mb-4 font-semibold'>Make Request</h3>
 
               <div className='flex-col flex gap-3'>
                 <div>
@@ -335,7 +364,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
 
               </div>
 
-              <Button onClick={form.handleSubmit} isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
+              <Button onClick={form.handleSubmit} isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Proceed' />
 
 
 
@@ -416,7 +445,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
               },
               {
                 header: "Item",
-                view: (row: any) => <div className='flex items-center gap-3'><img className='h-12 w-12 object-contain' src={row.image ?? ""} />{row.name}</div>,
+                view: (row: any) => <div className='flex  items-center gap-3'><img alt='' className='h-12 outline-0 border-0 w-12 bg-gray-200 object-contain' src={row.image ?? ""} />{row.name}</div>,
               },
               {
                 header: "Quantity",

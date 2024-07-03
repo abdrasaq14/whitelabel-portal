@@ -195,10 +195,10 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                     header: "No of Item",
                                     view: (row: any) => <div>{row.items.length}</div>,
                                 },
-                                {
-                                    header: "Total Price",
-                                    view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
-                                },
+                                // {
+                                //     header: "Total Price",
+                                //     view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
+                                // },
                                 {
                                     header: "Date Requested",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
@@ -208,7 +208,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                 },
 
                             ]}
-                            loading={false}
+                            loading={isLoading}
                             pagination={
                                 {
                                     page: currentPage,
@@ -226,7 +226,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                     : (
                         <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                             <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory history would appear here</p>
                         </div>
                     )
             }

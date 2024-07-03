@@ -106,19 +106,7 @@ const BlockedProducts = () => {
                     action: () => {
                       handleViewProductInfo(row)
                     },
-                  },
-                  {
-                    name: "Ban product",
-                    action: () => {
-                      handleViewProductInfo(row)
-                    },
-                  },
-                  {
-                    name: "View Seller",
-                    action: () => {
-                      handleViewProductInfo(row)
-                    },
-                  },
+                  }
                 ]}
                 columns={[
                   {
@@ -134,11 +122,11 @@ const BlockedProducts = () => {
                   },
                   {
                     header: "Merchant",
-                    view: (row: any) => <div>{row.merchant}</div>,
+                    view: (row: any) => <div>{row.merchantName}</div>,
                   },
                   {
-                    header: "Category",
-                    view: (row: any) => <div >{row?.category} </div>,
+                    header: "Product Name",
+                    view: (row: any) => <div >{row?.name} </div>,
                   },
                   {
                     header: "Date Listed",
@@ -158,7 +146,7 @@ const BlockedProducts = () => {
                 }
 
               />
-              <ViewProductModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
+              <ViewProductModal refetch={refetch} isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
             </div>
           ) : <div className='h-full flex-grow flex justify-center items-center'>

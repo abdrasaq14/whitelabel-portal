@@ -36,12 +36,9 @@ export const BreadCrumbClient = ({
   const profile:any = useAuth((s) => s.profile)
   return (
     <div className="flex mb-6">
-      <div className="flex cursor-pointer font-medium  text-sm text-primary-text">
+      <div className="flex  font-medium  text-sm text-primary-text">
         <p className=" ">
           {profile.whiteLabelName} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
-        </p>
-        <p className=" text-primary-text">
-          {backText} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
         </p>
       </div>
 

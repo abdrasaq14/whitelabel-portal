@@ -163,10 +163,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                                     header: "Category",
                                     view: (row: any) => <div>{row.categoryName}</div>,
                                 },
-                                {
-                                    header: "Unit Price",
-                                    view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
-                                },
+                                // {
+                                //     header: "Unit Price",
+                                //     view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
+                                // },
                                 {
                                     header: "Date Listed",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
@@ -176,7 +176,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                                 },
 
                             ]}
-                            loading={false}
+                            loading={isLoading}
                             pagination={
                                 {
                                     page: currentPage,
@@ -194,7 +194,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                     : (
                         <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                             <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here</p>
                         </div>
                     )
             }

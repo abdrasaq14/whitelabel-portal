@@ -1,19 +1,19 @@
 import React from 'react'
 import { Field, useField } from 'formik'
 
-export const CheckboxInput = ({ disabled, name, value, defaualt }: any) => {
+export const CheckboxInput = ({ disabled, name, value, defualt }: any) => {
   const [field, meta, helpers] = useField(name);
   return (
     <div>
       <label htmlFor="checkboxOption" className={`flex text-sm font-normal font-satoshiRegular items-center
-                ${disabled ? ' cursor-not-allowed text-primary-subtext ' : 'text-primary'}
+                ${disabled ? ' cursor-not-allowed text-primary-subtext bg-pri ' : 'text-primary'}
                     `}>
         <Field
           type="checkbox"
           id="checkboxOption"
-          checked={defaualt}
+          checked={defualt}
           name={name}
-          className="mr-2 border rounded-sm outline-none"
+          className="mr-2 border disabled:bg-primary disabled:!accent-primary !accent-primary rounded-sm outline-none"
           disabled={disabled}
         />
         {value}

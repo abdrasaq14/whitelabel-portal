@@ -102,7 +102,7 @@ const MerchantDetails = () => {
     },
         {
             onSuccess: () => {
-                toast.success("account suspended")
+                toast.success("account Activated")
                 refetch()
             }
         }

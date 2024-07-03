@@ -65,31 +65,48 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
     generalPermission: boolean;
   }
 
-  const StaffInfoInitialValues: StaffInfoProps = {
-    companyName: '',
-    staffEmail: '',
-    phoneNumber: '',
-    role: 'user',
-    allPermission: false,
-    viewUserDetails: false,
-    addOrDeleteUser: false,
-    acceptOrDeclineProduct: false,
-    banProduct: false,
-    editUser: false,
-    generalPermission: false
+
+  const StaffInfoInitialValues = {
+    email: staffInfo.email,
+    roleId: staffInfo.roleId,
+    firstName: staffInfo.firstName,
+    lastName: staffInfo.lastName,
+    phoneNumber: staffInfo.phoneNumber,
+    image: staffInfo.image,
   }
 
   const validationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company name is required'),
-    staffEmail: Yup.string().email('Invalid email').required('Staff email is required'),
-    phoneNumber: Yup.string(),
-    role: Yup.string().required('role is required'),
+    email: Yup.string().email('Invalid email').required('Staff email is required'),
+    firstName: Yup.string().required('firstName is required'),
+    lastName: Yup.string().required('lastName is required'),
+    image: Yup.string().required("image is required"),
+    phoneNumber: Yup.string().required("PhoneNumber is required"),
+    roleId: Yup.string().required('role is required'),
   });
-  const handleSubmit = (values: any) => {
-    console.log('Form submitted with values:', values);
-    closeModal();
-    setIsEditing(false);
-  };
+
+
+
+  const { mutate } = useMutation(
+    async (values: any) => {
+      return await UserService.editAdminDetails(values);
+    },
+    {
+      onSuccess: (response, variables, context: any) => {
+        toast.success('Account Information Updated Successfully');
+        setIsEditing(false);
+        closeModal();
+        if (context) {
+          context.setSubmitting(false);
+        }
+      },
+      onError: (error, variables, context) => {
+        toast.error('An error occurred. Please try again');
+        if (context) {
+          context.setSubmitting(false);
+        }
+      },
+    }
+  );
   const handleDelete = () => {
     setisDeleteModalOpen(true)
   };
@@ -105,17 +122,21 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   }
 
   const roleOptions = [
-    { value: 'user', label: 'User' },
-    { value: 'admin', label: 'Admin' },
-  ];
+    { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
+    { value: '663a5c848b1a1f64469b98bf', label: 'Admin' },
+  ]
+
   return (
     <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col z-10 align-middle max-w-2xl w-[80%] rounded  sm:w-[553px] h-[70%] overflow-y-auto'>
       <div className='full flex justify-between '>
         <div className='flex gap-4 items-center'>
-          <img alt='staff avatar' src={staffInfo?.avatar_url} className='h-32 w-28' />
+          <div className='h-28 rounded object-contain w-28'>
+            <img alt='staff avatar' src={staffInfo?.image} className='h-28 rounded object-contain w-28' />
+          </div>
+
           <div>
             <p className='font-satoshiBold text-xl text-primary-text'>{staffInfo.name}</p>
-            <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.staffId}</p>
+            <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.roleId}</p>
             <p className='w-16 px-2 py-1 rounded-full bg-green-600 text-white mt-2 flex items-center justify-center text-sm '>{staffInfo.role}</p>
           </div>
         </div>
@@ -136,73 +157,87 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       <div className='flex-grow '>
         <Formik
           initialValues={StaffInfoInitialValues}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           onSubmit={(values, formikActions) => {
-            if (values) {
-              handleSubmit(values);
-            }
+            mutate(values, {
+              onSuccess: (response) => {
+                toast.success('Account Information Updated Successfully');
+                setIsEditing(false);
+                closeModal();
+                formikActions.setSubmitting(false);
+              },
+              onError: () => {
+                toast.error('An error occurred. Please try again');
+                formikActions.setSubmitting(false);
+              },
+            });
           }}>
-          {() => {
+          {({ values, setFieldValue }) => {
             return (
               <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
                 <div className='col-span-1'>
                   <TextInput
-                    name='companyName'
+                    name='firstName'
                     type='text'
-                    placeholder='Landmark University'
-                    label="Company Name"
-                    disabled={!isEditing}
-
-                  />
-                </div>
-
-                <div className='col-span-1'>
-                  <PhoneInputField
-                    label="Phone Number"
-                    value="phoneNumber"
-                    name='phoneNumber'
-                    placeholder="+23420202020"
-                    wrapperClass=""
+                    placeholder='john Doe'
+                    label="First Name"
                     disabled={!isEditing}
                   />
                 </div>
                 <div className='col-span-1'>
                   <TextInput
-                    name='staffEmail'
+                    name='lastName'
+                    type='text'
+                    placeholder='john Doe'
+                    label="Last Name"
+                    disabled={!isEditing}
+                  />
+                </div>
+
+                <div className='col-span-1'>
+                  <TextInput
+                    name='email'
                     type='email'
                     placeholder='linda@framcreative.com'
                     label="Email"
                     disabled={!isEditing}
-
+                  />
+                </div>
+                <div className='col-span-1'>
+                  <TextInput
+                    name='phoneNumber'
+                    placeholder='linda@framcreative.com'
+                    label="Phone Number"
+                    disabled={!isEditing}
                   />
                 </div>
 
                 <div className='col-span-1 sm:col-span-2 flex flex-col'>
+                  <select value={values.roleId} onChange={(e) => setFieldValue("roleId", e.target.value)} disabled={!isEditing} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='roleId' >
+                    <option>Select Role</option>
 
-                  <SelectInput
-                    name="role"
-                    label="Change Role"
-                    values={roleOptions}
-                    disabled={!isEditing}
-                    selectInputClass="w-full sm:w-[60%]"
-                  />
+                    {
+                      roleOptions.map((items: any, id) => <option key={id} value={items.value}>{items.label}</option>)
+                    }
+
+                  </select>
                 </div>
 
                 <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
                   <div className=' '>
-                    <CheckboxInput disabled={!isEditing} name="allPermissions" value="All Permissions" />
+                    <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="allPermissions" value="All Permissions" />
                   </div>
                   <div className='flex mt-4 sm:mt-8'>
                     <div className=' w-[50%] flex gap-4 flex-wrap'>
-                      <CheckboxInput disabled={!isEditing} name="viewUserDetails" value="View User Details" />
-                      <CheckboxInput disabled={!isEditing} name="addOrDeleteUser" value="Add/Delete User" />
-                      <CheckboxInput disabled={!isEditing} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
-                      <CheckboxInput disabled={!isEditing} name="banProduct" value="Ban Product" />
+                      <CheckboxInput defualt={true} disabled={true} name="viewUserDetails" value="View User Details" />
+                      <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="addOrDeleteUser" value="Add/Delete User" />
+                      <CheckboxInput defualt={true} disabled={true} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
+                      <CheckboxInput defualt={true} disabled={true} name="banProduct" value="Ban Product" />
                     </div>
                     <div className='w-[50%] flex justify-end '>
                       <div className='gap-4 flex flex-col '>
-                        <CheckboxInput disabled={!isEditing} name="editUser" value="Edit User" />
-                        <CheckboxInput disabled={!isEditing} name="generalPermission" value="General Permission" />
+                        <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="editUser" value="Edit User" />
+                        <CheckboxInput defualt={true} disabled={true} name="generalPermission" value="General Permission" />
                       </div>
                     </div>
                   </div>
@@ -463,19 +498,19 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
           <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
             <div className=' '>
-              <CheckboxInput name="allPermissions" value="All Permissions" />
+              <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="allPermissions" value="All Permissions" />
             </div>
             <div className='flex mt-4 sm:mt-8'>
               <div className=' w-[50%] flex gap-4 flex-wrap'>
-                <CheckboxInput name="viewUserDetails" value="View User Details" />
-                <CheckboxInput name="addOrDeleteUser" value="Add/Delete User" />
-                <CheckboxInput name="acceptOrDeclineProduct" value="Accept/Decline Product" />
-                <CheckboxInput name="banProduct" value="Ban Product" />
+                <CheckboxInput defualt={true} disabled={true} name="viewUserDetails" value="View User Details" />
+                <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="addOrDeleteUser" value="Add/Delete User" />
+                <CheckboxInput defualt={true} disabled={true} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
+                <CheckboxInput defualt={true} disabled={true} name="banProduct" value="Ban Product" />
               </div>
               <div className='w-[50%] flex justify-end '>
                 <div className='gap-4 flex flex-col '>
-                  <CheckboxInput name="editUser" value="Edit User" />
-                  <CheckboxInput name="generalPermission" value="General Permission" />
+                  <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="editUser" value="Edit User" />
+                  <CheckboxInput defualt={true} disabled={true} name="generalPermission" value="General Permission" />
                 </div>
               </div>
             </div>
