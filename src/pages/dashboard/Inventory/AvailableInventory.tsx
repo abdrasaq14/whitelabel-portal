@@ -9,6 +9,7 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
+import { generateSerialNumber } from '../../../utils/functions'
 
 const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
     const [pageSize, setPageSize] = useState(10);
@@ -145,7 +146,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                                    view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                        currentPage,
+                                        pageSize
+                                    })}</div>
                                 },
                                 {
                                     header: "Item",

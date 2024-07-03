@@ -361,9 +361,13 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
   }
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Company name is required'),
+    // name: Yup.string().required('Company name is required'),
     email: Yup.string().email('Invalid email').required('Staff email is required'),
-    roleId: Yup.string().required('role is required'),
+    firstName: Yup.string().required('firstName is required'),
+    lastName: Yup.string().required('lastName is required'),
+    image: Yup.string().required("image is required"),
+    phoneNumber: Yup.string().required("PhoneNumber is required"),
+    // roleId: Yup.string().required('role is required'),
   });
   const handleSubmit = (values: any) => {
     console.log('Form submitted with values:', values);
@@ -379,6 +383,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
     {
       onSuccess: (res) => {
         console.log(res);
+        toast.success("staff created successfully")
 
 
       },
@@ -395,11 +400,14 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
   const form = useFormik({
     initialValues: StaffInfoInitialValues,
+    validationSchema,
     onSubmit: async (values) => {
       handleAddUser.mutate({ whiteLabelName: profile.whiteLabelName, ...values })
       handleSubmit(values);
     }
   })
+
+  console.log(form.errors)
 
   return (
     <div className='flex-grow '>
