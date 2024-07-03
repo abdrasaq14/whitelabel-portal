@@ -14,7 +14,7 @@ import { DashboardService } from '../../services/dashboard.service'
 const Dashboard = () => {
   const timeline = ["All", "Last Month", "This Month"]
   const timeline2 = ["2 months", "Last Month", "This Month"]
-
+  const profile:any = useAuth((s) => s.profile)
   const [isThisMonth, setIsThisMonth] = useState(true);
   const salesData = isThisMonth
 
@@ -36,7 +36,7 @@ const Dashboard = () => {
   const { data: monthlySales, } = useQuery(
     "query-dashboard-monthlty-sales",
     async () => {
-      return await DashboardService.getMonthleySales();
+      return await DashboardService.getMonthleySales(profile.whiteLabelName);
     },
     {
       enabled: true,
@@ -52,7 +52,7 @@ const Dashboard = () => {
   const { data: infoCardDetails, refetch, } = useQuery(
     "query-dashboard-dashboard-stats",
     async () => {
-      return await DashboardService.getDashboardstat();
+      return await DashboardService.getDashboardstat(profile.whiteLabelName);
     },
     {
       enabled: true,
@@ -68,7 +68,7 @@ const Dashboard = () => {
   const { data: topVentures, } = useQuery(
     "query-dashboard-Top-5-Revenue-Generation-Ventures",
     async () => {
-      return await DashboardService.getTopVentures();
+      return await DashboardService.getTopVentures(profile.whiteLabelName);
     },
     {
       enabled: true,
@@ -97,7 +97,8 @@ const Dashboard = () => {
         <InfoCard header="Total Sales" value={infoCardDetails ? infoCardDetails.data?.result.totalSales.toString() : '0'} iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
         <InfoCard header='Total Merchants' value={infoCardDetails ? infoCardDetails.data?.result.totalMerchants.toString() : '0'} iconName='people' />
         <InfoCard header="Total Products" value={infoCardDetails ? infoCardDetails.data?.result.totalProducts.toString() : '0'} iconName='3dcube' className='' />
-        <InfoCard header='Lead Conversion' value={infoCardDetails ? infoCardDetails.data?.result.leadConversion.toString() + "%" : '0'} iconName='trend-up' timeline={timeline2} />
+        <InfoCard header="Total Inventory" value={infoCardDetails ? infoCardDetails.data?.result.totalInventory.toString() : '0'} iconName='ic_deals' className='' />
+        <InfoCard header="Total Total Inventory Disbursed" value={infoCardDetails ? infoCardDetails.data?.result.totalInventoryDisbursed.toString() : '0'} iconName='3dcube' className='' />
 
       </div>
 

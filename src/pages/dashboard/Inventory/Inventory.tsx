@@ -39,6 +39,22 @@ const Inventory = () => {
 
     // console.log(profile.role_id);
    
+    const { data, isLoading, refetch } = useFetchWithParams(
+        ["query-total-inventory-page", {
+            // page: currentPage, limit: pageSize,
+        }],
+        InventoryService.getTotalInventories,
+        {
+            onSuccess: (data: any) => {
+                // console.log(data.data);
+            },
+            keepPreviousData: false,
+            refetchOnWindowFocus: false,
+            refetchOnMount: true,
+        }
+    )
+
+    console.log(data)
 
 
     const displayAccountContent = (tabIndex: number) => {
