@@ -83,76 +83,81 @@ const AllProducts = () => {
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
           <div>
             <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
-                setSearch(e.target.value)
-                setCurrentPage(1)
-              }} placeholder='Search' />
+              setSearch(e.target.value)
+              setCurrentPage(1)
+            }} placeholder='Search' />
           </div>
           <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
         </div>
         <div className='h-full flex-grow '>
-          <Table data={allProducts && allProducts.result.results}
-            hideActionName={true}
-            emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
-              <img src='/images/NoProduct.svg' alt='No Product Found' />
-            </div>}
-            rowActions={(row) => [
-              {
-                name: "View Product",
-                action: () => {
-                  handleViewProductInfo(row)
+          {
+            allProducts ? <Table data={allProducts && allProducts.result.results}
+              hideActionName={true}
+              emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
+                <img src='/images/NoProduct.svg' alt='No Product Found' />
+              </div>}
+              rowActions={(row) => [
+                {
+                  name: "View Product",
+                  action: () => {
+                    handleViewProductInfo(row)
+                  },
                 },
-              },
-              // {
-              //   name: "Ban product",
-              //   action: () => {
-              //     handleViewProductInfo(row)
-              //   },
-              // },
-              // {
-              //   name: "View Seller",
-              //   action: () => {
-              //     handleViewProductInfo(row)
-              //   },
-              // },
-            ]}
-            columns={[
-              {
-                header: "S/N",
-                view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
-                  currentPage,
-                  pageSize
-                })}</div>
-              },
-              {
-                header: "Product Id",
-                view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
-              },
-              {
-                header: "Merchant",
-                view: (row: any) => <div>{row.merchantId}</div>,
-              },
-              {
-                header: "Product Name",
-                view: (row: any) => <div >{row?.name} </div>,
-              },
-              {
-                header: "Date Listed",
-                view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
-              },
+                // {
+                //   name: "Ban product",
+                //   action: () => {
+                //     handleViewProductInfo(row)
+                //   },
+                // },
+                // {
+                //   name: "View Seller",
+                //   action: () => {
+                //     handleViewProductInfo(row)
+                //   },
+                // },
+              ]}
+              columns={[
+                {
+                  header: "S/N",
+                  view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
+                    currentPage,
+                    pageSize
+                  })}</div>
+                },
+                {
+                  header: "Product Id",
+                  view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
+                },
+                {
+                  header: "Merchant",
+                  view: (row: any) => <div>{row.merchantId}</div>,
+                },
+                {
+                  header: "Product Name",
+                  view: (row: any) => <div >{row?.name} </div>,
+                },
+                {
+                  header: "Date Listed",
+                  view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
+                },
 
-            ]}
-            loading={isLoading}
-            pagination={
-              {
-                page: currentPage,
-                pageSize: pageSize,
-                totalRows: allProducts?.result.totalResults,
-                setPageSize: handlePageSize,
-                setPage: handleCurrentPage
+              ]}
+              loading={isLoading}
+              pagination={
+                {
+                  page: currentPage,
+                  pageSize: pageSize,
+                  totalRows: allProducts?.result.totalResults,
+                  setPageSize: handlePageSize,
+                  setPage: handleCurrentPage
+                }
               }
-            }
 
-          />
+            /> : <div className='h-full flex-grow flex justify-center items-center'>
+              <img src='/images/NoProduct.svg' alt='No Product Found' />
+            </div>
+          }
+
           <ViewProductModal isOpen={isViewModalOpen} product={product} refetch={refetch} closeViewModal={closeViewModal} />
 
         </div>

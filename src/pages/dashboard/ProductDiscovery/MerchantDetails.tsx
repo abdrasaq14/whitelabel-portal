@@ -208,9 +208,9 @@ const MerchantDetails = () => {
 
                     <div className='flex items-center gap-3'>
                         <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
-                setSearch(e.target.value)
-                setCurrentPage(1)
-              }} className='w-[200px]' placeholder='Search for products' />
+                            setSearch(e.target.value)
+                            setCurrentPage(1)
+                        }} className='w-[200px]' placeholder='Search for products' />
                         {
                             allProducts && (
                                 (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' disabled={AddAllProducts.isLoading} isLoading={AddAllProducts.isLoading} onClick={() => AddAllProducts.mutate()} className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border ' />
@@ -220,57 +220,63 @@ const MerchantDetails = () => {
                     </div>
                 </div>
                 <div className='h-full flex-auto '>
-                    <Table data={allProducts && allProducts.result.results}
-                        hideActionName={true}
-                        emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
-                            <img src='/images/NoProduct.svg' alt='No Product Found' />
-                        </div>}
-                        clickRowAction={(row) => handleViewProductInfo(row)}
-                        onSelectRows={(row: any) => setSelectedProducts(Array.from(row.values()))}
-                        rowActions={(row) => [
+                    {
+                        allProducts ?
+                            <Table data={allProducts?.result && allProducts?.result?.results.length > 0}
+                                hideActionName={true}
+                                emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
+                                    <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                </div>}
+                                clickRowAction={(row) => handleViewProductInfo(row)}
+                                onSelectRows={(row: any) => setSelectedProducts(Array.from(row.values()))}
+                                rowActions={(row) => [
 
-                            {
-                                name: "View Details",
-                                action: () => { handleViewProductInfo(row) },
-                            },
-                        ]}
-                        columns={[
-                            {
-                                header: "S/N",
-                                view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
-                                    currentPage,
-                                    pageSize
-                                })}</div>
-                            },
-                            {
-                                header: "Product Id",
-                                view: (row: any) => <div>{row.id}</div>,
-                            },
-                            {
-                                header: "Product Name",
-                                view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row.name}</div>,
-                            },
-                            {
-                                header: "Category",
-                                view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
-                            },
-                            {
-                                header: "Date Listed",
-                                view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
-                            },
+                                    {
+                                        name: "View Details",
+                                        action: () => { handleViewProductInfo(row) },
+                                    },
+                                ]}
+                                columns={[
+                                    {
+                                        header: "S/N",
+                                        view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
+                                            currentPage,
+                                            pageSize
+                                        })}</div>
+                                    },
+                                    {
+                                        header: "Product Id",
+                                        view: (row: any) => <div>{row.id}</div>,
+                                    },
+                                    {
+                                        header: "Product Name",
+                                        view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row.name}</div>,
+                                    },
+                                    {
+                                        header: "Category",
+                                        view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
+                                    },
+                                    {
+                                        header: "Date Listed",
+                                        view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
+                                    },
 
-                        ]}
-                        loading={isLoading}
-                        pagination={{
+                                ]}
+                                loading={isLoading}
+                                pagination={{
 
-                            page: currentPage,
-                            pageSize: pageSize,
-                            totalRows: allProducts?.result.totalResults,
-                            setPageSize: handlePageSize,
-                            setPage: handleCurrentPage
-                        }}
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: allProducts?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }}
 
-                    />
+                            /> : <div className='h-full flex-grow flex justify-center items-center'>
+                                <img src='/images/NoProduct.svg' alt='No Product Found' />
+                            </div>
+                    }
+
                     <ViewProductDiscoveryModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
                 </div>

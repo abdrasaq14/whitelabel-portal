@@ -89,11 +89,31 @@ const BioProfile = () => {
     }
   );
 
+  const handleSubmitStaff = useMutation(
+    async (values: any) => {
+
+      return await UserService.updateStaff(values);
+    },
+    {
+      onSuccess: (response) => {
+        toast.success('Account Information Updated Successfully');
+        form.setSubmitting(false);
+        console.log(response)
+        // AuthActions.setProfile(response.data.user)
+
+      },
+      onError: (err: any) => {
+        form.setSubmitting(false)
+        toast.error('An error occurred. Please try again');
+      },
+    }
+  );
+
   const form = useFormik({
     initialValues: companyDetails.role === "Admin" ? BioInfoInitialValues : BioInfoInitialValuesStaff,
     validationSchema: companyDetails.role === "Admin" ? validationSchema : validationSchemaStaff,
     onSubmit: (values: any) => {
-      handleSubmit.mutate(values);
+      companyDetails.role === "Admin" ? handleSubmit.mutate(values) : handleSubmitStaff.mutate(values)
     },
   });
 

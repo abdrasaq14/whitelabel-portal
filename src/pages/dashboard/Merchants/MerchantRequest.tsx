@@ -13,11 +13,11 @@ const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
   const { data: allRequest, isLoading } = useFetchWithParams(
     ["query-all-merchants-request", {
-      page:currentPage,
-      limit:pageSize,
+      page: currentPage,
+      limit: pageSize,
       whiteLabelId: profile._id
 
     }],
@@ -59,27 +59,27 @@ const MerchantRequest = () => {
         {
           allRequest ? <div className='py-4'>
 
-          {
-            allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
-          }
+            {
+              allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
+            }
 
-          {/* <Request />
+            {/* <Request />
           <Request /> */}
 
-          <div className='flex items-center justify-center'>
-            <Paginator setPage={handleCurrentPage} loading={isLoading} currentLength={allRequest && allRequest.result.length} totalRows={1} page={currentPage} pageSize={pageSize} />
-          </div>
+            <div className='flex items-center justify-center'>
+              <Paginator setPage={handleCurrentPage} loading={isLoading} currentLength={allRequest && allRequest.result.length} totalRows={1} page={currentPage} pageSize={pageSize} />
+            </div>
 
-        </div> : 
-        <div className='w-full h-[60vh] flex  items-center justify-center'>
-          <div>
-            <h3>No request at the moment</h3>
-          </div>
+          </div> :
+            <div className='w-full h-[60vh] flex  items-center justify-center'>
+              <div>
+                <h3>No request at the moment</h3>
+              </div>
 
-        </div>
+            </div>
         }
 
-        
+
 
 
 
