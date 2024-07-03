@@ -136,6 +136,7 @@ const MerchantDetails = () => {
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
                         <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
                     </div>
+                    <button className='border border-primary rounded bg-white px-3 py-2 whitespace-nowrap'>Message Merchant</button>
 
                 </div>
 
