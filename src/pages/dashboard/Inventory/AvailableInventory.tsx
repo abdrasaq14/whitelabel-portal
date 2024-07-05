@@ -23,7 +23,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-page", {
-            page: currentPage, limit: pageSize,
+            page: currentPage, limit: pageSize,whiteLabelName: profile.whiteLabelName,
         }],
         InventoryService.getInventoroes,
         {

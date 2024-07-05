@@ -248,7 +248,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
     if (form.values.itemId == undefined || form.values.itemId == "" || form.values.itemId == null) {
       return
 
-    }else{
+    } else {
       setSelected(JSON.parse(form.values.itemId))
     }
 
@@ -258,7 +258,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   }, [form.values.itemId])
 
   const { data, isLoading, refetch } = useFetchWithParams(
-    ["query-all-inventory", { page: 1, limit: 1000 }],
+    ["query-all-inventory", { page: 1, limit: 1000, whiteLabelName: profile.whiteLabelName, }],
     InventoryService.getInventoroes,
     {
       onSuccess: () => {
