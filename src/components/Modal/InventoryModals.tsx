@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Yup from "yup";
 import Modal from './Modal'
 import { FormikProvider, useFormik } from 'formik'
@@ -70,6 +70,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
     {
       onSuccess: (res) => {
         toast.success("Inventory Added Successfully")
+        form.resetForm()
         closeViewModal()
 
       },
@@ -204,18 +205,21 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   const profile: any = useAuth((s) => s.profile)
   console.log(profile)
   const [inventoryItems, setInventoryItems] = useState<any>([]);
+  const [selected, setSelected] = useState<any>({})
 
-  console.log(inventoryItems)
+
+  // console.log(selected)
 
   const validationSchema = Yup.object({
     quantity: Yup.number()
       .required('Quantity is required')
       .positive('Quantity must be greater than zero')
+      .max(selected?.quantityIn ?? 10, "Quantity can't be greater than available quantity")
       .min(1, 'Quantity must be greater than one'),
     itemId: Yup.string().required('Item is required'),
   });
 
-  const form = useFormik({
+  const form: any = useFormik({
     initialValues: {
       quantity: "",
       itemId: ""
@@ -239,6 +243,19 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
       handleAddInventory.mutate(body);
     }
   });
+
+  useEffect(() => {
+    if (form.values.itemId == undefined || form.values.itemId == "" || form.values.itemId == null) {
+      return
+
+    }else{
+      setSelected(JSON.parse(form.values.itemId))
+    }
+
+    // console.log(form.values.itemId)
+
+
+  }, [form.values.itemId])
 
   const { data, isLoading, refetch } = useFetchWithParams(
     ["query-all-inventory", { page: 1, limit: 1000 }],
@@ -317,7 +334,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
                     Available Inventories
                   </label>
                   <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("itemId")} name='itemId' >
-                    <option>Select inventory</option>
+                    <option value="">Select inventory</option>
 
                     {
                       data && data?.result.results.map((items: any, id: any) => <option key={id} value={JSON.stringify(items)}>{items.name}</option>)
@@ -326,7 +343,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
                   </select>
                 </div>
 
-                <TextInput placeholder="Enter Quantity" name='quantity' label='Quantity' />
+                <TextInput type="number" placeholder="Enter Quantity" name='quantity' label='Quantity' />
               </div>
 
               {/* <button type="button" onClick={handleAddMore} className='mt-4 mb-5 bg-white font-semibold  !text-primary border border-primary' label='Add More Inventory' /> */}
@@ -380,7 +397,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   )
 }
 
-export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean }) => {
+export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true, isHistory }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean, isHistory?: boolean }) => {
 
   const handleApprove = useMutation(
     async () => {
@@ -431,7 +448,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
 
         <div className='md:w-[552px] w-full px-4 h-auto'>
           <div className='flex items-center justify-between'>
-            <h3 className='text-xl font-semibold'>Inventory History</h3>
+            <h3 className='text-xl font-semibold'>{isHistory ? 'Inventory History' : "Inventory Request"}</h3>
             <Label variant='success' >{details.status}</Label>
           </div>
 

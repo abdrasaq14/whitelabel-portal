@@ -37,6 +37,7 @@ export const RequestPasswordReset = () => {
     {
       onSuccess: (response) => {
         toast.success(response.data.message);
+        form.resetForm()
         form.setSubmitting(false)
         // requestAnimationFrame(() => {
         //   router("/reset-password");

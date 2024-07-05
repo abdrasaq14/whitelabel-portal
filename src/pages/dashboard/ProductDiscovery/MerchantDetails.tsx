@@ -221,8 +221,8 @@ const MerchantDetails = () => {
                 </div>
                 <div className='h-full flex-auto '>
                     {
-                        allProducts ?
-                            <Table data={allProducts?.result && allProducts?.result?.results.length > 0}
+                        allProducts && allProducts?.result?.results.length > 0 ?
+                            <Table data={allProducts && allProducts?.result?.results.length > 0 && allProducts?.result?.results}
                                 hideActionName={true}
                                 emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
                                     <img src='/images/NoProduct.svg' alt='No Product Found' />
@@ -246,16 +246,16 @@ const MerchantDetails = () => {
                                     },
                                     {
                                         header: "Product Id",
-                                        view: (row: any) => <div>{row.id}</div>,
-                                    },
+                                        view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
+                                      },
                                     {
                                         header: "Product Name",
                                         view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row.name}</div>,
                                     },
-                                    {
-                                        header: "Category",
-                                        view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
-                                    },
+                                    // {
+                                    //     header: "Category",
+                                    //     view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
+                                    // },
                                     {
                                         header: "Date Listed",
                                         view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,

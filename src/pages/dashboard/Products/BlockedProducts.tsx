@@ -118,7 +118,7 @@ const BlockedProducts = () => {
                   },
                   {
                     header: "Product Id",
-                    view: (row: any) => <div>{row.productIdOnProfitAll}</div>,
+                    view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
                   },
                   {
                     header: "Merchant",

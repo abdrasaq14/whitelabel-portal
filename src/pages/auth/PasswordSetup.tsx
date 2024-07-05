@@ -66,7 +66,7 @@ console.log(token)
         password: values.password,
         resetToken: token,
       }
-      console.log(body);
+      // console.log(body);
       
       return await AuthService.resetPassword(body);
     },

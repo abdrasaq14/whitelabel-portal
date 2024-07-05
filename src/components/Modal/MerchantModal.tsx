@@ -218,19 +218,51 @@ export const ConfirmModal = ({ isOpen, closeModal, confirmAddition, caption }: a
 
 
 export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: any) => {
+    const [isConfirm, setIsConfirm] = useState(false)
+    const [reason, setReason] = useState("")
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
         closeModal();
     });
 
     const handleConfirmDelete = async () => {
-        await confirmDelete();
+        await confirmDelete(reason);
         closeModal();
+        setIsConfirm(false)
     }
 
     return (
         <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col p-4 sm:p-8 align-middle max-w-2xl items-center rounded z-24 bg-white w-[70%] sm:w-[400px] h-auto'>
-            <div className=''>
+            {
+                isConfirm ? <>
+                <h3 className='font-medium'>Please provide a reason to suspend this account to sell on this platform</h3>
+
+                <div className="mt-4">
+                    <label className='text-xs text-gray-600'>Kindly provide a reason</label>
+                    <textarea onChange={(e) => setReason(e.target.value)} className='w-full mt-1 text-sm h-[90px] px-3 py-3 border rounded focus:outline-none' placeholder='Provide reason' />
+
+                </div>
+                <div className='w-full flex mt-4 justify-end gap-2  '>
+                <button
+                    type='button'
+                    onClick={() => closeModal()}
+                    disabled={false}
+                    className='border-primary-subtext border-[1px] rounded-lg text-primary text-sm inline-flex gap-2  items-center justify-center text-center sm:w-[40%] px-8 py-3 font-medium hover:bg-purple-700 hover:text-white '
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type='button'
+                    onClick={handleConfirmDelete}
+                    disabled={false}
+                    className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
+                >
+                    Submit  <span><MdOutlineArrowForward size={12} /></span>
+                </button>
+            </div>
+                </> : <>
+                <div className=''>
                 <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
             </div>
             <div>
@@ -248,13 +280,16 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
 
                 <button
                     type='button'
-                    onClick={handleConfirmDelete}
+                    onClick={() => setIsConfirm(true)}
                     disabled={false}
                     className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
                 >
                     Yes  <span><MdOutlineArrowForward size={12} /></span>
                 </button>
             </div>
+                </>
+            }
+            
         </Modal>
     )
 }

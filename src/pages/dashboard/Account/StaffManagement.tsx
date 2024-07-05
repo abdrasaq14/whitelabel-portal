@@ -136,8 +136,6 @@ export const StaffManagement = () => {
                   }
 
                 />
-                <EditStaffModal staffInfo={staff} isOpen={isEditModalOpen} closeModal={closeEditModal} />
-                <AddStaffModal isOpen={isAddModalOpen} closeModal={closeAddModal} />
 
               </>
 
@@ -153,6 +151,15 @@ export const StaffManagement = () => {
 
             )
           }
+          <EditStaffModal staffInfo={staff} isOpen={isEditModalOpen} closeModal={async () => {
+            await refetch()
+            closeEditModal()
+          }} />
+          <AddStaffModal isOpen={isAddModalOpen} closeModal={async () => {
+            await refetch()
+            closeAddModal()
+          }} />
+
 
         </div>
 

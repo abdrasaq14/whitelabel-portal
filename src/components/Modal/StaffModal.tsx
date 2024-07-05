@@ -88,7 +88,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
   const { mutate } = useMutation(
     async (values: any) => {
-      return await UserService.editAdminDetails(values);
+      return await UserService.updateStaff(values, staffInfo._id);
     },
     {
       onSuccess: (response, variables, context: any) => {

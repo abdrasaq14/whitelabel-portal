@@ -49,7 +49,9 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
         {
             onSuccess: async (res: any) => {
                 await refetch()
+                toast.success(res.data.result)
                 closeViewModal()
+                
 
             },
             onError: (err: any) => {
@@ -97,7 +99,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
                         <div className='mt-4'>
                             <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Name</p>
-                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.businessName}</p>
+                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.businessName ?? product.merchantName}</p>
                         </div>
                         <div className='mt-4'>
                             <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Rating</p>

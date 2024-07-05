@@ -16,7 +16,7 @@ export const InventoryService = {
     },
     getInventoryRequestHistory: async (payload: any) => {
         const { whiteLabelName, ...params } = payload;
-        console.log(whiteLabelName, params, payload)
+        // console.log(whiteLabelName, params, payload)
         return await createApiClient(false).get(`/inventory/request/${paramsObjectToQueryString(payload)}`,)
     },
     getUsersRequest: async (payload: any) => {

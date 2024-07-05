@@ -67,8 +67,9 @@ const SecurityPassword = () => {
       onSuccess: (response) => {
         toast.success(response.data.result.message)
         AuthActions.logout()
+
       },onError: (err:any) => {
-        toast.error(err.response.data.result.message)
+        toast.error(err.response.data.message)      
       }
 
 
@@ -90,6 +91,7 @@ const SecurityPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, formikActions) => {
           await changePassword.mutate(values)
+          formikActions.setSubmitting(false)
           formikActions.resetForm()
         }}
       >
