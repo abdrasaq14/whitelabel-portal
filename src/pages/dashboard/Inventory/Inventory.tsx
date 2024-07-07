@@ -74,7 +74,7 @@ const Inventory = () => {
         } else {
             switch (tabIndex) {
                 case 0:
-                    return <AvailableInventory />
+                    return <AvailableInventory isMakeModalOpen={isMakeModalOpen} />
                 case 1:
                     return <RequestedInvetory isMakeModalOpen={isMakeModalOpen}/>
                 case 2:

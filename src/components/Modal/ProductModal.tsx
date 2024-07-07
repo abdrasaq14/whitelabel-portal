@@ -220,7 +220,7 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8 '>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel images={product.gallery_image} />
+                    <ProductImageCarousel images={product?.gallery_image?.length > 0 ? product.gallery_image : [product.image]} />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -251,7 +251,7 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
                 <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
                     <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
                     <p className='text-primary-subtext font-normal text-sm'>
-                        {product.description}
+                   {product.description}
                     </p>
                     <div>
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>

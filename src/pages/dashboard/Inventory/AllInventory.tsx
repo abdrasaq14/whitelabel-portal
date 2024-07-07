@@ -115,6 +115,15 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
         },
     }
 
+    const calculateStockStatus = (quantity: number) => {
+        if (quantity > 20) {
+            return <Label variant='success'>In stock</Label>;
+        } else if (quantity > 0 && quantity <= 20) {
+            return <Label variant='warning'>Low in stock</Label>;
+        } else {
+            return <Label variant='danger'>Out of stock</Label>;
+        }
+    };
 
     const handlePageSize = (val: any) => {
         setPageSize(val);
@@ -160,7 +169,10 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                 },
                                 {
                                     header: "Quantity",
-                                    view: (row: any) => <div>{row.quantityIn}</div>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return <div>{quantity}</div>;
+                                    }
                                 },
                                 {
                                     header: "Category",
@@ -173,9 +185,12 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                 {
                                     header: "Date Listed",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
-                                }, {
+                                },{
                                     header: "Status",
-                                    view: (row: any) => <Label variant='success'>In stock</Label>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return calculateStockStatus(quantity);
+                                    }
                                 },
 
                             ]}

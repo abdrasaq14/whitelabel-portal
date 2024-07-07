@@ -11,7 +11,7 @@ import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
 
-const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
+const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any,isMakeModalOpen?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const profile: any = useAuth((s) => s.profile)
@@ -115,6 +115,16 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
         },
     }
 
+    const calculateStockStatus = (quantity: number) => {
+        if (quantity > 20) {
+            return <Label variant='success'>In stock</Label>;
+        } else if (quantity > 0 && quantity <= 20) {
+            return <Label variant='warning'>Low in stock</Label>;
+        } else {
+            return <Label variant='danger'>Out of stock</Label>;
+        }
+    };
+
 
     const handlePageSize = (val: any) => {
         setPageSize(val);
@@ -157,7 +167,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                                 },
                                 {
                                     header: "Quantity",
-                                    view: (row: any) => <div>{row.quantityIn}</div>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return <div>{quantity}</div>;
+                                    }
                                 },
                                 {
                                     header: "Category",
@@ -172,7 +185,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddM
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
-                                    view: (row: any) => <Label variant='success'>In stock</Label>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return calculateStockStatus(quantity);
+                                    }
                                 },
 
                             ]}

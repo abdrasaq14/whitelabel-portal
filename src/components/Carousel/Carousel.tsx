@@ -14,11 +14,11 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
 
   const mainCarouselSettings = {
     dots: false,
-    infinite: true,
+    infinite: images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: images.length > 1,
     autoplaySpeed: 5000,
     arrows: false,
     beforeChange: (oldIndex: number, newIndex: number) => setCurrentSlide(newIndex)
@@ -26,7 +26,7 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
 
   const thumbnailCarouselSettings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -58,20 +58,24 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
     <div>
       <Slider ref={mainCarouselRef} {...mainCarouselSettings}>
         {images.map((image, index) => (
-          <div key={index} className='w-full flex h-[150px]  '>
+          <div key={index} className='w-full flex h-[150px]'>
             <img src={image} alt={`Product ${index + 1}`} className='object-cover h-full w-full' />
           </div>
         ))}
       </Slider>
-      <Slider {...thumbnailCarouselSettings}>
-        {images.map((image, index) => (
-          <div className='grid grid-cols-4 h-28 w-14 gap-2 ' key={index} onClick={() => handleThumbnailClick(index)}>
-            <img className='col-span-1 object-cover h-full w-full ' src={image} alt={`Thumbnail ${index + 1}`} />
-          </div>
-        ))}
-      </Slider>
+      {images.length > 1 && (
+        <Slider {...thumbnailCarouselSettings}>
+          {images.map((image, index) => (
+            <div
+              className={`thumbnail-wrapper h-14 w-28 mr-2 border   ${currentSlide === index ? 'active' : ''}`}
+              key={index}
+              onClick={() => handleThumbnailClick(index)}
+            >
+              <img className='thumbnail-image object-contain h-full w-full' src={image} alt={`Thumbnail ${index + 1}`} />
+            </div>
+          ))}
+        </Slider>
+      )}
     </div>
   );
-}
-
-
+};
