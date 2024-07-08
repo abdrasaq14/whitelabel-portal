@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import NotificationIcon from "../../components/common/NotificationIcon";
 import NotificationSidebar from "../../components/common/NotificationSidebar";
 import { IoIosHelpCircleOutline } from "react-icons/io";
@@ -6,6 +6,7 @@ import { useAuth } from "../../zustand/auth.store";
 
 import { Link } from "react-router-dom";
 import Clock from "../../components/Clock";
+import { NotificationContext } from "../../context/NotificationContext";
 
 const _extractInitials = (val: string) => {
   const _first = val.split(" ")[0].slice(0, 1);
@@ -23,9 +24,10 @@ const user = {
 const DashboardHeader = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const companyDetails: any = useAuth(state => state.profile);
+  const notification = useContext(NotificationContext)
 
   const _openNav = () => {
-    setIsNotificationOpen(true);
+    notification?.toggleOpen();
   };
   return (
     <header className="h-20 w-full sticky top-0  shadow-sm  overflow-hidden">
@@ -44,11 +46,8 @@ const DashboardHeader = () => {
           <div className="flex items-center">
             <IoIosHelpCircleOutline size={28} fill="#000000" />
           </div>
-          {/* <div className="flex items-center ">
-            <NotificationSidebar
-              setIsNotificationOpen={setIsNotificationOpen}
-              isNotificationOpen={isNotificationOpen}
-            />
+          <div className="flex items-center ">
+
             <div
               onClick={_openNav}
               className={`w-10 h-10 rounded-full bg-opacity-20 cursor-pointer ${isNotificationOpen ? "bg-pc-lightblue" : "bg-transparent"
@@ -62,13 +61,14 @@ const DashboardHeader = () => {
             </div>
 
 
-          </div> */}
+          </div>
           <div>
             <p className=" font-normal text-xs text-[#464749]">{user.location}</p>
             <p className="font-satoshiBold text-xs text-[#464749] mt-1 text-end "><Clock /></p>
           </div>
         </div>
       </div>
+
     </header>
   );
 };
