@@ -7,6 +7,8 @@ import { useAuth } from "../../zustand/auth.store";
 import { Link } from "react-router-dom";
 import Clock from "../../components/Clock";
 import { NotificationContext } from "../../context/NotificationContext";
+import CurrencySymbol from "../../components/common/CurrencySymbol";
+import LanguageFlag from "../../components/common/LanguageFlag";
 
 const _extractInitials = (val: string) => {
   const _first = val.split(" ")[0].slice(0, 1);
@@ -42,6 +44,12 @@ const DashboardHeader = () => {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 text-sm">
+            <LanguageFlag languageCode={companyDetails.language} />{companyDetails.language}
+          </div>
+          <div className="flex items-center gap-1 text-sm">
+            <CurrencySymbol currencyCode={companyDetails.currency} />{companyDetails.currency}
+          </div>
 
           <div className="flex items-center">
             <IoIosHelpCircleOutline size={28} fill="#000000" />

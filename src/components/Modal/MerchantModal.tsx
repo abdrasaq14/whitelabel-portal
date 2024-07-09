@@ -246,7 +246,6 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
                 <button
                     type='button'
                     onClick={() => closeModal()}
-                    disabled={false}
                     className='border-primary-subtext border-[1px] rounded-lg text-primary text-sm inline-flex gap-2  items-center justify-center text-center sm:w-[40%] px-8 py-3 font-medium hover:bg-purple-700 hover:text-white '
                 >
                     Cancel
@@ -255,8 +254,8 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
                 <button
                     type='button'
                     onClick={handleConfirmDelete}
-                    disabled={false}
-                    className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
+                    disabled={reason === "" || reason.length <= 5}
+                    className='bg-primary hover:bg-purple-700 disabled:bg-gray-500 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
                 >
                     Submit  <span><MdOutlineArrowForward size={12} /></span>
                 </button>

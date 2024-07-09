@@ -134,7 +134,7 @@ const AllProducts = () => {
                 },
                 {
                   header: "Product Name",
-                  view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row?.name} </div>,
+                  view: (row: any) => <div  className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row?.name} </div>,
                 },
                 {
                   header: "Date Listed",

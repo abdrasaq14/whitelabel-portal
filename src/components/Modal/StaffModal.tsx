@@ -157,7 +157,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       <div className='flex-grow '>
         <Formik
           initialValues={StaffInfoInitialValues}
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           onSubmit={(values, formikActions) => {
             mutate(values, {
               onSuccess: (response) => {
@@ -172,7 +172,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
               },
             });
           }}>
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, errors } : any) => {
             return (
               <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
                 <div className='col-span-1'>
@@ -221,6 +221,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                     }
 
                   </select>
+                  <span className='text-xs text-red-600'>{errors?.roleId}</span>
                 </div>
 
                 <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
@@ -402,12 +403,12 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
     lastName: Yup.string().required('lastName is required'),
     image: Yup.string().required("image is required"),
     phoneNumber: Yup.string().required("PhoneNumber is required"),
-    // roleId: Yup.string().required('role is required'),
+    roleId: Yup.string().required('role is required'),
   });
-  const handleSubmit = (values: any) => {
-    console.log('Form submitted with values:', values);
-    closeModal();
-  };
+  // const handleSubmit = (values: any) => {
+  //   console.log('Form submitted with values:', values);
+  //   closeModal();
+  // };
 
 
   const handleAddUser = useMutation(
@@ -419,6 +420,8 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
       onSuccess: (res) => {
         console.log(res);
         toast.success("staff created successfully")
+        closeModal();
+
 
 
       },
@@ -438,7 +441,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
     validationSchema,
     onSubmit: async (values) => {
       handleAddUser.mutate({ whiteLabelName: profile.whiteLabelName, ...values })
-      handleSubmit(values);
+      // handleSubmit(values);
     }
   })
 
@@ -490,6 +493,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
               }
 
             </select>
+            <span className='text-red-600 text-xs'>{form.errors.roleId}</span>
           </div>
           <div className='col-span-1 sm:col-span-2 flex flex-col'>
             <h3 className='text-sm font-normal font-satoshiRegular text-[#344054]' >Staff profile Image</h3>
