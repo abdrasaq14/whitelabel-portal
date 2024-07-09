@@ -33,7 +33,12 @@ const Currency = () => {
         {
             onSuccess: (response) => {
                 toast.success("Currency Changed Successfully")
-                AuthActions.setProfile(response.data.user)
+                if (response.data.user) {
+                    AuthActions.setProfile(response.data.user)
+                } else {
+                    AuthActions.setProfile(response.data.result.user)
+
+                }
                 // AuthActions.logout()
             }
 
@@ -86,7 +91,12 @@ const Language = () => {
         {
             onSuccess: (response) => {
                 toast.success("Language Changed Successfully")
-                AuthActions.setProfile(response.data.user)
+                if (response.data.user) {
+                    AuthActions.setProfile(response.data.user)
+                } else {
+                    AuthActions.setProfile(response.data.result.user)
+
+                }
                 // AuthActions.logout()
                 form.setSubmitting(false)
 

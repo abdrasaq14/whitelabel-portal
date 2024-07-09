@@ -45,10 +45,10 @@ const DashboardHeader = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1 text-sm">
-            <LanguageFlag languageCode={companyDetails.language} />{companyDetails.language}
+            <LanguageFlag languageCode={companyDetails?.language} />{companyDetails?.language}
           </div>
           <div className="flex items-center gap-1 text-sm">
-            <CurrencySymbol currencyCode={companyDetails.currency} />{companyDetails.currency}
+            <CurrencySymbol currencyCode={companyDetails?.currency} />{companyDetails?.currency}
           </div>
 
           <div className="flex items-center">
