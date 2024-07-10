@@ -486,7 +486,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
           <div className='col-span-1 sm:col-span-2 flex flex-col'>
             <select {...form.getFieldProps("roleId")} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='roleId' >
-              <option>Select Role</option>
+              <option value={""}>Select Role</option>
 
               {
                 roleOptions.map((items: any, id) => <option key={id} value={items.value}>{items.label}</option>)
