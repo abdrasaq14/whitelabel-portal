@@ -36,7 +36,7 @@ export const RequestPasswordReset = () => {
     },
     {
       onSuccess: (response) => {
-        toast.success(response.data.message);
+        toast.success(response.data.result.message ?? "recovery link has been sent to your email");
         form.resetForm()
         form.setSubmitting(false)
         // requestAnimationFrame(() => {

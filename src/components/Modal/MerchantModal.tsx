@@ -104,18 +104,18 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Product  Categories</p>
                         <h3>{merchant?.category}</h3>
                     </div>
-                    <div className='mt-2'>
+                    {/* <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Products</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.category}</p>
-                    </div>
+                    </div> */}
                     <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Location</p>
-                        <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '></p>
+                        <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.location?.address}</p>
                     </div>
-                    <div className='mt-2'>
+                    {/* <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Address</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.businessName}</p>
-                    </div>
+                    </div> */}
                     <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Date Joined</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.createdAt && fDate(merchant?.createdAt)}</p>

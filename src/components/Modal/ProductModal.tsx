@@ -10,6 +10,7 @@ import { ProductService } from '../../services/product.service';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../zustand/auth.store';
 import { useNavigate } from 'react-router-dom';
+import { HtmlToString } from '../common/HtmlToString';
 
 
 
@@ -17,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: any) => {
     const [isProductBan, setIsProductBan] = useState(false);
     const profile: any = useAuth((s) => s.profile);
-    const  navigate = useNavigate()
+    const navigate = useNavigate()
 
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
@@ -51,7 +52,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
                 await refetch()
                 toast.success(res.data.result)
                 closeViewModal()
-                
+
 
             },
             onError: (err: any) => {
@@ -64,7 +65,12 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8'>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel images={product.gallery_image} />
+                    <ProductImageCarousel
+                        images={[
+                            product?.image,
+                            ...(product?.gallery_image || []),
+                        ]}
+                    />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -220,7 +226,12 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8 '>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel images={product?.gallery_image?.length > 0 ? product.gallery_image : [product.image]} />
+                    <ProductImageCarousel
+                        images={[
+                            product?.image,
+                            ...(product?.gallery_image || []),
+                        ]}
+                    />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -251,7 +262,8 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
                 <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
                     <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
                     <p className='text-primary-subtext font-normal text-sm'>
-                   {product.description}
+
+                        {product.description && HtmlToString(product.description)}
                     </p>
                     <div>
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>

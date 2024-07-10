@@ -210,16 +210,12 @@ const Overview = ({ merchant }: { merchant: any }) => {
                                 <h3>{merchant?.result?.category}</h3>
                             </div>
                             <div className='mt-2'>
-                                <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Products</p>
-                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result.category}</p>
-                            </div>
-                            <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Location</p>
                                 <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '></p>
                             </div>
                             <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Address</p>
-                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result.businessName}</p>
+                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result?.location?.address}</p>
                             </div>
                             <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Date Joined</p>
