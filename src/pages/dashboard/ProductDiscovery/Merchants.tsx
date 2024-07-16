@@ -118,7 +118,7 @@ const Merchants = () => {
               },
               {
                 header: "Location",
-                view: (row: any) => <div>{row?.location.country}</div>,
+                view: (row: any) => <div>{row?.location?.country}</div>,
               },
 
             ]}
