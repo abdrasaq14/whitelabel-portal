@@ -1,6 +1,10 @@
 import React, { useRef } from "react";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useAuth } from "../../zustand/auth.store";
+import { NotificationService } from "../../services/notification.service";
+import { fDate, fToNow } from "../../utils/formatTime";
 
 
 export const SampleNotification = [
@@ -89,6 +93,8 @@ const NotificationSidebar = ({
   setIsNotificationOpen,
 }: INO) => {
   const sideNavRef = useRef<any>();
+  const profile: any = useAuth((s) => s.profile)
+  console.log(profile)
 
   const navigate = useNavigate()
 
@@ -97,20 +103,35 @@ const NotificationSidebar = ({
     setIsNotificationOpen(false);
   });
 
+  const { data: notifications, } = useQuery(
+    ["query-user-Notifications-sales", profile],
+    async () => {
+      return await NotificationService.getUsersNotification();
+    },
+    {
+      enabled: true,
+      onSuccess: (res) => {
+      },
+      onError: (err: any) => {
+        console.log("Error Occured:", err.response);
+      },
+
+    }
+  );
 
 
 
 
-  // console.log(data?.data);
+  console.log(notifications)
 
 
   return (
     <>
       {isNotificationOpen && (
-        <div className="modal-background fixed top-0 left-0 right-0 bottom-0 bg-purple-900 bg-opacity-70 z-100">
+        <div className="modal-background fixed top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-70 z-[90]">
           <section
             ref={sideNavRef}
-            className={`fixed   notification-sidebar transition-transform duration-500 ease-in-out ${isNotificationOpen ? 'transform  z-20 translate-x-0' : 'transform -translate-x-full'
+            className={`absolute notification-sidebar transition-transform duration-500 ease-in-out ${isNotificationOpen ? 'transform  z-[90] translate-x-0' : 'transform -translate-x-full'
               }
          rounded-tl rounded-bl transition-transform duration-[30001] h-full w-[388px]  top-0 shadow-md bg-white  right-0`}
           >
@@ -139,7 +160,8 @@ const NotificationSidebar = ({
 
                 <div className="mb-24">
                   {
-                    SampleNotification.map((items: any, index: number) => <Notification key={index} data={items} />)
+                    notifications?.data.result && 
+                    notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
                   }
                 </div>
 
@@ -168,39 +190,26 @@ const NotificationSidebar = ({
   );
 };
 
-interface dataItf {
-  data: {
-    date: any,
-    notifications: {
-      title: string,
-      description: string,
-      isRead: boolean,
-      time: any
-    }[]
-  }
 
-}
-
-export const Notification = ({ data }: dataItf) => {
+export const Notification = ({ data }: any) => {
 
   return (
     <div>
-      <h3 className="text-xs border-b py-2 mt-3 ">{data?.date}</h3>
+      <h3 className="text-xs border-b py-2 mt-3 ">{fDate(data?.createdAt)}</h3>
       <div >
-        {
-          data.notifications.map((items: any, index: number) =>
+        
+         
             <div className="w-full flex items-end justify-between py-2 border-b">
               <div>
-                <h3 className="font-medium">{items.title}</h3>
-                <h5 className="text-xs text-[#6F7174]">{items.description}</h5>
+                <h3 className="font-medium">{data.title}</h3>
+                <h5 className="text-xs text-[#6F7174]">{data.body[0][1]}</h5>
               </div>
               <div>
-                <h3 className="text-xs text-[#4D5154] ">{items.time}</h3>
+                <h3 className="text-xs text-[#4D5154] ">{fToNow(data?.createdAt)}</h3>
               </div>
 
 
-            </div>)
-        }
+            </div>
 
       </div>
     </div>

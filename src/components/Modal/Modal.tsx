@@ -29,7 +29,7 @@ const Modal: FunctionComponent<ModalPropsInterface> = ({ children, onClick = () 
 								className
 							)}
 						>
-							<div className="modal-head flex border-b justify-between items-center px-3 py-3 ">
+							<div className={clsx("modal-head flex justify-between items-center px-3 py-3 ", header && "border-b")}>
 								<h3 className="text-xl text-[#111111] font-semibold">{header}</h3>
 								<a
 									onClick={onClick}

@@ -138,6 +138,12 @@ const SuspendedMerchants = () => {
     }
   )
 
+  const getStatusById = (arr:any, id:string) => {
+    const item = arr.find((element:any)  => element.platform == id);
+    return item && item.status;
+  }
+
+
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
     return (currentPage - 1) * pageSize + index + 1;
@@ -160,10 +166,13 @@ const SuspendedMerchants = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>Suspended Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{MerchantList.length}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>Suspended Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
+              <SearchInput value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} placeholder='Search' />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -171,7 +180,7 @@ const SuspendedMerchants = () => {
 
 
         {
-          mockData.data.length > 0 ? (
+         allMerchants &&  allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
                 clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
@@ -217,7 +226,7 @@ const SuspendedMerchants = () => {
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) => <Label variant={row.status === "Active" ? "success" : "danger"} >{row?.status} </Label>,
+                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row  && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
                   }
                 ]}
                 loading={isLoading}

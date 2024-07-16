@@ -1,8 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const OtpInput = ({ length, onChange } : {length:number, onChange:any}) => {
+const OtpInput = ({ length, onChange, error } : {length:number, onChange:any, error? : any}) => {
   const [otp, setOtp] = useState(Array(length).fill(''));
   const inputRefs = useRef(new Array(length));
+
+  useEffect(() => {
+    if (error) {
+      resetOtp();
+    }
+  }, [error]);
+
+  const resetOtp = () => {
+    setOtp(Array(length).fill(''));
+    inputRefs.current[0].focus();
+  };
+
 
   const handleChange = (e:any, index:number) => {
     const value = e.target.value;
@@ -26,8 +38,25 @@ const OtpInput = ({ length, onChange } : {length:number, onChange:any}) => {
     }
   };
 
+  const handlePaste = (e:any) => {
+    const pasteData = e.clipboardData.getData('text').slice(0, length).split('');
+    const newOtp = [...otp];
+
+    pasteData.forEach((char:any, index:number) => {
+      if (index < length) {
+        newOtp[index] = char;
+        const input:any = inputRefs.current[index];
+        input.value = char;
+      }
+    });
+
+    setOtp(newOtp);
+    onChange(newOtp.join(''));
+  };
+
+
   return (
-    <div className="flex w-full justify-between space-x-2">
+    <div onPaste={handlePaste} className="flex w-full justify-between space-x-2">
       {otp.map((digit, index) => (
         <input
           key={index}

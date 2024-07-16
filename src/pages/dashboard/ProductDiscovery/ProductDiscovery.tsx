@@ -6,6 +6,7 @@ import Products from './Products'
 import Merchants from './Merchants'
 
 const ProductDiscovery = () => {
+  
 
   const accountTabTitle = [
     {

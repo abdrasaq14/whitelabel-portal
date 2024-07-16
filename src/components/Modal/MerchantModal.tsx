@@ -71,7 +71,7 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[90%] sm:w-full h-auto gap-4">
             <div className='w-full'>
                 <div className='flex w-full justify-between items-center p-2 border-b-[#C8CCD0] border-b-[1px]'>
-                    <UserProfile name={merchant.storeName} url={merchant.avatar_url} dateJoined={merchant.dateJoined} />
+                    <UserProfile name={merchant.businessName} url={merchant.image} dateJoined={merchant.createdAt} />
                     <button onClick={closeViewModal} className='text-primary-text'><IoCloseCircleOutline size={24} /></button>
 
                 </div>
@@ -104,18 +104,18 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Product  Categories</p>
                         <h3>{merchant?.category}</h3>
                     </div>
-                    <div className='mt-2'>
+                    {/* <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Products</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.category}</p>
-                    </div>
+                    </div> */}
                     <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Location</p>
-                        <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '></p>
+                        <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.location?.address}</p>
                     </div>
-                    <div className='mt-2'>
+                    {/* <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Address</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant.businessName}</p>
-                    </div>
+                    </div> */}
                     <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Date Joined</p>
                         <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.createdAt && fDate(merchant?.createdAt)}</p>
@@ -133,7 +133,7 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
             </div>
 
 
-            {/* <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to invite this Merchant ???" confirmAddition={handleMerchantAddedSuccess} /> */}
+            {/* <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to invite this Merchant ?" confirmAddition={handleMerchantAddedSuccess} /> */}
 
         </Modal>
 
@@ -161,10 +161,10 @@ const Categories: React.FC<Props> = ({ categories }) => {
 const UserProfile = ({ url, name, dateJoined }: any) => {
     return (
         <div className='flex gap-4 items-center '>
-            <img alt='Employee ' src={url} />
-            <div>
+            <img alt='' src={url} />
+            <div className=''>
                 <p className='font-satoshiMedium text-base text-primary-text'>{name}</p>
-                <p className='text-sm font-satoshiMedium text-primary-subtext mt-1'>Joined on {dateJoined}</p>
+                <p className='text-sm font-satoshiMedium text-primary-subtext mt-1'>Joined on {fDate(dateJoined)}</p>
             </div>
         </div>
     )
@@ -218,23 +218,54 @@ export const ConfirmModal = ({ isOpen, closeModal, confirmAddition, caption }: a
 
 
 export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: any) => {
+    const [isConfirm, setIsConfirm] = useState(false)
+    const [reason, setReason] = useState("")
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
         closeModal();
     });
 
     const handleConfirmDelete = async () => {
-        await confirmDelete();
+        await confirmDelete(reason);
         closeModal();
+        setIsConfirm(false)
     }
 
     return (
         <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col p-4 sm:p-8 align-middle max-w-2xl items-center rounded z-24 bg-white w-[70%] sm:w-[400px] h-auto'>
-            <div className=''>
+            {
+                isConfirm ? <>
+                <h3 className='font-medium'>Please provide a reason to suspend this account to sell on this platform</h3>
+
+                <div className="mt-4">
+                    <label className='text-xs text-gray-600'>Kindly provide a reason</label>
+                    <textarea onChange={(e) => setReason(e.target.value)} className='w-full mt-1 text-sm h-[90px] px-3 py-3 border rounded focus:outline-none' placeholder='Provide reason' />
+
+                </div>
+                <div className='w-full flex mt-4 justify-end gap-2  '>
+                <button
+                    type='button'
+                    onClick={() => closeModal()}
+                    className='border-primary-subtext border-[1px] rounded-lg text-primary text-sm inline-flex gap-2  items-center justify-center text-center sm:w-[40%] px-8 py-3 font-medium hover:bg-purple-700 hover:text-white '
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type='button'
+                    onClick={handleConfirmDelete}
+                    disabled={reason === "" || reason.length <= 5}
+                    className='bg-primary hover:bg-purple-700 disabled:bg-gray-500 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
+                >
+                    Submit  <span><MdOutlineArrowForward size={12} /></span>
+                </button>
+            </div>
+                </> : <>
+                <div className=''>
                 <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
             </div>
             <div>
-                <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to suspend this Account ???</p>
+                <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to suspend this Account ?</p>
             </div>
             <div className='w-full flex mt-4 justify-between  '>
                 <button
@@ -248,13 +279,16 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
 
                 <button
                     type='button'
-                    onClick={handleConfirmDelete}
+                    onClick={() => setIsConfirm(true)}
                     disabled={false}
                     className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
                 >
                     Yes  <span><MdOutlineArrowForward size={12} /></span>
                 </button>
             </div>
+                </>
+            }
+            
         </Modal>
     )
 }

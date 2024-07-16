@@ -37,7 +37,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         )}
       >
         <img
-          src={'/client-asset/landmark_logo.png'}
+          src={companyDetails.companyLogo ?? '/client-asset/landmark_logo.png'}
           className={clsx(
             "transition-[width] w-auto  h-[64px] "
           )}
@@ -66,15 +66,15 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
 
         <SidebarItem />
 
-        <NavLink className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to=""><IoStorefrontOutline /> Visit Marketplace</NavLink>
-        <div className="w-full absolute bottom-4 mb-4 2xl:bottom-8 h-16  gap-3.5  flex items-center px-6">
+        <NavLink target="_blank" className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to="https://msquaretest.profitall.co.uk"><IoStorefrontOutline /> Visit Marketplace</NavLink>
+        <div className="w-full bg-white absolute bottom-[0px]  2xl:bottom-8 h-[105px]  gap-3.5  flex items-center px-6">
 
-          
-          <div className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
+
+          <div onClick={() => logout?.toggleLogout()} className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
 
 
             <div
-              onClick={() => logout?.toggleLogout()}
+
               className={`whitespace-nowrap pc-text-danger flex-grow ${isCollapsed ? "hidden" : ""
                 }`}
             >
