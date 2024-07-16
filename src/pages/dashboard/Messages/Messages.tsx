@@ -97,12 +97,14 @@ const Messages = () => {
         onSuccess: async (response) => {
           const conversations = response.data.result;
           const conversationList: Conversation[] = await createConversationList(conversations);
-          setConversations(conversationList)
-          setActiveConversationId(conversationList[0].conversationId)
-          setMessageInfo({ name: conversationList[0].businessName == null ? `${conversationList[0].firstName} ${conversationList[0].lastName}` : `${conversationList[0].businessName}`, image: conversationList[0].image, id: conversationList[0].id })
+          if(conversations.length > 0){
+              setConversations(conversationList)
+              setActiveConversationId(conversationList[0].conversationId)
+              setMessageInfo({ name: conversationList[0].businessName == null ? `${conversationList[0].firstName} ${conversationList[0].lastName}` : `${conversationList[0].businessName}`, image: conversationList[0].image, id: conversationList[0].id })
+              getMessages.mutate(conversationList[0].conversationId)
+              socket.emit("subscribe", `room-${conversationList[0].conversationId}`);
+          }
           setLoadingConversation(false);
-          getMessages.mutate(conversationList[0].conversationId)
-          socket.emit("subscribe", `room-${conversationList[0].conversationId}`);
         },
         onError: (err: any) => {
           console.log("error happened", err);
@@ -152,22 +154,18 @@ const Messages = () => {
       sendMessage.mutate({conversationId: activeConversationId!, message: {senderId: userId, text}})
     }
   }
-  
 
   return (
     <div className='px-4 pt-8 h-full'>
       <div className='flex items-center gap-6'>
         <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
         <BreadCrumbClient backText="Dashboard" currentPath="Messages" brand='Landmark' />
-
-
-
       </div>
       <div className='className="mt-2 px-2 md:px-6  w-full"'>
         {
           loadingConversation ?
           <div className='w-full h-full flex px-3 py-3 rounded-md bg-white flex-col items-center justify-center'>
-            <Spinner color="#000000"/>
+            {/*<Spinner color="#000000"/>*/}
           </div> :
           conversations.length === 0 ?
             <div className='w-full h-full flex px-3 py-3 rounded-md bg-white flex-col items-center justify-center'>
@@ -176,7 +174,6 @@ const Messages = () => {
               <h5 className='text-center'>Here you will be able to see all your messages. Stay tuned</h5>
             </div>
             :
-
             <div className='w-full grid grid-cols-1 lg:gap-3 lg:grid-cols-3'>
               <div className="w-full mx-auto h-[525px] px-4 py-3 rounded-md bg-white overflow-y-auto">
                 {conversations.slice().sort((a: any, b: any) => b - a).map((items: any) => <Chats 
