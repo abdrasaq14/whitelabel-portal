@@ -1,12 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react'
 import useOnClickOutside from "../../hooks/useClickOutside";
-import { Formik, Form, ErrorMessage, Field } from 'formik'
+import { Formik, Form, ErrorMessage, Field, useFormik, FormikProvider } from 'formik'
 import TextInput from '../FormInputs/TextInput2';
 import PhoneInputField from '../FormInputs/PhoneInput';
 import * as Yup from 'yup'
 import { CheckboxInput, SelectInput } from '../FormInputs/Checkbox';
 import { MdOutlineArrowForward } from "react-icons/md";
 import Button from '../Button/Button2';
+import { useMutation } from 'react-query';
+import { UserService } from '../../services/user';
+import toast from 'react-hot-toast';
+import FileUpload from '../FormInputs/FIleUpload2';
+import { useAuth } from '../../zustand/auth.store';
 
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
@@ -60,31 +65,48 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
     generalPermission: boolean;
   }
 
-  const StaffInfoInitialValues: StaffInfoProps = {
-    companyName: '',
-    staffEmail: '',
-    phoneNumber: '',
-    role: 'user',
-    allPermission: false,
-    viewUserDetails: false,
-    addOrDeleteUser: false,
-    acceptOrDeclineProduct: false,
-    banProduct: false,
-    editUser: false,
-    generalPermission: false
+
+  const StaffInfoInitialValues = {
+    email: staffInfo.email,
+    roleId: staffInfo.roleId,
+    firstName: staffInfo.firstName,
+    lastName: staffInfo.lastName,
+    phoneNumber: staffInfo.phoneNumber,
+    image: staffInfo.image,
   }
 
   const validationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company name is required'),
-    staffEmail: Yup.string().email('Invalid email').required('Staff email is required'),
-    phoneNumber: Yup.string(),
-    role: Yup.string().required('role is required'),
+    email: Yup.string().email('Invalid email').required('Staff email is required'),
+    firstName: Yup.string().required('firstName is required'),
+    lastName: Yup.string().required('lastName is required'),
+    image: Yup.string().required("image is required"),
+    phoneNumber: Yup.string().required("PhoneNumber is required"),
+    roleId: Yup.string().required('role is required'),
   });
-  const handleSubmit = (values: any) => {
-    console.log('Form submitted with values:', values);
-    closeModal();
-    setIsEditing(false);
-  };
+
+
+
+  const { mutate } = useMutation(
+    async (values: any) => {
+      return await UserService.updateStaff(values, staffInfo._id);
+    },
+    {
+      onSuccess: (response, variables, context: any) => {
+        toast.success('Account Information Updated Successfully');
+        setIsEditing(false);
+        closeModal();
+        if (context) {
+          context.setSubmitting(false);
+        }
+      },
+      onError: (error, variables, context) => {
+        toast.error('An error occurred. Please try again');
+        if (context) {
+          context.setSubmitting(false);
+        }
+      },
+    }
+  );
   const handleDelete = () => {
     setisDeleteModalOpen(true)
   };
@@ -100,17 +122,21 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   }
 
   const roleOptions = [
-    { value: 'user', label: 'User' },
-    { value: 'admin', label: 'Admin' },
-  ];
+    { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
+    { value: '663a5c848b1a1f64469b98bf', label: 'Admin' },
+  ]
+
   return (
     <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col z-10 align-middle max-w-2xl w-[80%] rounded  sm:w-[553px] h-[70%] overflow-y-auto'>
       <div className='full flex justify-between '>
         <div className='flex gap-4 items-center'>
-          <img alt='staff avatar' src={staffInfo?.avatar_url} className='h-32 w-28' />
+          <div className='h-28 rounded object-contain w-28'>
+            <img alt='staff avatar' src={staffInfo?.image} className='h-28 rounded object-contain w-28' />
+          </div>
+
           <div>
             <p className='font-satoshiBold text-xl text-primary-text'>{staffInfo.name}</p>
-            <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.staffId}</p>
+            <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.roleId}</p>
             <p className='w-16 px-2 py-1 rounded-full bg-green-600 text-white mt-2 flex items-center justify-center text-sm '>{staffInfo.role}</p>
           </div>
         </div>
@@ -133,71 +159,86 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
           initialValues={StaffInfoInitialValues}
           validationSchema={validationSchema}
           onSubmit={(values, formikActions) => {
-            if (values) {
-              handleSubmit(values);
-            }
+            mutate(values, {
+              onSuccess: (response) => {
+                toast.success('Account Information Updated Successfully');
+                setIsEditing(false);
+                closeModal();
+                formikActions.setSubmitting(false);
+              },
+              onError: () => {
+                toast.error('An error occurred. Please try again');
+                formikActions.setSubmitting(false);
+              },
+            });
           }}>
-          {() => {
+          {({ values, setFieldValue, errors } : any) => {
             return (
               <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
                 <div className='col-span-1'>
                   <TextInput
-                    name='companyName'
+                    name='firstName'
                     type='text'
-                    placeholder='Landmark University'
-                    label="Company Name"
-                    disabled={!isEditing}
-
-                  />
-                </div>
-
-                <div className='col-span-1'>
-                  <PhoneInputField
-                    label="Phone Number"
-                    value="phoneNumber"
-                    name='phoneNumber'
-                    placeholder="+23420202020"
-                    wrapperClass=""
+                    placeholder='john Doe'
+                    label="First Name"
                     disabled={!isEditing}
                   />
                 </div>
                 <div className='col-span-1'>
                   <TextInput
-                    name='staffEmail'
+                    name='lastName'
+                    type='text'
+                    placeholder='john Doe'
+                    label="Last Name"
+                    disabled={!isEditing}
+                  />
+                </div>
+
+                <div className='col-span-1'>
+                  <TextInput
+                    name='email'
                     type='email'
                     placeholder='linda@framcreative.com'
                     label="Email"
                     disabled={!isEditing}
-
+                  />
+                </div>
+                <div className='col-span-1'>
+                  <TextInput
+                    name='phoneNumber'
+                    placeholder='linda@framcreative.com'
+                    label="Phone Number"
+                    disabled={!isEditing}
                   />
                 </div>
 
                 <div className='col-span-1 sm:col-span-2 flex flex-col'>
+                  <select value={values.roleId} onChange={(e) => setFieldValue("roleId", e.target.value)} disabled={!isEditing} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='roleId' >
+                    <option>Select Role</option>
 
-                  <SelectInput
-                    name="role"
-                    label="Change Role"
-                    values={roleOptions}
-                    disabled={!isEditing}
-                    selectInputClass="w-full sm:w-[60%]"
-                  />
+                    {
+                      roleOptions.map((items: any, id) => <option key={id} value={items.value}>{items.label}</option>)
+                    }
+
+                  </select>
+                  <span className='text-xs text-red-600'>{errors?.roleId}</span>
                 </div>
 
                 <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
                   <div className=' '>
-                    <CheckboxInput disabled={!isEditing} name="allPermissions" value="All Permissions" />
+                    <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="allPermissions" value="All Permissions" />
                   </div>
                   <div className='flex mt-4 sm:mt-8'>
                     <div className=' w-[50%] flex gap-4 flex-wrap'>
-                      <CheckboxInput disabled={!isEditing} name="viewUserDetails" value="View User Details" />
-                      <CheckboxInput disabled={!isEditing} name="addOrDeleteUser" value="Add/Delete User" />
-                      <CheckboxInput disabled={!isEditing} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
-                      <CheckboxInput disabled={!isEditing} name="banProduct" value="Ban Product" />
+                      <CheckboxInput defualt={true} disabled={true} name="viewUserDetails" value="View User Details" />
+                      <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="addOrDeleteUser" value="Add/Delete User" />
+                      <CheckboxInput defualt={true} disabled={true} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
+                      <CheckboxInput defualt={true} disabled={true} name="banProduct" value="Ban Product" />
                     </div>
                     <div className='w-[50%] flex justify-end '>
                       <div className='gap-4 flex flex-col '>
-                        <CheckboxInput disabled={!isEditing} name="editUser" value="Edit User" />
-                        <CheckboxInput disabled={!isEditing} name="generalPermission" value="General Permission" />
+                        <CheckboxInput defualt={values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="editUser" value="Edit User" />
+                        <CheckboxInput defualt={true} disabled={true} name="generalPermission" value="General Permission" />
                       </div>
                     </div>
                   </div>
@@ -257,7 +298,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
         <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
       </div>
       <div>
-        <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to delete this Account ???</p>
+        <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to delete this Account ?</p>
       </div>
       <div className='w-full flex mt-4 justify-between  '>
         <button
@@ -332,6 +373,7 @@ export const AddStaffModal = ({ isOpen, closeModal }: any) => {
 
 
 export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
+  const profile: any = useAuth((s) => s.profile)
   interface StaffInfoProps {
     companyName: string;
     staffEmail: string;
@@ -345,132 +387,172 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
     generalPermission: boolean;
   }
 
-  const StaffInfoInitialValues: StaffInfoProps = {
-    companyName: '',
-    staffEmail: '',
-    role: 'user',
-    allPermission: false,
-    viewUserDetails: false,
-    addOrDeleteUser: false,
-    acceptOrDeclineProduct: false,
-    banProduct: false,
-    editUser: false,
-    generalPermission: false
+  const StaffInfoInitialValues = {
+    email: "",
+    roleId: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    image: "",
   }
 
   const validationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company name is required'),
-    staffEmail: Yup.string().email('Invalid email').required('Staff email is required'),
-    role: Yup.string().required('role is required'),
+    // name: Yup.string().required('Company name is required'),
+    email: Yup.string().email('Invalid email').required('Staff email is required'),
+    firstName: Yup.string().required('firstName is required'),
+    lastName: Yup.string().required('lastName is required'),
+    image: Yup.string().required("image is required"),
+    phoneNumber: Yup.string().required("PhoneNumber is required"),
+    roleId: Yup.string().required('role is required'),
   });
-  const handleSubmit = (values: any) => {
-    console.log('Form submitted with values:', values);
-    closeModal();
-  };
+  // const handleSubmit = (values: any) => {
+  //   console.log('Form submitted with values:', values);
+  //   closeModal();
+  // };
+
+
+  const handleAddUser = useMutation(
+    async (values: any) => {
+      return await UserService.createUser(values)
+    },
+
+    {
+      onSuccess: (res) => {
+        console.log(res);
+        toast.success("staff created successfully")
+        closeModal();
+
+
+
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+      }
+    }
+  )
 
   const roleOptions = [
-    { value: 'user', label: 'User' },
-    { value: 'admin', label: 'Admin' },
+    { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
+    { value: '663a5c848b1a1f64469b98bf', label: 'Admin' },
   ]
 
+  const form = useFormik({
+    initialValues: StaffInfoInitialValues,
+    validationSchema,
+    onSubmit: async (values) => {
+      handleAddUser.mutate({ whiteLabelName: profile.whiteLabelName, ...values })
+      // handleSubmit(values);
+    }
+  })
+
+  console.log(form.errors)
 
   return (
     <div className='flex-grow '>
-      <Formik
-        initialValues={StaffInfoInitialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values, formikActions) => {
-          if (values) {
-            handleSubmit(values);
-          }
-        }}>
-        {() => {
-          return (
-            <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
-              <div className='col-span-1'>
-                <TextInput
-                  name='companyName'
-                  type='text'
-                  placeholder='Landmark University'
-                  label="Company Name"
-                />
+      <FormikProvider value={form} >
+        <form onSubmit={form.handleSubmit} className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
+          <div className='col-span-1'>
+            <TextInput
+              name='firstName'
+              type='text'
+              placeholder='john Doe'
+              label="First Name"
+            />
+          </div>
+          <div className='col-span-1'>
+            <TextInput
+              name='lastName'
+              type='text'
+              placeholder='john Doe'
+              label="Last Name"
+            />
+          </div>
+
+          <div className='col-span-1'>
+            <TextInput
+              name='email'
+              type='email'
+              placeholder='linda@framcreative.com'
+              label="Email"
+            />
+          </div>
+          <div className='col-span-1'>
+            <TextInput
+              name='phoneNumber'
+              placeholder='linda@framcreative.com'
+              label="Phone Number"
+            />
+          </div>
+
+          <div className='col-span-1 sm:col-span-2 flex flex-col'>
+            <select {...form.getFieldProps("roleId")} className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' name='roleId' >
+              <option value={""}>Select Role</option>
+
+              {
+                roleOptions.map((items: any, id) => <option key={id} value={items.value}>{items.label}</option>)
+              }
+
+            </select>
+            <span className='text-red-600 text-xs'>{form.errors.roleId}</span>
+          </div>
+          <div className='col-span-1 sm:col-span-2 flex flex-col'>
+            <h3 className='text-sm font-normal font-satoshiRegular text-[#344054]' >Staff profile Image</h3>
+            <FileUpload name='image' />
+          </div>
+
+          <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
+            <div className=' '>
+              <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="allPermissions" value="All Permissions" />
+            </div>
+            <div className='flex mt-4 sm:mt-8'>
+              <div className=' w-[50%] flex gap-4 flex-wrap'>
+                <CheckboxInput defualt={true} disabled={true} name="viewUserDetails" value="View User Details" />
+                <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="addOrDeleteUser" value="Add/Delete User" />
+                <CheckboxInput defualt={true} disabled={true} name="acceptOrDeclineProduct" value="Accept/Decline Product" />
+                <CheckboxInput defualt={true} disabled={true} name="banProduct" value="Ban Product" />
               </div>
-
-              <div className='col-span-1'>
-                <TextInput
-                  name='staffEmail'
-                  type='email'
-                  placeholder='linda@framcreative.com'
-                  label="Email"
-                />
-              </div>
-
-              <div className='col-span-1 sm:col-span-2 flex flex-col'>
-                <SelectInput
-                  name="role"
-                  label="Change Role"
-                  values={roleOptions}
-
-                  selectInputClass="w-full sm:w-[60%]"
-                />
-              </div>
-
-              <div className='col-span-1 sm:col-span-2 flex flex-col mt-4 sm:mt-8 '>
-                <div className=' '>
-                  <CheckboxInput name="allPermissions" value="All Permissions" />
+              <div className='w-[50%] flex justify-end '>
+                <div className='gap-4 flex flex-col '>
+                  <CheckboxInput defualt={form.values.roleId === '663a5c848b1a1f64469b98bf'} disabled={true} name="editUser" value="Edit User" />
+                  <CheckboxInput defualt={true} disabled={true} name="generalPermission" value="General Permission" />
                 </div>
-                <div className='flex mt-4 sm:mt-8'>
-                  <div className=' w-[50%] flex gap-4 flex-wrap'>
-                    <CheckboxInput name="viewUserDetails" value="View User Details" />
-                    <CheckboxInput name="addOrDeleteUser" value="Add/Delete User" />
-                    <CheckboxInput name="acceptOrDeclineProduct" value="Accept/Decline Product" />
-                    <CheckboxInput name="banProduct" value="Ban Product" />
-                  </div>
-                  <div className='w-[50%] flex justify-end '>
-                    <div className='gap-4 flex flex-col '>
-                      <CheckboxInput name="editUser" value="Edit User" />
-                      <CheckboxInput name="generalPermission" value="General Permission" />
-                    </div>
-                  </div>
-                </div>
               </div>
-              <div className='col-span-1 sm:col-span-2 flex gap-4 mt-4 justify-between flex-wrap items-center'>
-                <div>
-                  <p className='font-satoshiMedium text-sm text-primary-subtext flex gap-1 items-center'>
-                    <button
-                      type='button'
-                      onClick={() => setTabIndex(1)}
-                      className='text-[#3581FF] underline'>
-                      Add multiple staff </button>
+            </div>
+          </div>
+          <div className='col-span-1 sm:col-span-2 flex gap-4 mt-4 justify-between flex-wrap items-center'>
+            <div>
+              <p className='font-satoshiMedium text-sm text-primary-subtext flex gap-1 items-center'>
+                <button
+                  type='button'
+                  onClick={() => setTabIndex(1)}
+                  className='text-[#3581FF] underline'>
+                  Add multiple staff </button>
 
-                    by uploading csv</p>
+                by uploading csv</p>
 
-                </div>
-                <div className='flex gap-4 justify-end w-full sm:w-auto'>
-                  <button
-                    type='submit'
-                    disabled={false}
-                    onClick={() => closeModal()}
-                    className='border-[1px] !border-[#470E81] px-8 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-primary-text text-center '
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type='submit'
-                    className='bg-primary rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
-                  >
-                    Update
-                  </button>
-                </div>
+            </div>
+            <div className='flex gap-4 justify-end w-full sm:w-auto'>
+              <button
+                type='submit'
+                disabled={false}
+                onClick={() => closeModal()}
+                className='border-[1px] !border-[#470E81] px-8 py-2 rounded-lg text-base font-satoshiMedium  font-medium text-primary-text text-center '
+              >
+                Cancel
+              </button>
+              <button
+                type='submit'
+                className='bg-primary rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
+              >
+                Update
+              </button>
+            </div>
 
 
-              </div>
+          </div>
 
-            </Form>
-          )
-        }}
-
-      </Formik>
+        </form>
+      </FormikProvider>
 
     </div>
 

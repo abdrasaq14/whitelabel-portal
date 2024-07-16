@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LogoutProvider } from "./context/LogoutContext";
 import { AuthProvider } from "./context/AuthContext";
+import { NotificationProvider } from "./context/NotificationContext";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -23,11 +24,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
-    <QueryClientProvider client={queryClient}>
-      <LogoutProvider>
-        <App />
-      </LogoutProvider>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <LogoutProvider>
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
+        </LogoutProvider>
+      </QueryClientProvider>
 
     </AuthProvider>
   </React.StrictMode>

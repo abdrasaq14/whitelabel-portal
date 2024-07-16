@@ -31,15 +31,16 @@ const MerchantDetails = () => {
     const [product, setProduct] = useState({})
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [pageSize, setPageSize] = useState(10);
-    const profile:any = useAuth((s) => s.profile)
+    const profile: any = useAuth((s) => s.profile)
+    const [search, setSearch] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { id }:any = useParams()
+    const { id }: any = useParams()
 
 
     const { data: allProducts, isLoading } = useFetchWithParams(
         ["query-all-products", {
-            merchantId: id,
+            merchantId: id, page: currentPage, search
         }],
         MerchantService.getMerchantProducts,
         {
@@ -92,13 +93,15 @@ const MerchantDetails = () => {
         }
     )
 
+    console.log(merchant)
+
 
     const AddAllProducts = useMutation(async () => {
         const body = {
             "merchant": {
-                "id": merchant.id,
-                "email": merchant.email,
-                "name": merchant.businessName
+                "id": merchant.result.id,
+                "email": merchant.result.email,
+                "name": merchant.result.businessName
             },
             "whiteLabelClient": {
                 "id": profile._id,
@@ -112,35 +115,39 @@ const MerchantDetails = () => {
         {
             onSuccess: () => {
                 toast.success("request sent successfully")
-               navigate(-1)
+                navigate(-1)
+            },
+            onError: (err: any) => {
+                toast.error(err.response.data.message)
+
             }
         }
     )
 
     const AddProducts = useMutation(async () => {
-        const formattedBody = selectedProducts.map((product:any) => ({
+        const formattedBody = selectedProducts.map((product: any) => ({
             product: {
-              productId: product.id,
-              productOwnerId: product.userId,
-              productName: product.name
+                productId: product.id,
+                productOwnerId: product.userId,
+                productName: product.name
             },
             whiteLabelClient: {
-              whiteLabelClientId: profile._id,
-              email: profile.email,
-              whiteLabelName: profile.whiteLabelName
+                whiteLabelClientId: profile._id,
+                email: profile.email,
+                whiteLabelName: profile.whiteLabelName
             }
-          }));
-          console.log(formattedBody, "body")
+        }));
+        console.log(formattedBody, "body")
         return await ProductService.sendProductRequest(formattedBody);
     },
         {
             onSuccess: () => {
                 toast.success("request sent successfully")
-            //    navigate(-1)
+                //    navigate(-1)
             },
-            onError(error:any) {
+            onError(error: any) {
                 toast.error(error.response.data.message);
-                
+
             },
         }
     )
@@ -200,71 +207,76 @@ const MerchantDetails = () => {
                     </div>
 
                     <div className='flex items-center gap-3'>
-                        <SearchInput placeholder='search product' />
+                        <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+                            setSearch(e.target.value)
+                            setCurrentPage(1)
+                        }} className='w-[200px]' placeholder='Search for products' />
                         {
                             allProducts && (
-                                (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border '/>
+                                (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <Button label='Add all Products' disabled={AddAllProducts.isLoading} isLoading={AddAllProducts.isLoading} onClick={() => AddAllProducts.mutate()} className='px-3 py-2 whitespace-nowrap font-semibold text-sm rounded bg-primary border-primary border ' />
 
                             )
                         }
                     </div>
                 </div>
                 <div className='h-full flex-auto '>
-                    <Table data={allProducts && allProducts.result.results}
-                        hideActionName={true}
-                        emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
-                            <img src='/images/NoProduct.svg' alt='No Product Found' />
-                        </div>}
-                        clickRowAction={(row) => handleViewProductInfo(row)}
-                        onSelectRows={(row: any) => setSelectedProducts(Array.from(row.values()))}
-                        rowActions={(row) => [
+                    {
+                        allProducts && allProducts?.result?.results.length > 0 ?
+                            <Table data={allProducts && allProducts?.result?.results.length > 0 && allProducts?.result?.results}
+                                hideActionName={true}
+                                emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
+                                    <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                </div>}
+                                clickRowAction={(row) => handleViewProductInfo(row)}
+                                onSelectRows={(row: any) => setSelectedProducts(Array.from(row.values()))}
+                                rowActions={(row) => [
 
-                            {
-                                name: "View Details",
-                                action: () => { handleViewProductInfo(row) },
-                            },
-                        ]}
-                        columns={[
-                            {
-                                header: "S/N",
-                                view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
-                                    currentPage,
-                                    pageSize
-                                })}</div>
-                            },
-                            {
-                                header: "Product Id",
-                                view: (row: any) => <div>{row._id}</div>,
-                            },
-                            {
-                                header: "Product Name",
-                                view: (row: any) => <div>{row.name}</div>,
-                            },
-                            {
-                                header: "Merchant",
-                                view: (row: any) => <div>{row.productOwner}</div>,
-                            },
-                            {
-                                header: "Category",
-                                view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
-                            },
-                            {
-                                header: "Date Listed",
-                                view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
-                            },
+                                    {
+                                        name: "View Details",
+                                        action: () => { handleViewProductInfo(row) },
+                                    },
+                                ]}
+                                columns={[
+                                    {
+                                        header: "S/N",
+                                        view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
+                                            currentPage,
+                                            pageSize
+                                        })}</div>
+                                    },
+                                    {
+                                        header: "Product Id",
+                                        view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
+                                      },
+                                    {
+                                        header: "Product Name",
+                                        view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row.name}</div>,
+                                    },
+                                    // {
+                                    //     header: "Category",
+                                    //     view: (row: any) => <div >{row?.categories.map((item: any) => item.title).join(" | ")} </div>,
+                                    // },
+                                    {
+                                        header: "Date Listed",
+                                        view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
+                                    },
 
-                        ]}
-                        loading={isLoading}
-                        pagination={{
+                                ]}
+                                loading={isLoading}
+                                pagination={{
 
-                            page: currentPage,
-                            pageSize: pageSize,
-                            totalRows: allProducts?.result.totalPages,
-                            setPageSize: handlePageSize,
-                            setPage: handleCurrentPage
-                        }}
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: allProducts?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }}
 
-                    />
+                            /> : <div className='h-full flex-grow flex justify-center items-center'>
+                                <img src='/images/NoProduct.svg' alt='No Product Found' />
+                            </div>
+                    }
+
                     <ViewProductDiscoveryModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
                 </div>

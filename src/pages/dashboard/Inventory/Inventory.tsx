@@ -20,6 +20,8 @@ import InventoryRequest from './InventoryRequest'
 import History from './History'
 import AvailableInventory from './AvailableInventory'
 import RequestedInvetory from './RequestedInvetory'
+import { AddInventory, MakeRequest } from '../../../components/Modal/InventoryModals'
+import { InventoryService } from '../../../services/inventory.service'
 
 interface PaginationInfo {
     currentPage: number;
@@ -27,36 +29,56 @@ interface PaginationInfo {
 }
 
 const Inventory = () => {
-    const role : any =  "admin"
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
-    const accountTabTitle = role === "admin" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
+    const accountTabTitle = profile.roleId === "663a5c848b1a1f64469b98bf" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
     const [tabIndex, setTabIndex] = useState<number>(0)
-    const [isSuspendOpen, setIsSuspendOpen] = useState(false)
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false) 
+    const [isMakeModalOpen, setIsMakeModalOpen] = useState(false) 
+   
 
-  
+    // console.log(profile.role_id);
+   
+    const { data, isLoading, refetch } = useFetchWithParams(
+        ["query-total-inventory-page", {
+            // page: currentPage, limit: pageSize,
+        }],
+        InventoryService.getTotalInventories,
+        {
+            onSuccess: (data: any) => {
+                // console.log(data.data);
+            },
+            keepPreviousData: false,
+            refetchOnWindowFocus: false,
+            refetchOnMount: true,
+        }
+    )
+
+    console.log(data)
+
+
     const displayAccountContent = (tabIndex: number) => {
 
-        if(role === "admin") {
+        if (profile.roleId === "663a5c848b1a1f64469b98bf") {
             switch (tabIndex) {
                 case 0:
-                    return <AllInventory />
+                    return <AllInventory isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 case 1:
-                    return <InventoryRequest />
+                    return <InventoryRequest  isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 case 2:
-                    return <History />
+                    return <History isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
                 default:
                     return <AllInventory />
                 // return <BioProfile />
             }
-        }else {
+        } else {
             switch (tabIndex) {
                 case 0:
-                    return <AvailableInventory />
+                    return <AvailableInventory isMakeModalOpen={isMakeModalOpen} />
                 case 1:
-                    return <RequestedInvetory />
+                    return <RequestedInvetory isMakeModalOpen={isMakeModalOpen}/>
                 case 2:
-                    return <History />
+                    return <History isMakeModalOpen={isMakeModalOpen} />
                 default:
                     return <AvailableInventory />
                 // return <BioProfile />
@@ -64,8 +86,10 @@ const Inventory = () => {
         }
 
 
-       
+
     }
+
+
 
 
     return (
@@ -74,7 +98,7 @@ const Inventory = () => {
             <div className="pt-4 bg-white pb-10 px-6 rounded-2xl mx-2">
                 <div className='flex item-center justify-between py-3'>
                     <BreadCrumbClient backText="Dashboard" currentPath="Inventory" brand='Landmark' />
-                    <Button label='Add Inventory' />
+                   { profile.roleId === "663a5c848b1a1f64469b98bf" ?  <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' /> : <Button onClick={() => setIsMakeModalOpen(true)} label='Make Request' /> }
                 </div>
                 <div className="flex items-center justify-between gap-10 border-b w-full">
                     <div className="flex items-center w-5/6 gap-2 flex-wrap">
@@ -95,7 +119,13 @@ const Inventory = () => {
                 </div>
                 {displayAccountContent(tabIndex)}
             </div>
+
+            
+
+            <MakeRequest isOpen={isMakeModalOpen} closeViewModal={() => {setIsMakeModalOpen(false)}} />
+
            
+
         </div>
     )
 }

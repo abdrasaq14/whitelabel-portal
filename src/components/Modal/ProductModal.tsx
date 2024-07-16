@@ -9,26 +9,68 @@ import { useMutation } from 'react-query';
 import { ProductService } from '../../services/product.service';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../zustand/auth.store';
+import { useNavigate } from 'react-router-dom';
+import { HtmlToString } from '../common/HtmlToString';
 
 
 
 
-export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
+export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: any) => {
     const [isProductBan, setIsProductBan] = useState(false);
+    const profile: any = useAuth((s) => s.profile);
+    const navigate = useNavigate()
 
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
         closeViewModal();
     });
     const toggleProductBan = () => {
-        setIsProductBan(!isProductBan);
+        if (product.status === "ACTIVE") {
+            const body = {
+                "id": product._id,
+                "status": "block",
+                "platform": profile.whiteLabelName
+            }
+            handleToggleBan.mutate(body)
+        } else {
+            const body = {
+                "id": product._id,
+                "status": "unblock",
+                "platform": profile.whiteLabelName
+            }
+            handleToggleBan.mutate(body)
+        }
     }
+
+    const handleToggleBan = useMutation(
+        async (values: any) => {
+            return await ProductService.blockAndUnblockProducts(values)
+        },
+
+        {
+            onSuccess: async (res: any) => {
+                await refetch()
+                toast.success(res.data.result)
+                closeViewModal()
+
+
+            },
+            onError: (err: any) => {
+                toast.error(err.response.data.message);
+            }
+        }
+    )
 
     return (
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8'>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel images={product.gallery_image} />
+                    <ProductImageCarousel
+                        images={[
+                            product?.image,
+                            ...(product?.gallery_image || []),
+                        ]}
+                    />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -63,7 +105,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
                         <div className='mt-4'>
                             <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Name</p>
-                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.productOwner}</p>
+                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.businessName ?? product.merchantName}</p>
                         </div>
                         <div className='mt-4'>
                             <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Rating</p>
@@ -84,7 +126,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
                             <Categories categories={product.categories} />
 
                         </div>
-                       
+
 
                     </div>
 
@@ -94,7 +136,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
             <div className='w-full flex flex-wrap justify-between gap-4'>
                 <button
                     type='button'
-                    onClick={() => closeViewModal()}
+                    onClick={() => navigate(`/merchant/profile/${product.merchantId}`)}
                     disabled={false}
                     className='border-primary hover:bg-primary border-[1px] rounded-lg text-primary hover:text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium '>
                     View Merchant
@@ -113,9 +155,9 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen }: any) => {
                         type='button'
                         onClick={toggleProductBan}
                         disabled={false}
-                        className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${!isProductBan ? 'border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500' : 'text-white bg-green-500 hover:bg-green-800'} `}
+                        className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${product.status == "ACTIVE" ? 'border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500' : 'text-white bg-green-500 hover:bg-green-800'} `}
                     >
-                        {isProductBan ? 'Unban product' : 'Ban product'}
+                        {product.status !== "ACTIVE" ? 'Unban product' : 'Ban product'}
                     </button>
                 </div>
 
@@ -184,7 +226,12 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
         <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
             <div className='grid grid-cols-2 w-full gap-8 '>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel images={product.gallery_image} />
+                    <ProductImageCarousel
+                        images={[
+                            product?.image,
+                            ...(product?.gallery_image || []),
+                        ]}
+                    />
                 </div>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
                     <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
@@ -215,7 +262,8 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
                 <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
                     <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
                     <p className='text-primary-subtext font-normal text-sm'>
-                        {product.description}
+
+                        {product.description && HtmlToString(product.description)}
                     </p>
                     <div>
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
@@ -259,7 +307,7 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
 
 
             </div>
-            <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to add this Product ???" confirmAddition={handleProductAddedSuccess} />
+            <ConfirmModal isOpen={isConfirmModalOpen} closeModal={() => setIsConfirmModalOpen(false)} caption="Are you sure you want to add this Product ?" confirmAddition={handleProductAddedSuccess} />
 
         </Modal>
 

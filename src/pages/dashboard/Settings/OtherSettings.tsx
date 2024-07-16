@@ -5,18 +5,47 @@ import { ErrorMessage, Form, Formik, FormikHelpers, FormikProvider, FormikValues
 import { IoLanguage } from "react-icons/io5";
 import { Button } from "../../../components/Button/Button";
 import TextInput from "../../../components/FormInputs/TextInput2";
+import { UserService } from "../../../services/user";
+import { useMutation } from "react-query";
+import toast from "react-hot-toast";
+import { AuthActions, useAuth } from "../../../zustand/auth.store";
 
 
 
 const Currency = () => {
+    const profile: any = useAuth((s) => s.profile)
     const form = useFormik({
         initialValues: {
-
+            currency: profile.currency,
         },
         onSubmit: (values: any) => {
+            changeCurrency.mutate(values)
 
         }
+
+
     })
+
+    const changeCurrency = useMutation(
+        async (values: any) => {
+            return await UserService.editAdminDetails(values);
+        },
+        {
+            onSuccess: (response) => {
+                toast.success("Currency Changed Successfully")
+                if (response.data.user) {
+                    AuthActions.setProfile(response.data.user)
+                } else {
+                    AuthActions.setProfile(response.data.result.user)
+
+                }
+                // AuthActions.logout()
+            }
+
+
+        },
+    )
+    console.log(profile.currency)
     return (
         <div>
             <h1 className="text-lg text-black font-bold font-satoshiBold mb-3 flex items-center gap-2">
@@ -27,13 +56,13 @@ const Currency = () => {
             </h1>
 
             <FormikProvider value={form}>
-                <form onSubmit={form.handleSubmit}>
-                    <TextInput label="Select a default Currency" placeholder="currency" name='select'>
-                        <option>Currency</option>
+                <form onChange={form.handleSubmit} onSubmit={form.handleSubmit}>
+                    <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' {...form.getFieldProps("currency")} name='currency'>
+                        <option>currency</option>
                         <option value="USD">USD</option>
                         <option value="NGN">NGN</option>
                         <option value="EUR">EUR</option>
-                    </TextInput>
+                    </select>
                 </form>
             </FormikProvider>
 
@@ -45,14 +74,42 @@ const Currency = () => {
 
 
 const Language = () => {
+    const profile: any = useAuth((s) => s.profile)
+
     const form = useFormik({
         initialValues: {
-
+            language: profile.language,
         },
         onSubmit: (values: any) => {
-
+            changeLanguage.mutate(values)
         }
     })
+    const changeLanguage = useMutation(
+        async (values: any) => {
+            return await UserService.editAdminDetails(values);
+        },
+        {
+            onSuccess: (response) => {
+                toast.success("Language Changed Successfully")
+                if (response.data.user) {
+                    AuthActions.setProfile(response.data.user)
+                } else {
+                    AuthActions.setProfile(response.data.result.user)
+
+                }
+                // AuthActions.logout()
+                form.setSubmitting(false)
+
+            },
+            onError: (err: any) => {
+                form.setSubmitting(false)
+                toast.error("something went wrong!!! Please try again")
+            }
+
+
+
+        },
+    )
     return (
         <>
             <h1 className="text-lg text-black font-bold font-satoshiBold mb-3 flex items-center gap-2">
@@ -63,13 +120,13 @@ const Language = () => {
             </h1>
 
             <FormikProvider value={form}>
-                <form onSubmit={form.handleSubmit}>
-                    <TextInput label="Select a default Language" placeholder="Language" name='select'>
+                <form onChange={form.handleSubmit} onSubmit={form.handleSubmit}>
+                    <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]' {...form.getFieldProps("language")} name='language'>
                         <option>Language</option>
-                        <option value="USD">ENG</option>
-                        <option value="NGN">FRN</option>
-                        <option value="EUR">ESP</option>
-                    </TextInput>
+                        <option value="EN">EN</option>
+                        <option value="FN">FN</option>
+                        <option value="ES">ES</option>
+                    </select>
                 </form>
             </FormikProvider>
 
@@ -79,18 +136,40 @@ const Language = () => {
 
 
 const Pricing = () => {
+    const profile: any = useAuth((s) => s.profile)
+
     const form = useFormik({
         initialValues: {
-
+            commisionPecentage: profile.commisionPecentage
         },
         onSubmit: (values: any) => {
-
+            changeCommisionPecentage.mutate(values)
         }
     })
 
+    const changeCommisionPecentage = useMutation(
+        async (values: any) => {
+            return await UserService.editAdminDetails(values);
+        },
+        {
+            onSuccess: (response) => {
+                toast.success("Language Changed Successfully")
+                AuthActions.setProfile(response.data.user)
+                // AuthActions.logout()
+                form.setSubmitting(false)
+            },
+            onError: (err: any) => {
+                form.setSubmitting(false)
+                toast.error("something went wrong!!! Please try again")
+            }
+
+
+        },
+    )
+
     return (
         <div>
-             <h1 className="text-lg text-black font-bold font-satoshiBold mb-3 flex items-center gap-2">
+            <h1 className="text-lg text-black font-bold font-satoshiBold mb-3 flex items-center gap-2">
                 product Pricing
             </h1>
 
@@ -98,8 +177,8 @@ const Pricing = () => {
 
             <FormikProvider value={form}>
                 <form onSubmit={form.handleSubmit}>
-                    <TextInput label="Enter Percentage" placeholder="5%" name="percentage" />
-                    <Button className="w-full font-semibold mt-4" label="Update"/>
+                    <TextInput  {...form.getFieldProps("commisionPecentage")} name='commisionPecentage' label="Enter Percentage" placeholder="5%" />
+                    <Button disabled={form.isSubmitting} isLoading={form.isSubmitting} className="w-full font-semibold mt-4" label="Update" />
                 </form>
             </FormikProvider>
         </div>

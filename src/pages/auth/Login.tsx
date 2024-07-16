@@ -50,10 +50,19 @@ export default function Login() {
     },
     {
       onSuccess: (response) => {
-        toast.success(response.data.result.otpMessage)
-        requestAnimationFrame(() => {
-          router("/authenticate");
-        });
+        if (response.data.result.otpMessage) {
+          toast.success(response.data.result.otpMessage)
+          requestAnimationFrame(() => {
+            router("/authenticate");
+          });
+        } else {
+          AuthActions.setToken(response.data.result.authToken);
+          AuthActions.setProfile(response.data.result.user)
+          requestAnimationFrame(() => {
+            router("/");
+          });
+        }
+
 
       },
       onError: (err: any) => {

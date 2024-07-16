@@ -1,10 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from '../../../components/Table/Table2'
-import { Label } from '../../../components/Label/Label'
 import StarRating from '../../../components/Rating.tsx'
+import { Label } from '../../../components/Label/Label'
+import { currencyFormat } from '../../../utils/helpers'
+import { formatAmount } from '../../../utils/Helpfunctions'
+import { fDateTime } from '../../../utils/formatTime'
+import useFetchWithParams from '../../../hooks/useFetchWithParams'
+import { InventoryService } from '../../../services/inventory.service'
+import { useAuth } from '../../../zustand/auth.store'
+import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
+import { generateSerialNumber } from '../../../utils/functions'
 
 
-const History = () => {
+const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen?: any }) => {
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const profile: any = useAuth((s) => s.profile)
+    const [search, setSearch] = useState("")
+    const [selectedInventory, setSelectedInventory] = useState({})
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+    const { data, isLoading, refetch } = useFetchWithParams(
+        ["query-inventory-history", {
+            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, history: true
+        }],
+        InventoryService.getInventoryRequestHistory,
+        {
+            onSuccess: (data: any) => {
+                // console.log(data.data);
+            },
+            keepPreviousData: false,
+            refetchOnWindowFocus: false,
+            refetchOnMount: true,
+        }
+    )
     const mockData = {
         data: [
             {
@@ -84,57 +115,109 @@ const History = () => {
             totalRows: 40,
         },
     }
+
+    const calculateTotalPrice = (items: any, itemDetails: any) => {
+        // Create a dictionary from itemDetails for quick lookup
+        const itemDetailsDict = itemDetails.reduce((dict: any, item: any) => {
+            dict[item._id] = item;
+            return dict;
+        }, {});
+
+        // Calculate total price
+        let totalPrice = 0;
+
+        items.forEach((item: any) => {
+            const itemId = item.itemId;
+            const quantity = item.quantity;
+
+            if (itemDetailsDict[itemId]) {
+                const unitPrice = itemDetailsDict[itemId].unitPrice;
+                totalPrice += unitPrice * quantity;
+            } else {
+                console.log(`Item with ID ${itemId} not found in itemDetails.`);
+            }
+        });
+
+        return totalPrice;
+    }
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
+
+    useEffect(() => {
+        console.log(isMakeModalOpen)
+        refetch()
+    }, [isMakeModalOpen])
     return (
         <div>
 
             {
-                mockData.data.length > 0 ? (
+                data && data?.result.requests.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={mockData?.data}
+                        <Table data={data?.result.requests}
                             hideActionName={true}
                             // clickRowAction={(row) => setModalOpen(true)}
-                            rowActions={(row) => [
-                                {
-                                    name: "View Hub",
-                                    action: () => { },
-                                },
-                                {
-                                    name: "Do Something",
-                                    action: () => { },
-                                },
-                            ]}
+                            // rowActions={(row) => [
+                            //     {
+                            //         name: "View Item",
+                            //         action: () => {
+                            //             setSelectedInventory(row)
+                            //             setIsViewModalOpen(true)
+                            //         },
+                            //     },
+                            //     {
+                            //         name: "Update Item",
+                            //         action: () => { },
+                            //     }, {
+                            //         name: "Delete",
+                            //         action: () => { },
+                            //     },
+                            // ]}
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                                    view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                        currentPage,
+                                        pageSize
+                                    })}</div>
                                 },
                                 {
-                                    header: "Item",
-                                    view: (row: any) => <div>{row.name}</div>,
+                                    header: "Request From",
+                                    view: (row: any) => <div>{row.requesterName ?? row.requesterId}</div>,
                                 },
                                 {
-                                    header: "Quantity",
-                                    view: (row: any) => <div>{row.category}</div>,
+                                    header: "No of Item",
+                                    view: (row: any) => <div>{row.items.length}</div>,
                                 },
+                                // {
+                                //     header: "Total Price",
+                                //     view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
+                                // },
                                 {
-                                    header: "Category",
-                                    view: (row: any) => <StarRating totalRatings={4} />,
-                                },
-                                {
-                                    header: "Unit Price",
-                                    view: (row: any) => <div>{row.Location}</div>,
-                                },
-                                {
-                                    header: "Date Listed",
-                                    view: (row: any) => <div>{row.Location}</div>,
+                                    header: "Date Requested",
+                                    view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }, {
                                     header: "Status",
-                                    view: (row: any) => <Label variant='success'>In stock</Label>,
+                                    view: (row: any) => <Label variant={row.status === "APPROVED" ? "success" : 'danger'}>{row.status}</Label>,
                                 },
 
                             ]}
-                            loading={false}
-                            pagination={mockData.pagination}
+                            loading={isLoading}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
 
                         />
 
@@ -142,11 +225,17 @@ const History = () => {
                 )
                     : (
                         <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/NoVendor.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+                            <img src='/images/add-product.svg' alt='No Product Found' />
+                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory history would appear here</p>
                         </div>
                     )
             }
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+                await refetch()
+                closeViewModal()
+
+
+            }} />
         </div>
     )
 }

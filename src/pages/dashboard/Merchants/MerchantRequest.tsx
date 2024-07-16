@@ -13,11 +13,11 @@ const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
   const { data: allRequest, isLoading } = useFetchWithParams(
     ["query-all-merchants-request", {
-      page:currentPage,
-      limit:pageSize,
+      page: currentPage,
+      limit: pageSize,
       whiteLabelId: profile._id
 
     }],
@@ -47,7 +47,7 @@ const MerchantRequest = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="Merchant Request" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{1}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allRequest ? allRequest?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
               <SearchInput placeholder='Search' />
@@ -59,27 +59,27 @@ const MerchantRequest = () => {
         {
           allRequest ? <div className='py-4'>
 
-          {
-            allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
-          }
+            {
+              allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
+            }
 
-          {/* <Request />
+            {/* <Request />
           <Request /> */}
 
-          <div className='flex items-center justify-center'>
-            <Paginator setPage={handleCurrentPage} loading={isLoading} currentLength={allRequest && allRequest.result.length} totalRows={1} page={currentPage} pageSize={pageSize} />
-          </div>
+            <div className='flex items-center justify-center'>
+              <Paginator setPage={handleCurrentPage} loading={isLoading} currentLength={allRequest && allRequest.result.length} totalRows={1} page={currentPage} pageSize={pageSize} />
+            </div>
 
-        </div> : 
-        <div className='w-full h-[60vh] flex  items-center justify-center'>
-          <div>
-            <h3>No request at the moment</h3>
-          </div>
+          </div> :
+            <div className='w-full h-[60vh] flex  items-center justify-center'>
+              <div>
+                <h3>No request at the moment</h3>
+              </div>
 
-        </div>
+            </div>
         }
 
-        
+
 
 
 
