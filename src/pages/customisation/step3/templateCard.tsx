@@ -23,7 +23,7 @@ function TemplateCard({
       onClick={() => onClick(index)}
       className={`w-1/3 flex items-start gap-2 h-[min-8rem] border ${color} rounded-lg p-2 cursor-pointer`}
     >
-      <div className="w-[90%] h-full bg-red-100">
+      <div className="w-[90%] h-full">
         <div className="h-[70%] max-h-[70%]">
           <img src={image} alt="" className=" object-contain h-full w-full" />
         </div>

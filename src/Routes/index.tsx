@@ -4,6 +4,10 @@ import { AuthRouter } from "./AuthRoutes";
 import { AdminDashRouter } from "./DashboardRoutes";
 import { AppFallback } from "./Layout";
 import { useAuth } from "../zustand/auth.store";
+import { TRUE } from "sass";
+import { CustomisationRouter } from "./CustomisationRoutes";
+
+
 
 export interface IModuleRouter {
   guard: (loggedIn: boolean) => boolean;
@@ -12,7 +16,11 @@ export interface IModuleRouter {
   key: string;
 }
 
-const ModuleRouters: Array<IModuleRouter> = [AuthRouter, AdminDashRouter];
+const ModuleRouters: Array<IModuleRouter> = [
+  AuthRouter,
+  CustomisationRouter,
+  AdminDashRouter
+];
 
 export const AppRouter = () => {
 

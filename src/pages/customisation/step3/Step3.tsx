@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import TemplateCard, { templates } from "./templateCard";
 import * as Yup from "yup";
 import { FormikProvider, useFormik } from "formik";
-import { Link } from "react-router-dom";
 import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
 import { MdOutlineArrowForward } from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
+import BannerTemplate from "../livePreview/Banner";
 
 interface Step3Props {
   index: number;
+  primaryColor: string;
+  secondaryColor: string;
 }
 
 // Validation schema
@@ -23,7 +25,7 @@ const validationSchema = Yup.object({
     .min(8, "*Password must be at least 8 characters")
     .required("*Password is required")
 });
-function Step3({ index }: Step3Props) {
+function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
 
   const handleTemplateClick = (index: number) => {
@@ -53,7 +55,7 @@ function Step3({ index }: Step3Props) {
   );
   return (
     <div className="flex w-full bg-[#F3F3F3] h-full">
-      <div className="w-[50%] h-full bg-white text-foundation-black p-4 font-satoshiBold">
+      <div className="w-[50%] h-full bg-white text-foundation-black p-8 font-satoshiBold">
         <h1 className="text-3xl mb-1">Customise your Account</h1>
         <p className="mb-4 text-sm text-[#5a5a5a] font-satoshiRegular w-[60%]">
           Choose a template and provide the hero section image and content below
@@ -65,7 +67,7 @@ function Step3({ index }: Step3Props) {
           <span className="h-2 w-2/3 bg-foundation-darkPurple rounded-xl"></span>
         </div>
         {/* templates */}
-        <div className="flex gap-4 max-w-[80%] my-6">
+        <div className="flex gap-4 max-w-[90%] my-6">
           {templates.map((template, index) => (
             <TemplateCard
               key={index}
@@ -79,7 +81,7 @@ function Step3({ index }: Step3Props) {
         </div>
         {/* hero secrion */}
 
-        <div className="max-w-[80%]  my-6">
+        <div className="max-w-[90%]  my-6">
           <FormikProvider value={form}>
             <form className="flex flex-col gap-4 font-satoshiMedium w-full">
               <div className="rounded-lg p-4 border border-[#C8CCD0]">
@@ -150,8 +152,13 @@ function Step3({ index }: Step3Props) {
           </FormikProvider>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-foundation-darkPurple">
-        <h1>Step 3</h1>
+      <div className="w-[50%] h-full bg-foundation-darkPurple p-10">
+        <div className="bg-white h-full w-full flex flex-col">
+          <BannerTemplate
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
+        </div>
       </div>
     </div>
   );
