@@ -109,6 +109,13 @@ export const AdminDashRouter: IModuleRouter = {
       },
       () => import("../pages/dashboard/Orders & Transaction/Orders")
     ),
+    //customisation
+    LazyRoute(
+      {
+        path: "/customisation",
+      },
+      () => import("../pages/customisation/step3/Step3")
+    ),
     LazyRoute(
       {
         path: "/notifications",

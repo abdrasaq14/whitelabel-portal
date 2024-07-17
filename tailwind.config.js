@@ -17,6 +17,7 @@ module.exports = {
         foundation: {
           lightPurple: "#EDE6F3",
           darkPurple: "#4B0082",
+          black: "#2B2C34"
         },
         perrywinkle: "#a077e6",
         lightTan: "#f8f3a6",
