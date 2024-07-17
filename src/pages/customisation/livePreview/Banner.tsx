@@ -16,7 +16,7 @@ const BannerTemplate = ({
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
-      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-2 p-4 md:px-[36px] h-[250px] gap-4"
+      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-2 p-4 md:px-[36px] h-[260px] gap-4"
     >
       <div className="col-span-1  flex flex-col gap-4 justify-center items-center sm:items-start order-2 ">
         <h3 className="font-medium font-satoshiMedium text-xl text-center sm:text-start sm:text-2xl lg:text-4xl text-black leading-10 ">
