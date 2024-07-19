@@ -92,7 +92,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
     },
     {
       onSuccess: (response, variables, context: any) => {
-        toast.success('Account Information Updated Successfully');
+        // toast.success('Account Information Updated Successfully');
         setIsEditing(false);
         closeModal();
         if (context) {
@@ -100,7 +100,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
         }
       },
       onError: (error, variables, context) => {
-        toast.error('An error occurred. Please try again');
+        // toast.error('An error occurred. Please try again');
         if (context) {
           context.setSubmitting(false);
         }

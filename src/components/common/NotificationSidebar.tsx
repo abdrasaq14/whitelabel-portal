@@ -157,11 +157,15 @@ const NotificationSidebar = ({
 
               </div>
               <div className="flex-1  scrollbar px-6 py-4 overflow-y-auto">
-
                 <div className="mb-24">
+                 
                   {
-                    notifications?.data.result && 
-                    notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
+                    notifications?.data.result.length > 0 ?
+                      <>
+                        {
+                          notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
+                        }
+                      </> : <div className="text-center w-full mt-12 text-sm">No Notifation</div>
                   }
                 </div>
 
@@ -197,19 +201,19 @@ export const Notification = ({ data }: any) => {
     <div>
       <h3 className="text-xs border-b py-2 mt-3 ">{fDate(data?.createdAt)}</h3>
       <div >
-        
-         
-            <div className="w-full flex items-end justify-between py-2 border-b">
-              <div>
-                <h3 className="font-medium">{data.title}</h3>
-                <h5 className="text-xs text-[#6F7174]">{data.body[0][1]}</h5>
-              </div>
-              <div>
-                <h3 className="text-xs text-[#4D5154] ">{fToNow(data?.createdAt)}</h3>
-              </div>
 
 
-            </div>
+        <div className="w-full flex items-end justify-between py-2 border-b">
+          <div>
+            <h3 className="font-medium">{data.title}</h3>
+            <h5 className="text-xs text-[#6F7174]">{data.body[0][1]}</h5>
+          </div>
+          <div>
+            <h3 className="text-xs text-[#4D5154] ">{fToNow(data?.createdAt)}</h3>
+          </div>
+
+
+        </div>
 
       </div>
     </div>
