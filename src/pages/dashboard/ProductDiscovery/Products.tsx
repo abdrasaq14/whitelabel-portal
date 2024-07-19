@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { mockProductList } from '../../../utils/ProductList'
+// import { mockProductList } from '../../../utils/ProductList'
 import { Table } from '../../../components/Table/Table2'
 import StarRating from '../../../components/Rating.tsx';
 import { MdFilterList } from "react-icons/md";
-import { ViewProductModal, ViewProductDiscoveryModal } from '../../../components/Modal/ProductModal';
+import { ViewProductDiscoveryModal } from '../../../components/Modal/ProductModal';
 import useFetchWithParams from '../../../hooks/useFetchWithParams';
-import { MerchantService } from '../../../services/merchant.service';
+// import { MerchantService } from '../../../services/merchant.service';
 import { ProductService } from '../../../services/product.service';
 import SearchInput from '../../../components/FormInputs/SearchInput';
 import { formatAmount } from '../../../utils/Helpfunctions';
@@ -58,7 +58,7 @@ const Products = () => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  })
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -154,7 +154,7 @@ const Products = () => {
               },
               {
                 header: "Product Id",
-                view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
+                view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
               }, {
                 header: "Product Name",
                 view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row.name}</div>,

@@ -15,9 +15,6 @@ import { useEffect, useState } from "react";
 import ResendOtpButton from "../../components/ResendOtpButton";
 
 
-
-
-
 // Validation schema
 const validationSchema = Yup.object({
     otp: Yup.string()
@@ -28,7 +25,7 @@ const validationSchema = Yup.object({
 export default function Authenticate() {
 
 
-    const { showPassword, handleClickShowPassword } = usePasswordToggle();
+    // const { showPassword, handleClickShowPassword } = usePasswordToggle();
     const router = useNavigate();
     const [loginRequest, setLoginRequest] = useState<any>({})
     const form = useFormik<Yup.Asserts<typeof validationSchema>>({
@@ -74,13 +71,15 @@ export default function Authenticate() {
         },
         {
             onSuccess: (response) => {
+                console.log("Response from login", response.data)
                 AuthActions.setToken(response.data.result.authToken);
                 if (response.data.result.user.roleId) {
                     AuthActions.setProfile(response.data.result.user)
                     toast.success("login successful");
                     form.setSubmitting(false)
+                    const setupCompleted = response.data.result.user.customisationData.completeSetup === "completed";
                     requestAnimationFrame(() => {
-                        router("/dashboard");
+                        setupCompleted ? router("/dashboard") : router("/setup");
                     });
                 } else {
                     toast.error("You do no not have access to this platform")

@@ -11,7 +11,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children }) => {
-  const [fileName, setFileName] = useState("");
+  const [_, setFileName] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -24,30 +24,30 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
     beforeChange: (oldIndex: number, newIndex: number) => setCurrentSlide(newIndex)
   };
 
-  const thumbnailCarouselSettings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    // slidesToScroll: 'auto',
-    autoplay: false,
-    arrows: true,
-    focusOnSelect: true,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 4
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3
-        }
-      }
-    ]
-  };
+  // const thumbnailCarouselSettings = {
+  //   dots: false,
+  //   infinite: false,
+  //   speed: 500,
+  //   slidesToShow: 4,
+  //   // slidesToScroll: 'auto',
+  //   autoplay: false,
+  //   arrows: true,
+  //   focusOnSelect: true,
+  //   responsive: [
+  //     {
+  //       breakpoint: 768,
+  //       settings: {
+  //         slidesToShow: 4
+  //       }
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 3
+  //       }
+  //     }
+  //   ]
+  // };
 
   const handleThumbnailClick = (index: number) => {
     setCurrentSlide(index);

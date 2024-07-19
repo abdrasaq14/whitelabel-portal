@@ -4,14 +4,14 @@ import { BreadCrumbClient } from '../../../components/Breadcrumb'
 import { useNavigate, useParams } from 'react-router-dom'
 import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { MerchantService } from '../../../services/merchant.service'
-import { Label } from '../../../components/Label/Label'
-import StarRating from '../../../components/Rating.tsx'
-import CopyToClipboard from '../../../components/CopytoClipboard/Copy'
-import { fDate, fDateTime } from '../../../utils/formatTime'
+// import { Label } from '../../../components/Label/Label'
+// import StarRating from '../../../components/Rating.tsx'
+// import CopyToClipboard from '../../../components/CopytoClipboard/Copy'
+import { fDateTime } from '../../../utils/formatTime'
 import { Table } from '../../../components/Table/Table2'
-import { ViewProductDiscoveryModal, ViewProductModal } from '../../../components/Modal/ProductModal'
+import { ViewProductDiscoveryModal} from '../../../components/Modal/ProductModal'
 import { ProductService } from '../../../services/product.service'
-import { SuspendModal } from '../../../components/Modal/MerchantModal'
+// import { SuspendModal } from '../../../components/Modal/MerchantModal'
 import SearchInput from '../../../components/FormInputs/SearchInput'
 import { useMutation } from 'react-query'
 import { useAuth } from '../../../zustand/auth.store'
@@ -27,7 +27,7 @@ const MerchantDetails = () => {
     const accountTabTitle = ['All Products']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [selectedProducts, setSelectedProducts] = useState<any>([])
-    const [showFilter, setShowFilter] = useState<boolean>(false)
+    // const [showFilter, setShowFilter] = useState<boolean>(false)
     const [product, setProduct] = useState({})
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [pageSize, setPageSize] = useState(10);
@@ -165,7 +165,7 @@ const MerchantDetails = () => {
         <div className='px-4 pt-8 h-full'>
 
             <div className='flex items-center gap-6'>
-                <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
+                <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img alt="alt_img" className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
                 <BreadCrumbClient backText="All Merchants" currentPath="Account Details" brand='Landmark' />
             </div>
 
@@ -174,13 +174,13 @@ const MerchantDetails = () => {
                 <div className='flex items-center gap-3'>
 
                     <div className='relative'>
-                        <img src={merchant?.result && merchant?.result.image} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
+                        <img alt="mct_img" src={merchant?.result && merchant?.result.image} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
 
                         <span className='h-2 w-2 absolute rounded-full bottom-0  right-0 bg-green-500' />
                     </div>
                     <div>
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
-                        <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
+                        <a target='_blank' rel="noreferrer" href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
                     </div>
 
                 </div>
@@ -246,7 +246,7 @@ const MerchantDetails = () => {
                                     },
                                     {
                                         header: "Product Id",
-                                        view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
+                                        view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.id}</div>,
                                       },
                                     {
                                         header: "Product Name",

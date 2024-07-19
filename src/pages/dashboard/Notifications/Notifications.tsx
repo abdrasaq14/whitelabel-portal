@@ -1,6 +1,6 @@
 import React from 'react'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
-import { Notification, SampleNotification } from '../../../components/common/NotificationSidebar'
+import { Notification } from '../../../components/common/NotificationSidebar'
 import { useNavigate } from 'react-router-dom'
 import { NotificationService } from '../../../services/notification.service'
 import { useAuth } from '../../../zustand/auth.store'
@@ -28,7 +28,7 @@ const Notifications = () => {
     return (
         <div className='px-4 pt-8 h-full  '>
             <div className='flex items-center gap-6'>
-                <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
+                <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img alt="arrow-left-img" className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
                 <BreadCrumbClient backText="Dashboard" currentPath="Notifications" brand='Landmark' />
 
 

@@ -49,7 +49,7 @@ const Merchants = () => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  })
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -154,19 +154,19 @@ const Merchants = () => {
 export default Merchants
 
 
-interface Props {
-  categories: string[];
-}
+// interface Props {
+//   categories: string[];
+// }
 
-const Categories: React.FC<Props> = ({ categories }) => {
-  return (
-    <div className='flex gap-1'>
-      {categories.map((category, index) => (
-        <React.Fragment key={index}>
-          <p>{category}</p>
-          {index !== categories.length - 1 && <div className='border-r-[.0625rem] pr-1'></div>}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-};
+// const Categories: React.FC<Props> = ({ categories }) => {
+//   return (
+//     <div className='flex gap-1'>
+//       {categories.map((category, index) => (
+//         <React.Fragment key={index}>
+//           <p>{category}</p>
+//           {index !== categories.length - 1 && <div className='border-r-[.0625rem] pr-1'></div>}
+//         </React.Fragment>
+//       ))}
+//     </div>
+//   );
+// };

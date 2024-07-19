@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SearchInput from '../../../components/FormInputs/SearchInput'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
-import { mockProductList } from '../../../utils/ProductList'
+// import { mockProductList } from '../../../utils/ProductList'
 import { Table } from '../../../components/Table/Table2'
 import { ViewProductModal } from '../../../components/Modal/ProductModal'
 import { MdFilterList } from "react-icons/md";
@@ -54,7 +54,7 @@ const BlockedProducts = () => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  })
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -118,7 +118,7 @@ const BlockedProducts = () => {
                   },
                   {
                     header: "Product Id",
-                    view: (row: any) => <div className='flex items-center gap-3'><img src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
+                    view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
                   },
                   {
                     header: "Merchant",
