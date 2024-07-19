@@ -77,7 +77,7 @@ const Messages = () => {
         
         allConversation.push({...userData, conversationId: conversation.id});
         
-        if(index == conversations.length - 1){
+        if(index === conversations.length - 1){
           
           resolve(allConversation);
         
@@ -95,16 +95,18 @@ const Messages = () => {
     },
     {
         onSuccess: async (response) => {
-          const conversations = response.data.result;
-          const conversationList: Conversation[] = await createConversationList(conversations);
-          if(conversations.length > 0){
-              setConversations(conversationList)
-              setActiveConversationId(conversationList[0].conversationId)
-              setMessageInfo({ name: conversationList[0].businessName == null ? `${conversationList[0].firstName} ${conversationList[0].lastName}` : `${conversationList[0].businessName}`, image: conversationList[0].image, id: conversationList[0].id })
-              getMessages.mutate(conversationList[0].conversationId)
-              socket.emit("subscribe", `room-${conversationList[0].conversationId}`);
-          }
-          setLoadingConversation(false);
+            console.log("Success happened", response.data.result)
+            const conversations = response.data.result;
+            if(conversations.length > 0){
+            const conversationList: Conversation[] = await createConversationList(conversations);
+            console.log("Checking conversations>>>>>>>>>>>>> ", conversations);
+                setConversations(conversationList)
+                setActiveConversationId(conversationList[0].conversationId)
+                setMessageInfo({ name: conversationList[0].businessName == null ? `${conversationList[0].firstName} ${conversationList[0].lastName}` : `${conversationList[0].businessName}`, image: conversationList[0].image, id: conversationList[0].id })
+                getMessages.mutate(conversationList[0].conversationId)
+                socket.emit("subscribe", `room-${conversationList[0].conversationId}`);
+            }
+            setLoadingConversation(false);
         },
         onError: (err: any) => {
           console.log("error happened", err);
@@ -158,18 +160,18 @@ const Messages = () => {
   return (
     <div className='px-4 pt-8 h-full'>
       <div className='flex items-center gap-6'>
-        <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
+        <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img alt="arrow-left-img" className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
         <BreadCrumbClient backText="Dashboard" currentPath="Messages" brand='Landmark' />
       </div>
       <div className='className="mt-2 px-2 md:px-6  w-full"'>
         {
           loadingConversation ?
           <div className='w-full h-full flex px-3 py-3 rounded-md bg-white flex-col items-center justify-center'>
-            {/*<Spinner color="#000000"/>*/}
+            <Spinner color="#000000"/>
           </div> :
           conversations.length === 0 ?
             <div className='w-full h-full flex px-3 py-3 rounded-md bg-white flex-col items-center justify-center'>
-              <img src='no-notification.png' />
+              <img alt="no-notification-img" src='no-notification.png' />
               <h3 className='text-center text-black font-medium text'>No Message Yet!</h3>
               <h5 className='text-center'>Here you will be able to see all your messages. Stay tuned</h5>
             </div>
@@ -179,7 +181,8 @@ const Messages = () => {
                 {conversations.slice().sort((a: any, b: any) => b - a).map((items: any) => <Chats 
                 id={items?.conversationId} image={items?.image} 
                 name={items?.businessName == null ? `${items?.firstName} ${items?.lastName}` : `${items?.businessName}`} 
-                key={items?.id} email={items?.email}
+                key={items?.id}
+                email={items?.email}
                 onClick={() => {
                   setMessageInfo({ name: items?.businessName == null ? `${items?.firstName} ${items?.lastName}` : `${items?.businessName}`, image: items?.image, id: items.id })
                   setLoadingMessages(true);
@@ -193,9 +196,9 @@ const Messages = () => {
               <div className={`col-span-2  relative h-[90vh] lg:h-[625px] lg:bg-white lg:rounded-md w-full`}>
                 <div className='w-full flex  px-3 items-center  h-[65px] lg:rounded-t-md bg-[#470E81]'>
                   <div className='w-full flex py-5 items-center gap-2'>
-                  {messageInfo.image == "" ? <span className='w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center text-base font-semibold'>{messageInfo.name.charAt(0)}</span> : <img src={messageInfo.image} className='w-10 h-10 rounded-full bg-gray-400' />}
+                  {messageInfo.image === "" ? <span className='w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center text-base font-semibold'>{messageInfo.name.charAt(0)}</span> : <img alt="msg_info_img" src={messageInfo.image} className='w-10 h-10 rounded-full bg-gray-400' />}
                   <div>
-                    <div className='flex items-center gap-2 text-white'><h3 className='font-semibold'>{messageInfo.name}</h3><img src='verify.svg' className='mt-1' /></div>
+                    <div className='flex items-center gap-2 text-white'><h3 className='font-semibold'>{messageInfo.name}</h3><img alt="verify_img" src='verify.svg' className='mt-1' /></div>
                   </div>
 
                   </div>
@@ -234,7 +237,7 @@ const Messages = () => {
 const Chats = ({ name, email, onClick = () => { }, image, id }: { name: string; email: string, onClick: (e?: any) => void, image: string, id: string }) => {
   return (
     <div onClick={() => onClick(id)} className='w-full cursor-pointer flex py-5 border-b items-center gap-2'>
-      {image == "" ? <div className='w-10 h-10 rounded-full bg-gray-400 flex justify-center items-center'>{name.charAt(0)}</div> : <img src={image} className='w-10 h-10 rounded-full bg-gray-400' />}
+      {image === "" ? <div className='w-10 h-10 rounded-full bg-gray-400 flex justify-center items-center'>{name.charAt(0)}</div> : <img alt="img-two" src={image} className='w-10 h-10 rounded-full bg-gray-400' />}
       <div>
         <div className='flex items-center gap-2'>
           <h3 className='font-semibold'>{name}</h3>

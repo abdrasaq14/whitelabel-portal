@@ -11,10 +11,6 @@ import { AuthActions } from "../../zustand/auth.store";
 import { useMutation } from "react-query";
 import Spinner from "../../components/spinner/Spinner";
 
-
-
-
-
 // Validation schema
 const validationSchema = Yup.object({
   email: Yup.string()

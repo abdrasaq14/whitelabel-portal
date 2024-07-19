@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, useField } from 'formik'
 
 export const CheckboxInput = ({ disabled, name, value, defualt }: any) => {
-  const [field, meta, helpers] = useField(name);
+  // const [field, meta, helpers] = useField(name);
   return (
     <div>
       <label htmlFor="checkboxOption" className={`flex text-sm font-normal font-satoshiRegular items-center
@@ -23,7 +23,7 @@ export const CheckboxInput = ({ disabled, name, value, defualt }: any) => {
 }
 
 export const SelectInput = ({ disabled, values, label, name, selectInputClass }: any) => {
-  const [field, meta, helpers] = useField(name);
+  // const [field, meta, helpers] = useField(name);
   return (
 
     <>

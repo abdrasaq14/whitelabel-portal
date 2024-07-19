@@ -1,5 +1,4 @@
-import React, { Children, FunctionComponent, useRef } from 'react'
-import useOnClickOutside from '../../hooks/useClickOutside';
+import React, {FunctionComponent, useRef } from 'react'
 import { Button } from '../Button/Button';
 import { MdFilterList } from "react-icons/md";
 import Select from "./CustomSelect"

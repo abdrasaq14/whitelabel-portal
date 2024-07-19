@@ -1,15 +1,12 @@
 import clsx from "clsx";
-import { NavLink, useMatch, useLocation, useResolvedPath } from "react-router-dom";
-import { ChevronRightIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { NavLink, useLocation } from "react-router-dom";
+// import { ChevronRightIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { useRef, useState, useContext } from "react";
 import { useSingleState } from "../../hooks/useSingleState";
 import { LogoutContext } from "../../context/LogoutContext";
 import { sidebar } from "../../pages/dashboard/layout/AdminLayout";
 import { useAuth } from "../../zustand/auth.store";
-
-
-
 
 export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const companyDetails: any = useAuth(state => state.profile);
@@ -37,7 +34,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         )}
       >
         <img
-          src={companyDetails.companyLogo ?? '/client-asset/landmark_logo.png'}
+          src={companyDetails?.companyLogo ?? '/client-asset/landmark_logo.png'}
           className={clsx(
             "transition-[width] w-auto  h-[64px] "
           )}
@@ -85,7 +82,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
                 )}
                 alt="Brand_logo"
               />
-              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails.email}</p>
+              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email}</p>
             </div>
             <img
               src={`/icons/sidebar/logout.svg`}

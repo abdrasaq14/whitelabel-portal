@@ -1,10 +1,9 @@
 import { LayoutOutlet } from '../../../Routes/Layout'
-
+import {useLocation} from 'react-router-dom'
 
 
 export default function OnboardingLayout() {
-
-
+    const location = useLocation()
 
   return (
     <div className=' w-screen h-screen '>
@@ -23,10 +22,10 @@ export default function OnboardingLayout() {
                 src='/client-asset/Logo_Landmark.svg' />
                   </div>
                 <LayoutOutlet />
-                 
-                  <div className="w-full mt-4 lg:mt-0 p-4 flex items-center justify-center">
-                  <img alt="powered by Profitall" src="/images/PoweredbyProfitall.svg" />
-                  </div>
+
+              {location.pathname !== "/setup" && <div className="w-full mt-4 lg:mt-0 p-4 flex items-center justify-center">
+                  <img alt="powered by Profitall" src="/images/PoweredbyProfitall.svg"/>
+              </div>}
                 </div> 
 
       </div>

@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import  Login  from "../pages/auth/Login";
-import SignIn from "../pages/auth/SignIn";
+import  Setup  from "../pages/auth/Setup";
 import { ResetPassword } from "../pages/auth/ResetPassword";
 import { RequestPasswordReset } from "../pages/auth/RequestPasswordReset";
 import { PasswordSetup } from "../pages/auth/PasswordSetup";
@@ -50,6 +50,10 @@ export const AuthRouter: IModuleRouter = {
     {
       path: "/forgot-password",
       element: <RequestPasswordReset />,
+    },
+    {
+      path: "/setup",
+      element: <Setup />,
     },
     {
       path: "*",

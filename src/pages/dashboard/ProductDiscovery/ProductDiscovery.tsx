@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
-import SearchInput from '../../../components/FormInputs/SearchInput'
+// import SearchInput from '../../../components/FormInputs/SearchInput'
 import Button from '../../../components/Button/Button2'
 import Products from './Products'
 import Merchants from './Merchants'

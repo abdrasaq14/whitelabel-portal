@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BreadCrumbClient } from '../../../components/Breadcrumb';
 import SearchInput from '../../../components/FormInputs/SearchInput';
-import { OrderDetailsMockData } from '../../../utils/ProductList';
+// import { OrderDetailsMockData } from '../../../utils/ProductList';
 import { Table } from '../../../components/Table/Table2';
 import { Modal } from '../../../components/Modal/StaffModal';
 import { formatAmount } from '../../../utils/Helpfunctions';
@@ -52,7 +52,7 @@ const Orders = () => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  })
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -177,7 +177,7 @@ export default Orders
 
 const Label = ({ status }: any) => {
   return (
-    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${status === "pending" || status == "NEW" && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered" && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled" && "text-red-600 bg-red-200"} `}>{status}</p>
+    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${(status === "pending" || status === "NEW") && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered" && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled" && "text-red-600 bg-red-200"} `}>{status}</p>
   )
 }
 
