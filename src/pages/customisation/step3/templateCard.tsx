@@ -29,13 +29,29 @@ function TemplateCard({
         </div>
         <p className=" font-satoshiBold text-sm my-2">{title}</p>
       </div>
-      <input
+      {/* <input
         type="radio"
         name="template"
         checked={isSelected}
         readOnly
         className="cursor-pointer outline-none hover:outline-none focus:outline-none border-none focus:border-none ring-0 focus:ring-0 checked:ring-0 checked:border-0 checked:outline-none"
+      /> */}
+      <input
+        type="radio"
+        name="template"
+        checked={isSelected}
+        readOnly
+        className="hidden"
       />
+      <div
+        className={`w-4 h-4 rounded-full border-2 ${
+          isSelected ? "border-[#4B0082] bg-white" : "border-[#C8CCD0]"
+        } flex items-center justify-center`}
+      >
+        {isSelected && (
+          <div className="w-2 h-2 rounded-full bg-[#4B0082]"></div>
+        )}
+      </div>
     </div>
   );
 }
