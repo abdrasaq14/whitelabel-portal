@@ -1211,32 +1211,6 @@
   dependencies:
     ckeditor5 "42.0.1"
 
-"@ckeditor/ckeditor5-build-classic@^42.0.1":
-  version "42.0.1"
-  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-42.0.1.tgz"
-  integrity sha512-3pururepwfd086jN+YYEqX7YNEQEiufgNpvzQ50gqXkHtS6NJ8ZsrIsg1Os1z1H4khy82MvEhQrGZXkzEty7Hg==
-  dependencies:
-    "@ckeditor/ckeditor5-adapter-ckfinder" "42.0.1"
-    "@ckeditor/ckeditor5-autoformat" "42.0.1"
-    "@ckeditor/ckeditor5-basic-styles" "42.0.1"
-    "@ckeditor/ckeditor5-block-quote" "42.0.1"
-    "@ckeditor/ckeditor5-ckbox" "42.0.1"
-    "@ckeditor/ckeditor5-ckfinder" "42.0.1"
-    "@ckeditor/ckeditor5-cloud-services" "42.0.1"
-    "@ckeditor/ckeditor5-easy-image" "42.0.1"
-    "@ckeditor/ckeditor5-editor-classic" "42.0.1"
-    "@ckeditor/ckeditor5-essentials" "42.0.1"
-    "@ckeditor/ckeditor5-heading" "42.0.1"
-    "@ckeditor/ckeditor5-image" "42.0.1"
-    "@ckeditor/ckeditor5-indent" "42.0.1"
-    "@ckeditor/ckeditor5-link" "42.0.1"
-    "@ckeditor/ckeditor5-list" "42.0.1"
-    "@ckeditor/ckeditor5-media-embed" "42.0.1"
-    "@ckeditor/ckeditor5-paragraph" "42.0.1"
-    "@ckeditor/ckeditor5-paste-from-office" "42.0.1"
-    "@ckeditor/ckeditor5-table" "42.0.1"
-    "@ckeditor/ckeditor5-typing" "42.0.1"
-
 "@ckeditor/ckeditor5-ckbox@42.0.1":
   version "42.0.1"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-ckbox/-/ckeditor5-ckbox-42.0.1.tgz"
@@ -1370,7 +1344,7 @@
     ckeditor5 "42.0.1"
     lodash-es "4.17.21"
 
-"@ckeditor/ckeditor5-font@^42.0.1", "@ckeditor/ckeditor5-font@42.0.1":
+"@ckeditor/ckeditor5-font@42.0.1":
   version "42.0.1"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-font/-/ckeditor5-font-42.0.1.tgz"
   integrity sha512-5TEbQvvrQn45S+08ancAFFecv8BWvC2L4nIxPKKYikOsFNScE6C5nxrr/Xaa98ZEgHowp48z+yZxLjTDwOZctQ==
