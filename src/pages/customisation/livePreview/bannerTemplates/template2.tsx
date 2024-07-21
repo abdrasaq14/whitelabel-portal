@@ -16,7 +16,7 @@ const BannerTemplate = ({
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
-      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-2 p-4 md:px-[36px] h-[260px] gap-4"
+      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[40%,60%] p-6 md:px-[36px] h-[260px] gap-4"
     >
       <div className="col-span-1 flex overflow-hidden">
         <div className="flex justify-center items-center h-full w-full">
@@ -29,9 +29,11 @@ const BannerTemplate = ({
       </div>
       <div className="col-span-1  flex flex-col gap-4 justify-center items-center sm:items-start  ">
         <h3
-          className="font-semiBold text-xl text-center sm:text-start text-black leading-8"
+          className="font-bold font-satoshiMedium text-lg text-center sm:text-start text-black leading-8"
           dangerouslySetInnerHTML={{
-            __html: heroText ? heroText : "Lorem ipsum dolor sit"
+            __html: heroText
+              ? heroText
+              : "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
           }}
         />
         <Link

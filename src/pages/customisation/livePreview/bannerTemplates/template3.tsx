@@ -38,9 +38,11 @@ const BannerTemplate = ({
     >
       <div className="w-[90%] flex flex-col justify-center items-center">
         <h3
-          className="font-semiBold text-xl text-center sm:text-start text-black leading-8"
+          className="font-bold font-satoshiMedium text-xl w-[80%] mx-auto text-center  text-white leading-7 mb-4"
           dangerouslySetInnerHTML={{
-            __html: heroText ? heroText : "Lorem ipsum dolor sit"
+            __html: heroText
+              ? heroText
+              : "Lorem ipsum dolor sit amet consectetur adipiscing elit."
           }}
         />
         <Link

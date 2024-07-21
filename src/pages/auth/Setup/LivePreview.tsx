@@ -7,6 +7,10 @@ import Item from "./Item";
 import {ImFacebook} from "react-icons/im";
 import {TbBrandInstagram} from "react-icons/tb";
 
+
+interface ILivePreview {
+    
+}
 const inventory: any[] = [
     {name: "Ainvoer green hand bag", storeName: "MS Boutique", image: "/images/item1.svg", price: "16,500", rating: "/images/rating.svg"},
     {name: "Bar chair with Suede", storeName: "M&K Furniture store", image: "/images/item2.svg", price: "16,500", rating: "/images/rating.svg"},

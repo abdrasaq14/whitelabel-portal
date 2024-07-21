@@ -14,7 +14,6 @@ import "react-quill/dist/quill.snow.css";
 import { CustomisationService } from "../../../services/customisation.service";
 
 interface Step3Props {
-  index: number;
   primaryColor: string;
   secondaryColor: string;
 }
@@ -25,7 +24,7 @@ const validationSchema = Yup.object({
   heroImage: Yup.string().trim().required("*Hero Image is required")
 });
 
-function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
+function Step3({ primaryColor, secondaryColor }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
@@ -106,7 +105,8 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
-    }
+    },
+    validateOnChange: false
   });
 
   const handleSubmit = useMutation(
@@ -135,17 +135,17 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
     }
   );
 
-  const fonts = [
-    "Satoshi-Regular",
-    "Satoshi-Bold",
-    "Satoshi-Light",
-    "Satoshi-Medium",
-    "Satoshi-Black"
-  ];
+  // const fonts = [
+  //   "Satoshi-Regular",
+  //   "Satoshi-Bold",
+  //   "Satoshi-Light",
+  //   "Satoshi-Medium",
+  //   "Satoshi-Black"
+  // ];
 
   const modules = {
     toolbar: [
-      [{ font: fonts }],
+      // [{ font: fonts }],
       ["bold", "italic", "underline"],
       ["clean"],
       [{ color: [] }]
@@ -200,15 +200,17 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
                       modules={modules}
                       formats={formats}
                       placeholder="Provide your hero section text here..."
-                      className=" placeholder:text-sm placeholder:text-[#667085] text-sm min-h-[15rem] focus:outline-none overflow-hidden"
+                      className=" placeholder:text-sm placeholder:text-[#667085] text-sm min-h-[10rem] focus:outline-none overflow-hidden rounded-lg border border-[#C8CCD0] "
                       theme="snow"
                     />
                     <style>{`
                     .ql-editor{
                       min-height: 10rem;
-                      border-radius: 0px 0px 8px 8px;
                       
                     }
+                      .ql-container.ql-snow{
+                      border: 0px!important;
+                      }
                       .ql-snow .ql-picker.ql-font{
                       min-width: 130px;
                       }
@@ -218,8 +220,8 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
                       }
                     .ql-toolbar{
                       background-color: #f8f8ff;
-                      border: 1px solid #C8CCD0;
-                      border-radius: 8px 8px 0px 0px;
+                      border: 0px!important;
+                      outline: none!important;
                       
                     }
                     .ql-snow .ql-picker.ql-font .ql-picker-label[data-value='Satoshi-Regular']::before {
@@ -264,13 +266,20 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
                       className="rounded-lg border border-[#C8CCD0] p-2 placeholder:text-sm placeholder:text-[#667085] text-sm max-h-[10rem] min-h-[10rem] focus:outline-none"
                       {...form.getFieldProps("heroText")}
                     ></textarea> */}
-                    <div className="flex justify-between">
+                    <div
+                      className="flex "
+                      style={{
+                        justifyContent: form.errors.heroText
+                          ? "space-between"
+                          : "end"
+                      }}
+                    >
                       {form.errors.heroText && (
                         <span className="text-[#D42620] text-sm">
                           {form.errors.heroText}
                         </span>
                       )}
-                      <span className="self-end font-satoshiLight text-sm text-[#667085]">
+                      <span className="font-satoshiLight text-sm text-[#667085]">
                         Max. of 70 Characters
                       </span>
                     </div>
@@ -329,7 +338,7 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
               </div>
               <button
                 type="button"
-                disabled={form.isSubmitting}
+                disabled={!form.values.heroText.trim() || !form.values.heroImage.trim()|| form.isSubmitting || isUploading}
                 onClick={() => form.handleSubmit()}
                 className="bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed"
               >
