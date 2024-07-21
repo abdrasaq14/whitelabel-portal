@@ -4,12 +4,16 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@ckeditor/ckeditor5-build-classic": "^42.0.1",
+    "@ckeditor/ckeditor5-font": "^42.0.1",
+    "@ckeditor/ckeditor5-react": "^8.0.0",
     "@heroicons/react": "^2.0.13",
     "@radix-ui/react-popover": "^1.0.2",
     "@tanstack/react-table": "^8.7.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@tinymce/tinymce-react": "^5.1.1",
     "@types/html-to-text": "^9.0.4",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.38",
@@ -29,6 +33,7 @@
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-chartjs-2": "^5.1.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-headless-passcode": "^1.0.1",
@@ -74,6 +79,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-color": "^3.0.12",
     "@types/react-slick": "^0.23.13",
     "autoprefixer": "^10.4.14",
     "daisyui": "^4.6.3",

@@ -11,6 +11,7 @@ import BannerTemplate from "../livePreview/index";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { CustomisationService } from "../../../services/customisation.service";
 
 interface Step3Props {
   index: number;
@@ -20,9 +21,7 @@ interface Step3Props {
 
 // Validation schema
 const validationSchema = Yup.object({
-  heroText: Yup.string()
-    .trim()
-    .required("Hero Section text is required"),
+  heroText: Yup.string().trim().required("Hero Section text is required"),
   heroImage: Yup.string().trim().required("*Hero Image is required")
 });
 
@@ -112,14 +111,26 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
 
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
-      // handle form submission logic
+      return await CustomisationService.createCustomisation({
+        banner: {
+          text: values.heroText,
+          imageUrl: values.heroImage,
+          template: templates[selectedTemplate].title
+        
+      }});
     },
     {
       onSuccess: (response) => {
-        // handle success
+        setIsUploading(false);
+        setUploadError("");
+        form.setSubmitting(false);
+        console.log("response", response);
       },
       onError: (err: any) => {
-        console.log(err);
+        setIsUploading(false);
+        setUploadError("");
+        form.setSubmitting(false);
+        console.log("erro", err);
       }
     }
   );
@@ -141,6 +152,7 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
     ]
   };
 
+  console.log("form.Value", form.values);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   return (
     <div className="flex w-full bg-[#F3F3F3] h-full">
@@ -194,10 +206,12 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
                     <style>{`
                     .ql-editor{
                       min-height: 10rem;
-                      // border: 1px solid #C8CCD0;
                       border-radius: 0px 0px 8px 8px;
                       
                     }
+                      .ql-snow .ql-picker.ql-font{
+                      min-width: 130px;
+                      }
                       .ql-editor::before, .ql-editor::after{
                       border: none!important;
                       outline: none!important
@@ -238,6 +252,12 @@ function Step3({ index, primaryColor, secondaryColor }: Step3Props) {
                     .ql-font-Satoshi-Black {
                       font-family: 'Satoshi-Black', sans-serif;
                     }
+                      .ql-editor p{
+                        line-height: 1.5; // Default line height for paragraphs
+                      }
+                      .ql-editor p + br{
+                        display: none; // Hide <br> after <p> tags to avoid extra spacing
+                      }
                   `}</style>
                     {/* <textarea
                       placeholder="Provide your hero section text here..."

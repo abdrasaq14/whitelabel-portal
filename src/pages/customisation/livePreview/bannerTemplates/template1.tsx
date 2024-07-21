@@ -20,7 +20,7 @@ const BannerTemplate = ({
     >
       <div className="col-span-1 flex flex-col gap-4 justify-center items-center sm:items-start">
         <h3
-          className="font-semiBold text-xl text-center sm:text-start text-black leading-8"
+          className="font-semiBold text-lg text-center sm:text-start text-black leading-8"
           dangerouslySetInnerHTML={{
             __html: heroText ? heroText : "Lorem ipsum dolor sit"
           }}
