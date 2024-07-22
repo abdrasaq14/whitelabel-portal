@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { HeroImage } from "../../../../assets/customisation";
+import { HeroImage, Hero2 } from "../../../../assets/customisation";
 
 interface BannerTemplateProps {
   primaryColor: string;
@@ -16,7 +16,7 @@ const BannerTemplate = ({
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
-      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[50%,50%] p-6  h-[260px] gap-4"
+      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[50%,50%] p-6  h-[260px] gap-4 overflow-hidden"
     >
       <div className="col-span-1 flex flex-col gap-4 justify-center items-center sm:items-start">
         <h3
@@ -33,12 +33,12 @@ const BannerTemplate = ({
           Explore
         </Link>
       </div>
-      <div className="col-span-1 flex overflow-hidden">
+      <div className="col-span-1 flex overflow-visible p-2">
         <div className="flex justify-center items-center h-full w-full">
           <img
             src={heroImage ? heroImage : HeroImage}
             alt="Hero"
-            className=" h-full max-h-[260px] sm:h-full object-cover"
+            className=" h-full max-h-[270px] object-contain scale-110"
           />
         </div>
       </div>

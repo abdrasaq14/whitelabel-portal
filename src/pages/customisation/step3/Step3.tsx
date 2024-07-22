@@ -94,6 +94,7 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
       }
 
       setUploadError("");
+      if (selectedTemplate !== 3) {
         const bgRemovedImage = await removeBackground(file);
         if (bgRemovedImage) {
           // Continue with your image upload logic, using the bgRemovedImage URL
@@ -101,7 +102,12 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
         } else {
           setUploadError("Failed to remove background from the image.");
           setIsUploading(false);
+          return
         }
+      }
+      else {
+        handleImageUpload.mutate(file);
+      }
     }
   };
 

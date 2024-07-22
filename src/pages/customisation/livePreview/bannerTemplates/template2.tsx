@@ -16,14 +16,14 @@ const BannerTemplate = ({
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
-      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[40%,60%] p-6 md:px-[36px] h-[260px] gap-4"
+      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[50%,50%] p-6  h-[260px] gap-4 overflow-hidden"
     >
-      <div className="col-span-1 flex overflow-hidden ">
+      <div className="col-span-1 flex overflow-visible ">
         <div className="flex justify-center items-center h-full w-full ">
           <img
             src={heroImage ? heroImage : HeroImage}
             alt="Hero"
-            className=" h-full max-h-[250px] object-cover"
+            className=" h-full max-h-[270px] object-contain scale-110"
           />
         </div>
       </div>
