@@ -147,10 +147,10 @@ const form = useFormik({
 
           </FormikProvider>
        
-          <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
+          {/* <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
                   <img alt='Client logo'
                 src='/client-asset/Logo_Landmark.svg' width={58} height={20} />
-          </div>
+          </div> */}
     </main>
     <LoadingModal isOpen={isOpen} closeModal={closeModal} />
     
