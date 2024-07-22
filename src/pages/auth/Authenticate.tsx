@@ -160,11 +160,11 @@ export default function Authenticate() {
                     </span> 
                     Continue with Google
                   </button> */}
-            <div className="w-full bottom-logo p-4 hidden  items-center justify-center">
+            {/* <div className="w-full bottom-logo p-4 hidden  items-center justify-center">
                 <img alt='Client logo'
                     src='/client-asset/Logo_Landmark.svg' width={118}
                     height={40} />
-            </div>
+            </div> */}
 
 
         </main>

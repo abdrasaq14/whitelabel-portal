@@ -172,10 +172,10 @@ console.log(token)
             )
           }}
         </Formik>
-        <div className="w-full p-2 mt-8 hidden sm:flex  items-center justify-center">
+        {/* <div className="w-full p-2 mt-8 hidden sm:flex  items-center justify-center">
           <img alt='Client logo'
             src='/client-asset/Logo_Landmark.svg' width={68} height={20} />
-        </div>
+        </div> */}
       </main>
       <LoadingModal isOpen={handleSubmit.isLoading} closeModal={closeModal} />
 
