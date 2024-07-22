@@ -79,7 +79,7 @@ export default function Authenticate() {
                     form.setSubmitting(false)
                     const setupCompleted = response.data.result.user.customisationData.completeSetup === "completed";
                     requestAnimationFrame(() => {
-                        setupCompleted ? router("/dashboard") : router("/setup");
+                        setupCompleted ? router("/dashboard") : router("/customisation");
                     });
                 } else {
                     toast.error("You do no not have access to this platform")
