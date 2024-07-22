@@ -16,7 +16,7 @@ const BannerTemplate = ({
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
-      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[60%,40%] p-6  h-[260px] gap-4"
+      className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[50%,50%] p-6  h-[260px] gap-4"
     >
       <div className="col-span-1 flex flex-col gap-4 justify-center items-center sm:items-start">
         <h3
@@ -38,7 +38,7 @@ const BannerTemplate = ({
           <img
             src={heroImage ? heroImage : HeroImage}
             alt="Hero"
-            className=" h-full max-h-[260px] sm:w-full sm:h-full object-contain"
+            className=" h-full max-h-[260px] sm:h-full object-cover"
           />
         </div>
       </div>

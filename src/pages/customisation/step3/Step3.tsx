@@ -12,6 +12,7 @@ import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { CustomisationService } from "../../../services/customisation.service";
+import removeBackground from "../../../utils/removeBg";
 
 interface Step3Props {
   primaryColor: string;
@@ -70,7 +71,7 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
     }
   );
 
-  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (event.currentTarget.files) {
       setIsUploading(true);
       const file = event.currentTarget.files[0];
@@ -93,7 +94,14 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
       }
 
       setUploadError("");
-      handleImageUpload.mutate(file);
+        const bgRemovedImage = await removeBackground(file);
+        if (bgRemovedImage) {
+          // Continue with your image upload logic, using the bgRemovedImage URL
+          handleImageUpload.mutate(bgRemovedImage);
+        } else {
+          setUploadError("Failed to remove background from the image.");
+          setIsUploading(false);
+        }
     }
   };
 
