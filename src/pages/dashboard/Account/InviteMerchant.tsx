@@ -1,13 +1,15 @@
 import { IoCopyOutline } from "react-icons/io5";
 import { useAuth } from "../../../zustand/auth.store";
 import { toast } from "react-hot-toast";
+import { Config } from "../../../utils/config";
+
 function InviteMerchant() {
     const whiteLabelName = useAuth(
     // @ts-ignore
     (s) => s.profile.whiteLabelName
   );
  const handleCopyLink = () => {
-   const textToCopy = `https://www.profitall.co.uk/onboarding?whiteLabelName=${whiteLabelName}`;
+   const textToCopy = `${Config.profitAllUrl}/onboarding/?whiteLabelName=${whiteLabelName}`;
    navigator.clipboard
      .writeText(textToCopy)
      .then(() => {
