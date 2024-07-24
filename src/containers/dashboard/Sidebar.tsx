@@ -34,7 +34,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         )}
       >
         <img
-          src={companyDetails?.companyLogo ?? '/client-asset/landmark_logo.png'}
+          src={companyDetails?.companyLogo}
           className={clsx(
             "transition-[width] w-auto  h-[64px] "
           )}
@@ -76,7 +76,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
                 }`}
             >
               <img
-                src={'/client-asset/landmark_logo.png'}
+                src={companyDetails?.companyLogo || ""}
                 className={clsx(
                   "transition-[width] w-auto  h-[24.5px] "
                 )}
