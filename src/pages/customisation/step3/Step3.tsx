@@ -45,7 +45,7 @@ function Step3({
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
-
+  const [updatedUserObject, setUpdatedUserObject] = useState<any>({})
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
@@ -77,7 +77,6 @@ function Step3({
         setIsUploading(false);
         form.setSubmitting(false);
         const fileUrl = response.data.secure_url;
-        console.log("File uploaded successfully:", fileUrl);
         form.setFieldValue("heroImage", fileUrl);
         scrollToSection();
         
@@ -126,7 +125,6 @@ function Step3({
           return;
         }
       } else {
-        console.log("yes");
         handleImageUpload.mutate(file);
         return;
       }
@@ -136,9 +134,10 @@ function Step3({
 
   const handleProceed = () => {
     localStorage.removeItem("setupData")
-    navigate("/dashboard");
-    setIsOpen(false);
     setStep(1);
+    AuthActions.setProfile(updatedUserObject);
+   navigate("/dashboard");
+   setIsOpen(false);
     return;
   };
   const form = useFormik({
@@ -166,14 +165,14 @@ function Step3({
     },
     {
       onSuccess: (response) => {
+        form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        form.setSubmitting(false);
+        setUpdatedUserObject(response.data.result)
         setIsOpen(true);
-        // According to Emeka, you have to update user profile on the frontend with the new user data from the backend before you route to dashboard
-        // AuthActions.setProfile(response.data.result.user)
-
-        // console.log("response", response);
+        // AuthActions.setProfile(response.data.result)
+        // return
+        
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -209,7 +208,6 @@ function Step3({
     ]
   };
 
-  console.log("form.Value", form.values.heroImage);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {

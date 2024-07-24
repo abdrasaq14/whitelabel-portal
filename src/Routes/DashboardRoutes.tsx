@@ -11,118 +11,118 @@ export const AdminDashRouter: IModuleRouter = {
   routes: [
     {
       index: true,
-      element: <Navigate to="/dashboard" />
+      element: <Navigate to="/dashboard" />,
     },
     LazyRoute(
       {
-        path: "/dashboard"
+        path: "/dashboard",
       },
       () => import("../pages/dashboard/Dashboard")
     ),
     // product discovery
     LazyRoute(
       {
-        path: "/discover-products"
+        path: "/discover-products",
       },
       () => import("../pages/dashboard/ProductDiscovery/ProductDiscovery")
     ),
     LazyRoute(
       {
-        path: "/inventory"
+        path: "/inventory",
       },
       () => import("../pages/dashboard/Inventory/Inventory")
     ),
     LazyRoute(
       {
-        path: "/discover-products/details/:id"
+        path: "/discover-products/details/:id",
       },
       () => import("../pages/dashboard/ProductDiscovery/MerchantDetails")
     ),
     // products
     LazyRoute(
       {
-        path: "/product/all-products"
+        path: "/product/all-products",
       },
       () => import("../pages/dashboard/Products/AllProducts")
     ),
     LazyRoute(
       {
-        path: "/product/blocked-products"
+        path: "/product/blocked-products",
       },
       () => import("../pages/dashboard/Products/BlockedProducts")
     ),
     // merchants
     LazyRoute(
       {
-        path: "/merchant/all-merchants"
+        path: "/merchant/all-merchants",
       },
       () => import("../pages/dashboard/Merchants/AllMerchants")
     ),
     LazyRoute(
       {
-        path: "/merchant/add-merchants"
+        path: "/merchant/add-merchants",
       },
       () => import("../pages/dashboard/Merchants/AddMerchants")
     ),
     LazyRoute(
       {
-        path: "/merchant/request-merchants"
+        path: "/merchant/request-merchants",
       },
       () => import("../pages/dashboard/Merchants/MerchantRequest")
     ),
     LazyRoute(
       {
-        path: "/merchant/suspend-merchants"
+        path: "/merchant/suspend-merchants",
       },
       () => import("../pages/dashboard/Merchants/SuspendedMerchants")
     ),
     LazyRoute(
       {
-        path: "/merchant/profile/:id"
+        path: "/merchant/profile/:id",
       },
       () => import("../pages/dashboard/Merchants/MerchantDetails")
     ),
     // messages
     LazyRoute(
       {
-        path: "/message"
+        path: "/message",
       },
       () => import("../pages/dashboard/Messages/Messages")
     ),
     //settings
     LazyRoute(
       {
-        path: "/settings"
+        path: "/settings",
       },
       () => import("../pages/dashboard/Settings/Settings")
     ),
     // Account Info
     LazyRoute(
       {
-        path: "/account"
+        path: "/account",
       },
       () => import("../pages/dashboard/Account/AccountInfo")
     ),
     //Orders & Transaction
     LazyRoute(
       {
-        path: "/orders"
+        path: "/orders",
       },
       () => import("../pages/dashboard/Orders & Transaction/Orders")
     ),
     LazyRoute(
       {
-        path: "/notifications"
+        path: "/notifications",
       },
       () => import("../pages/dashboard/Notifications/Notifications")
     ),
     {
       path: "/login",
-      element: <Navigate to="/dashboard" />
+      element: <Navigate to="/dashboard" />,
     },
     {
       path: "*",
-      element: <div>Not found</div>
-    }
-  ]
+      element: <Navigate to="/dashboard" />,
+    },
+  ],
 };
