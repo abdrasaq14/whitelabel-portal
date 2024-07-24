@@ -50,8 +50,7 @@ const customizationData = {
 }
 
 function CustomisationPage() {
-  const profile: any = useAuth((s) => s.profile)
-  console.log("userProdile", profile)
+  const profile:any = useAuth((s) => s.profile)
   const [step, setStep] = useState(1);
   const [data, setData] = useState<customisationData>(customizationData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -81,7 +80,7 @@ function CustomisationPage() {
       },
       image: {
         logo: profile.companyLogo,
-        favicon: ""
+        favicon: "",
       },
       socialMedia: {
         facebook: "",
@@ -91,15 +90,15 @@ function CustomisationPage() {
         tiktok: ""
       },
       banner: {
-        text: profile.customisationData.banner.text,
-        imageUrl: profile.customisationData.banner.imageUrl,
-        template: ""
+        text: "",
+        imageUrl: "",
+        template: "",
       },
       contact: {
         phone: "",
         email: {
           supportEmail: "",
-          senderEmail: ""
+          senderEmail: "",
         },
         address: ""
       }
