@@ -77,7 +77,6 @@ function Step3({
         setIsUploading(false);
         form.setSubmitting(false);
         const fileUrl = response.data.secure_url;
-        console.log("File uploaded successfully:", fileUrl);
         form.setFieldValue("heroImage", fileUrl);
         scrollToSection();
         
@@ -115,22 +114,21 @@ function Step3({
       }
 
       setUploadError("");
-      // if (selectedTemplate !== 2) {
-      //   const bgRemovedImage = await removeBackground(file);
-      //   if (bgRemovedImage) {
-      //     // Continue with your image upload logic, using the bgRemovedImage URL
-      //     handleImageUpload.mutate(bgRemovedImage);
-      //   } else {
-      //     setUploadError("Failed to remove background from the image.");
-      //     setIsUploading(false);
-      //     return;
-      //   }
-      // } else {
-      //   console.log("yes");
-      //   handleImageUpload.mutate(file);
-      //   return;
-      // }
-      handleImageUpload.mutate(file);
+      if (selectedTemplate !== 2) {
+        const bgRemovedImage = await removeBackground(file);
+        if (bgRemovedImage) {
+          // Continue with your image upload logic, using the bgRemovedImage URL
+          handleImageUpload.mutate(bgRemovedImage);
+        } else {
+          setUploadError("Failed to remove background from the image.");
+          setIsUploading(false);
+          return;
+        }
+      } else {
+        handleImageUpload.mutate(file);
+        return;
+      }
+      // handleImageUpload.mutate(file);
     }
   };
 
@@ -171,7 +169,6 @@ function Step3({
         setIsUploading(false);
         setUploadError("");
         setUpdatedUserObject(response.data.result)
-        console.log("responseCusom", response);
         setIsOpen(true);
         // AuthActions.setProfile(response.data.result)
         // return
@@ -211,10 +208,8 @@ function Step3({
     ]
   };
 
-  console.log("form.Value", form.values.heroImage);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
-  console.log("response,", isOpen);
   useEffect(() => {
     if (data?.banner?.text) {
       form.setFieldValue("heroText", data.banner.text);
