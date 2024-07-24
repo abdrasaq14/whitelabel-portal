@@ -12,7 +12,7 @@ export const CompletionModal = ({
 }: ICompletionModal) => {
   return (
     <>
-      isOpen && (
+      {isOpen && (
       <div className="modal-background fixed top-0 left-0 right-0 bottom-0 bg-opacity-60 bg-[#1A002E]">
         <div className="flex items-center justify-around min-w-44 h-screen">
           <div
@@ -44,7 +44,7 @@ export const CompletionModal = ({
           </div>
         </div>
       </div>
-      )
+      )}
     </>
   );
 };

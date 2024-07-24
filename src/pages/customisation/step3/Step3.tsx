@@ -89,11 +89,11 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
         return;
       }
 
-      if (file.size < minSize || file.size > maxSize) {
-        setUploadError("Image size must be between 50 KB and 5 MB.");
-        setIsUploading(false);
-        return;
-      }
+      // if (file.size < minSize || file.size > maxSize) {
+      //   setUploadError("Image size must be between 50 KB and 5 MB.");
+      //   setIsUploading(false);
+      //   return;
+      // }
 
       setUploadError("");
       if (selectedTemplate !== 2) {
@@ -114,6 +114,12 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
       }
     }
   };
+
+  const handleProceed = ()=>{
+    navigate("/dashboard")
+    setIsOpen(false)
+    return
+  }
 console.log("selectedTemplate", selectedTemplate)
   const form = useFormik({
     initialValues: {
@@ -405,7 +411,7 @@ console.log("selectedTemplate", selectedTemplate)
           </div>
         </div>
       </div>
-      <CompletionModal isOpen={isOpen} handleProceed={()=>navigate("/dashboard")} />
+      <CompletionModal isOpen={isOpen} handleProceed={handleProceed} />
     </>
   );
 }
