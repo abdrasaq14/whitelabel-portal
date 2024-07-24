@@ -12,6 +12,7 @@ export const MerchantService = {
   getMerchantDiscovery: (payload:any) => createApiClient(false).get(`/external-api/merchant/get-all-merchants/${paramsObjectToQueryString(payload)}`),
   sendPMerchantRequest:(payload:any) => createApiClient(false).post(`/external-api/merchant/send-merchant-request`, payload),
   getMerchantProducts: (payload:any) => createApiClient(false).get(`/external-api/merchant/get-merchant-products/${paramsObjectToQueryString(payload)}`),
-  suspendMerchant: (payload:any, id:string) => createApiClient(false).put(`/external-api/merchant/update-merchant-status/${id}`, payload)
+  suspendMerchant: (payload:any, id:string) => createApiClient(false).put(`/external-api/merchant/update-merchant-status/${id}`, payload),
+  startConversation: (payload:any) => createApiClient(false).post(`/messaging/conversations`, payload)
 
 }
