@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChangeEventHandler, useState } from "react";
 import TemplateCard, { templates } from "./templateCard";
 import * as Yup from "yup";
 import { FormikProvider, useFormik } from "formik";
 import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
-import { MdOutlineArrowForward } from "react-icons/md";
+import {
+  MdOutlineArrowForward,
+  MdOutlineKeyboardBackspace
+} from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
-import BannerTemplate from "../livePreview/index";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { CustomisationService } from "../../../services/customisation.service";
 import removeBackground from "../../../utils/removeBg";
 import { CompletionModal } from "../../../components/Modal/CompletionModal";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import LivePreview from "../LivePreviewComponent/LivePreview";
+
 interface Step3Props {
-  primaryColor: string;
-  secondaryColor: string;
+  primaryColor: any;
+  secondaryColor: any;
+  step: number;
+  setStep: (step: number) => void;
+  data: any;
 }
 
 // Validation schema
@@ -26,10 +33,17 @@ const validationSchema = Yup.object({
   heroImage: Yup.string().trim().required("*Hero Image is required")
 });
 
-function Step3({ primaryColor, secondaryColor }: Step3Props) {
+function Step3({
+  primaryColor,
+  secondaryColor,
+  step,
+  setStep,
+  data
+}: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
+
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
@@ -73,7 +87,9 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
     }
   );
 
-  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
+    event
+  ) => {
     if (event.currentTarget.files) {
       setIsUploading(true);
       const file = event.currentTarget.files[0];
@@ -89,11 +105,11 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
         return;
       }
 
-      // if (file.size < minSize || file.size > maxSize) {
-      //   setUploadError("Image size must be between 50 KB and 5 MB.");
-      //   setIsUploading(false);
-      //   return;
-      // }
+      if (file.size < minSize || file.size > maxSize) {
+        setUploadError("Image size must be between 50 KB and 5 MB.");
+        setIsUploading(false);
+        return;
+      }
 
       setUploadError("");
       if (selectedTemplate !== 2) {
@@ -104,23 +120,21 @@ function Step3({ primaryColor, secondaryColor }: Step3Props) {
         } else {
           setUploadError("Failed to remove background from the image.");
           setIsUploading(false);
-          return
+          return;
         }
-      }
-      else {
-        console.log("yes")
+      } else {
+        console.log("yes");
         handleImageUpload.mutate(file);
-        return
+        return;
       }
     }
   };
 
-  const handleProceed = ()=>{
-    navigate("/dashboard")
-    setIsOpen(false)
-    return
-  }
-console.log("selectedTemplate", selectedTemplate)
+  const handleProceed = () => {
+    navigate("/dashboard");
+    setIsOpen(false);
+    return;
+  };
   const form = useFormik({
     initialValues: {
       heroText: "",
@@ -140,8 +154,9 @@ console.log("selectedTemplate", selectedTemplate)
           text: values.heroText,
           imageUrl: values.heroImage,
           template: templates[selectedTemplate].title
-        
-      }});
+        },
+        completeSetup: "completed"
+      });
     },
     {
       onSuccess: (response) => {
@@ -160,6 +175,9 @@ console.log("selectedTemplate", selectedTemplate)
     }
   );
 
+  const goBack = () => {
+    setStep(step - 1);
+  };
   // const fonts = [
   //   "Satoshi-Regular",
   //   "Satoshi-Bold",
@@ -177,13 +195,28 @@ console.log("selectedTemplate", selectedTemplate)
     ]
   };
 
-  console.log("form.Value", form.values);
+  console.log("form.Value", form.values.heroText, data);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    if (data?.banner?.text) {
+      form.setFieldValue("heroText", data.banner.text);
+    }
+    if (data?.banner?.imageUrl) {
+      form.setFieldValue("heroImage", data.banner.imageUrl);
+    }
+  }, [data, form]);
   return (
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
-        <div className="w-[50%] h-full bg-white text-foundation-black p-8 font-satoshiBold">
+        <div className="w-[45%] h-full bg-white text-foundation-black p-8 font-satoshiBold">
+          <div
+            className="flex gap-1 items-center cursor-pointer mb-6"
+            onClick={goBack}
+          >
+            <MdOutlineKeyboardBackspace size={22} />
+            <span className="font-satoshiMedium">Back</span>
+          </div>
           <h1 className="text-3xl mb-1">Customise your Account</h1>
           <p className="mb-4 text-sm text-[#5a5a5a] font-satoshiRegular w-[60%]">
             Choose a template and provide the hero section image and content
@@ -390,25 +423,16 @@ console.log("selectedTemplate", selectedTemplate)
             </FormikProvider>
           </div>
         </div>
-        <div className="w-[50%] h-full bg-foundation-darkPurple p-6 flex items-center justify-center">
-          <div className="bg-white h-full w-[95%] flex flex-col">
-            <div className="h-[5rem] w-full">
-              <div
-                className={`h-[50%] w-full`}
-                style={{ backgroundColor: primaryColor }}
-              ></div>
-            </div>
-            <div className="p-4 border-[2px] border-dotted border-[#D42620] scale-105 bg-white shadow-md  animate-zoomOut">
-              <BannerTemplate
-                scrollRef={scrollRef}
-                template={selectedTemplate}
-                heroText={form.values.heroText}
-                heroImage={form.values.heroImage}
-                primaryColor={primaryColor}
-                secondaryColor={secondaryColor}
-              />
-            </div>
-          </div>
+        <div className="w-[55%] h-full bg-foundation-darkPurple p-6 flex items-center justify-center">
+          <LivePreview
+            data={data}
+            scrollRef={scrollRef}
+            template={selectedTemplate}
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+            heroImage={form.values.heroImage }
+            heroText={form.values.heroText}
+          />
         </div>
       </div>
       <CompletionModal isOpen={isOpen} handleProceed={handleProceed} />

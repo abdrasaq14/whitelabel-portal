@@ -47,5 +47,8 @@ export interface customisationData {
 export const CustomisationService = {
   createCustomisation: (payload: customisationData) =>
     createApiClient(false).put(`/customisation/`, payload),
-  updateCustomisation: (payload: customisationData) => createApiClient(false).put(`/customisation/update-profile`, {customisationData: payload})
-}
+  updateCustomisation: (payload: customisationData) =>
+    createApiClient(false).put(`/customisation/update-profile`, {
+      customisationData: payload
+    })
+};

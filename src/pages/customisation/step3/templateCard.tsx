@@ -29,13 +29,6 @@ function TemplateCard({
         </div>
         <p className=" font-satoshiBold text-sm my-2">{title}</p>
       </div>
-      {/* <input
-        type="radio"
-        name="template"
-        checked={isSelected}
-        readOnly
-        className="cursor-pointer outline-none hover:outline-none focus:outline-none border-none focus:border-none ring-0 focus:ring-0 checked:ring-0 checked:border-0 checked:outline-none"
-      /> */}
       <input
         type="radio"
         name="template"
