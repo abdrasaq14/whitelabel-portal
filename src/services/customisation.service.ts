@@ -20,28 +20,32 @@ export interface customisationData {
   };
   domain?: string;
   socialMedia?: {
-    title: string;
-    link: string;
-  }[];
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+    tiktok: string;
+  };
   banner?: {
     text: string;
     imageUrl: string;
     template: string;
   };
   contact?: {
-    phone: string;
-    email: {
-      supportEmail: string;
-      senderEmail: string;
+    phone?: string;
+    email?: {
+      supportEmail?: string;
+      senderEmail?: string;
     };
-    address: string;
+    address?: string;
   };
   services?: string[];
-  completeSetup?: "ongoing" | "propagating" | "completed";
+  completeSetup?: string;
   stage?: number;
 }
 
 export const CustomisationService = {
   createCustomisation: (payload: customisationData) =>
-    createApiClient(false).put(`/customisation/`, payload)
-};
+    createApiClient(false).put(`/customisation/`, payload),
+  updateCustomisation: (payload: customisationData) => createApiClient(false).put(`/customisation/update-profile`, {customisationData: payload})
+}
