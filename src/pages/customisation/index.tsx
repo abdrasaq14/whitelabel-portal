@@ -50,7 +50,8 @@ const customizationData = {
 }
 
 function CustomisationPage() {
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
+  // console.log("Profile", profile)
   const [step, setStep] = useState(1);
   const [data, setData] = useState<customisationData>(customizationData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -76,7 +77,7 @@ function CustomisationPage() {
       theme: {
         primaryColor: "#006600",
         secondaryColor: "#E0F5E0",
-        footerColor: "#000000"
+        footerColor: "#000000",
       },
       image: {
         logo: profile.companyLogo,
@@ -87,11 +88,11 @@ function CustomisationPage() {
         twitter: "",
         instagram: "",
         linkedin: "",
-        tiktok: ""
+        tiktok: "",
       },
       banner: {
-        text: "",
-        imageUrl: "",
+        text: profile.customisationData.banner.text,
+        imageUrl: profile.customisationData.banner.imageUrl,
         template: "",
       },
       contact: {
@@ -100,8 +101,8 @@ function CustomisationPage() {
           supportEmail: "",
           senderEmail: "",
         },
-        address: ""
-      }
+        address: "",
+      },
     };
     localStorage.setItem("setupData", JSON.stringify(existingData));
     setData(existingData);
@@ -185,8 +186,8 @@ function CustomisationPage() {
 
   return (
     <div className="w-full">
-      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={isLoading} />}
-      {step === 2 && data && <Step2 data={data} isLoading={isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
+      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={!isLoading} />}
+      {step === 2 && data && <Step2 data={data} isLoading={!isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
       {step === 3 && <Step3 primaryColor={data.theme?.primaryColor} secondaryColor={data.theme?.secondaryColor} step={step} setStep={setStep} data={data}/>}
     </div>
   );
