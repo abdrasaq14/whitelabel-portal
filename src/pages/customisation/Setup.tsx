@@ -16,7 +16,7 @@ export default function Setup({data, setColor, setService, setInfo, processStage
                 <ColorPicker setColor={setColor} theme={data.theme} />
                 <OtherServices data={data.services} setService={setService} />
                 <OtherInformation setInfo={setInfo} contact={data.contact} />
-                <button onClick={processStage1} className='mt-5 bg-primary w-full text-white text-center p-2.5 font-satoshiBold inline-flex items-center justify-center h-[48px]'>Continue {isLoading ? <Spinner color="#4B0082" /> :  < FaArrowRightLong color={"#ffffff"} size={20} className="ml-2" />}</button>
+                <button onClick={processStage1} className='mt-5 bg-primary w-full text-white text-center p-2.5 font-satoshiBold inline-flex items-center justify-center h-[48px]'>Continue &nbsp; {isLoading ? <Spinner color="#ffffff" /> :  < FaArrowRightLong color={"#ffffff"} size={20} className="ml-2" />}</button>
             </div>
 
             <LivePreview data={data} stage={1} />

@@ -17,7 +17,7 @@ export default function Step2({data, isLoading, setAboutData, setSocial, prev, p
                 <SetupHeader stage={1} prev={prev} />
                 <AddSocials data={data.socialMedia} setSocial={setSocial} />
                 <AboutUs data={data.aboutUs} setAboutData={setAboutData} />
-                <button onClick={processStage2} className='mt-5 bg-primary w-full text-white text-center p-2.5 font-satoshiBold inline-flex items-center justify-center h-[48px]'>Continue {isLoading ? <Spinner color="#4B0082" /> :  < FaArrowRightLong color={"#ffffff"} size={20} className="ml-2" />}</button>
+                <button onClick={processStage2} className='mt-5 bg-primary w-full text-white text-center p-2.5 font-satoshiBold inline-flex items-center justify-center h-[48px]'>Continue &nbsp; {isLoading ? <Spinner color="#ffffff" /> :  < FaArrowRightLong color={"#ffffff"} size={20} className="ml-2" />}</button>
             </div>
 
             <LivePreview processStage2={processStage2} data={data} stage={2} />

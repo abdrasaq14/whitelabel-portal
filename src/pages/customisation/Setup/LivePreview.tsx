@@ -77,9 +77,9 @@ export default function LivePreview({data, stage}: any) {
                                 <span className="font-satoshiMedium mx-2" style={{color: primaryColor}}>All</span>
                                 <BiSolidDownArrow color={primaryColor} size={18}/>
                             </div>
-                            {data.services.map((service: { id: number; name: string; }) => <span key={service.id}
+                            {data.services.map((service: string, index: number) => <span key={index}
                                                                                                  className="font-satoshiRegular mx-7"
-                                                                                                 style={{color: primaryColor}}>{service.name}</span>)}
+                                                                                                 style={{color: primaryColor}}>{service}</span>)}
                         </div>
                     </div>}
 
