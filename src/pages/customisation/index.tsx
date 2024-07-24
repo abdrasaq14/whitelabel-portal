@@ -81,7 +81,7 @@ function CustomisationPage() {
       },
       image: {
         logo: profile.companyLogo,
-        favicon: "",
+        favicon: ""
       },
       socialMedia: {
         facebook: "",
@@ -92,14 +92,14 @@ function CustomisationPage() {
       },
       banner: {
         text: profile.customisationData.banner.text,
-        imageUrl: profile.customisationData.banner.ImageUrl,
-        template: "",
+        imageUrl: profile.customisationData.banner.imageUrl,
+        template: ""
       },
       contact: {
         phone: "",
         email: {
           supportEmail: "",
-          senderEmail: "",
+          senderEmail: ""
         },
         address: ""
       }

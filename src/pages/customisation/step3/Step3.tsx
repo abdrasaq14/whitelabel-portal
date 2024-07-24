@@ -131,6 +131,7 @@ function Step3({
   };
 
   const handleProceed = () => {
+    localStorage.removeItem("setupData")
     navigate("/dashboard");
     setIsOpen(false);
     return;
@@ -149,6 +150,7 @@ function Step3({
 
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
+      console.log("Processing data", values);
       return await CustomisationService.createCustomisation({
         banner: {
           text: values.heroText,
@@ -195,7 +197,7 @@ function Step3({
     ]
   };
 
-  console.log("form.Value", form.values.heroText, data);
+  console.log("form.Value", data);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
