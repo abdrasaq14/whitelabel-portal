@@ -65,8 +65,8 @@ export default function AddSocials({data, setSocial}: any) {
                     <h2 className="font-satoshiBold text-[20px] leading-7 text-[#000000] tracking-tighter">Add Social Link</h2>
                     <div className="mt-3 gap-2 flex flex-col">
                         {socials.map((social, index: number) => <div key={index} className="flex items-center">
-                            <div
-                                className="h-[20px] w-[20px] bg-[#ffffff] border border-[#B4B8BB] mr-3 hover:border-[#4B0082]"></div>
+                            {/*<div*/}
+                            {/*    className="h-[20px] w-[20px] bg-[#ffffff] border border-[#B4B8BB] mr-3 hover:border-[#4B0082]"></div>*/}
                             <p onClick={() => chooseSocial(social)}
                                className="cursor-pointer hover:text-[#4B0082] hover:font-satoshi text-[#000000] font-satoshiRegular text-[16px] leading-6">{social}</p>
                         </div>)}
