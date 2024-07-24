@@ -144,7 +144,6 @@ function CustomisationPage() {
   const processStage1 = useMutation(
       async () => {
         console.log("Processing data", data);
-        setIsLoading(true);
         return await CustomisationService.updateCustomisation({...data, stage: 2});
       },
       {
@@ -165,15 +164,14 @@ function CustomisationPage() {
 
   const processStage2 = useMutation(
       async () => {
-        setIsLoading(true);
-        console.log("Processing data stage 2", data);
+        console.log("Processing data", data);
         return await CustomisationService.updateCustomisation({...data, stage: 3});
       },
       {
         onSuccess: (response) => {
           console.log("Inside success")
           setIsLoading(false);
-          localStorage.setItem("setupData", JSON.stringify({...data, stage: 3}));
+          localStorage.setItem("setupData", JSON.stringify({...data, stage: 2}));
           setStep(3);
           toast.success("Stage2 setup completed")
         },
@@ -187,8 +185,8 @@ function CustomisationPage() {
 
   return (
     <div className="w-full">
-      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={isLoading} />}
-      {step === 2 && data && <Step2 data={data} isLoading={isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
+      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={!isLoading} />}
+      {step === 2 && data && <Step2 data={data} isLoading={!isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
       {step === 3 && <Step3 primaryColor="#005200" secondaryColor="#B0D0B0" />}
     </div>
   );
