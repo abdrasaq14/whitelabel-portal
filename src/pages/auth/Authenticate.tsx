@@ -78,6 +78,7 @@ export default function Authenticate() {
                     toast.success("login successful");
                     form.setSubmitting(false)
                     const setupCompleted = response.data.result.user.customisationData.completeSetup === "completed";
+                    sessionStorage.removeItem("loginRequest");
                     requestAnimationFrame(() => {
                         setupCompleted ? router("/dashboard") : router("/customisation");
                     });

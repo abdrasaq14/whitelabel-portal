@@ -185,8 +185,8 @@ function CustomisationPage() {
 
   return (
     <div className="w-full">
-      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={!isLoading} />}
-      {step === 2 && data && <Step2 data={data} isLoading={!isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
+      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={isLoading} />}
+      {step === 2 && data && <Step2 data={data} isLoading={isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
       {step === 3 && <Step3 primaryColor={data.theme?.primaryColor} secondaryColor={data.theme?.secondaryColor} step={step} setStep={setStep} data={data}/>}
     </div>
   );

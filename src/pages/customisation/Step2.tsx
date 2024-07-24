@@ -1,7 +1,4 @@
 import SetupHeader from "./Setup/SetupHeader";
-import ColorPicker from "./Setup/ColorPicker";
-import OtherServices from "./Setup/OtherServices";
-import OtherInformation from "./Setup/OtherInformation";
 import {FaArrowRightLong} from "react-icons/fa6";
 import LivePreview from "./Setup/LivePreview";
 import Spinner from "../../components/spinner/Spinner";

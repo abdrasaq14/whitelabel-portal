@@ -19,6 +19,7 @@ import { CompletionModal } from "../../../components/Modal/CompletionModal";
 import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
+import {AuthActions} from "../../../zustand/auth.store";
 
 interface Step3Props {
   primaryColor: any;
@@ -169,6 +170,9 @@ function Step3({
         setUploadError("");
         form.setSubmitting(false);
         setIsOpen(true);
+        // According to Emeka, you have to update user profile on the frontend with the new user data from the backend before you route to dashboard
+        // AuthActions.setProfile(response.data.result.user)
+
         // console.log("response", response);
       },
       onError: (err: any) => {
