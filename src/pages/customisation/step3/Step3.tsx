@@ -18,6 +18,7 @@ import removeBackground from "../../../utils/removeBg";
 import { CompletionModal } from "../../../components/Modal/CompletionModal";
 import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
+import toast from "react-hot-toast";
 
 interface Step3Props {
   primaryColor: any;
@@ -113,22 +114,22 @@ function Step3({
       }
 
       setUploadError("");
-      // if (selectedTemplate !== 2) {
-      //   const bgRemovedImage = await removeBackground(file);
-      //   if (bgRemovedImage) {
-      //     // Continue with your image upload logic, using the bgRemovedImage URL
-      //     handleImageUpload.mutate(bgRemovedImage);
-      //   } else {
-      //     setUploadError("Failed to remove background from the image.");
-      //     setIsUploading(false);
-      //     return;
-      //   }
-      // } else {
-      //   console.log("yes");
-      //   handleImageUpload.mutate(file);
-      //   return;
-      // }
-      handleImageUpload.mutate(file);
+      if (selectedTemplate !== 2) {
+        const bgRemovedImage = await removeBackground(file);
+        if (bgRemovedImage) {
+          // Continue with your image upload logic, using the bgRemovedImage URL
+          handleImageUpload.mutate(bgRemovedImage);
+        } else {
+          setUploadError("Failed to remove background from the image.");
+          setIsUploading(false);
+          return;
+        }
+      } else {
+        console.log("yes");
+        handleImageUpload.mutate(file);
+        return;
+      }
+      // handleImageUpload.mutate(file);
     }
   };
 
@@ -153,7 +154,6 @@ function Step3({
 
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
-      console.log("Processing data", values);
       return await CustomisationService.createCustomisation({
         banner: {
           text: values.heroText,
@@ -183,6 +183,11 @@ function Step3({
   const goBack = () => {
     setStep(step - 1);
   };
+
+  const saveDataToLocaStorage = (item: Record<string, any>) => {
+    localStorage.setItem("setupData", JSON.stringify({ ...data, banner: { ...data.banner, ...item } }));
+    // toast.success("herotext successfully");
+  }
   // const fonts = [
   //   "Satoshi-Regular",
   //   "Satoshi-Bold",
@@ -210,7 +215,8 @@ function Step3({
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
-  }, [data, form]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
   return (
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
@@ -263,6 +269,7 @@ function Step3({
                         onChange={(content) =>
                           form.setFieldValue("heroText", content)
                         }
+                        onBlur={()=> saveDataToLocaStorage({text: form.values.heroText})}
                         modules={modules}
                         formats={formats}
                         placeholder="Provide your hero section text here..."
@@ -385,7 +392,8 @@ function Step3({
                           type="file"
                           className="cursor-pointer absolute opacity-0 h-full w-full"
                           onChange={handleFileChange}
-                        />
+                          onBlur={() => saveDataToLocaStorage({imageUrl: form.values.heroImage})}
+                          />
                       </div>
                     )}
 
