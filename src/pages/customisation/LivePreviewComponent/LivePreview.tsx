@@ -27,10 +27,11 @@ function LivePreview({
   template,
   data
 }: BannerTemplateProps) {
-
   useEffect(() => {
-    console.log("form.Value", heroImage);
-  }, [heroImage]);
+  
+console.log("changed", heroImage)
+}, [heroImage])
+
   return (
     <div className="bg-white h-full w-[98%] flex flex-col">
 

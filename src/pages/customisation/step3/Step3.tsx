@@ -79,6 +79,7 @@ function Step3({
         console.log("File uploaded successfully:", fileUrl);
         form.setFieldValue("heroImage", fileUrl);
         scrollToSection();
+        
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -113,23 +114,22 @@ function Step3({
       }
 
       setUploadError("");
-     
+      if (selectedTemplate !== 2) {
+        const bgRemovedImage = await removeBackground(file);
+        if (bgRemovedImage) {
+          // Continue with your image upload logic, using the bgRemovedImage URL
+          handleImageUpload.mutate(bgRemovedImage);
+        } else {
+          setUploadError("Failed to remove background from the image.");
+          setIsUploading(false);
+          return;
+        }
+      } else {
+        console.log("yes");
         handleImageUpload.mutate(file);
-      // if (selectedTemplate !== 2) {
-      //   const bgRemovedImage = await removeBackground(file);
-      //   if (bgRemovedImage) {
-      //     // Continue with your image upload logic, using the bgRemovedImage URL
-      //     handleImageUpload.mutate(bgRemovedImage);
-      //   } else {
-      //     setUploadError("Failed to remove background from the image.");
-      //     setIsUploading(false);
-      //     return;
-      //   }
-      // } else {
-      //   console.log("yes");
-      //   handleImageUpload.mutate(file);
-      //   return;
-      // }
+        return;
+      }
+      // handleImageUpload.mutate(file);
     }
   };
 
@@ -205,6 +205,7 @@ function Step3({
     ]
   };
 
+  console.log("form.Value", form.values.heroImage);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
