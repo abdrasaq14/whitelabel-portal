@@ -1,6 +1,6 @@
-import Template1 from "../livePreview/bannerTemplates/template1";
-import Template2 from "../livePreview/bannerTemplates/template2";
-import Template3 from "../livePreview/bannerTemplates/template3";
+import Template1 from "./template1";
+import Template2 from "./template2";
+import Template3 from "./template3";
 
 interface BannerTemplateProps {
   scrollRef: React.RefObject<HTMLDivElement>;
