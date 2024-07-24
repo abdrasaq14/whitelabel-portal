@@ -1,6 +1,16 @@
 // import {useState} from "react";
 
-export default function ColorPicker() {
+import {useState} from "react";
+
+export default function ColorPicker({setColor, theme}: any) {
+    const [primaryCode, setPrimaryCode] = useState<string>(theme ? theme.primaryColor.slice(1).toUpperCase() : '#000000');
+    const [secondaryCode, setSecondaryCode] = useState<string>(theme ? theme.secondaryColor.slice(1).toUpperCase() : '#0344a2');
+    const [footerCode, setFooterCode] = useState<string>(theme ? theme.footerColor.slice(1).toUpperCase() : '#000000');
+
+    const selectColor = (color: any) => {
+        setColor(color);
+    }
+
     return (
         <>
             <div className="border border-[#E2DFDF] mt-7 p-3">
@@ -12,9 +22,13 @@ export default function ColorPicker() {
                             Color</p>
                         <div className="bg-[#F1F0F0] p-2 mt-2 flex justify-between items-center">
                             <div className="flex items-center">
-                                <div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>
+                                {/*<div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>*/}
+                                <input type="color" className="h-[20px] w-[20px] mr-3" value={theme && theme.primaryColor} onChange={(e) => {
+                                    selectColor({primaryColor: e.target.value});
+                                    setPrimaryCode(e.target.value.slice(1).toUpperCase());
+                                }} />
                                 <span
-                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">FFFFFF</span>
+                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">{primaryCode}</span>
                             </div>
                             <span
                                 className="text-[#000000] font-satoshiRegular leading-4 tracking-tighter text-[12px]">100%</span>
@@ -27,9 +41,14 @@ export default function ColorPicker() {
                         </p>
                         <div className="bg-[#F1F0F0] p-2 mt-2 flex justify-between items-center">
                             <div className="flex items-center">
-                                <div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>
+                                {/*<div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>*/}
+                                <input type="color" value={theme && theme.secondaryColor} className="h-[20px] w-[20px] mr-3"
+                                       onChange={(e) => {
+                                           selectColor({secondaryColor: e.target.value});
+                                           setSecondaryCode(e.target.value.slice(1).toUpperCase());
+                                       }}/>
                                 <span
-                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">FFFFFF</span>
+                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">{secondaryCode}</span>
                             </div>
                             <span
                                 className="text-[#000000] font-satoshiRegular leading-4 tracking-tighter text-[12px]">100%</span>
@@ -40,9 +59,14 @@ export default function ColorPicker() {
                             Color</p>
                         <div className="bg-[#F1F0F0] p-2 mt-2 flex justify-between items-center">
                             <div className="flex items-center">
-                                <div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>
+                                {/*<div className="h-[20px] w-[20px] bg-[#ffffff] border border-[#4B0082] mr-3"></div>*/}
+                                <input type="color" value={theme && theme.footerColor} className="h-[20px] w-[20px] mr-3"
+                                       onChange={(e) => {
+                                           selectColor({footerColor: e.target.value});
+                                           setFooterCode(e.target.value.slice(1).toUpperCase());
+                                       }}/>
                                 <span
-                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">FFFFFF</span>
+                                    className="text-[#000000] font-satoshiMedium leading-5 tracking-tighter text-[14px]">{footerCode}</span>
                             </div>
                             <span
                                 className="text-[#000000] font-satoshiRegular leading-4 tracking-tighter text-[12px]">100%</span>

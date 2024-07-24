@@ -1,12 +1,17 @@
 import {BiSolidDownArrow} from "react-icons/bi";
 import Modal from "../../../components/Modal/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const services = [{name: "Cafeteria", id: 1}, {name: "Electricity", id: 2}];
 
-export default function OtherServices() {
+export default function OtherServices({setService, data}: any) {
     const [selectService, setSelectService] = useState<boolean>(false)
     const [chosenService, setChosenService] = useState<any>([])
+
+    useEffect(() => {
+        // console.log("Service selected", data);
+        setChosenService(data);
+    }, [])
 
     const chooseService = (service: any) => {
         console.log(service)
@@ -18,16 +23,15 @@ export default function OtherServices() {
             initialSelectedService[serviceIndex] = service;
         }
         setChosenService(initialSelectedService);
-
+        setService(initialSelectedService);
         setSelectService(!selectService);
-        // setServiceChosen(service.name)
-        // setChosenCountryCode(`+${country.phone_code}`);
     }
 
     const removeService = (serviceName: string) => {
         const initialSelectedService = [...chosenService];
         const filtered = initialSelectedService.filter((service) => service.name !== serviceName);
         setChosenService(filtered);
+        setService(filtered);
     }
 
     return (
@@ -47,8 +51,8 @@ export default function OtherServices() {
                         </div>
                     </div>
                     <div className="flex gap-2 mt-2">
-                        {chosenService.map((service: any) => <div
-                            className="flex gap-2 p-2 bg-gray-200 items-center rounded">
+                        {chosenService.map((service: any, index: number) => <div
+                            key={index} className="flex gap-2 p-2 bg-gray-200 items-center rounded">
                             <span className="text-[14px] font-satoshiMedium">{service?.name}</span>
                             <img src="/images/cancelx.svg" alt="Cancel" onClick={() => removeService(service.name)}
                                  className="cursor-pointer" width={24} height={24}/>
@@ -62,7 +66,7 @@ export default function OtherServices() {
                     <h2 className="font-satoshiBold text-[20px] leading-7 text-[#000000] tracking-tighter">Select
                         Service</h2>
                     <div className="mt-3 gap-2 flex flex-col">
-                        {services.map(service => <div className="flex items-center">
+                        {services.map((service: any, index: number) => <div key={index} className="flex items-center">
                             <div
                                 className="h-[20px] w-[20px] bg-[#ffffff] border border-[#B4B8BB] mr-3 hover:border-[#4B0082]"></div>
                             <p onClick={() => chooseService(service)}

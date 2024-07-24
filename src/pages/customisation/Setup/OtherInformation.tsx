@@ -1,7 +1,7 @@
 import {MdMailOutline} from "react-icons/md";
 import TextInput from "../../../components/FormInputs/TextInput2";
 
-export default function OtherInformation() {
+export default function OtherInformation({setInfo, contact}: any) {
     return (
         <>
             <div className="border border-[#E2DFDF] mt-4 p-3">
@@ -14,6 +14,8 @@ export default function OtherInformation() {
                         <input
                             name='email'
                             type='email'
+                            value={contact.email.supportEmail}
+                            onChange={(e) => setInfo({supportEmail: e.target.value})}
                             placeholder='support@email.com'
                             className="outline-none border border-[#D0D5DD] rounded-md h-[40px] px-[14px]"
                         />
@@ -23,9 +25,11 @@ export default function OtherInformation() {
                         <p className="font-satoshiMedium text-[14px] leading-5 tracking-tighter text-[#000000]">Contact
                             Phone Number</p>
                         <input
-                            name='email'
-                            type='email'
-                            placeholder='support@email.com'
+                            name='phone'
+                            type='phone'
+                            value={contact.phone}
+                            onChange={(e) => setInfo({phone: e.target.value})}
+                            placeholder='+1(555)000-0000'
                             className="outline-none border border-[#D0D5DD] rounded-md h-[40px] px-[14px]"
                         />
                     </div>
@@ -35,6 +39,8 @@ export default function OtherInformation() {
                         <input
                             name='noreply_email'
                             type='email'
+                            value={contact.email.senderEmail}
+                            onChange={(e) => setInfo({senderEmail: e.target.value})}
                             placeholder='no-reply@email.com'
                             className="outline-none border border-[#D0D5DD] rounded-md h-[40px] px-[14px]"
                         />

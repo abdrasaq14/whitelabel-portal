@@ -1,5 +1,5 @@
 
-export default function Item({itemData}: any) {
+export default function Item({itemData, color}: any) {
     return (
         <>
             <div className="border border-[#C8CCD0] p-2 flex flex-col rounded-md">
@@ -12,7 +12,7 @@ export default function Item({itemData}: any) {
                 </div>
                 <p className="w-full text-end font-satoshiRegular text-[10px]">&#8358;{itemData.price}</p>
                 <div className="flex justify-between items-center mt-2">
-                    <button onClick={() => {}} className='bg-[#006600] text-white text-center px-1 py-1 rounded font-satoshiMedium inline-flex items-center justify-center text-[10px]'>Add to Cart
+                    <button onClick={() => {}}  style={{backgroundColor: color}} className='text-white text-center px-1 py-1 rounded font-satoshiMedium inline-flex items-center justify-center text-[10px]'>Add to Cart
                     </button>
                     <img src={itemData.rating} />
                 </div>
