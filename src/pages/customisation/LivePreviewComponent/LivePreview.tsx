@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useEffect } from "react";
 import BannerTemplate from "./bannerTemplates";
 import inventory from "../Setup/DummyProduct";
 import Item from "../Setup/Item";
@@ -28,7 +28,9 @@ function LivePreview({
   data
 }: BannerTemplateProps) {
 
-
+  useEffect(() => {
+    console.log("form.Value", heroImage);
+  }, [heroImage]);
   return (
     <div className="bg-white h-full w-[98%] flex flex-col">
 
