@@ -3,7 +3,7 @@ import Template2 from "./template2";
 import Template3 from "./template3";
 
 interface BannerTemplateProps {
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef?: React.RefObject<HTMLDivElement>;
   primaryColor: string;
   secondaryColor: string;
   heroImage: string;

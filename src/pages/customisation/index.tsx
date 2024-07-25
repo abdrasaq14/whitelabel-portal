@@ -93,7 +93,7 @@ function CustomisationPage() {
       banner: {
         text: profile.customisationData.banner.text,
         imageUrl: profile.customisationData.banner.imageUrl,
-        template: "",
+        template: profile.customisationData.banner.template,
       },
       contact: {
         phone: "",
