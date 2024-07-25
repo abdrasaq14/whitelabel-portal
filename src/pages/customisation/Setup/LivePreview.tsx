@@ -77,7 +77,7 @@ export default function LivePreview({data, stage}: any) {
                     </div>}
 
                     {stage === 1 && (
-                        <BannerTemplate primaryColor={ primaryColor} secondaryColor={secondaryColor} heroImage={data.banner.imageUrl} heroText={data.banner.text} template={data.banner.tempate === "Template 1" ? 0 : data.banner.tempate === "Template 2" ? 1 : 2 } />
+                        <BannerTemplate primaryColor={ primaryColor} secondaryColor={secondaryColor} heroImage={data.banner.imageUrl} heroText={data.banner.text} template={data.banner.tempate === "Template 3" ? 2 : data.banner.tempate === "Template 2" ? 1 : 0 } />
                     )
                     //     <div className={"w-full h-[220px] grid grid-cols-2"} style={{ backgroundColor: secondaryColor }}>
                     //     <div className="h-[220px] flex flex-col justify-center items-end">
