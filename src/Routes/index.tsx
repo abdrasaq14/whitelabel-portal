@@ -29,8 +29,11 @@ export const AppRouter = () => {
   const isLoggedIn: boolean = useAuth(s => !!s.token)
   // const isLoggedIn: boolean = false
   const isCustomised: boolean = useAuth(
+    (s) =>
+      // @ts-ignore
+    s.profile?.customisationData.completeSetup === "completed" ||
     // @ts-ignore
-    (s) => s.profile?.customisationData.completeSetup === "completed"
+      s.profile?.customisationData.completeSetup === "propagating"
   );
 
   useEffect(() => {
