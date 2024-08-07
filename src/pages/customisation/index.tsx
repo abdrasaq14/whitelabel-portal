@@ -91,9 +91,9 @@ function CustomisationPage() {
         tiktok: "",
       },
       banner: {
-        text: profile.customisationData.banner.text,
-        imageUrl: profile.customisationData.banner.imageUrl,
-        template: profile.customisationData.banner.template,
+        text: profile.customisationData?.banner?.text,
+        imageUrl: profile.customisationData?.banner?.imageUrl,
+        template: profile.customisationData?.banner?.template,
       },
       contact: {
         phone: "",
