@@ -77,11 +77,25 @@ export default function Authenticate() {
                     AuthActions.setProfile(response.data.result.user)
                     toast.success("login successful");
                     form.setSubmitting(false)
-                    const setupCompleted = response.data.result.user.customisationData.completeSetup === "completed";
-                    sessionStorage.removeItem("loginRequest");
-                    requestAnimationFrame(() => {
-                        setupCompleted ? router("/dashboard") : router("/customisation");
-                    });
+                    // chceking if user has customisationData, for admins
+                    if (response.data.result.user.customisationData) {
+                      const setupCompleted =
+                        response.data.result.user.customisationData
+                          .completeSetup === "completed";
+                      sessionStorage.removeItem("loginRequest");
+                      requestAnimationFrame(() => {
+                        setupCompleted
+                          ? router("/dashboard")
+                          : router("/customisation");
+                      });
+                    }
+                    // if no customisationData, for Staff
+                    else {
+                          sessionStorage.removeItem("loginRequest");
+                          requestAnimationFrame(() => {
+                            router("/dashboard");
+                          });
+                    }
                 } else {
                     toast.error("You do no not have access to this platform")
                 }

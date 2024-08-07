@@ -47,11 +47,6 @@ const MerchantDetails = () => {
         }
     )
 
-    // useEffect(() => {
-
-    //     refetch()
-    // },[])
-
     const getStatusById = (arr: any, id: string) => {
         const item = arr.find((element: any) => element.platform == id);
         return item && item.status;
@@ -108,6 +103,25 @@ const MerchantDetails = () => {
         }
     )
 
+    const startConversation = useMutation(async (reason) => {
+            const values = {
+                firstUser: {id: profile._id, phone: profile.phoneNumber, image: profile.companyLogo, email: profile.email, businessName: profile.buinessName},
+                secondUser: {id: merchant.result.id, userName: merchant.result.userName, firstName: merchant.result.firstName, lastName: merchant.result.lastName, phone: merchant.result.phone, image: merchant.result.image, email: merchant.result.email}
+            }
+            console.log("Conversation users", values);
+            return await MerchantService.startConversation(values);
+        },
+        {
+            onSuccess: () => {
+                toast.success("Conversation started")
+                navigate("/message");
+            },
+            onError: () => {
+                toast.error("Failed to start conversation")
+            }
+        }
+    )
+
     console.log(merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase())), merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase(), profile)
 
 
@@ -136,7 +150,8 @@ const MerchantDetails = () => {
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
                         <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
                     </div>
-                    <button className='border border-primary rounded bg-white px-3 py-2 whitespace-nowrap'>Message Merchant</button>
+                    <button className='border border-primary rounded bg-white px-3 py-2 whitespace-nowrap' onClick={() => startConversation.mutate()}>Message Merchant
+                    </button>
 
                 </div>
 

@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import { HeroImage, Hero2 } from "../../../../assets/customisation";
 
-interface BannerTemplateProps {
+interface Template1Props {
   primaryColor: string;
   secondaryColor: string;
   heroImage?: string;
   heroText?: string;
 }
-const BannerTemplate = ({
+const Template1 = ({
   primaryColor,
   secondaryColor,
   heroImage,
   heroText
-}: BannerTemplateProps) => {
+}: Template1Props) => {
   return (
     <div
       style={{ backgroundColor: secondaryColor }}
@@ -46,4 +46,4 @@ const BannerTemplate = ({
   );
 };
 
-export default BannerTemplate;
+export default Template1;
