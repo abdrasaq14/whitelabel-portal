@@ -6,7 +6,6 @@ profile = JSON.parse(profile)
 const userId = profile.state.profile._id;
 console.log("Session UserID", userId)
 
-
 export const MessageService = {
   createConversation: (payload: any) => createApiClient(false).post(`/messaging/conversations`, payload),
   getConversations: () => createApiClient(false).get(`/messaging/conversations/${userId}`),

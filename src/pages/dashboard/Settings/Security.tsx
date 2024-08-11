@@ -1,17 +1,18 @@
 import { BsShield, BsShieldLockFill } from "react-icons/bs";
 import * as Yup from "yup";
-import { FaCreditCard } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import { ErrorMessage, Form, Formik, FormikHelpers, FormikValues } from "formik";
-import { ImSpinner8 } from "react-icons/im";
-import { BsBank } from "react-icons/bs";
-import { CiPercent } from "react-icons/ci"
-import { FiPercent } from "react-icons/fi";
-import { log } from "console";
+// import { FaCreditCard } from "react-icons/fa";
+import { useState } from "react";
+import { Form, Formik } from "formik";
+// import { ImSpinner8 } from "react-icons/im";
+// import { BsBank } from "react-icons/bs";
+// import { CiPercent } from "react-icons/ci"
+// import { FiPercent } from "react-icons/fi";
+// import { log } from "console";
 import { Button } from "../../../components/Button/Button";
 import { useMutation } from "react-query";
 import { UserService } from "../../../services/user";
 import toast from "react-hot-toast";
+import { AuthActions } from "../../../zustand/auth.store";
 
 
 const SecurityPassword = () => {
@@ -35,7 +36,7 @@ const SecurityPassword = () => {
       .trim()
       .required("*Confirm Password is required")
       .when("password", {
-        is: (val: string | any[]) => (val && val.length > 0 ? true : false),
+        is: (val: string | any[]) => (!!(val && val.length > 0)),
         then: Yup.string().oneOf(
           [Yup.ref("password"), null],
           "Both password must be the same"
@@ -47,10 +48,10 @@ const SecurityPassword = () => {
     oldPassword: string;
     confirmPassword?: string;
   }
-  interface ChangePasswordDataValues {
-    password: string;
-    oldPassword: string;
-  }
+  // interface ChangePasswordDataValues {
+  //   password: string;
+  //   oldPassword: string;
+  // }
   const passwordData: InitialValues = {
     password: "",
     oldPassword: "",
@@ -65,6 +66,10 @@ const SecurityPassword = () => {
     {
       onSuccess: (response) => {
         toast.success(response.data.result.message)
+        AuthActions.logout()
+
+      },onError: (err:any) => {
+        toast.error(err.response.data.message)      
       }
 
 
@@ -86,6 +91,7 @@ const SecurityPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, formikActions) => {
           await changePassword.mutate(values)
+          formikActions.setSubmitting(false)
           formikActions.resetForm()
         }}
       >

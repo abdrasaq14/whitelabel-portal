@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SearchInput from '../../../components/FormInputs/SearchInput'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
-import { mockProductList } from '../../../utils/ProductList'
+// import { mockProductList } from '../../../utils/ProductList'
 import { Table } from '../../../components/Table/Table2'
 import { ViewProductModal } from '../../../components/Modal/ProductModal'
 import { MdFilterList } from "react-icons/md";
@@ -25,7 +25,7 @@ const BlockedProducts = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row)
@@ -38,7 +38,7 @@ const BlockedProducts = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-blocked-products", {
-      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName,status:'BLOCKED'
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, status: 'BLOCKED'
     }],
     ProductService.getallProducts,
     {
@@ -54,22 +54,22 @@ const BlockedProducts = () => {
 
   useEffect(() => {
     refetch()
- },[])
+  })
 
-const handlePageSize = (val: any) => {
+  const handlePageSize = (val: any) => {
     setPageSize(val);
     // setFilterParams({ ...filterParams, pageSize: val });
-};
+  };
 
-const handleCurrentPage = (val: any) => {
+  const handleCurrentPage = (val: any) => {
     setCurrentPage(val);
     // setFilterParams({ ...filterParams, pageNum: val - 1 });
-};
+  };
 
-const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
-  const { currentPage, pageSize } = pageInfo;
-  return (currentPage - 1) * pageSize + index + 1;
-};
+  const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
+    const { currentPage, pageSize } = pageInfo;
+    return (currentPage - 1) * pageSize + index + 1;
+  };
 
   return (
     <div className='px-4 pt-8 h-full'>
@@ -77,40 +77,36 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>Blocked Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allProducts ? allProducts.result.totalResults : 0}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>Blocked Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allProducts ? allProducts?.result.totalResults : 0}</span></h1>
 
         </div>
         <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
           <div>
-            <SearchInput placeholder='Search' />
+            <SearchInput onClear={() => {
+              setSearch("")
+              setCurrentPage(1)
+            }} onChange={(e: any) => {
+              setSearch(e.target.value)
+              setCurrentPage(1)
+            }} placeholder='Search' />
           </div>
           <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
         </div>
+        {
+          allProducts ? (
             <div className='h-full flex-grow '>
-              <Table data={allProducts && allProducts.result.results}
+              <Table data={allProducts && allProducts?.result.results}
                 hideActionName={true}
-                emptyMessage={ <div className='h-full flex-grow flex justify-center items-center'>
-                <img src='/images/NoProduct.svg' alt='No Product Found' />
-              </div>}
+                emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
+                  <img src='/images/NoProduct.svg' alt='No Product Found' />
+                </div>}
                 rowActions={(row) => [
                   {
                     name: "View Product",
                     action: () => {
                       handleViewProductInfo(row)
                     },
-                  },
-                  {
-                    name: "Ban product",
-                    action: () => {
-                      handleViewProductInfo(row)
-                    },
-                  },
-                  {
-                    name: "View Seller",
-                    action: () => {
-                      handleViewProductInfo(row)
-                    },
-                  },
+                  }
                 ]}
                 columns={[
                   {
@@ -122,15 +118,15 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
                   },
                   {
                     header: "Product Id",
-                    view: (row: any) => <div>{row.productIdOnProfitAll}</div>,
+                    view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
                   },
                   {
                     header: "Merchant",
-                    view: (row: any) => <div>{row.merchant}</div>,
+                    view: (row: any) => <div>{row.merchantName}</div>,
                   },
                   {
-                    header: "Category",
-                    view: (row: any) => <div >{row?.category} </div>,
+                    header: "Product Name",
+                    view: (row: any) => <div  className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row?.name} </div>,
                   },
                   {
                     header: "Date Listed",
@@ -150,9 +146,14 @@ const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number =
                 }
 
               />
-              <ViewProductModal isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
+              <ViewProductModal refetch={refetch} isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
             </div>
+          ) : <div className='h-full flex-grow flex justify-center items-center'>
+            <img src='/images/NoProduct.svg' alt='No Product Found' />
+          </div>
+        }
+
       </div>
     </div>
   )

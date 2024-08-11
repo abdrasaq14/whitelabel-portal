@@ -11,10 +11,6 @@ import { AuthActions } from "../../zustand/auth.store";
 import { useMutation } from "react-query";
 import Spinner from "../../components/spinner/Spinner";
 
-
-
-
-
 // Validation schema
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -179,11 +175,11 @@ export default function Login() {
                     </span> 
                     Continue with Google
                   </button> */}
-      <div className="w-full bottom-logo p-4 hidden  items-center justify-center">
+      {/* <div className="w-full bottom-logo p-4 hidden  items-center justify-center">
         <img alt='Client logo'
           src='/client-asset/Logo_Landmark.svg' width={118}
           height={40} />
-      </div>
+      </div> */}
 
 
     </main>

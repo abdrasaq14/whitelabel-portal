@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from '../../../components/Table/Table2'
 import { Label } from '../../../components/Label/Label'
 import StarRating from '../../../components/Rating.tsx'
@@ -11,7 +11,7 @@ import { AddInventory, InventoryRequestDetails } from '../../../components/Modal
 import { generateSerialNumber } from '../../../utils/functions'
 
 
-const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
+const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const profile: any = useAuth((s) => s.profile)
@@ -21,8 +21,8 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-    console.log(profile)
-
+    // console.log(profile)
+    console.log(isMakeModalOpen)
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-user-inventory-request", {
             page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
@@ -37,6 +37,11 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
             refetchOnMount: true,
         }
     )
+
+    useEffect(() => {
+        refetch()
+        // console.log(isMakeModalOpen)
+    }, [isMakeModalOpen])
     const mockData = {
         data: [
             {
@@ -140,13 +145,22 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
 
         return totalPrice;
     }
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
     return (
         <div>
 
             {
-                data && data?.result.length > 0 ? (
+                data && data?.result.requests.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result}
+                        <Table data={data?.result.requests}
                             hideActionName={true}
                             clickRowAction={(row) => {
                                 setSelectedInventory(row)
@@ -171,30 +185,39 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
                             columns={[
                                 {
                                     header: "S/N",
-                                    view: (row: any, index:number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                                    view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
                                         currentPage,
                                         pageSize
                                     })}</div>
                                 },
                                 {
                                     header: "Request From",
-                                    view: (row: any) => <div>{row.requesterId}</div>,
+                                    view: (row: any) => <div>{row.requesterName ?? row.requesterId}</div>,
                                 },
                                 {
                                     header: "No of Item",
                                     view: (row: any) => <div>{row.items.length}</div>,
                                 },
-                                {
-                                    header: "Total Price",
-                                    view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
-                                },
+                                // {
+                                //     header: "Total Price",
+                                //     view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
+                                // },
                                 {
                                     header: "Date Requested",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }
                             ]}
-                            loading={false}
-                            pagination={mockData.pagination}
+                            loading={isLoading}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
+
 
                         />
 
@@ -207,12 +230,13 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal }: { isAddMo
                         </div>
                     )
             }
-            
+
 
             {
-                selectedInventory && <InventoryRequestDetails isAdmin={false} details={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+                selectedInventory && <InventoryRequestDetails isAdmin={false} details={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                    await refetch()
                     setIsViewModalOpen(false)
-                    refetch()
+
                 }} />
             }
 

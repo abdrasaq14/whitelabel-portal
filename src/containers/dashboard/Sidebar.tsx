@@ -1,15 +1,12 @@
 import clsx from "clsx";
-import { NavLink, useMatch, useLocation, useResolvedPath } from "react-router-dom";
-import { ChevronRightIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { NavLink, useLocation } from "react-router-dom";
+// import { ChevronRightIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { useRef, useState, useContext } from "react";
 import { useSingleState } from "../../hooks/useSingleState";
 import { LogoutContext } from "../../context/LogoutContext";
 import { sidebar } from "../../pages/dashboard/layout/AdminLayout";
 import { useAuth } from "../../zustand/auth.store";
-
-
-
 
 export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const companyDetails: any = useAuth(state => state.profile);
@@ -37,7 +34,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         )}
       >
         <img
-          src={'/client-asset/landmark_logo.png'}
+          src={companyDetails?.companyLogo}
           className={clsx(
             "transition-[width] w-auto  h-[64px] "
           )}
@@ -66,26 +63,26 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
 
         <SidebarItem />
 
-        <NavLink className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to=""><IoStorefrontOutline /> Visit Marketplace</NavLink>
+        <NavLink target="_blank" className={"flex px-6 py-2 gap-2 items-center text-[#2B2C34]"} to="https://msquaretest.profitall.co.uk"><IoStorefrontOutline /> Visit Marketplace</NavLink>
         <div className="w-full bg-white absolute bottom-[0px]  2xl:bottom-8 h-[105px]  gap-3.5  flex items-center px-6">
 
 
-          <div className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
+          <div onClick={() => logout?.toggleLogout()} className="w-full flex cursor-pointer bg-[#C8CCD0] rounded-md p-4 border-[1px] border-foundation-darkPurple items-center gap-3.5 ">
 
 
             <div
-              onClick={() => logout?.toggleLogout()}
+
               className={`whitespace-nowrap pc-text-danger flex-grow ${isCollapsed ? "hidden" : ""
                 }`}
             >
               <img
-                src={'/client-asset/landmark_logo.png'}
+                src={companyDetails?.companyLogo || ""}
                 className={clsx(
                   "transition-[width] w-auto  h-[24.5px] "
                 )}
                 alt="Brand_logo"
               />
-              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails.email}</p>
+              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email}</p>
             </div>
             <img
               src={`/icons/sidebar/logout.svg`}

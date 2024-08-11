@@ -66,11 +66,11 @@ const SignIn = () => {
           );
         }}
       </Formik>
-      <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
+      {/* <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
         <img alt='Client logo'
           src='/client-asset/Logo_Landmark.svg' width={118}
           height={40} />
-      </div>
+      </div> */}
     </main>
   )
 }

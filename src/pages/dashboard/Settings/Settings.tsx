@@ -3,8 +3,8 @@ import { BreadCrumbClient } from '../../../components/Breadcrumb'
 import Button from '../../../components/Button/Button2'
 import Security from './Security'
 import OtherSettings from './OtherSettings'
-import ApiIntegration from './ApiIntegration'
-import Promotion from './Promotion'
+// import ApiIntegration from './ApiIntegration'
+// import Promotion from './Promotion'
 
 const Settings = () => {
   const accountTabTitle = ['security', 'settings']

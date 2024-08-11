@@ -36,7 +36,8 @@ export const RequestPasswordReset = () => {
     },
     {
       onSuccess: (response) => {
-        toast.success(response.data.message);
+        toast.success(response.data.result.message ?? "recovery link has been sent to your email");
+        form.resetForm()
         form.setSubmitting(false)
         // requestAnimationFrame(() => {
         //   router("/reset-password");
@@ -53,7 +54,7 @@ export const RequestPasswordReset = () => {
 
 
   return (
-    <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple h-auto  rounded-lg  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[413px]'>
+    <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple h-auto  rounded-lg  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[453px]'>
       <h2 className='text-xl font-gooperBlack font-extrabold sm:text-center  text-black mb-2'> Password Recovery </h2>
       <p className='text-sm mb-4 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
         Lorem ipsum dolor sit amet consectetur. Urna eget lobortis rhoncus suspendisse cursus tristique eu turpis.
@@ -85,9 +86,9 @@ export const RequestPasswordReset = () => {
         </form>
 
       </FormikProvider>
-      <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
+      {/* <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
         <img alt='Client logo' src='/client-asset/Logo_Landmark.svg' width={58} height={20} />
-      </div>
+      </div> */}
     </main>
   )
 }

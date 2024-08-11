@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import { Table } from '../../../components/Table/Table2'
 import { TeamMember } from '../../../utils/ProductList'
 import { EditStaffModal, AddStaffModal } from '../../../components/Modal/StaffModal'
+import useFetchWithParams from '../../../hooks/useFetchWithParams'
+import { UserService } from '../../../services/user'
+import { useAuth } from '../../../zustand/auth.store'
+import { generateSerialNumber } from '../../../utils/functions'
 
 
 
@@ -9,11 +13,31 @@ export const StaffManagement = () => {
   const [staff, setStaff] = useState({})
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const profile: any = useAuth((s) => s.profile)
 
   const closeAddModal = () => {
     setIsAddModalOpen(false);
   };
 
+  const { data, isLoading, refetch } = useFetchWithParams(
+    ["query-all-Staff-page", {
+      // page: currentPage, limit: pageSize,
+      whiteLabelName: profile.whiteLabelName
+    }],
+    UserService.getAllUsers,
+    {
+      onSuccess: (data: any) => {
+        // console.log(data.data);
+      },
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    }
+  )
+
+  // console.log(data)
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
@@ -25,8 +49,18 @@ export const StaffManagement = () => {
   }
   const handleAddStaffInfo = () => {
     setIsAddModalOpen(true);
+
   }
 
+  const handlePageSize = (val: any) => {
+    setPageSize(val);
+    // setFilterParams({ ...filterParams, pageSize: val });
+  };
+
+  const handleCurrentPage = (val: any) => {
+    setCurrentPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+  };
 
 
 
@@ -58,9 +92,9 @@ export const StaffManagement = () => {
 
         <div className=' flex-grow w-auto overflow-x-auto'>
           {
-            TeamMember.data.length > 0 ? (
+            data && data.result.results.length > 0 ? (
               <>
-                <Table data={TeamMember?.data}
+                <Table data={data?.result.results}
                   hideActionName={true}
                   rowActions={(row) => [
                     {
@@ -69,27 +103,18 @@ export const StaffManagement = () => {
                         handleViewAccountInfo(row)
                       },
                     },
-                    {
-                      name: "Suspend Account",
-                      action: () => {
-                        handleViewAccountInfo(row)
-                      },
-                    },
-                    {
-                      name: "Change Account Permission",
-                      action: () => {
-                        handleViewAccountInfo(row)
-                      },
-                    },
                   ]}
                   columns={[
                     {
                       header: "S/N",
-                      view: (row: any) => <div className="pc-text-blue">{row.id}</div>
+                      view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                        currentPage,
+                        pageSize
+                      })}</div>
                     },
                     {
                       header: "Staff",
-                      view: (row: any) => <UserProfile url={row.avatar_url} name={row.name} email={row.email} />,
+                      view: (row: any) => <UserProfile url={row.image} name={`${row.firstName} ${row.lastName}`} email={row.email} />,
                     },
                     {
                       header: "Role/Permission",
@@ -100,11 +125,17 @@ export const StaffManagement = () => {
 
                   ]}
                   loading={false}
-                  pagination={TeamMember.pagination}
+                  pagination={
+                    {
+                      page: currentPage,
+                      pageSize: pageSize,
+                      totalRows: data?.result.totalResults,
+                      setPageSize: handlePageSize,
+                      setPage: handleCurrentPage
+                    }
+                  }
 
                 />
-                <EditStaffModal staffInfo={staff} isOpen={isEditModalOpen} closeModal={closeEditModal} />
-                <AddStaffModal isOpen={isAddModalOpen} closeModal={closeAddModal} />
 
               </>
 
@@ -120,6 +151,15 @@ export const StaffManagement = () => {
 
             )
           }
+          <EditStaffModal staffInfo={staff} isOpen={isEditModalOpen} closeModal={async () => {
+            await refetch()
+            closeEditModal()
+          }} />
+          <AddStaffModal isOpen={isAddModalOpen} closeModal={async () => {
+            await refetch()
+            closeAddModal()
+          }} />
+
 
         </div>
 
@@ -129,10 +169,11 @@ export const StaffManagement = () => {
 }
 
 
+
 const UserProfile = ({ url, name, email }: any) => {
   return (
     <div className='flex gap-4 items-center '>
-      <img alt='Employee ' src={url} />
+      <img className='h-10 w-10 ' alt='Employee ' src={url} />
       <div>
         <p className='font-satoshiMedium text-base text-primary-text'>{name}</p>
         <p className='text-sm text-primary-subtext mt-1'>{email}</p>

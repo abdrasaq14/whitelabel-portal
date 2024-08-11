@@ -14,40 +14,40 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
 
   const mainCarouselSettings = {
     dots: false,
-    infinite: true,
+    infinite: images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: images.length > 1,
     autoplaySpeed: 5000,
     arrows: false,
     beforeChange: (oldIndex: number, newIndex: number) => setCurrentSlide(newIndex)
   };
 
-  const thumbnailCarouselSettings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: false,
-    arrows: false,
-    focusOnSelect: true,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2
-        }
-      }
-    ]
-  };
+  // const thumbnailCarouselSettings = {
+  //   dots: false,
+  //   infinite: false,
+  //   speed: 500,
+  //   slidesToShow: 4,
+  //   // slidesToScroll: 'auto',
+  //   autoplay: false,
+  //   arrows: true,
+  //   focusOnSelect: true,
+  //   responsive: [
+  //     {
+  //       breakpoint: 768,
+  //       settings: {
+  //         slidesToShow: 4
+  //       }
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 3
+  //       }
+  //     }
+  //   ]
+  // };
 
   const handleThumbnailClick = (index: number) => {
     setCurrentSlide(index);
@@ -58,20 +58,30 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ imag
     <div>
       <Slider ref={mainCarouselRef} {...mainCarouselSettings}>
         {images.map((image, index) => (
-          <div key={index} className='w-full flex h-[150px]  '>
+          <div key={index} className='w-full flex h-[150px]'>
             <img src={image} alt={`Product ${index + 1}`} className='object-cover h-full w-full' />
           </div>
         ))}
       </Slider>
-      <Slider {...thumbnailCarouselSettings}>
+      {/* {images.length > 1 && (
+        <Slider {...thumbnailCarouselSettings}>
+
+        </Slider>
+      )} */}
+
+      <div className=' flex gap-2 items-center'>
         {images.map((image, index) => (
-          <div className='grid grid-cols-4 h-28 w-14 gap-2 ' key={index} onClick={() => handleThumbnailClick(index)}>
-            <img className='col-span-1 object-cover h-full w-full ' src={image} alt={`Thumbnail ${index + 1}`} />
+          <div
+            className={`thumbnail-wrapper  h-14 w-28 mr-2 border    ${currentSlide === index ? 'active' : ''}`}
+            key={index}
+            onClick={() => handleThumbnailClick(index)}
+          >
+            <img className='thumbnail-image object-contain h-full w-full' src={image} alt={`Thumbnail ${index + 1}`} />
           </div>
         ))}
-      </Slider>
+      </div>
+
+
     </div>
   );
-}
-
-
+};

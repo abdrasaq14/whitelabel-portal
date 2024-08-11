@@ -115,15 +115,20 @@ const AllMerchants = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
 
 
   console.log(profile)
 
+  const getStatusById = (arr:any, id:string) => {
+    const item = arr.find((element:any)  => element.platform == id);
+    return item && item.status;
+  }
+
 
   const { data: allMerchants, isLoading } = useFetchWithParams(
     ["query-all-merchants", {
-      page: currentPage, limit: pageSize, search, whiteLabelName:profile.whiteLabelName
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
     }],
     MerchantService.getallMerchants,
     {
@@ -158,10 +163,17 @@ const AllMerchants = () => {
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants.result.totalResults : 0}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => setSearch(e.target.value)} placeholder='Search' />
+              <SearchInput onClear={() => {
+                setSearch("")
+                setCurrentPage(1)
+              }
+              } value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} placeholder='Search' />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -169,7 +181,7 @@ const AllMerchants = () => {
 
 
         {
-          mockData.data.length > 0 ? (
+       allMerchants &&  allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
                 clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
@@ -212,7 +224,7 @@ const AllMerchants = () => {
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) => <Label variant={row.status === "Active" ? "success" : "danger"} >{row?.status} </Label>,
+                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row  && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
                   }
                 ]}
                 loading={isLoading}

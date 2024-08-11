@@ -23,7 +23,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-page", {
-            // page: currentPage, limit: pageSize,
+            page: currentPage, limit: pageSize,whiteLabelName: profile.whiteLabelName,
         }],
         InventoryService.getInventoroes,
         {
@@ -114,6 +114,26 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
             totalRows: 40,
         },
     }
+
+    const calculateStockStatus = (quantity: number) => {
+        if (quantity > 20) {
+            return <Label variant='success'>In stock</Label>;
+        } else if (quantity > 0 && quantity <= 20) {
+            return <Label variant='warning'>Low in stock</Label>;
+        } else {
+            return <Label variant='danger'>Out of stock</Label>;
+        }
+    };
+
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
     return (
         <div>
 
@@ -122,7 +142,10 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                     <div className='h-full flex-grow '>
                         <Table data={data.result.results && data?.result?.results}
                             hideActionName={true}
-                            // clickRowAction={(row) => setModalOpen(true)}
+                            clickRowAction={(row) => {
+                                setSelectedInventory(row)
+                                setIsViewModalOpen(true)
+                            }}
                             rowActions={(row) => [
                                 {
                                     name: "View Item",
@@ -130,14 +153,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                         setSelectedInventory(row)
                                         setIsViewModalOpen(true)
                                     },
-                                },
-                                {
-                                    name: "Update Item",
-                                    action: () => { },
-                                }, {
-                                    name: "Delete",
-                                    action: () => { },
-                                },
+                                }
                             ]}
                             columns={[
                                 {
@@ -153,27 +169,41 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                 },
                                 {
                                     header: "Quantity",
-                                    view: (row: any) => <div>{row.quantityIn}</div>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return <div>{quantity}</div>;
+                                    }
                                 },
                                 {
                                     header: "Category",
                                     view: (row: any) => <div>{row.categoryName}</div>,
                                 },
-                                {
-                                    header: "Unit Price",
-                                    view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
-                                },
+                                // {
+                                //     header: "Unit Price",
+                                //     view: (row: any) => <div>{formatAmount(row.unitPrice)}</div>,
+                                // },
                                 {
                                     header: "Date Listed",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
-                                }, {
+                                },{
                                     header: "Status",
-                                    view: (row: any) => <Label variant='success'>In stock</Label>,
+                                    view: (row: any) => {
+                                        const quantity = row.quantityIn - row.quantityOut;
+                                        return calculateStockStatus(quantity);
+                                    }
                                 },
 
                             ]}
-                            loading={false}
-                            pagination={mockData.pagination}
+                            loading={isLoading}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
 
                         />
 
@@ -182,18 +212,18 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                     : (
                         <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                             <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here.</p>
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+                await refetch()
                 closeViewModal()
-                refetch()
 
             }} />
-            <ViewInventory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={() => {
+            <ViewInventory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                await refetch()
                 setIsViewModalOpen(false)
-                refetch()
 
             }} />
         </div>

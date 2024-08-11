@@ -6,6 +6,7 @@ import { IModuleRouter } from "./index";
 export const AdminDashRouter: IModuleRouter = {
   key: "dashboard",
   guard: (loggedIn) => loggedIn,
+  next: (isCustomised) => isCustomised,
   layout: AdminLayout,
   routes: [
     {
@@ -121,7 +122,7 @@ export const AdminDashRouter: IModuleRouter = {
     },
     {
       path: "*",
-      element: <div>Not found</div>,
+      element: <Navigate to="/dashboard" />,
     },
   ],
 };

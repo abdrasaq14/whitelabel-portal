@@ -45,7 +45,7 @@ console.log(token)
       .min(8, "*Password must be at least 8 characters")
       .matches(
         /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-        "*Password must contain at least one number, one special character, one uppercase letter, and one lowercase letter"
+        "*Password must contain at least one number, at least one special character, at least one uppercase letter, and at least one lowercase letter"
       )
       .required("*Password is required"),
     confirmPassword: Yup.string()
@@ -66,7 +66,7 @@ console.log(token)
         password: values.password,
         resetToken: token,
       }
-      console.log(body);
+      // console.log(body);
       
       return await AuthService.resetPassword(body);
     },
@@ -172,10 +172,10 @@ console.log(token)
             )
           }}
         </Formik>
-        <div className="w-full p-2 mt-8 hidden sm:flex  items-center justify-center">
+        {/* <div className="w-full p-2 mt-8 hidden sm:flex  items-center justify-center">
           <img alt='Client logo'
             src='/client-asset/Logo_Landmark.svg' width={68} height={20} />
-        </div>
+        </div> */}
       </main>
       <LoadingModal isOpen={handleSubmit.isLoading} closeModal={closeModal} />
 

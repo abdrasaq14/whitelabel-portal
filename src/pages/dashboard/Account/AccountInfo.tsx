@@ -4,10 +4,11 @@ import Button from '../../../components/Button/Button2'
 import BioProfile from './BioProfile'
 import { StaffManagement } from './StaffManagement'
 import { useAuth } from '../../../zustand/auth.store'
+import InviteMerchant from './InviteMerchant'
 
 const AccountInfo = () => {
   const profile: any = useAuth((s) => s.profile)
-  const accountTabTitle = profile.role_id === "663a5c848b1a1f64469b98bf" ? ['Account', 'Staff Management'] : ["Account"]
+  const accountTabTitle = profile.roleId === "663a5c848b1a1f64469b98bf" ? ['Account', 'Staff Management', 'Invite Merchant'] : ["Account"]
   const [tabIndex, setTabIndex] = useState<number>(0)
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {
@@ -15,6 +16,8 @@ const AccountInfo = () => {
         return <BioProfile />
       case 1:
         return <StaffManagement />
+      case 2:
+        return <InviteMerchant />
       default:
         return <BioProfile />
     }

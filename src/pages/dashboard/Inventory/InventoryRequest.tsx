@@ -140,13 +140,22 @@ const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddMod
 
         return totalPrice;
     }
+    const handlePageSize = (val: any) => {
+        setPageSize(val);
+        // setFilterParams({ ...filterParams, pageSize: val });
+    };
+
+    const handleCurrentPage = (val: any) => {
+        setCurrentPage(val);
+        // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
     return (
         <div>
 
             {
-                data && data?.result.length > 0 ? (
+                data && data?.result.requests.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result}
+                        <Table data={data?.result.requests}
                             hideActionName={true}
                             clickRowAction={(row) => {
                                 setSelectedInventory(row)
@@ -178,23 +187,32 @@ const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddMod
                                 },
                                 {
                                     header: "Request From",
-                                    view: (row: any) => <div>{row.requesterId}</div>,
+                                    view: (row: any) => <div>{row.requesterName ?? row.requesterId}</div>,
                                 },
                                 {
                                     header: "No of Item",
                                     view: (row: any) => <div>{row.items.length}</div>,
                                 },
-                                {
-                                    header: "Total Price",
-                                    view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
-                                },
+                                // {
+                                //     header: "Total Price",
+                                //     view: (row: any) => <div>{formatAmount(calculateTotalPrice(row.items, row.itemDetails))}</div>,
+                                // },
                                 {
                                     header: "Date Requested",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
                                 }
                             ]}
-                            loading={false}
-                            pagination={mockData.pagination}
+                            loading={isLoading}
+                            pagination={
+                                {
+                                    page: currentPage,
+                                    pageSize: pageSize,
+                                    totalRows: data?.result.totalResults,
+                                    setPageSize: handlePageSize,
+                                    setPage: handleCurrentPage
+                                }
+                            }
+
 
                         />
 
@@ -207,9 +225,9 @@ const InventoryRequest = ({ isAddModalOpen = false, closeViewModal }: { isAddMod
                         </div>
                     )
             }
-            <AddInventory isOpen={isAddModalOpen} closeViewModal={() => {
-                closeViewModal()
-                refetch()
+            <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
+               await refetch()
+               closeViewModal()
 
             }} />
 

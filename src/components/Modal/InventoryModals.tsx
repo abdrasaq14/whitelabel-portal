@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import * as Yup from "yup";
 import Modal from './Modal'
 import { FormikProvider, useFormik } from 'formik'
 import TextInput from '../FormInputs/TextInput2'
@@ -18,6 +19,25 @@ import { Label } from '../Label/Label'
 
 export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required('Name is required')
+      .min(2, 'Name must be at least 2 characters long'),
+    image: Yup.string()
+      .url('Image must be a valid URL')
+      .required('Image URL is required'),
+    categoryName: Yup.string()
+      .required('Category name is required')
+      .min(2, 'Category name must be at least 2 characters long'),
+    quantityIn: Yup.number()
+      .required('Quantity In is required')
+      .integer('Quantity In must be an integer')
+      .min(1, 'Quantity In cannot be less than 1'),
+    unitPrice: Yup.number()
+      .required('Unit Price is required')
+      .positive('Unit Price must be greater than zero')
+      .min(1, 'Unit Price cannot be less than 1')
+  });
   const form = useFormik({
     initialValues: {
       "name": "",
@@ -28,7 +48,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
       "unitPrice": 0,
       "whiteLabelName": profile.whiteLabelName
     },
-
+    validationSchema,
     onSubmit: async (val) => {
 
       await form.setFieldValue("whiteLabelName", profile.whiteLabelName)
@@ -50,6 +70,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
     {
       onSuccess: (res) => {
         toast.success("Inventory Added Successfully")
+        form.resetForm()
         closeViewModal()
 
       },
@@ -184,15 +205,26 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   const profile: any = useAuth((s) => s.profile)
   console.log(profile)
   const [inventoryItems, setInventoryItems] = useState<any>([]);
+  const [selected, setSelected] = useState<any>({})
 
-  console.log(inventoryItems)
 
-  const form = useFormik({
+  // console.log(selected)
+
+  const validationSchema = Yup.object({
+    quantity: Yup.number()
+      .required('Quantity is required')
+      .positive('Quantity must be greater than zero')
+      .max(selected?.quantityIn ?? 10, "Quantity can't be greater than available quantity")
+      .min(1, 'Quantity must be greater than one'),
+    itemId: Yup.string().required('Item is required'),
+  });
+
+  const form: any = useFormik({
     initialValues: {
       quantity: "",
       itemId: ""
     },
-
+    validationSchema,
     onSubmit: async (val: any) => {
       const currentFormItem = JSON.parse(val.itemId);
       const itemsToSubmit = [
@@ -212,8 +244,21 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
     }
   });
 
+  useEffect(() => {
+    if (form.values.itemId == undefined || form.values.itemId == "" || form.values.itemId == null) {
+      return
+
+    } else {
+      setSelected(JSON.parse(form.values.itemId))
+    }
+
+    // console.log(form.values.itemId)
+
+
+  }, [form.values.itemId])
+
   const { data, isLoading, refetch } = useFetchWithParams(
-    ["query-all-inventory", {}],
+    ["query-all-inventory", { page: 1, limit: 1000, whiteLabelName: profile.whiteLabelName, }],
     InventoryService.getInventoroes,
     {
       onSuccess: () => {
@@ -232,6 +277,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
     {
       onSuccess: (res) => {
         // console.log(res);
+        form.resetForm()
         toast.success("Inventory Request Submitted")
         closeViewModal()
       },
@@ -277,7 +323,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
         <div className='md:w-[552px] w-full px-4 h-auto'>
           <FormikProvider value={form}>
             <form onSubmit={form.handleSubmit}>
-              <h3 className='text-2xl  mb-4 font-semibold'>Add Inventory</h3>
+              <h3 className='text-2xl  mb-4 font-semibold'>Make Request</h3>
 
               <div className='flex-col flex gap-3'>
                 <div>
@@ -288,7 +334,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
                     Available Inventories
                   </label>
                   <select className='w-full mt-1 px-4  appearance-none text-xs h-10 py-2.5 focus:outline-none rounded-lg bg-white border border-[#470e812b]'  {...form.getFieldProps("itemId")} name='itemId' >
-                    <option>Select inventory</option>
+                    <option value="">Select inventory</option>
 
                     {
                       data && data?.result.results.map((items: any, id: any) => <option key={id} value={JSON.stringify(items)}>{items.name}</option>)
@@ -297,7 +343,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
                   </select>
                 </div>
 
-                <TextInput placeholder="Enter Quantity" name='quantity' label='Quantity' />
+                <TextInput type="number" placeholder="Enter Quantity" name='quantity' label='Quantity' />
               </div>
 
               {/* <button type="button" onClick={handleAddMore} className='mt-4 mb-5 bg-white font-semibold  !text-primary border border-primary' label='Add More Inventory' /> */}
@@ -335,7 +381,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
 
               </div>
 
-              <Button onClick={form.handleSubmit} isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
+              <Button onClick={form.handleSubmit} isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Proceed' />
 
 
 
@@ -351,7 +397,7 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   )
 }
 
-export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean }) => {
+export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true, isHistory }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean, isHistory?: boolean }) => {
 
   const handleApprove = useMutation(
     async () => {
@@ -386,7 +432,6 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
     {
       onSuccess: (res) => {
         toast.success("Inventory Request Declined")
-
         closeViewModal()
       },
       onError: (err: any) => {
@@ -403,7 +448,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
 
         <div className='md:w-[552px] w-full px-4 h-auto'>
           <div className='flex items-center justify-between'>
-            <h3 className='text-xl font-semibold'>Inventory History</h3>
+            <h3 className='text-xl font-semibold'>{isHistory ? 'Inventory History' : "Inventory Request"}</h3>
             <Label variant='success' >{details.status}</Label>
           </div>
 
@@ -417,7 +462,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
               },
               {
                 header: "Item",
-                view: (row: any) => <div className='flex items-center gap-3'><img className='h-12 w-12 object-contain' src={row.image ?? ""} />{row.name}</div>,
+                view: (row: any) => <div className='flex  items-center gap-3'><img alt='' className='h-12 outline-0 border-0 w-12 bg-gray-200 object-contain' src={row.image ?? ""} />{row.name}</div>,
               },
               {
                 header: "Quantity",
@@ -432,7 +477,7 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
 
           {
             isAdmin && <div className='grid my-3 grid-cols-2 gap-3 items-center'>
-              <button className='w-full text-center py-3 rounded bg-white border border-primary'>Decline</button>
+              <button onClick={() => handleDecline.mutate()} className='w-full text-center py-3 rounded bg-white border border-primary'>Decline</button>
               <button onClick={() => handleApprove.mutate()} className='w-full text-center py-3 rounded text-white border bg-primary'>Approve</button>
 
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BreadCrumbClient } from '../../../components/Breadcrumb';
 import SearchInput from '../../../components/FormInputs/SearchInput';
-import { OrderDetailsMockData } from '../../../utils/ProductList';
+// import { OrderDetailsMockData } from '../../../utils/ProductList';
 import { Table } from '../../../components/Table/Table2';
 import { Modal } from '../../../components/Modal/StaffModal';
 import { formatAmount } from '../../../utils/Helpfunctions';
@@ -21,7 +21,7 @@ interface PaginationInfo {
 const Orders = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [order, setOrder] = useState({})
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
@@ -52,7 +52,7 @@ const Orders = () => {
 
   useEffect(() => {
     refetch()
-  }, [])
+  })
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -85,72 +85,82 @@ const Orders = () => {
           <InfoCard header="Completed Orders" value="0" iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
         </div>
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Products <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{OrderDetailsMockData.data.length}</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Orders <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{ }</span></h1>
           <div>
           </div>
           <div>
-            <SearchInput placeholder='Search' />
+            <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
+              setSearch(e.target.value)
+              setCurrentPage(1)
+            }} placeholder='Search' />
           </div>
         </div>
 
         <div className='h-auto flex-grow '>
 
-          <Table data={allOrders && allOrders.result.results}
-            emptyMessage={
-              <div className='h-full flex-grow flex flex-col justify-center items-center'>
-                <img src='/images/no_transaction_history.svg' alt='No Order Completed yet' />
-                <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
-              </div>
-            }
-            hideActionName={true}
-            rowActions={(row: any) => [
-              {
-                name: "View Order Details",
-                action: () => {
-                  handleViewOrderInfo(row)
-                },
-              },
-
-            ]}
-            columns={[
-              {
-                header: "S/N",
-                view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
-                  currentPage,
-                  pageSize
-                })}</div>
-              },
-              {
-                header: "Order Id",
-                view: (row: any) => <div>{row.orderReference}</div>,
-              },
-              {
-                header: "Amount",
-                view: (row: any) => <div>
-                  {formatAmount(row.totalPrice)}</div>,
-              },
-              {
-                header: "Date",
-                view: (row: any) => <div>{fDateTime(row.orderedAt)}</div>,
-              },
-              {
-                header: "Status",
-                view: (row: any) => <Label status={row?.status} />,
-              },
-
-            ]}
-            loading={isLoading}
-            pagination={
-              {
-                page: currentPage,
-                pageSize: pageSize,
-                totalRows: allOrders?.result.totalPages,
-                setPageSize: handlePageSize,
-                setPage: handleCurrentPage
+          {
+            allOrders ? <Table data={allOrders && allOrders.result.results}
+              emptyMessage={
+                <div className='h-full flex-grow flex flex-col justify-center items-center'>
+                  <img src='/images/no_transaction_history.svg' alt='No Order Completed yet' />
+                  <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
+                </div>
               }
-            }
+              hideActionName={true}
+              rowActions={(row: any) => [
+                {
+                  name: "View Order Details",
+                  action: () => {
+                    handleViewOrderInfo(row)
+                  },
+                },
 
-          />
+              ]}
+              columns={[
+                {
+                  header: "S/N",
+                  view: (row: any, id) => <div className="pc-text-blue">{generateSerialNumber(id, {
+                    currentPage,
+                    pageSize
+                  })}</div>
+                },
+                {
+                  header: "Order Id",
+                  view: (row: any) => <div>{row.orderReference}</div>,
+                },
+                {
+                  header: "Amount",
+                  view: (row: any) => <div>
+                    {formatAmount(row.totalPrice)}</div>,
+                },
+                {
+                  header: "Date",
+                  view: (row: any) => <div>{fDateTime(row.orderedAt)}</div>,
+                },
+                {
+                  header: "Status",
+                  view: (row: any) => <Label status={row?.status} />,
+                },
+
+              ]}
+              loading={isLoading}
+              pagination={
+                {
+                  page: currentPage,
+                  pageSize: pageSize,
+                  totalRows: allOrders?.result.totalPages,
+                  setPageSize: handlePageSize,
+                  setPage: handleCurrentPage
+                }
+              }
+
+            /> : <div className='h-full flex-grow flex flex-col justify-center items-center'>
+              <img src='/images/no_transaction_history.svg' alt='No Order Completed yet' />
+              <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
+            </div>
+          }
+
+
           <OrderModal isOpen={isViewModalOpen} order={order} closeViewModal={closeViewModal} />
 
         </div>
@@ -167,7 +177,7 @@ export default Orders
 
 const Label = ({ status }: any) => {
   return (
-    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${status === "pending" || status == "NEW" && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered" && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled" && "text-red-600 bg-red-200"} `}>{status}</p>
+    <p className={`text-sm font-semibold py-1 px-2 text-center rounded ${(status === "pending" || status === "NEW") && "text-[#865503] bg-[#FEF6E7]"} ${status === "delivered" && "text-[#036B26] bg-[#E7F6EC]"} ${status === "cancelled" && "text-red-600 bg-red-200"} `}>{status}</p>
   )
 }
 

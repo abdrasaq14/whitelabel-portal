@@ -11,7 +11,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children, fileType, ...restProps }) => {
-    const [field, meta, helpers] = useField(name);
+    const [_, meta, helpers] = useField(name);
     const [fileName, setFileName] = useState("")
     const [isUploading, setIsuploading] = useState(false)
 
@@ -59,7 +59,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
     return (
         <div className={`flex flex-col ${wrapperClass}`}>
             <div className='relative bg-[#edeeef] h-[165px] mt-1 border border-[#470e812b] rounded py-6 px-3 flex flex-col items-center justify-center'>
-                <img src='/icons/upload_icon.svg' />
+                <img alt="Upload Icon" src='/icons/upload_icon.svg' />
                 <h3 className='mt-2'>Drag & Drop files or Browse  <label className='text-primary cursor-pointer underline font-semibold' htmlFor={name}>
                     Browse
                 </label>

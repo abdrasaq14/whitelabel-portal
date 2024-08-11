@@ -23,7 +23,7 @@ interface PaginationInfo {
 
 const MerchantDetails = () => {
     const navigate = useNavigate()
-    const profile:any = useAuth((s) => s.profile)
+    const profile: any = useAuth((s) => s.profile)
     const accountTabTitle = ['Overview', 'All Products', 'Product Sold']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [isSuspendOpen, setIsSuspendOpen] = useState(false)
@@ -47,15 +47,10 @@ const MerchantDetails = () => {
         }
     )
 
-    // useEffect(() => {
-
-    //     refetch()
-    // },[])
-
-    const getStatusById = (arr:any, id:string) => {
-        const item = arr.find((element:any)  => element.platform == id);
+    const getStatusById = (arr: any, id: string) => {
+        const item = arr.find((element: any) => element.platform == id);
         return item && item.status;
-      }
+    }
 
 
     const displayAccountContent = (tabIndex: number) => {
@@ -73,11 +68,11 @@ const MerchantDetails = () => {
         }
     }
 
-    const SuspendMerchant = useMutation(async () => {
+    const SuspendMerchant = useMutation(async (reason) => {
         const values = {
             "action": "suspend",
             "platform": profile.whiteLabelName,
-            "reason": "Unauthorized products"
+            "reason": reason
         }
         return await MerchantService.suspendMerchant(values, id);
     },
@@ -96,19 +91,38 @@ const MerchantDetails = () => {
         const values = {
             "action": "unsuspend",
             "platform": profile.whiteLabelName,
-            "reason": "Unauthorized products"
+            "reason": "authorized product"
         }
         return await MerchantService.suspendMerchant(values, id);
     },
         {
             onSuccess: () => {
-                toast.success("account suspended")
+                toast.success("account Activated")
                 refetch()
             }
         }
     )
 
-    console.log( merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase())),merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase(), profile )
+    const startConversation = useMutation(async (reason) => {
+            const values = {
+                firstUser: {id: profile._id, phone: profile.phoneNumber, image: profile.companyLogo, email: profile.email, businessName: profile.buinessName},
+                secondUser: {id: merchant.result.id, userName: merchant.result.userName, firstName: merchant.result.firstName, lastName: merchant.result.lastName, phone: merchant.result.phone, image: merchant.result.image, email: merchant.result.email}
+            }
+            console.log("Conversation users", values);
+            return await MerchantService.startConversation(values);
+        },
+        {
+            onSuccess: () => {
+                toast.success("Conversation started")
+                navigate("/message");
+            },
+            onError: () => {
+                toast.error("Failed to start conversation")
+            }
+        }
+    )
+
+    console.log(merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase())), merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase(), profile)
 
 
     useEffect(() => {
@@ -136,10 +150,12 @@ const MerchantDetails = () => {
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
                         <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
                     </div>
+                    <button className='border border-primary rounded bg-white px-3 py-2 whitespace-nowrap' onClick={() => startConversation.mutate()}>Message Merchant
+                    </button>
 
                 </div>
 
-                {merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase()) == "active" )? <Button label='Suspend Merchant' onClick={() => setIsSuspendOpen(true)} className='px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white' /> : <Button isLoading={unSuspendMerchant.isLoading} disabled={unSuspendMerchant.isLoading} label='Activate Merchant' onClick={() => unSuspendMerchant.mutate()} className='px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white' />}
+                {merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase()) == "active") ? <Button label='Suspend Merchant' onClick={() => setIsSuspendOpen(true)} className='px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white' /> : <Button isLoading={unSuspendMerchant.isLoading} disabled={unSuspendMerchant.isLoading} label='Activate Merchant' onClick={() => unSuspendMerchant.mutate()} className='px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white' />}
 
             </div>
             <div className="pt-4 pb-10 px-6 rounded-2xl mx-2">
@@ -162,7 +178,7 @@ const MerchantDetails = () => {
                 </div>
                 {displayAccountContent(tabIndex)}
             </div>
-            <SuspendModal confirmDelete={() => { SuspendMerchant.mutate() }} isOpen={isSuspendOpen} closeModal={() => setIsSuspendOpen(false)} merchant={merchant?.result ?? {}} />
+            <SuspendModal confirmDelete={(reason:any) => { SuspendMerchant.mutate(reason) }} isOpen={isSuspendOpen} closeModal={() => setIsSuspendOpen(false)} merchant={merchant?.result ?? {}} />
         </div>
     )
 }
@@ -209,16 +225,12 @@ const Overview = ({ merchant }: { merchant: any }) => {
                                 <h3>{merchant?.result?.category}</h3>
                             </div>
                             <div className='mt-2'>
-                                <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Products</p>
-                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result.category}</p>
-                            </div>
-                            <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Location</p>
                                 <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '></p>
                             </div>
                             <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Address</p>
-                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result.businessName}</p>
+                                <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{merchant?.result?.location?.address}</p>
                             </div>
                             <div className='mt-2'>
                                 <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Date Joined</p>
@@ -367,9 +379,9 @@ const ProductsSold = () => {
 
     const { data: allProducts, isLoading } = useFetchWithParams(
         ["query-all-products-sold", {
-            merchantId: id,
+            merchantId: id, page: currentPage
         }],
-        MerchantService.getMerchantProducts,
+        ProductService.getProductsSold,
         {
             onSuccess: (data: any) => {
                 // console.log(data.data);
