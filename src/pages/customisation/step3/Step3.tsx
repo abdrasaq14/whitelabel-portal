@@ -20,7 +20,8 @@ import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import {AuthActions} from "../../../zustand/auth.store";
-
+import parse from "html-react-parser";
+// import { htmlToText } from "html-to-text";
 interface Step3Props {
   primaryColor: any;
   secondaryColor: any;
@@ -29,10 +30,43 @@ interface Step3Props {
   data: any;
 }
 
+// Custom HTML parser function
+export const stripHtml = (str: any) => {
+  console.log("strpassed", str);
+  const parsedContent = parse(str); // Parse the HTML string into a React element or array of elements
+
+  let cleanText = "";
+
+  if (Array.isArray(parsedContent)) {
+    // If parsedContent is an array of elements
+    cleanText = parsedContent
+      .map((element) => element.props.children)
+      .join(" ");
+  } else if (typeof parsedContent === "object" && parsedContent !== null) {
+    // If parsedContent is a single element
+    cleanText = parsedContent.props.children;
+  } else if (typeof parsedContent === "string") {
+    // If parsedContent is already a string (no HTML tags)
+    cleanText = parsedContent;
+  }
+
+  return cleanText.trim(); // Return the cleaned and trimmed plain text
+};
 // Validation schema
 const validationSchema = Yup.object({
-  heroText: Yup.string().trim().required("Hero Section text is required"),
-  heroImage: Yup.string().trim().required("*Hero Image is required")
+  heroText: Yup.string()
+    .trim()
+    .required("Hero Section text is required")
+    .test("", "", function (value) {
+    if (stripHtml(value).length > 80) {
+      return this.createError({
+        path: "heroText",
+        message: "Hero Text must no be greater than 70 charcaters",
+      });
+    }
+    return true;
+  }),
+  heroImage: Yup.string().trim().required("Hero Image is required"),
 });
 
 function Step3({
@@ -149,7 +183,7 @@ function Step3({
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
-    validateOnChange: false
+    // validateOnChange: false
   });
 
   const handleSubmit = useMutation(
@@ -208,14 +242,16 @@ function Step3({
       [{ color: [] }]
     ]
   };
-
+console.log("formValues", form.values.heroText, form.errors.heroText);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
-    if (data?.banner?.text) {
+    if (data?.banner?.text.trim()) {
+      console.log("Formdata", data.banner.text);
       form.setFieldValue("heroText", data.banner.text);
     }
-    if (data?.banner?.imageUrl) {
+    if (data?.banner?.imageUrl.trim()) {
+      console.log("Formdata", data.banner.imageUrl);
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,7 +308,11 @@ function Step3({
                         onChange={(content) =>
                           form.setFieldValue("heroText", content)
                         }
-                        onBlur={()=> saveDataToLocaStorage({text: form.values.heroText})}
+                        onBlur={() =>
+                          saveDataToLocaStorage({
+                            text: form.values.heroText,
+                          })
+                        }
                         modules={modules}
                         formats={formats}
                         placeholder="Provide your hero section text here..."
@@ -347,7 +387,7 @@ function Step3({
                         style={{
                           justifyContent: form.errors.heroText
                             ? "space-between"
-                            : "end"
+                            : "end",
                         }}
                       >
                         {form.errors.heroText && (
@@ -395,8 +435,12 @@ function Step3({
                           type="file"
                           className="cursor-pointer absolute opacity-0 h-full w-full"
                           onChange={handleFileChange}
-                          onBlur={() => saveDataToLocaStorage({imageUrl: form.values.heroImage})}
-                          />
+                          onBlur={() =>
+                            saveDataToLocaStorage({
+                              imageUrl: form.values.heroImage,
+                            })
+                          }
+                        />
                       </div>
                     )}
 
@@ -446,7 +490,7 @@ function Step3({
             template={selectedTemplate}
             primaryColor={primaryColor}
             secondaryColor={secondaryColor}
-            heroImage={form.values.heroImage }
+            heroImage={form.values.heroImage}
             heroText={form.values.heroText}
           />
         </div>
