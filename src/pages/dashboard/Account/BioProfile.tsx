@@ -110,10 +110,10 @@ const BioProfile = () => {
   );
 
   const form = useFormik({
-    initialValues: companyDetails.role === "Admin" ? BioInfoInitialValues : BioInfoInitialValuesStaff,
-    validationSchema: companyDetails.role === "Admin" ? validationSchema : validationSchemaStaff,
+    initialValues: companyDetails?.role === "Admin" ? BioInfoInitialValues : BioInfoInitialValuesStaff,
+    validationSchema: companyDetails?.role === "Admin" ? validationSchema : validationSchemaStaff,
     onSubmit: (values: any) => {
-      companyDetails.role === "Admin" ? handleSubmit.mutate(values) : handleSubmitStaff.mutate(values)
+      companyDetails?.role === "Admin" ? handleSubmit.mutate(values) : handleSubmitStaff.mutate(values)
     },
   });
 
@@ -150,7 +150,7 @@ const BioProfile = () => {
         {/* Brand Logo Section */}
 
         {
-          companyDetails.role == "Admin" &&
+          companyDetails?.role == "Admin" &&
           <div className='max-w-[250px]'>
             <h2 className='text-base font-satoshiBold font-semibold text-primary-text'>Brand Logo</h2>
             <p className='mt-2 text-sm font-satoshiRegular font-normal text-primary-subtext'>
@@ -223,7 +223,7 @@ const BioProfile = () => {
 
         {/* Form Section */}
         {
-          companyDetails.role === "Admin" ?
+          companyDetails?.role === "Admin" ?
 
             <div className='flex-grow'>
               <FormikProvider value={form}>

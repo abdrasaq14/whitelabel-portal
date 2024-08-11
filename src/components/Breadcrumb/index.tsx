@@ -38,7 +38,7 @@ export const BreadCrumbClient = ({
     <div className="flex mb-6">
       <div className="flex  font-medium  text-sm text-primary-text">
         <p className=" ">
-          {profile.whiteLabelName} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
+          {profile?.whiteLabelName} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
         </p>
       </div>
 
