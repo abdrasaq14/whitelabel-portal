@@ -29,11 +29,11 @@ const Template2 = ({
       </div>
       <div className="col-span-1  flex flex-col gap-4 pl-4 justify-center items-center sm:items-start  ">
         <h3
-          className="font-bold font-satoshiMedium text-lg text-center sm:text-start text-black leading-8"
+          className="font-bold font-gooperSemiBold text-lg text-center sm:text-start text-black leading-8"
           dangerouslySetInnerHTML={{
             __html: heroText
               ? heroText
-              : "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+              : "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           }}
         />
         <Link

@@ -11,6 +11,7 @@ module.exports = {
         satoshiMedium: ["Satoshi-Medium"],
         satoshiRegular: ["Satoshi-Regular"],
         gooperRegular: ["FontGooper-Regular"],
+        gooperSemiBold: ["FontGooper-SemiBold"],
         gooperBlack: ["FontGooper-Black"]
       },
       colors: {

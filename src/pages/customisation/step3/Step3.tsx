@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
 import {
   MdOutlineArrowForward,
-  MdOutlineKeyboardBackspace
+  MdOutlineKeyboardBackspace,
 } from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
 import axios from "axios";
@@ -19,9 +19,8 @@ import { CompletionModal } from "../../../components/Modal/CompletionModal";
 import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
-import {AuthActions} from "../../../zustand/auth.store";
+import { AuthActions } from "../../../zustand/auth.store";
 import parse from "html-react-parser";
-// import { htmlToText } from "html-to-text";
 interface Step3Props {
   primaryColor: any;
   secondaryColor: any;
@@ -30,56 +29,41 @@ interface Step3Props {
   data: any;
 }
 
-// Custom HTML parser function
 export const stripHtml = (str: any) => {
-  console.log("strpassed", str);
-  const parsedContent = parse(str); // Parse the HTML string into a React element or array of elements
-
-  let cleanText = "";
-
-  if (Array.isArray(parsedContent)) {
-    // If parsedContent is an array of elements
-    cleanText = parsedContent
-      .map((element) => element.props.children)
-      .join(" ");
-  } else if (typeof parsedContent === "object" && parsedContent !== null) {
-    // If parsedContent is a single element
-    cleanText = parsedContent.props.children;
-  } else if (typeof parsedContent === "string") {
-    // If parsedContent is already a string (no HTML tags)
-    cleanText = parsedContent;
-  }
-
-  return cleanText.trim(); // Return the cleaned and trimmed plain text
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = str;
+  const textContent = tempDiv.textContent || tempDiv.innerText || "";
+  return textContent.trim();
 };
+
 // Validation schema
 const validationSchema = Yup.object({
   heroText: Yup.string()
     .trim()
     .required("Hero Section text is required")
-    .test("", "", function (value) {
-    if (stripHtml(value).length > 80) {
-      return this.createError({
-        path: "heroText",
-        message: "Hero Text must no be greater than 70 charcaters",
-      });
-    }
-    return true;
-  }),
+    .test(
+      "max-length",
+      "Hero Text must not be greater than 70 characters",
+      function (value) {
+        const plainText = stripHtml(value);
+        return plainText.length <= 70;
+      }
+    ),
   heroImage: Yup.string().trim().required("Hero Image is required"),
 });
+
 
 function Step3({
   primaryColor,
   secondaryColor,
   step,
   setStep,
-  data
+  data,
 }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
-  const [updatedUserObject, setUpdatedUserObject] = useState<any>({})
+  const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
@@ -100,8 +84,8 @@ function Step3({
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       return response;
@@ -113,13 +97,12 @@ function Step3({
         const fileUrl = response.data.secure_url;
         form.setFieldValue("heroImage", fileUrl);
         scrollToSection();
-        
       },
       onError: (err: any) => {
         setIsUploading(false);
         form.setSubmitting(false);
         console.error("Error uploading file:", err);
-      }
+      },
     }
   );
 
@@ -167,23 +150,24 @@ function Step3({
   };
 
   const handleProceed = () => {
-    localStorage.removeItem("setupData")
+    localStorage.removeItem("setupData");
     setStep(1);
     AuthActions.setProfile(updatedUserObject);
-   navigate("/dashboard");
-   setIsOpen(false);
+    navigate("/dashboard");
+    setIsOpen(false);
     return;
   };
   const form = useFormik({
     initialValues: {
       heroText: "",
-      heroImage: ""
+      heroImage: "",
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
-    // validateOnChange: false
+    validateOnChange: true, 
+    validateOnBlur: true, 
   });
 
   const handleSubmit = useMutation(
@@ -192,9 +176,9 @@ function Step3({
         banner: {
           text: values.heroText,
           imageUrl: values.heroImage,
-          template: templates[selectedTemplate].title
+          template: templates[selectedTemplate].title,
         },
-        completeSetup: "completed"
+        completeSetup: "completed",
       });
     },
     {
@@ -202,11 +186,10 @@ function Step3({
         form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        setUpdatedUserObject(response.data.result)
+        setUpdatedUserObject(response.data.result);
         setIsOpen(true);
         // AuthActions.setProfile(response.data.result)
         // return
-        
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -214,7 +197,7 @@ function Step3({
         form.setSubmitting(false);
         toast.error("An error occurred. Please try again.");
         console.log("erro", err);
-      }
+      },
     }
   );
 
@@ -223,38 +206,33 @@ function Step3({
   };
 
   const saveDataToLocaStorage = (item: Record<string, any>) => {
-    localStorage.setItem("setupData", JSON.stringify({ ...data, banner: { ...data.banner, ...item } }));
+    localStorage.setItem(
+      "setupData",
+      JSON.stringify({ ...data, banner: { ...data.banner, ...item } })
+    );
     // toast.success("herotext successfully");
-  }
-  // const fonts = [
-  //   "Satoshi-Regular",
-  //   "Satoshi-Bold",
-  //   "Satoshi-Light",
-  //   "Satoshi-Medium",
-  //   "Satoshi-Black"
-  // ];
+  };
+
 
   const modules = {
     toolbar: [
       // [{ font: fonts }],
       ["bold", "italic", "underline"],
       ["clean"],
-      [{ color: [] }]
-    ]
+      [{ color: [] }],
+    ],
   };
-console.log("formValues", form.values.heroText, form.errors.heroText);
+console.log("formValues", form.values)
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
-    if (data?.banner?.text.trim()) {
-      console.log("Formdata", data.banner.text);
+    if (data?.banner?.text) {
       form.setFieldValue("heroText", data.banner.text);
     }
-    if (data?.banner?.imageUrl.trim()) {
-      console.log("Formdata", data.banner.imageUrl);
+    if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   return (
     <>
@@ -309,9 +287,7 @@ console.log("formValues", form.values.heroText, form.errors.heroText);
                           form.setFieldValue("heroText", content)
                         }
                         onBlur={() =>
-                          saveDataToLocaStorage({
-                            text: form.values.heroText,
-                          })
+                          saveDataToLocaStorage({ text: form.values.heroText })
                         }
                         modules={modules}
                         formats={formats}
@@ -377,11 +353,7 @@ console.log("formValues", form.values.heroText, form.errors.heroText);
                         display: none; // Hide <br> after <p> tags to avoid extra spacing
                       }
                   `}</style>
-                      {/* <textarea
-                      placeholder="Provide your hero section text here..."
-                      className="rounded-lg border border-[#C8CCD0] p-2 placeholder:text-sm placeholder:text-[#667085] text-sm max-h-[10rem] min-h-[10rem] focus:outline-none"
-                      {...form.getFieldProps("heroText")}
-                    ></textarea> */}
+
                       <div
                         className="flex "
                         style={{
