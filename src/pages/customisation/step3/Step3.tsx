@@ -362,7 +362,7 @@ console.log("formValues", form.values)
                             : "end",
                         }}
                       >
-                        {form.errors.heroText && (
+                        {form.touched && form.errors.heroText && (
                           <span className="text-[#D42620] text-sm">
                             {form.errors.heroText}
                           </span>
@@ -421,7 +421,7 @@ console.log("formValues", form.values)
                         {uploadError}
                       </span>
                     ) : (
-                      form.errors.heroImage && (
+                      form.touched && form.errors.heroImage && (
                         <span className="text-[#D42620] text-sm">
                           {form.errors.heroImage}
                         </span>
