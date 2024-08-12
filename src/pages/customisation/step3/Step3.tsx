@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
-import parse from "html-react-parser";
+
 interface Step3Props {
   primaryColor: any;
   secondaryColor: any;

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { HeroImage, Hero2 } from "../../../../assets/customisation";
+import { HeroImage } from "../../../../assets/customisation";
 
 interface Template1Props {
   primaryColor: string;
@@ -18,7 +18,7 @@ const Template1 = ({
       style={{ backgroundColor: secondaryColor }}
       className="max-w-[1560px] mx-auto grid grid-cols-1 sm:grid-cols-[50%,50%] p-6  h-[260px] gap-4 overflow-hidden"
     >
-      <div className="col-span-1 flex flex-col gap-4 justify-center items-center sm:items-start">
+      <div className="col-span-1 flex flex-col gap-4 justify-center items-center sm:items-start max-h-[270px]">
         <h3
           className="font-bold font-gooperSemiBold text-lg text-center sm:text-start text-red leading-8"
           dangerouslySetInnerHTML={{
