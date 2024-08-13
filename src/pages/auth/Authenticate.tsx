@@ -81,7 +81,9 @@ export default function Authenticate() {
                     if (response.data.result.user.customisationData) {
                       const setupCompleted =
                         response.data.result.user.customisationData
-                          .completeSetup === "completed";
+                          .completeSetup === "completed" ||
+                        response.data.result.user.customisationData
+                          .completeSetup === "propagating";
                       sessionStorage.removeItem("loginRequest");
                       requestAnimationFrame(() => {
                         setupCompleted

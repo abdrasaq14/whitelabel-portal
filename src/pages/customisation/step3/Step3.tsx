@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
 import {
   MdOutlineArrowForward,
-  MdOutlineKeyboardBackspace
+  MdOutlineKeyboardBackspace,
 } from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
 import axios from "axios";
@@ -19,8 +19,8 @@ import { CompletionModal } from "../../../components/Modal/CompletionModal";
 import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
-import {AuthActions} from "../../../zustand/auth.store";
-
+import { AuthActions } from "../../../zustand/auth.store";
+import parse from "html-react-parser";
 interface Step3Props {
   primaryColor: any;
   secondaryColor: any;
@@ -29,23 +29,41 @@ interface Step3Props {
   data: any;
 }
 
+export const stripHtml = (str: any) => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = str;
+  const textContent = tempDiv.textContent || tempDiv.innerText || "";
+  return textContent.trim();
+};
+
 // Validation schema
 const validationSchema = Yup.object({
-  heroText: Yup.string().trim().required("Hero Section text is required"),
-  heroImage: Yup.string().trim().required("*Hero Image is required")
+  heroText: Yup.string()
+    .trim()
+    .required("Hero Section text is required")
+    .test(
+      "max-length",
+      "Hero Text must not be greater than 70 characters",
+      function (value) {
+        const plainText = stripHtml(value);
+        return plainText.length <= 70;
+      }
+    ),
+  heroImage: Yup.string().trim().required("Hero Image is required"),
 });
+
 
 function Step3({
   primaryColor,
   secondaryColor,
   step,
   setStep,
-  data
+  data,
 }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
-  const [updatedUserObject, setUpdatedUserObject] = useState<any>({})
+  const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
@@ -66,8 +84,8 @@ function Step3({
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       return response;
@@ -79,13 +97,12 @@ function Step3({
         const fileUrl = response.data.secure_url;
         form.setFieldValue("heroImage", fileUrl);
         scrollToSection();
-        
       },
       onError: (err: any) => {
         setIsUploading(false);
         form.setSubmitting(false);
         console.error("Error uploading file:", err);
-      }
+      },
     }
   );
 
@@ -133,23 +150,24 @@ function Step3({
   };
 
   const handleProceed = () => {
-    localStorage.removeItem("setupData")
+    localStorage.removeItem("setupData");
     setStep(1);
     AuthActions.setProfile(updatedUserObject);
-   navigate("/dashboard");
-   setIsOpen(false);
+    navigate("/dashboard");
+    setIsOpen(false);
     return;
   };
   const form = useFormik({
     initialValues: {
       heroText: "",
-      heroImage: ""
+      heroImage: "",
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
-    validateOnChange: false
+    validateOnChange: true, 
+    validateOnBlur: true, 
   });
 
   const handleSubmit = useMutation(
@@ -158,9 +176,9 @@ function Step3({
         banner: {
           text: values.heroText,
           imageUrl: values.heroImage,
-          template: templates[selectedTemplate].title
+          template: templates[selectedTemplate].title,
         },
-        completeSetup: "completed"
+        completeSetup: "completed",
       });
     },
     {
@@ -168,11 +186,10 @@ function Step3({
         form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        setUpdatedUserObject(response.data.result)
+        setUpdatedUserObject(response.data.result);
         setIsOpen(true);
         // AuthActions.setProfile(response.data.result)
         // return
-        
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -180,7 +197,7 @@ function Step3({
         form.setSubmitting(false);
         toast.error("An error occurred. Please try again.");
         console.log("erro", err);
-      }
+      },
     }
   );
 
@@ -189,26 +206,23 @@ function Step3({
   };
 
   const saveDataToLocaStorage = (item: Record<string, any>) => {
-    localStorage.setItem("setupData", JSON.stringify({ ...data, banner: { ...data.banner, ...item } }));
+    localStorage.setItem(
+      "setupData",
+      JSON.stringify({ ...data, banner: { ...data.banner, ...item } })
+    );
     // toast.success("herotext successfully");
-  }
-  // const fonts = [
-  //   "Satoshi-Regular",
-  //   "Satoshi-Bold",
-  //   "Satoshi-Light",
-  //   "Satoshi-Medium",
-  //   "Satoshi-Black"
-  // ];
+  };
+
 
   const modules = {
     toolbar: [
       // [{ font: fonts }],
       ["bold", "italic", "underline"],
       ["clean"],
-      [{ color: [] }]
-    ]
+      [{ color: [] }],
+    ],
   };
-
+console.log("formValues", form.values)
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -218,7 +232,7 @@ function Step3({
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   return (
     <>
@@ -272,7 +286,9 @@ function Step3({
                         onChange={(content) =>
                           form.setFieldValue("heroText", content)
                         }
-                        onBlur={()=> saveDataToLocaStorage({text: form.values.heroText})}
+                        onBlur={() =>
+                          saveDataToLocaStorage({ text: form.values.heroText })
+                        }
                         modules={modules}
                         formats={formats}
                         placeholder="Provide your hero section text here..."
@@ -337,20 +353,16 @@ function Step3({
                         display: none; // Hide <br> after <p> tags to avoid extra spacing
                       }
                   `}</style>
-                      {/* <textarea
-                      placeholder="Provide your hero section text here..."
-                      className="rounded-lg border border-[#C8CCD0] p-2 placeholder:text-sm placeholder:text-[#667085] text-sm max-h-[10rem] min-h-[10rem] focus:outline-none"
-                      {...form.getFieldProps("heroText")}
-                    ></textarea> */}
+
                       <div
                         className="flex "
                         style={{
                           justifyContent: form.errors.heroText
                             ? "space-between"
-                            : "end"
+                            : "end",
                         }}
                       >
-                        {form.errors.heroText && (
+                        {form.touched && form.errors.heroText && (
                           <span className="text-[#D42620] text-sm">
                             {form.errors.heroText}
                           </span>
@@ -395,8 +407,12 @@ function Step3({
                           type="file"
                           className="cursor-pointer absolute opacity-0 h-full w-full"
                           onChange={handleFileChange}
-                          onBlur={() => saveDataToLocaStorage({imageUrl: form.values.heroImage})}
-                          />
+                          onBlur={() =>
+                            saveDataToLocaStorage({
+                              imageUrl: form.values.heroImage,
+                            })
+                          }
+                        />
                       </div>
                     )}
 
@@ -405,7 +421,7 @@ function Step3({
                         {uploadError}
                       </span>
                     ) : (
-                      form.errors.heroImage && (
+                      form.touched && form.errors.heroImage && (
                         <span className="text-[#D42620] text-sm">
                           {form.errors.heroImage}
                         </span>
@@ -446,7 +462,7 @@ function Step3({
             template={selectedTemplate}
             primaryColor={primaryColor}
             secondaryColor={secondaryColor}
-            heroImage={form.values.heroImage }
+            heroImage={form.values.heroImage}
             heroText={form.values.heroText}
           />
         </div>

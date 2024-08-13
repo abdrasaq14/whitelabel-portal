@@ -164,6 +164,10 @@ input[type=checkbox]{
 }
 
 @font-face {
+  font-family: "FontGooper-SemiBold";
+  src: url("../public/fonts/gooper/Gooper-SemiBold.ttf");
+}
+@font-face {
   font-family: "FontGooper-Black";
   src: url("../public/fonts/gooper/Gooper-Black.ttf");
 }
