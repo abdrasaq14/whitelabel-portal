@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
 import {
   MdOutlineArrowForward,
-  MdOutlineKeyboardBackspace,
+  MdOutlineKeyboardBackspace
 } from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
 import axios from "axios";
@@ -49,23 +49,55 @@ const validationSchema = Yup.object({
         return plainText.length <= 70;
       }
     ),
-  heroImage: Yup.string().trim().required("Hero Image is required"),
+  heroImage: Yup.string().trim().required("Hero Image is required")
 });
-
 
 function Step3({
   primaryColor,
   secondaryColor,
   step,
   setStep,
-  data,
+  data
 }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
+  const form = useFormik({
+    initialValues: {
+      heroText: "",
+      heroImage: ""
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      handleSubmit.mutate(values);
+    },
+    validateOnChange: true,
+    validateOnBlur: true
+  });
+  useEffect(() => {
+    if (data?.banner?.text) {
+      form.setFieldValue("heroText", data.banner.text);
+    }
+    if (data?.banner?.imageUrl) {
+      form.setFieldValue("heroImage", data.banner.imageUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+  const [characterCount, setCharacterCount] = useState(
+    form.values.heroText.length
+  );
+  const characterLimit = 70; 
+console.log("form.values", form.values.heroText);
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
+  };
+ 
+  const handleTextChange = (content: string) => {
+    if (content.length <= characterLimit) {
+      form.setFieldValue("heroText", content);
+      setCharacterCount(content.length);
+    }
   };
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const scrollToSection = () => {
@@ -84,8 +116,8 @@ function Step3({
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            "Content-Type": "multipart/form-data"
+          }
         }
       );
       return response;
@@ -102,7 +134,7 @@ function Step3({
         setIsUploading(false);
         form.setSubmitting(false);
         console.error("Error uploading file:", err);
-      },
+      }
     }
   );
 
@@ -157,18 +189,6 @@ function Step3({
     setIsOpen(false);
     return;
   };
-  const form = useFormik({
-    initialValues: {
-      heroText: "",
-      heroImage: "",
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      handleSubmit.mutate(values);
-    },
-    validateOnChange: true, 
-    validateOnBlur: true, 
-  });
 
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
@@ -176,9 +196,9 @@ function Step3({
         banner: {
           text: values.heroText,
           imageUrl: values.heroImage,
-          template: templates[selectedTemplate].title,
+          template: templates[selectedTemplate].title
         },
-        completeSetup: "completed",
+        completeSetup: "completed"
       });
     },
     {
@@ -197,7 +217,7 @@ function Step3({
         form.setSubmitting(false);
         toast.error("An error occurred. Please try again.");
         console.log("erro", err);
-      },
+      }
     }
   );
 
@@ -213,27 +233,18 @@ function Step3({
     // toast.success("herotext successfully");
   };
 
-
   const modules = {
     toolbar: [
       // [{ font: fonts }],
       ["bold", "italic", "underline"],
       ["clean"],
-      [{ color: [] }],
-    ],
+      [{ color: [] }]
+    ]
   };
-console.log("formValues", form.values)
+  console.log("formValues", form.values);
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    if (data?.banner?.text) {
-      form.setFieldValue("heroText", data.banner.text);
-    }
-    if (data?.banner?.imageUrl) {
-      form.setFieldValue("heroImage", data.banner.imageUrl);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+
   return (
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
@@ -283,9 +294,7 @@ console.log("formValues", form.values)
                       </span>
                       <ReactQuill
                         value={form.values.heroText}
-                        onChange={(content) =>
-                          form.setFieldValue("heroText", content)
-                        }
+                        onChange={handleTextChange}
                         onBlur={() =>
                           saveDataToLocaStorage({ text: form.values.heroText })
                         }
@@ -359,7 +368,7 @@ console.log("formValues", form.values)
                         style={{
                           justifyContent: form.errors.heroText
                             ? "space-between"
-                            : "end",
+                            : "end"
                         }}
                       >
                         {form.touched && form.errors.heroText && (
@@ -368,7 +377,7 @@ console.log("formValues", form.values)
                           </span>
                         )}
                         <span className="font-satoshiLight text-sm text-[#667085]">
-                          Max. of 70 Characters
+                          {characterCount}/{characterLimit} characters
                         </span>
                       </div>
                     </div>
@@ -409,7 +418,7 @@ console.log("formValues", form.values)
                           onChange={handleFileChange}
                           onBlur={() =>
                             saveDataToLocaStorage({
-                              imageUrl: form.values.heroImage,
+                              imageUrl: form.values.heroImage
                             })
                           }
                         />
@@ -421,7 +430,8 @@ console.log("formValues", form.values)
                         {uploadError}
                       </span>
                     ) : (
-                      form.touched && form.errors.heroImage && (
+                      form.touched &&
+                      form.errors.heroImage && (
                         <span className="text-[#D42620] text-sm">
                           {form.errors.heroImage}
                         </span>
