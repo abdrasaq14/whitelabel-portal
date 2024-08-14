@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BreadCrumbClient } from '../../../components/Breadcrumb';
 import SearchInput from '../../../components/FormInputs/SearchInput';
 import { Table } from '../../../components/Table/Table2';
 import { Label } from '../../../components/Label/Label';
+import Filter from '../../../components/Filter/Filter'
+import { useNavigate } from 'react-router-dom';
+import { MdFilterList } from 'react-icons/md';
+import useFetchWithParams from '../../../hooks/useFetchWithParams';
+import { MerchantService } from '../../../services/merchant.service';
+import StarRating from '../../../components/Rating.tsx';
+import { useAuth } from '../../../zustand/auth.store';
 
 const MerchantList = []
 
@@ -94,29 +101,95 @@ const mockData = {
     totalRows: 40,
   },
 }
-
+interface PaginationInfo {
+  currentPage: number;
+  pageSize: number;
+}
 
 // console.log(mockData);
 
 
-const SuspendedMerchant = () => {
+const SuspendedMerchants = () => {
+  const navigate = useNavigate()
+  const [showFilter, setShowFilter] = useState<boolean>(false)
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("")
+  const profile: any = useAuth((s) => s.profile)
+
+
+  console.log(profile)
+
+  
+
+
+  const { data: allMerchants, isLoading } = useFetchWithParams(
+    ["query-all--suspended-merchants", {
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName,status:'suspended'
+    }],
+    MerchantService.getallMerchants,
+    {
+      onSuccess: (data: any) => {
+        // console.log(data.data);
+      },
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    }
+  )
+
+  const getStatusById = (arr:any, id:string) => {
+    const item = arr.find((element:any)  => element.platform == id);
+    return item && item.status;
+  }
+
+
+  const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
+    const { currentPage, pageSize } = pageInfo;
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
+  const handlePageSize = (val: any) => {
+    setPageSize(val);
+    // setFilterParams({ ...filterParams, pageSize: val });
+  };
+
+  const handleCurrentPage = (val: any) => {
+    setCurrentPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+  };
+
+  // console.log(allMerchants)
   return (
     <div className='px-4 pt-8 h-full'>
+      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
-        <BreadCrumbClient backText="Dashboard" currentPath="Suspended Merchants" brand='Jumia' />
+        <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>Suspended Merchant <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{MerchantList.length}</span></h1>
-          <div>
-            <SearchInput placeholder='Search' />
+          <h1 className='text-primary-text text-sm font-normal'>Suspended Merchants <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allMerchants ? allMerchants?.result.totalResults : 0}</span></h1>
+          <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
+            <div>
+              <SearchInput value={search} onChange={(e: any) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }} placeholder='Search' />
+            </div>
+            <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
         </div>
 
 
         {
-          mockData.data.length > 0 ? (
+         allMerchants &&  allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
-              <Table data={mockData?.data}
-              hideActionName={true}
+              <Table data={allMerchants && allMerchants.result.results}
+                clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
+                // onSelectRows={(e: any) => { console.log(e) }}
+                hideActionName={true}
+                emptyMessage={<div className='h-auto flex-grow flex justify-center flex-col items-center'>
+                  <img src='/images/NoVendor.svg' alt='No Product Found' />
+                  <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently suspended.</p>
+                </div>}
                 rowActions={(row) => [
                   {
                     name: "View Hub",
@@ -130,30 +203,45 @@ const SuspendedMerchant = () => {
                 columns={[
                   {
                     header: "S/N",
-                    view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                    view: (row: any, i) => <div className="pc-text-blue">{generateSerialNumber(i, {
+                      currentPage: 1,
+                      pageSize: 100
+                    })}</div>
                   },
                   {
                     header: "STORE NAME",
-                    view: (row: any) => <div>{row.name}</div>,
+                    view: (row: any) => <div>{row.businessName}</div>,
+                  },
+                  {
+                    header: "CUSTORMER RATING",
+                    view: (row: any) => <StarRating totalRatings={4} />,
                   },
                   {
                     header: "CATEGORY",
-                    view: (row: any) => <Label variant="success" >{row?.category} </Label>,
+                    view: (row: any) => <div>{row?.category}</div>,
                   },
                   {
-                    header: "COUNTRY",
+                    header: "Location",
                     view: (row: any) => <div>{row.country}</div>,
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) => <div>{row.status}</div>,
+                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row  && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
                   }
                 ]}
-                loading={false}
-                pagination={mockData.pagination}
+                loading={isLoading}
+                pagination={
+                  {
+                    page: currentPage,
+                    pageSize: pageSize,
+                    totalRows: allMerchants?.result.totalPages,
+                    setPageSize: handlePageSize,
+                    setPage: handleCurrentPage
+                  }
 
+                }
               />
-              {/* <Table loading={loading} data={ProductList} columns={columns} /> */}
+
 
             </div>
           )
@@ -169,4 +257,4 @@ const SuspendedMerchant = () => {
   )
 }
 
-export default SuspendedMerchant
+export default SuspendedMerchants

@@ -11,7 +11,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children }) => {
-  const [fileName, setFileName] = useState("");
+  const [_, setFileName] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,11 +45,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
   };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
- const handleButtonClick = () => {
+  const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-   
+
   };
   return (
     <div className={`flex flex-col ${wrapperClass}`}>
@@ -57,26 +57,26 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
         {
           isUploading ? (
             <div className='bg-primary w-uto p-2 rounded-full mt-1'>
-                 <Spinner />
+              <Spinner />
             </div>
-          ):(
-              <>
-               {children}
-        <input
-        type='file'
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            accept=".png,.jpg,.jpeg"
-            className='hidden'
-            name={name}
-            
-        />
-        </>
+          ) : (
+            <>
+              {children}
+              <input
+                type='file'
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                accept=".png,.jpg,.jpeg"
+                className='hidden'
+                name={name}
+
+              />
+            </>
           )
         }
-       
-      
-        
+
+
+
       </button>
     </div>
   );

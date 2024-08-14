@@ -1,5 +1,6 @@
 // ChatButton.tsx
 import React from 'react';
+import { IoChatboxSharp } from "react-icons/io5";
 
 interface ChatButtonProps {
   onClick: () => void;
@@ -13,7 +14,7 @@ const ChatButton: React.FC<ChatButtonProps> = ({ isOpen, onClick }) => {
       onClick={onClick}
     >
       {/* Add your chat icon here */}
-      {isOpen ? <>&times;</> : <><img src='/icons/chat.png' /></>}
+      {isOpen ? <>&times;</> : <><IoChatboxSharp  /></>}
 
     </div>
   );

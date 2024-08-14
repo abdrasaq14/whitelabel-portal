@@ -58,8 +58,8 @@ const form = useFormik({
   }),
   onSubmit: async (values) => {
     try {
-      await handleSubmit.mutate({ password: values.password, token });
-      toast.success("Password updated successfully!");
+       handleSubmit.mutate({ password: values.password, token });
+      // toast.success("Password updated successfully!");
     } catch (error: any) {
       toast.error(error.response?.data.message || "Failed to update password.");
     }
@@ -147,10 +147,10 @@ const form = useFormik({
 
           </FormikProvider>
        
-          <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
+          {/* <div className="w-full p-4 mt-8 hidden sm:flex  items-center justify-center">
                   <img alt='Client logo'
                 src='/client-asset/Logo_Landmark.svg' width={58} height={20} />
-          </div>
+          </div> */}
     </main>
     <LoadingModal isOpen={isOpen} closeModal={closeModal} />
     

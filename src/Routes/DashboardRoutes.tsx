@@ -6,6 +6,7 @@ import { IModuleRouter } from "./index";
 export const AdminDashRouter: IModuleRouter = {
   key: "dashboard",
   guard: (loggedIn) => loggedIn,
+  next: (isCustomised) => isCustomised,
   layout: AdminLayout,
   routes: [
     {
@@ -25,16 +26,28 @@ export const AdminDashRouter: IModuleRouter = {
       },
       () => import("../pages/dashboard/ProductDiscovery/ProductDiscovery")
     ),
+    LazyRoute(
+      {
+        path: "/inventory",
+      },
+      () => import("../pages/dashboard/Inventory/Inventory")
+    ),
+    LazyRoute(
+      {
+        path: "/discover-products/details/:id",
+      },
+      () => import("../pages/dashboard/ProductDiscovery/MerchantDetails")
+    ),
     // products
     LazyRoute(
       {
-        path: "/products",
+        path: "/product/all-products",
       },
       () => import("../pages/dashboard/Products/AllProducts")
     ),
     LazyRoute(
       {
-        path: "/blocked-products",
+        path: "/product/blocked-products",
       },
       () => import("../pages/dashboard/Products/BlockedProducts")
     ),
@@ -109,7 +122,7 @@ export const AdminDashRouter: IModuleRouter = {
     },
     {
       path: "*",
-      element: <div>Not found</div>,
+      element: <Navigate to="/dashboard" />,
     },
   ],
 };

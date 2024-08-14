@@ -13,6 +13,7 @@ export const AdminLayout = () => {
 export const sidebar: SideItem[] = [
   { name: "Dashboard", path: "/dashboard", iconName: "dashboard" },
   { name: "Product Discovery", path: "/discover-products", iconName: "discover" },
+  { name: "Inventory", path: "/inventory", iconName: "inventory" },
   {
     name: "Merchant", iconName:"people", path:"merchant", children: [
       { name: "All merchants", path: "/merchant/all-merchants", iconName: "report" },
@@ -22,9 +23,9 @@ export const sidebar: SideItem[] = [
     ]
   },
   {
-    name: "Product", iconName:"note",  children: [
-      { name: "All Products", path: "/products" },
-      { name: "Blocked Products", path: "/blocked-products", },
+    name: "Product", iconName:"note", path:"product", children: [
+      { name: "All Products", path: "/product/all-products" },
+      { name: "Blocked Products", path: "/product/blocked-products", },
     ]
   },
   { name: "Order & Transaction", path: "/orders", iconName: "orders" },
