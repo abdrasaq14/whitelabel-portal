@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { HiOutlineSearch } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
 import useOnClickOutside from '../../hooks/useClickOutside';
 import { MdFilterList } from "react-icons/md";
-
 
 interface Option {
   id: number;

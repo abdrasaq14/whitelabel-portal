@@ -11,12 +11,14 @@ module.exports = {
         satoshiMedium: ["Satoshi-Medium"],
         satoshiRegular: ["Satoshi-Regular"],
         gooperRegular: ["FontGooper-Regular"],
-        gooperBlack: ["FontGooper-Black"],
+        gooperSemiBold: ["FontGooper-SemiBold"],
+        gooperBlack: ["FontGooper-Black"]
       },
       colors: {
         foundation: {
           lightPurple: "#EDE6F3",
           darkPurple: "#4B0082",
+          black: "#2B2C34"
         },
         perrywinkle: "#a077e6",
         lightTan: "#f8f3a6",
@@ -39,19 +41,30 @@ module.exports = {
           subtext: "#667185",
           light: "#470E810A",
           DEFAULT: "#470E81",
-          bg: "#EFEFEF",
-        },
+          bg: "#EFEFEF"
+        }
       },
       boxShadow: {
-        custom: "0 2px 4px 0 rgba(0, 0, 0, 0.08)",
+        custom: "0 2px 4px 0 rgba(0, 0, 0, 0.08)"
+      },
+      animation: {
+        zoomOut: "zoomOut 0.5s ease-in-out",
+        // fadeOut: "fadeOut 0.5s ease-in-out"
+      },
+      keyframes: {
+        zoomOut: {
+          "0%": { opacity: 0.5, transform: "scale(0.5)" },
+          "100%": { opacity: 1, transform: "scale(1)" }
+        },
+       
       },
       screens: {
-        xs: "400px",
-      },
-    },
+        xs: "400px"
+      }
+    }
   },
   daisyui: {
-    themes: [],
+    themes: []
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui")]
 };

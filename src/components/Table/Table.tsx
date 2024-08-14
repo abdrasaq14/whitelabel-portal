@@ -6,15 +6,13 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSingleState } from "../../hooks/useSingleState";
 import { ErrorBoundary } from "../../shared_components/ErrorBoundary";
 import Action, { ActionOptionProps } from "../Action/Action";
 import Filter from "../Filter/Filter";
 import Spinner from "../spinner/Spinner";
 import { Paginator } from "./Paginator";
-import TabBar from "../Tab/TabBar";
-import SearchInput from "../FormInputs/SearchInput";
 // import { useTable, Column } from "react-table";
 
 export interface ITableProps<TRow> {
@@ -27,9 +25,9 @@ export interface ITableProps<TRow> {
   }>;
   topSlot?: React.ReactNode;
   data?: NonNullable<TRow[]> | undefined;
-  tabs?: string[];
   loading: boolean;
   emptyMessage?: React.ReactNode;
+  onSelectRows?: (e: any) => any;
   columns: Array<{
     header: React.ReactNode;
     view: (
@@ -60,11 +58,16 @@ export function Table<TRow extends {}>({
   columns,
   hideActionName = false,
   noDivider = false,
+  onSelectRows,
   ...props
 }: ITableProps<TRow>) {
   const data = props.data ?? [];
-  const [filter, setFilter] = useState<boolean>(false)
+  const [filter, setFilter] = useState<boolean>(false);
   const isMobile = useSingleState(false);
+  const [selectAll, setSelectAll] = useState(false); // State to track select all
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set()); // State to track selected rows by index
+  const totalRowsRef = useRef<number>(props.pagination?.totalRows || 0);
+
   useEffect(() => {
     const handleResize = () => {
       isMobile.set(window.innerWidth < 768);
@@ -75,169 +78,172 @@ export function Table<TRow extends {}>({
     };
   }, []);
 
-  const IndeterminateCheckbox = React.forwardRef(
-    ({ indeterminate, ...rest }: { indeterminate: any }, ref) => {
-      const defaultRef = React.useRef();
-      const resolvedRef: any = ref || defaultRef;
+  useEffect(() => {
+    totalRowsRef.current = props.pagination?.totalRows || 0;
+  }, [props.pagination?.totalRows]);
 
-      React.useEffect(() => {
-        resolvedRef.current.indeterminate = indeterminate;
-      }, [resolvedRef, indeterminate]);
-
-      return (
-        <>
-          <input
-            className="rounded focus:ring-pc-secondaryshade1 form-checkbox border-pc-grey5 text-pc-secondaryshade1"
-            type="checkbox"
-            ref={resolvedRef}
-            {...rest}
-          />
-        </>
-      );
+  useEffect(() => {
+    const newSelectedRows = new Set<number>();
+    if (selectAll) {
+      for (let i = 0; i < totalRowsRef.current; i++) {
+        newSelectedRows.add(i);
+      }
     }
-  );
+    setSelectedRows(newSelectedRows);
+  }, [selectAll]);
+
+  useEffect(() => {
+    onSelectRows && onSelectRows(selectedRows);
+  }, [selectedRows]);
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+  };
+
+  const handleRowSelect = (rowIndex: number, row: TRow) => {
+    setSelectedRows((prevSelectedRows) => {
+      const newSelectedRows = new Set(prevSelectedRows);
+      if (newSelectedRows.has(rowIndex)) {
+        newSelectedRows.delete(rowIndex);
+      } else {
+        newSelectedRows.add(rowIndex);
+      }
+      return newSelectedRows;
+    });
+  };
+
+  const isAllSelected = () => {
+    return selectedRows.size === totalRowsRef.current;
+  };
 
   return (
     <ErrorBoundary>
-      {/* <Filter open={filter} onClose={() => setFilter(false)} /> */}
+      <Filter open={filter} onClose={() => setFilter(false)} />
       <div
         className={clsx([
-          "flex flex-col  overflow-y-hidden overflow-x-auto w-full h-full rounded-lg",
+          "flex flex-col relative overflow-y-hidden overflow-x-auto w-full h-full bg-white rounded-lg",
         ])}
       >
-        {/* <!-- body --> */}
         <div className="flex-1 overflow-hidden relative px-4">
           {props.loading && (
-            <div className="absolute top-0 w-full  z-10 text-center">
-              {/* <Loader type="bar" /> */}
-              <Spinner />
+            <div className="absolute flex justify-center items-center top-0 w-full h-full z-10 text-center">
+              <Spinner color="#000000" />
             </div>
           )}
-          {/* <div className="flex justify-between py-6 bg-red-500">
-            <h4 className="my-auto text-2xl text-landingPagePrimary font-bold">hello</h4>
-            <div className="flex">
-
-              <SearchInput placeholder="search here" />
-            </div>
-          </div> */}
-          <div>
-            {props.tabs &&
-              <div className="px-3">
-                <TabBar tabs={props.tabs} />
-              </div>}
+          <div className="flex justify-between py-6">
+            <h4 className="my-auto">{props.tableName}</h4>
           </div>
-          <div className="h-full w-full mt-8 overflow-x-hidden hover:overflow-x-auto custom-scrollbar">
-            <table className=" w-full border-collapse pc-bg-gray-2 ">
-              <thead className={` bg-[#F0F2F5] border-b-[1px]  `}>
-                <tr className="py-1 h-[4.5rem]">
-                  {props.bulkAction && <th></th>}
-                  <th className="px-4 mx-2  w-0">
-                    <h3 className="text-[#344054] text-xs font-satoshiMedium font-medium">S/N</h3>
-                  </th>
-                  {columns.map((col: any) => {
-                    const view = data[0] && col.view(data[0], 0);
-                    const isAnObject =
-                      typeof view !== "string" &&
-                      typeof view !== "boolean" &&
-                      typeof view !== "number" &&
-                      view &&
-                      "desktop" in view;
-                    if (id) {
-                      return null;
-                    }
-                    if (
-                      isMobile.get &&
-                      isAnObject &&
-                      view &&
-                      view?.mobile === false
-                    )
-                      return null;
-                    return (
+          <div>
+            {props.topSlot && <div className="px-3 py-3">{props.topSlot}</div>}
+          </div>
+          {!props.loading && (
+            <div className="h-full w-full overflow-x-hidden hover:overflow-x-auto custom-scrollbar relative">
+              <table className="table table-auto w-full border-collapse !border-[#E4E7EC]">
+                <thead className="sticky top-0">
+                  <tr className="py-1 border-b !border-[#E4E7EC] h-[2.813rem]">
+                    {props.bulkAction && <th></th>}
+                    <th className="px-4 mx-2 bg-[#F4F5F6] w-0">
+                      <input
+                        type="checkbox"
+                        checked={isAllSelected()}
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 bg-red-500"
+                      />
+                    </th>
+                    {columns.map((col) => {
+                      const view = data[0] && col.view(data[0], 0);
+                      const isAnObject =
+                        typeof view !== "string" &&
+                        typeof view !== "boolean" &&
+                        typeof view !== "number" &&
+                        view &&
+                        "desktop" in view;
+                      if (id) {
+                        return null;
+                      }
+                      if (isMobile.get && isAnObject && view && view?.mobile === false)
+                        return null;
+                      return (
+                        <th
+                          key={`${col.header}-head`}
+                          className="text-mid-night-80 whitespace-nowrap text-[12px] capitalize font-normal text-left px-5 py-3 bg-[#F4F5F6] max-w-sm"
+                        >
+                          <span>{col.header}</span>
+                        </th>
+                      );
+                    })}
+                    {props.rowActions && props.rowActions({} as any, 0).length > 0 && (
                       <th
-                        key={`${col.header}-head`}
-                        className="text-mid-night-80 text-[14px] text-center px-5 py-3 whitespace-nowrap    max-w-sm"
-                      >
-                        <h3 className="text-[#344054] text-xs font-satoshiMedium  font-medium">{col.header}</h3>
-                      </th>
-                    );
-                  })}
-                  {props.rowActions &&
-                    props.rowActions({} as any, 0).length > 0 && (
-                      <th
-                        className="text-mid-night-80 text-[14px] font-normal text-right px-6 py-3 whitespace-nowrap
-                    pc-bg-gray-2  first:rounded-tl-lg last:rounded-tr-lg max-w-sm"
+                        className="text-mid-night-80 text-[14px] font-normal bg-[#F4F5F6] text-right px-6 py-3 whitespace-nowrap pc-bg-gray-2 first:rounded-tl-lg last:rounded-tr-lg max-w-sm"
                       >
                         {hideActionName ? "" : "Action"}
                       </th>
                     )}
-                </tr>
-              </thead>
-            <tbody className="px-4 mt-5 text-[#4D5154] ">
-                {data.length < 1 && !props.loading && (
-                  <tr className=" text-base">
-                    <td colSpan={columns.length + 1} className="py-40">
-                      <div className="w-full grid place-content-center">
-                        {props.emptyMessage ?? (
-                          <TableEmpty
-                            title="Nothing to see yet"
-                            subtitle="Records will be listed here"
-                          />
-                        )}
-                      </div>
-                    </td>
                   </tr>
-                )}
-                {data.map((row: any, rowIndex: any) => (
-                  <tr
-                    key={`row-${rowIndex}`}
-                    className={clsx(
-                      "px-5 py-1 h-[4.5rem]",
-                      "text-sm text-center",
-                      noDivider
-                        ? ""
-                        : "border-b last:border-b-0 pc-border-gray",
-                      "bg-white ",
-                      props.clickRowAction &&
-                      "hover:bg-fara-blue/10 cursor-pointer"
-                    )}
-                  >
-                    <td className="px-4">
-                      {rowIndex + 1}
-                    </td>
-                    {columns.map((col, colIndex) => (
-                      <TableCol
-                        key={`row-${rowIndex} + col-${colIndex}`}
-                        {...{
-                          col,
-                          row,
-                          rowIndex,
-                          id,
-                          isMobile: isMobile.get,
-                          clickRowAction: props.clickRowAction,
-                        }}
-                      />
-                    ))}
-                    {props.rowActions &&
-                      props.rowActions({} as any, 0).length > 0 && (
-                        <td className="px-2">
-                          <div className="flex justify-end pr-6 pl-5">
+                </thead>
+                <tbody className="px-4 mt-5 text-mid-night-80/80">
+                  {data.length < 1 && !props.loading && (
+                    <tr className="!border-[#E4E7EC] text-base">
+                      <td colSpan={columns.length + 1} className="!border-[#E4E7EC] py-40">
+                        <div className="w-full grid place-content-center">
+                          {props.emptyMessage ?? props.emptyMessage}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {data.map((row, rowIndex) => {
+                    const globalIndex = (props.pagination?.page! - 1) * props.pagination?.pageSize! + rowIndex;
+                    return (
+                      <tr
+                        key={`row-${globalIndex}`}
+                        className={clsx(
+                          "px-5 py-1 h-[4.5rem]",
+                          "text-sm",
+                          noDivider ? "" : "border-b last:border-b-0 !border-[#E4E7EC]",
+                          "bg-white",
+                          props.clickRowAction && "hover:bg-fara-blue/10 cursor-pointer"
+                        )}
+                      >
+                        <td className="px-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedRows.has(globalIndex)}
+                            onChange={() => handleRowSelect(globalIndex, row)}
+                            className="w-4 h-4 checked:shadow-xl border border-gray-500"
+                          />
+                        </td>
+                        {columns.map((col, colIndex) => (
+                          <TableCol
+                            key={`row-${globalIndex} + col-${colIndex}`}
+                            {...{
+                              col,
+                              row,
+                              rowIndex,
+                              id,
+                              isMobile: isMobile.get,
+                              clickRowAction: props.clickRowAction,
+                            }}
+                          />
+                        ))}
+                        {props.rowActions && props.rowActions({} as any, 0).length > 0 && (
+                          <td className="py-3 pr-6 max-w-sm">
                             <Action
                               variant="vertical"
                               options={props.rowActions(row, rowIndex)}
                             />
-                          </div>
-                        </td>
-                      )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-
         {/* footer */}
         {props.pagination && (
-          <div className="border-t h-14 mx-4 pc-border-gray relative z-0 bg-white">
+          <div className="border-t h-14 mx-4 !border-[#E4E7EC] relative z-0 bg-white">
             {/* pagination */}
             <Pagination
               {...props.pagination}
@@ -251,7 +257,6 @@ export function Table<TRow extends {}>({
     </ErrorBoundary>
   );
 }
-
 const TableCol = <TRow,>({
   col,
   rowIndex,
@@ -281,7 +286,7 @@ const TableCol = <TRow,>({
   return (
     <td
       className={clsx(
-        "px-6 py-5 text-center font-normal max-w-sm",
+        "px-6 py-5 text-left font-normal max-w-sm whitespace-nowrap",
         clickRowAction && "cursor-pointer"
       )}
       onClick={() => clickRowAction?.(row, rowIndex)}
@@ -319,17 +324,17 @@ const Pagination = ({
   return (
     <div className="flex items-center justify-center h-full px-4 py-1 text-sm text-gm-blue-main">
       {/* <div className="mr-10">
-        <span className="">Items per page</span>
-        <select
-          className="border border-fara-blue/30 w-12 ml-2 h-8 bg-transparent"
-          value={pageSize}
-          onChange={(e) => setPageSize?.(+e.target.value)}
-        >
-          {[10, 20, 25, 30, 40, 50, 100].map((size) => (
-            <option key={size.toString()}>{size}</option>
-          ))}
-        </select>
-      </div> */}
+          <span className="">Items per page</span>
+          <select
+            className="border border-fara-blue/30 w-12 ml-2 h-8 bg-transparent"
+            value={pageSize}
+            onChange={(e) => setPageSize?.(+e.target.value)}
+          >
+            {[10, 20, 25, 30, 40, 50, 100].map((size) => (
+              <option key={size.toString()}>{size}</option>
+            ))}
+          </select>
+        </div> */}
 
       {withNumber ? (
         <Paginator

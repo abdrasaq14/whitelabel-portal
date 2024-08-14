@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldAttributes, useField } from "formik";
+import { useField } from "formik";
 import PasswordCriteria from './PasswordCriteria';
 
 
@@ -25,7 +25,7 @@ const Input = ({
 	onRightIconClick,
   ...restProps
  }: ICB) => {
-    const [field, meta, helpers] = useField(name);
+    const [field, meta] = useField(name);
   return (
     <div className={`flex flex-col ${wrapperClass}`} >
          {label && (

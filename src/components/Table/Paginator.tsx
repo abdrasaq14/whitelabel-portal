@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useMemo } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 
 
@@ -84,7 +85,7 @@ interface ITmpPaginator {
     const btnNextClick = () => setPage?.(page + 1);
     const classes = {
       paginator: "flex items-center text-sm",
-      btnClass: "h-9 min-w-[2.25rem] mx-1 rounded focus:outline-none disabled:text-zp-line",
+      btnClass: "h-9 min-w-[2.25rem] flex items-center gap-2 mx-1 rounded focus:outline-none disabled:text-zp-line",
       btnNext: "inline-flex w-[92px] px-2 items-center justify-center",
       btnPrev: "inline-flex px-2 w-[92px] items-center justify-center",
       item: " h-9 min-w-[2.25rem] bg-primary-light px-3 py-1 cursor-pointer text-primary",
@@ -113,10 +114,10 @@ interface ITmpPaginator {
             classes.btnPrev,
             leftArrowDisabled
               ? "cursor-not-allowed text-gray-500 border rounded border-gray-500"
-              : "cursor-pointer text-primary border rounded border-primary",
+              : "cursor-pointer  text-primary border rounded border-primary",
           ])}
         >
-          Previous
+         <FaChevronLeft size={10} /> Previous
         </button>
   
         {pageNumbers.map((pageNum, index) => {
@@ -175,7 +176,7 @@ interface ITmpPaginator {
               : "cursor-pointer text-primary border rounded border-primary",
           ])}
         >
-         Next
+         Next <FaChevronRight size={10} />
         </button>
       </div>
     );

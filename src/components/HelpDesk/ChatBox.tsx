@@ -32,10 +32,10 @@ const handleProductImgChange = async (e: any) => {
     e.preventDefault();
     console.log(e.target.files[0])
 }
-const handleEnter = async (e: any) => {
-    e.preventDefault();
-    console.log(e.key)
-}
+// const handleEnter = async (e: any) => {
+//     e.preventDefault();
+//     console.log(e.key)
+// }
 
 
 const details ={
@@ -69,7 +69,7 @@ const details ={
         </div>
         <div className='absolute flex items-center bottom-0 p-3 w-full rounded-md  border bg-[#C8CCD0]'>
             <div className='flex bg-white w-full rounded-lg'>
-            <input value={text} onChange={(e) => { e.preventDefault(); setText(e.target.value) }} onKeyDown={handleEnter} placeholder='Type a message' className='py-2 w-full px-6 bg-transparent outline-none focus:outline-none' />
+            <input onChange={(e) => {setText(e.target.value) }}  placeholder='Type a message' className='py-2 w-full px-6 bg-transparent outline-none focus:outline-none' />
                 <button className='bg-primary px-6 py-2 z- text-white rounded-lg'>Send</button>
 
             </div>

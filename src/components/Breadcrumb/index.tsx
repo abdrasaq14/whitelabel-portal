@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "../../zustand/auth.store";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
@@ -31,17 +32,19 @@ export const BreadCrumbClient = ({
   brand,
   backText,
   currentPath,
-}: BreadcrumbPropClient) => (
-  <div className="flex mb-6">
-    <div className="flex cursor-pointer font-medium  text-sm text-primary-text">
-      <p className=" ">
-        {brand} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
-      </p>
-      <p className=" text-primary-text">
-        {backText} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
-      </p>
-    </div>
+}: BreadcrumbPropClient) => {
+  const profile:any = useAuth((s) => s.profile)
+  return (
+    <div className="flex mb-6">
+      <div className="flex  font-medium  text-sm text-primary-text">
+        <p className=" ">
+          {profile?.whiteLabelName} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
+        </p>
+      </div>
 
-    <h6 className="text-foundation-darkPurple text-sm font-medium ">{currentPath}</h6>
-  </div>
-);
+      <h6 className="text-foundation-darkPurple text-sm font-medium ">{currentPath}</h6>
+    </div>
+  );
+}
+
+

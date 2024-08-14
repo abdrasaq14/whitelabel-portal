@@ -8,6 +8,8 @@ import DashboardHeader from "./Header";
 // import Loader from "../Loader";
 import { DashboardSidebar, SideItem } from "./Sidebar";
 import { useAuth } from "../../zustand/auth.store";
+import NotificationSidebar from "../../components/common/NotificationSidebar";
+import { NotificationContext } from "../../context/NotificationContext";
 // import { DashboardTopBar } from "./TopBar";
 
 export const DashboardWrapper = ({
@@ -18,6 +20,7 @@ export const DashboardWrapper = ({
   children: React.ReactNode;
 }) => {
   const logout: any = React.useContext(LogoutContext);
+  const notification:any = React.useContext(NotificationContext)
   return (
     <section className="flex relative h-screen w-full pc-bg-gray text-[15px] max-w-[1560px] mx-auto">
       <DashboardSidebar items={sidebar} />
@@ -61,6 +64,10 @@ export const DashboardWrapper = ({
           )} */}
           <div className="h-full bg-gray-100 z-10 relative w-full flex flex-col overflow-x-auto">
             <ErrorBoundary>{children}</ErrorBoundary>
+            <NotificationSidebar
+              setIsNotificationOpen={notification?.cloesNotification}
+              isNotificationOpen={notification?.isNotificationOpen}
+            />
           </div>
         </main>
       </section>
