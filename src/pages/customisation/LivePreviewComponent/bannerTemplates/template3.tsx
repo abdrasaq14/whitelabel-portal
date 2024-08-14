@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom";
 
 
-interface BannerTemplateProps {
+interface Template3Props {
   primaryColor: string;
   secondaryColor: string;
   heroImage?: string;
   heroText: string;
 }
 
-const BannerTemplate = ({
+const Template3 = ({
   primaryColor,
   secondaryColor,
   heroImage,
   heroText
-}: BannerTemplateProps) => {
+}: Template3Props) => {
   const defaultHeroImage = "/images/heroImage.png";
   const backgroundImage = heroImage
     ? `url(${heroImage})`
@@ -38,11 +38,11 @@ const BannerTemplate = ({
     >
       <div className="w-[90%] flex flex-col justify-center items-center">
         <h3
-          className="font-bold font-satoshiMedium text-xl w-[80%] mx-auto text-center  text-white leading-7 mb-4"
+          className="font-bold font-gooperSemiBold text-xl w-[80%] mx-auto text-center  text-white leading-7 mb-4"
           dangerouslySetInnerHTML={{
             __html: heroText
               ? heroText
-              : "Lorem ipsum dolor sit amet consectetur adipiscing elit."
+              : "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
           }}
         />
         <Link
@@ -57,4 +57,4 @@ const BannerTemplate = ({
   );
 };
 
-export default BannerTemplate;
+export default Template3;

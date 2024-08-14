@@ -7,6 +7,7 @@ import Item from "./Item";
 import {ImFacebook} from "react-icons/im";
 import {TbBrandInstagram} from "react-icons/tb";
 import inventory from "./DummyProduct";
+import BannerTemplate from "../LivePreviewComponent/bannerTemplates";
 
 
 
@@ -75,23 +76,27 @@ export default function LivePreview({data, stage}: any) {
                         </div>
                     </div>}
 
-                    {stage === 1 && <div className={"w-full h-[220px] grid grid-cols-2"} style={{backgroundColor: secondaryColor}}>
-                        <div className="h-[220px] flex flex-col justify-center items-end">
-                            <div className="w-[100%] flex justify-end">
-                                <p className="text-[18px] font-satoshi w-[80%]">One - Stop Online Shopping on LandMart
-                                    for all your Basic Needs</p>
-                            </div>
-                            <div className="w-[80%] flex">
-                                <button onClick={() => {
-                                }}
-                                        className='mt-1 text-white text-center px-7 py-1 rounded font-satoshiMedium inline-flex items-center justify-center'
-                                        style={{backgroundColor: primaryColor}}>Explore
-                                </button>
-                            </div>
-                        </div>
-                        <div className="h-[220px] flex flex-col justify-center items-center"><img
-                            src="/banner_img.svg"/></div>
-                    </div>}
+                    {stage === 1 && (
+                        <BannerTemplate primaryColor={ primaryColor} secondaryColor={secondaryColor} heroImage={data.banner.imageUrl} heroText={data.banner.text} template={data.banner.tempate === "Template 3" ? 2 : data.banner.tempate === "Template 2" ? 1 : 0 } />
+                    )
+                    //     <div className={"w-full h-[220px] grid grid-cols-2"} style={{ backgroundColor: secondaryColor }}>
+                    //     <div className="h-[220px] flex flex-col justify-center items-end">
+                    //         <div className="w-[100%] flex justify-end">
+                    //             <p className="text-[18px] font-satoshi w-[80%]">One - Stop Online Shopping on LandMart
+                    //                 for all your Basic Needs</p>
+                    //         </div>
+                    //         <div className="w-[80%] flex">
+                    //             <button onClick={() => {
+                    //             }}
+                    //                     className='mt-1 text-white text-center px-7 py-1 rounded font-satoshiMedium inline-flex items-center justify-center'
+                    //                     style={{backgroundColor: primaryColor}}>Explore
+                    //             </button>
+                    //         </div>
+                    //     </div>
+                    //     <div className="h-[220px] flex flex-col justify-center items-center"><img
+                    //         src="/banner_img.svg"/></div>
+                    // </div>
+                    }
 
                     {stage === 1 && <div className="w-full bg-[#ffffff] px-10 py-5">
                         <h2 className="font-satoshi text-[14px] text-[#2B2C34] leading-2 tracking-tighter">Explore
