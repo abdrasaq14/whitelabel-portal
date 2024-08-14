@@ -40,7 +40,6 @@ export const stripHtml = (str: any) => {
 const validationSchema = Yup.object({
   heroText: Yup.string()
     .trim()
-    .required("Hero Section text is required")
     .test(
       "max-length",
       "Hero Text must not be greater than 70 characters",
@@ -48,7 +47,8 @@ const validationSchema = Yup.object({
         const plainText = stripHtml(value);
         return plainText.length <= 70;
       }
-    ),
+    )
+    .required("Hero Section text is required"),
   heroImage: Yup.string().trim().required("Hero Image is required")
 });
 
@@ -63,6 +63,8 @@ function Step3({
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
+  const [isOpen, setIsOpen] = useState(false);
+  
   const form = useFormik({
     initialValues: {
       heroText: "",
@@ -72,9 +74,11 @@ function Step3({
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
+    validateOnMount: false,
     validateOnChange: true,
     validateOnBlur: true
   });
+  
   useEffect(() => {
     if (data?.banner?.text) {
       form.setFieldValue("heroText", data.banner.text);
@@ -82,21 +86,35 @@ function Step3({
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
+    // form.validateForm()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const [characterCount, setCharacterCount] = useState(
     form.values.heroText.length
   );
   const characterLimit = 70; 
-console.log("form.values", form.values.heroText);
+console.log("form.values", form.values.heroText.length, data?.banner?.text);
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
  
   const handleTextChange = (content: string) => {
-    if (content.length <= characterLimit) {
+    const strippedContent = stripHtml(content);
+    if (strippedContent.length <= characterLimit) {
+      console.log("yes", strippedContent.length);
       form.setFieldValue("heroText", content);
-      setCharacterCount(content.length);
+      setCharacterCount(strippedContent.length);
+      return
+    }
+    return
+  };
+  const handleBeforeInput = (e:any) => {
+    if (
+      characterCount >= characterLimit &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete"
+    ) {
+      e.preventDefault();
     }
   };
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -183,7 +201,6 @@ console.log("form.values", form.values.heroText);
 
   const handleProceed = () => {
     localStorage.removeItem("setupData");
-    setStep(1);
     AuthActions.setProfile(updatedUserObject);
     navigate("/dashboard");
     setIsOpen(false);
@@ -206,9 +223,10 @@ console.log("form.values", form.values.heroText);
         form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        setUpdatedUserObject(response.data.result);
+        // setUpdatedUserObject(response.data.result)
+
         setIsOpen(true);
-        // AuthActions.setProfile(response.data.result)
+        AuthActions.setProfile(response.data.result)
         // return
       },
       onError: (err: any) => {
@@ -241,9 +259,9 @@ console.log("form.values", form.values.heroText);
       [{ color: [] }]
     ]
   };
-  console.log("formValues", form.values);
+
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
-  const [isOpen, setIsOpen] = useState(false);
+  
 
   return (
     <>
@@ -295,6 +313,7 @@ console.log("form.values", form.values.heroText);
                       <ReactQuill
                         value={form.values.heroText}
                         onChange={handleTextChange}
+                        onKeyDown={handleBeforeInput}
                         onBlur={() =>
                           saveDataToLocaStorage({ text: form.values.heroText })
                         }
@@ -442,13 +461,13 @@ console.log("form.values", form.values.heroText);
                 <button
                   type="button"
                   disabled={
-                    !form.values.heroText.trim() ||
+                    !stripHtml(form.values.heroText).trim() ||
                     !form.values.heroImage.trim() ||
                     form.isSubmitting ||
                     isUploading
                   }
                   onClick={() => form.handleSubmit()}
-                  className="bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed"
+                  className="bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
                   {form.isSubmitting ? (
                     <Spinner />
