@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c9409247-7eb8-4a62-93b7-07e83a570645" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2jH5xfFXKjXgNi5FSbrd2cHAuUF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/denis/Documents/Apps Development/ProfitAll/whitelabel_frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "/Users/denis/Documents/Apps Development/ProfitAll/whitelabel_frontend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/customisation" />
+      <recent name="$PROJECT_DIR$/src/pages/auth" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c9409247-7eb8-4a62-93b7-07e83a570645" name="Changes" comment="" />
+      <created>1721031409956</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721031409956</updated>
+      <workItem from="1721031411405" duration="6253000" />
+      <workItem from="1721120268756" duration="26497000" />
+      <workItem from="1721208937819" duration="20687000" />
+      <workItem from="1721296987466" duration="2373000" />
+      <workItem from="1721420800632" duration="27000" />
+      <workItem from="1721650655201" duration="401000" />
+      <workItem from="1721654073856" duration="2156000" />
+      <workItem from="1721665267848" duration="46855000" />
+      <workItem from="1721746605449" duration="677000" />
+      <workItem from="1721806416877" duration="5334000" />
+      <workItem from="1721828145339" duration="1114000" />
+      <workItem from="1721832145588" duration="4768000" />
+      <workItem from="1721838678740" duration="6213000" />
+      <workItem from="1721891930254" duration="409000" />
+      <workItem from="1721982243029" duration="271000" />
+      <workItem from="1722848044781" duration="218000" />
+      <workItem from="1722933175333" duration="2222000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
