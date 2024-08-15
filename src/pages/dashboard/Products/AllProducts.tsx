@@ -124,10 +124,10 @@ const AllProducts = () => {
                     pageSize
                   })}</div>
                 },
-                {
-                  header: "Product Id",
-                  view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
-                },
+                // {
+                //   header: "Product Id",
+                //   view: (row: any) => <div className='flex items-center gap-3'><img alt="row-img" src={row.image ?? ""} className='h-10 w-10 object-contain' />{row.productIdOnProfitAll}</div>,
+                // },
                 {
                   header: "Merchant",
                   view: (row: any) => <div>{row.merchantName}</div>,

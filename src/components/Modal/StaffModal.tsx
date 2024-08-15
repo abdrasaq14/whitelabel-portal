@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, ChangeEventHandler } from 'react'
 import useOnClickOutside from "../../hooks/useClickOutside";
 import { Formik, Form, ErrorMessage, Field, useFormik, FormikProvider } from 'formik'
 import TextInput from '../FormInputs/TextInput2';
@@ -11,7 +11,9 @@ import { useMutation } from 'react-query';
 import { UserService } from '../../services/user';
 import toast from 'react-hot-toast';
 import FileUpload from '../FormInputs/FIleUpload2';
+import ProfilePicUpload from '../FormInputs/FileUpload';
 import { useAuth } from '../../zustand/auth.store';
+import axios from 'axios';
 
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
@@ -44,7 +46,9 @@ export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => 
 export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isDeleteModalOpen, setisDeleteModalOpen] = useState<boolean>(false);
-
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string>("");
+  
 
   const modalRef = useRef<any>();
   useOnClickOutside(modalRef, () => {
@@ -88,6 +92,13 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
   const { mutate } = useMutation(
     async (values: any) => {
+      // Find the label corresponding to the selected roleId
+      const selectedRole = roleOptions.find(
+        (role) => role.value === values.roleId
+      );
+      if (selectedRole) {
+        values.role = selectedRole.label; 
+      }
       return await UserService.updateStaff(values, staffInfo._id);
     },
     {
@@ -120,6 +131,50 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       console.error('Staff info is undefined');
     }
   }
+    // const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
+    //   event
+    // ) => {
+    //   if (event.currentTarget.files) {
+    //     setIsUploading(true);
+    //     const file = event.currentTarget.files[0];
+    //     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+    //     const minSize = 50 * 1024; // 50 KB
+    //     const maxSize = 5 * 1024 * 1024; // 5 MB
+
+    //     if (!validFormats.includes(file.type)) {
+    //       setUploadError(
+    //         "Invalid image format. Supported formats: JPEG, PNG, JPG."
+    //       );
+    //       setIsUploading(false);
+    //       return;
+    //     }
+
+    //     if (file.size < minSize || file.size > maxSize) {
+    //       setUploadError("Image size must be between 50 KB and 5 MB.");
+    //       setIsUploading(false);
+    //       return;
+    //     }
+
+    //     setUploadError("");
+
+    //     handleImageUpload.mutate(file);
+    //   }
+  // };
+    const handleStaffProfilePicUpload = useMutation(
+      async (file: File) => {
+       return await UserService.updateStaff({image: file}, staffInfo._id);
+        // return await UserService.editAdminDetails({ companyLogo: file });
+      },
+      {
+        onSuccess: (response) => {
+          closeModal();
+          toast.success("Staff profile pics changed successfully");
+        },
+        onError: (err: any) => {
+          toast.error("An error occurred. Please try again");
+        },
+      }
+    );
 
   const roleOptions = [
     { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
@@ -130,8 +185,22 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
     <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col z-10 align-middle max-w-2xl w-[80%] rounded  sm:w-[553px] h-[70%] overflow-y-auto'>
       <div className='full flex justify-between '>
         <div className='flex gap-4 items-center'>
-          <div className='h-28 rounded object-contain w-28'>
-            <img alt='staff avatar' src={staffInfo?.image} className='h-28 rounded object-contain w-28' />
+          <div className='relative h-28 rounded object-contain w-28'>
+           {isUploading ? (
+              <div className="h-full w-full text-white rounded-full bg-slate-500 bg-opacity-50 flex items-center justify-center">
+                <span>Uploading</span>
+           </div>
+           ): (
+             <>
+             <button type="button" className='absolute  rounded-full bottom-0 right-0 p-1 bg-gray-300 cursor-pointer'>
+                <ProfilePicUpload name='' onFileChange={handleStaffProfilePicUpload.mutate}>
+                  <img src='/icons/edit.svg' alt='Edit profile' />
+                </ProfilePicUpload>
+                    {/* <input type="file" className='absolute top-0 left-0 h-full w-full opacity-0 cursor-pointer' onChange={handleFileChange} /> */}
+            </button>
+            <img alt='staff avatar' src={staffInfo?.image} className='h-28 max-28 max-w-28 rounded-full object-contain w-28' />
+             </>
+           )}
           </div>
 
           <div>
@@ -206,7 +275,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                 <div className='col-span-1'>
                   <TextInput
                     name='phoneNumber'
-                    placeholder='linda@framcreative.com'
+                    placeholder='+2348100000543'
                     label="Phone Number"
                     disabled={!isEditing}
                   />

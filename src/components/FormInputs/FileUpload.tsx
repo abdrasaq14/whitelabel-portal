@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import Spinner from '../spinner/Spinner';
+import toast from 'react-hot-toast';
 
 interface FileUploadProps {
   name: string;
@@ -13,12 +14,29 @@ interface FileUploadProps {
 const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children }) => {
   const [_, setFileName] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-
+    
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
+     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+        const minSize = 20 * 1024; // 20 KB
+        const maxSize = 5 * 1024 * 1024; // 5 MB
+
+        if (!validFormats.includes(file.type)) {
+          toast.error("Invalid image format. Supported formats: JPEG, PNG, JPG.");
+          setIsUploading(false);
+          return;
+        }
+
+        if (file.size < minSize || file.size > maxSize) {
+          toast.error("Image size must be between 50 KB and 5 MB.");
+          setIsUploading(false);
+          return;
+        }
+
+        // setUploadError("");
 
     try {
       const formData = new FormData();
@@ -40,6 +58,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
       setIsUploading(false);
     } catch (error) {
       console.error('Error uploading file:', error);
+      toast.error("Error uploading image. Please try again.");
       setIsUploading(false);
     }
   };
