@@ -130,7 +130,7 @@ const BioProfile = () => {
     {
       onSuccess: (response) => {
         form.setSubmitting(false);
-        AuthActions.setProfile(response.data.user)
+        AuthActions.setProfile(response.data.result.user)
         toast.success('Company Logo Updated Successfully');
       },
       onError: (err: any) => {
@@ -171,7 +171,7 @@ const BioProfile = () => {
 
         {/* Client Logo Section */}
         <div>
-          <img src={companyDetails.companyLogo ?? '/client-asset/landmark_logo.png'} className='w-auto h-20' alt='brand_logo' />
+          <img src={companyDetails?.companyLogo ?? '/client-asset/landmark_logo.png'} className='w-auto h-20' alt='brand_logo' />
           <p className='text-base font-satoshiMedium font-medium text-primary-text text-center'>Administrator</p>
         </div>
       </div>

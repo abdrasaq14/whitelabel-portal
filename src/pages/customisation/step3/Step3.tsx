@@ -86,6 +86,14 @@ function Step3({
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
+    if(data?.completeSetup === "completed"){
+      setIsOpen(true);
+      const localUserData: string | null = localStorage.getItem("userObject");
+      if (localUserData) {
+        const localData = JSON.parse(localUserData);
+        setUpdatedUserObject(localData)
+      }
+    }
     // form.validateForm()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -93,7 +101,6 @@ function Step3({
     form.values.heroText.length
   );
   const characterLimit = 70; 
-console.log("form.values", form.values.heroText.length, data?.banner?.text);
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
   };
@@ -101,7 +108,6 @@ console.log("form.values", form.values.heroText.length, data?.banner?.text);
   const handleTextChange = (content: string) => {
     const strippedContent = stripHtml(content);
     if (strippedContent.length <= characterLimit) {
-      console.log("yes", strippedContent.length);
       form.setFieldValue("heroText", content);
       setCharacterCount(strippedContent.length);
       return
@@ -203,6 +209,7 @@ console.log("form.values", form.values.heroText.length, data?.banner?.text);
     localStorage.removeItem("setupData");
     AuthActions.setProfile(updatedUserObject);
     navigate("/dashboard");
+    localStorage.removeItem("userObject");
     setIsOpen(false);
     return;
   };
@@ -223,11 +230,18 @@ console.log("form.values", form.values.heroText.length, data?.banner?.text);
         form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        // setUpdatedUserObject(response.data.result)
-
+        setUpdatedUserObject(response.data.result)
+        // in case the user refershes without clicking on proceed button
+        localStorage.setItem("userObject", JSON.stringify(response.data.result));
+        const localData: string | null = localStorage.getItem("setupData");
+        if (localData) { 
+          const updateLocalData = JSON.parse(localData);
+          updateLocalData.banner = response.data.result.customisationData.banner;
+          updateLocalData.completeSetup = response.data.result.customisationData.completeSetup
+          updateLocalData.stage = response.data.result.customisationData.stage;
+          localStorage.setItem("setupData", JSON.stringify(updateLocalData));
+        }
         setIsOpen(true);
-        AuthActions.setProfile(response.data.result)
-        // return
       },
       onError: (err: any) => {
         setIsUploading(false);

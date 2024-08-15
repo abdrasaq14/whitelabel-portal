@@ -29,7 +29,7 @@ export const StaffManagement = () => {
     UserService.getAllUsers,
     {
       onSuccess: (data: any) => {
-        // console.log(data.data);
+        console.log("ResponseData", data);
       },
       keepPreviousData: false,
       refetchOnWindowFocus: false,

@@ -328,10 +328,10 @@ const Products = () => {
                             pageSize
                         })}</div>
                     },
-                    {
-                        header: "Product Id",
-                        view: (row: any) => <div>{row.id}</div>,
-                    },
+                    // {
+                    //     header: "Product Id",
+                    //     view: (row: any) => <div>{row.id}</div>,
+                    // },
                     {
                         header: "Product Name",
                         view: (row: any) => <div>{row.name}</div>,
@@ -443,10 +443,10 @@ const ProductsSold = () => {
                             pageSize
                         })}</div>
                     },
-                    {
-                        header: "Product Id",
-                        view: (row: any) => <div>{row._id}</div>,
-                    },
+                    // {
+                    //     header: "Product Id",
+                    //     view: (row: any) => <div>{row._id}</div>,
+                    // },
                     {
                         header: "Product Name",
                         view: (row: any) => <div>{row.name}</div>,
