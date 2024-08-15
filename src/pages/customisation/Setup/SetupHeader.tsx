@@ -5,13 +5,13 @@ export default function SetupHeader({stage, prev}: any) {
     const arrayOf3: number[] = Array.from({length: 3}, (_, i) => i);
     return (
         <div className="flex flex-col mt-10">
-            <div
+            {stage !== 0 && <div
                 className="flex gap-1 items-center cursor-pointer mb-6"
                 onClick={prev}
             >
                 <MdOutlineKeyboardBackspace size={22}/>
                 <span className="font-satoshiMedium">Back</span>
-            </div>
+            </div>}
             <h4 className="text-[#2B2C34] font-satoshiBold text-[36px] leading-10 tracking-tighter">Customise your
                 Account</h4>
             {stage === 0 &&

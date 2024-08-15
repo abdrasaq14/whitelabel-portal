@@ -157,6 +157,7 @@ function Step3({
     setIsOpen(false);
     return;
   };
+  
   const form = useFormik({
     initialValues: {
       heroText: "",
