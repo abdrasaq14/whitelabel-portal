@@ -64,7 +64,7 @@ function Step3({
   const [uploadError, setUploadError] = useState<string>("");
   const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [dragging, setDragging] = useState<boolean>(false);
   const form = useFormik({
     initialValues: {
       heroText: "",
@@ -161,48 +161,61 @@ function Step3({
       }
     }
   );
-
-  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
-    event
+const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+  event.preventDefault();
+  setDragging(false);
+  if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+    const file = event.dataTransfer.files[0];
+    setIsUploading(true);
+    await validateAndUploadFile(file);
+    event.dataTransfer.clearData();
+  }
+  };
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.currentTarget.files) {
       setIsUploading(true);
       const file = event.currentTarget.files[0];
-      const validFormats = ["image/jpeg", "image/png", "image/jpg"];
-      const minSize = 50 * 1024; // 50 KB
-      const maxSize = 5 * 1024 * 1024; // 5 MB
-
-      if (!validFormats.includes(file.type)) {
-        setUploadError(
-          "Invalid image format. Supported formats: JPEG, PNG, JPG."
-        );
-        setIsUploading(false);
-        return;
-      }
-
-      if (file.size < minSize || file.size > maxSize) {
-        setUploadError("Image size must be between 50 KB and 5 MB.");
-        setIsUploading(false);
-        return;
-      }
-
-      setUploadError("");
-      if (selectedTemplate !== 2) {
-        const bgRemovedImage = await removeBackground(file);
-        if (bgRemovedImage) {
-          // Continue with your image upload logic, using the bgRemovedImage URL
-          handleImageUpload.mutate(bgRemovedImage);
-        } else {
-          setUploadError("Failed to remove background from the image.");
-          setIsUploading(false);
-          return;
-        }
-      } else {
-        handleImageUpload.mutate(file);
-        return;
-      }
-      // handleImageUpload.mutate(file);
+      await validateAndUploadFile(file);
     }
+  };
+  const validateAndUploadFile = async (file: File) => {
+    setIsUploading(true);
+    const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+    const minSize = 50 * 1024; // 50 KB
+    const maxSize = 5 * 1024 * 1024; // 5 MB
+
+    if (!validFormats.includes(file.type)) {
+      setUploadError(
+        "Invalid image format. Supported formats: JPEG, PNG, JPG."
+      );
+      setIsUploading(false);
+      return;
+    }
+
+    if (file.size < minSize || file.size > maxSize) {
+      setUploadError("Image size must be between 50 KB and 5 MB.");
+      setIsUploading(false);
+      return;
+    }
+
+    setUploadError("");
+    if (selectedTemplate !== 2) {
+      const bgRemovedImage = await removeBackground(file);
+      if (bgRemovedImage) {
+        // Continue with your image upload logic, using the bgRemovedImage URL
+        handleImageUpload.mutate(bgRemovedImage);
+      } else {
+        setUploadError("Failed to remove background from the image.");
+        setIsUploading(false);
+        return;
+      }
+    } else {
+      handleImageUpload.mutate(file);
+      return;
+    }
+    // handleImageUpload.mutate(file);
   };
 
   const handleProceed = () => {
@@ -401,7 +414,7 @@ function Step3({
                         style={{
                           justifyContent: form.errors.heroText
                             ? "space-between"
-                            : "end"
+                            : "end",
                         }}
                       >
                         {form.touched && form.errors.heroText && (
@@ -428,7 +441,17 @@ function Step3({
                         </span>
                       </div>
                     ) : (
-                      <div className="flex flex-col cursor-pointer  items-center justify-center rounded-lg gap-2 relative border-[0.8px] border-dashed border-[#384eb74d] h-[15rem] bg-[#f8f8ff]">
+                      <div
+                        className={`flex flex-col cursor-pointer items-center justify-center rounded-lg gap-2 relative border-[0.8px] border-dashed border-[#384eb74d] h-[15rem] bg-[#f8f8ff] ${
+                          dragging ? "bg-[#e6e6fa]" : ""
+                        }`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          setDragging(true);
+                        }}
+                        onDragLeave={() => setDragging(false)}
+                        onDrop={handleDrop}
+                      >
                         <div className="w-80px h-[50px]">
                           <img
                             src={uploadIcon}
@@ -451,7 +474,7 @@ function Step3({
                           onChange={handleFileChange}
                           onBlur={() =>
                             saveDataToLocaStorage({
-                              imageUrl: form.values.heroImage
+                              imageUrl: form.values.heroImage,
                             })
                           }
                         />
