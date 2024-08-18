@@ -548,7 +548,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
           <div className='col-span-1'>
             <TextInput
               name='phoneNumber'
-              placeholder='linda@framcreative.com'
+              placeholder='+2348000000011'
               label="Phone Number"
             />
           </div>

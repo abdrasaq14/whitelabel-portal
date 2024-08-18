@@ -94,8 +94,7 @@ function Step3({
         setUpdatedUserObject(localData)
       }
     }
-    // form.validateForm()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const [characterCount, setCharacterCount] = useState(
     form.values.heroText.length
