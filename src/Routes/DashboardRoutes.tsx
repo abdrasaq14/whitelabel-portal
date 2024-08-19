@@ -108,6 +108,12 @@ export const AdminDashRouter: IModuleRouter = {
       {
         path: "/blog",
       },
+      () => import("../pages/blog/Index")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/create",
+      },
       () => import("../pages/blog/CreateBlog")
     ),
     //Orders & Transaction
