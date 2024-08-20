@@ -227,6 +227,13 @@ input[type=checkbox]{
   background-color: var(--primary-color, #470e81); 
   animation: progressBar 5s linear forwards;
 } 
+.style-image figure{
+  display: flex!important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto!important;
+}
 
 
 

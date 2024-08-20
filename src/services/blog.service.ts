@@ -4,6 +4,7 @@ export interface BlogPayload {
   authorId: string;
   title: string;
   content: string;
+  date?: string;
   image: string;
   comments: {
     userId: string;
@@ -15,9 +16,20 @@ export interface BlogPayload {
   allowComments: boolean;
   allowLikes: boolean;
   status: string;
+  whiteLabelName: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-
+export interface IQueryParams { 
+  whiteLabelName?: string;
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+}
 export const BlogService = {
   create: (payload: BlogPayload) =>
-    createApiClient(false).post(`/blog/create`, payload)
+    createApiClient(false).post(`/blog/create`, payload),
+  fetchAll: (IQueryParams: IQueryParams) =>
+    createApiClient(false).get(`/blog/query`, { params: IQueryParams })
 };

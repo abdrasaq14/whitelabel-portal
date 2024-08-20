@@ -40,7 +40,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
     };
 
     const handleFileUpload = async (file: File) => {
-        console.log("fileSystem", file)
         if (!validateFile(file)) return;
         setIsUploading(true);
         if (onFileChange) {

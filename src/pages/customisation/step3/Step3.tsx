@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
+import { stripHtml } from "../../../utils/Helpfunctions";
 
 interface Step3Props {
   primaryColor: any;
@@ -29,12 +30,7 @@ interface Step3Props {
   data: any;
 }
 
-export const stripHtml = (str: any) => {
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = str;
-  const textContent = tempDiv.textContent || tempDiv.innerText || "";
-  return textContent.trim();
-};
+
 
 // Validation schema
 const validationSchema = Yup.object({

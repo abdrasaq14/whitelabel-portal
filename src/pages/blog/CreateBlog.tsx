@@ -4,18 +4,20 @@ import { IoCalendarOutline } from "react-icons/io5";
 import FileUpload from "../../components/Blog/Inputs";
 import { FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-
+import { useNavigate } from "react-router-dom";
 import BlogDescription from "../../components/Blog/CkEditor/CkEditor";
 import { useMutation } from "react-query";
 import { BlogPayload, BlogService } from "../../services/blog.service";
 import { useAuth } from "../../zustand/auth.store";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { decrypt, encrypt } from "../../utils/Helpfunctions";
 
 const validationSchema = Yup.object({
   title: Yup.string().trim().required("Title is required"),
   date: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
-  image: Yup.string().trim().required("Image is required"),
+  image: Yup.string().url(),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
   allowLikes: Yup.boolean()
@@ -23,6 +25,7 @@ const validationSchema = Yup.object({
 
 const CreateBlogPost = () => {
   const profile: any = useAuth((s) => s.profile);
+  const navigate = useNavigate();
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
@@ -54,6 +57,7 @@ const CreateBlogPost = () => {
       onSuccess: () => {
         form.setSubmitting(false);
         form.resetForm();
+        localStorage.removeItem("_Blog");
         toast.success("Blog post created successfully");
         // show success toast
       },
@@ -65,6 +69,20 @@ const CreateBlogPost = () => {
       }
     }
   );
+
+  const handlePreview = (value: BlogPayload) => {
+    console.log("value", value);
+    localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
+    navigate("/blog/preview");
+    // toast.success("Blog previewed successfully");
+  };
+
+  useEffect(() => {
+    const localBlogDetails = localStorage.getItem("_Blog");
+    if (localBlogDetails) {
+      form.setValues(decrypt(localBlogDetails));
+    }
+  }, []);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
@@ -73,7 +91,7 @@ const CreateBlogPost = () => {
             backText="Blog"
             showBackButton={true}
             currentPath="Create"
-            handleBackAction={() => {}}
+            handleBackAction={() => navigate("/blog")}
           />
           <div className="flex justify-between items-center text-primary-text">
             <div className="flex flex-col gap-2">
@@ -85,17 +103,18 @@ const CreateBlogPost = () => {
             </div>
             <button
               type="button"
-              className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+              onClick={() => handlePreview({ ...form.values })}
+              disabled={
+                form.isSubmitting || !form.values.title || !form.values.content
+              }
+              className="border border-primary font-semibold hover:bg-primary disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
             >
               Preview
             </button>
           </div>
 
           <FormikProvider value={form}>
-            <form
-              onSubmit={form.handleSubmit}
-              className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8"
-            >
+            <form className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8">
               <TextInput
                 {...form.getFieldProps("title")}
                 title="Blog Title"
@@ -129,13 +148,13 @@ const CreateBlogPost = () => {
                   Blog Image
                 </span>
                 <FileUpload
-                disabled={form.isSubmitting}
+                  disabled={form.isSubmitting}
                   // {...form.getFieldProps("image")}
                   extraClass="min-h-[15rem]"
                   name="image"
                   fileType="image"
                 />
-                
+
                 <span className=" font-semibold mt-8 mb-2">
                   Comment & Like Management
                 </span>
@@ -167,12 +186,20 @@ const CreateBlogPost = () => {
               <div className="flex flex-col  col-span-1 md:flex-row md:justify-between gap-2 md:gap-6 text-primary-text mt-4">
                 <button
                   type="button"
+                  onClick={() => {
+                    form.setFieldValue("status", "draft");
+                    form.handleSubmit();
+                  }}
                   className="border border-primary font-semibold rounded-md text-primary min-w-[7.5rem] w-[50%] py-3"
                 >
                   Save as Draft
                 </button>
                 <button
                   type="submit"
+                  onClick={() => {
+                    form.setFieldValue("status", "published");
+                    form.handleSubmit();
+                  }}
                   className="bg-primary font-semibold  text-white rounded-md  min-w-[7.5rem] w-[50%] py-2"
                 >
                   Publish

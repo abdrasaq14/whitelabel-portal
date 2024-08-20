@@ -69,13 +69,10 @@ export const BreadCrumbWithBackButton = ({
     <div className="flex mb-6 items-center">
       <div className="flex cursor-pointer items-center">
         {showBackButton && (
-          <Link to="/dashboard">
+          <span onClick={handleBackAction}>
             <MdOutlineKeyboardBackspace className="font-bold mr-2 text-primary text-[18px]" />
-          </Link>
+          </span>
         )}
-        {/* <ChevronLeftIcon className="w-[16px] font-bold mr-2" /> */}
-        {/* <Link to="/dashboard"> {profile?.whiteLabelName} </Link> */}
-        {/* <span className="text-gray-300">{" / "}</span>{" "} */}
         {backText && (
           <>
             <Link to="/blog" className="mx-1">
