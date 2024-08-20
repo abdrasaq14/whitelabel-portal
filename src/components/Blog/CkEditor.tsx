@@ -4,7 +4,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useField, useFormikContext } from "formik";
 import { MyUploadAdapter } from "./UploadAdapter";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 interface BlogDescriptionProps {
   name: string;
@@ -12,15 +12,16 @@ interface BlogDescriptionProps {
 
 const validateFile = (file: File): boolean => {
   const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+//   const minSize = 50 * 1024; // 50 KB
   const maxSize = 5 * 1024 * 1024; // 5 MB
 
-  if (!validFormats.includes(file.type)) {
-    toast.error("Invalid file format. Supported formats are PNG, JPG");
+    if (!validFormats.includes(file.type)) {
+    toast.error(`Invalid file format. Supported formats are PNG, JPG`);
     return false;
   }
 
   if (file.size > maxSize) {
-    toast.error("File size must not be greater than 5MB");
+    toast.error("File size nit be greater than 5MB");
     return false;
   }
 
@@ -47,26 +48,30 @@ const handleFileUpload = async (file: File): Promise<string> => {
 export default function BlogDescription({ name }: BlogDescriptionProps) {
   const { setFieldValue } = useFormikContext();
   const [field] = useField<string>(name);
-  console.log("field", field);
+console.log("field", field)
   return (
     <CKEditor
       editor={ClassicEditor}
       config={{
-        // extraPlugins: [
-        //   (editor: any) =>
-        //     MyCustomUploadAdapterPlugin(editor, validateFile, handleFileUpload)
-        // ],
         toolbar: [
           "heading",
           "|",
           "bold",
           "italic",
           "|",
+          "alignment:left", 
+          "alignment:center",
+          "alignment:right", 
+          "alignment:justify", 
+          "|",
           "bulletedList",
           "numberedList",
           "|",
           "insertImage"
-        ]
+        ],
+        alignment: {
+          options: ["left", "center", "right", "justify"]
+        }
       }}
       data={field.value}
       onChange={(event: any, editor: any) => {
