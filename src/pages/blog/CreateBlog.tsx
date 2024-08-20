@@ -1,7 +1,7 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
 import { TextInput, Toggle } from "../../components/Blog/Inputs";
 import { IoCalendarOutline } from "react-icons/io5";
-import FileUpload from "../../components/FormInputs/FIleUpload2";
+import FileUpload from "../../components/Blog/Inputs";
 import { FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -10,6 +10,7 @@ import { useMutation } from "react-query";
 import { BlogPayload, BlogService } from "../../services/blog.service";
 import { useAuth } from "../../zustand/auth.store";
 import toast from "react-hot-toast";
+
 const validationSchema = Yup.object({
   title: Yup.string().trim().required("Title is required"),
   date: Yup.date().required("Date is required"),
@@ -24,7 +25,7 @@ const CreateBlogPost = () => {
   const profile: any = useAuth((s) => s.profile);
   const form = useFormik({
     initialValues: {
-      authorId: profile?.id,
+      authorId: profile?._id,
       title: "",
       content: "",
       image: "",
@@ -33,7 +34,8 @@ const CreateBlogPost = () => {
       likes: 0,
       shares: 0,
       allowComments: true,
-      allowLikes: true
+      allowLikes: true,
+      whiteLabelName: profile?.whiteLabelName
     },
     validationSchema,
     onSubmit: (values) => {
@@ -43,7 +45,7 @@ const CreateBlogPost = () => {
     // validateOnChange: true,
     // validateOnBlur: true
   });
-
+  console.log("form.Values", form.values);
   const handleSubmit = useMutation(
     async (values: BlogPayload) => {
       return await BlogService.create(values);
@@ -90,7 +92,10 @@ const CreateBlogPost = () => {
           </div>
 
           <FormikProvider value={form}>
-            <form className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8">
+            <form
+              onSubmit={form.handleSubmit}
+              className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8"
+            >
               <TextInput
                 {...form.getFieldProps("title")}
                 title="Blog Title"
@@ -124,12 +129,13 @@ const CreateBlogPost = () => {
                   Blog Image
                 </span>
                 <FileUpload
+                disabled={form.isSubmitting}
+                  // {...form.getFieldProps("image")}
                   extraClass="min-h-[15rem]"
-                  {...form.getFieldProps("image")}
                   name="image"
                   fileType="image"
-                ></FileUpload>
-
+                />
+                
                 <span className=" font-semibold mt-8 mb-2">
                   Comment & Like Management
                 </span>
