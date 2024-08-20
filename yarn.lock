@@ -4317,7 +4317,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.3.1.tgz"
   integrity sha512-a3KdPAANPbNE4ZUv9h6LckSl9zLsYOP4MBmhIPkRaeyybt+r4UghLvq+xw/YwUcC1gqylCkL4rdVs3Lwupjm4Q==
 
-"ckeditor5@>=42.0.0 || ^0.0.0-nightly", ckeditor5@43.0.0:
+ckeditor5@^43.0.0, "ckeditor5@>=42.0.0 || ^0.0.0-nightly", ckeditor5@43.0.0:
   version "43.0.0"
   resolved "https://registry.npmjs.org/ckeditor5/-/ckeditor5-43.0.0.tgz"
   integrity sha512-7amisPZrSPMuaSDRFVAz/BgplV5OzUpWs6jtFP6MNDh98QK/RLyGvm4vhxjEN5n2MCov/ZURphwYsKwStIX68Q==

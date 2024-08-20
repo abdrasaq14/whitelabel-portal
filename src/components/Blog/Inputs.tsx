@@ -45,3 +45,38 @@ export function TextInput({
     </div>
   );
 }
+
+
+interface ToggleProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
+
+interface ToggleProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
+
+export const Toggle: React.FC<ToggleProps> = ({ name, value, onChange }) => {
+  const handleClick = () => {
+    onChange(!value);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
+        value ? "bg-primary" : "bg-gray-300"
+      }`}
+    >
+      <div
+        className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${
+          value ? "translate-x-6" : "translate-x-0"
+        }`}
+      />
+    </button>
+  );
+};

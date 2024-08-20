@@ -5,12 +5,13 @@ import axios from 'axios';
 interface FileUploadProps {
     name: string;
     wrapperClass?: string;
+    extraClass?: string;
     onFileChange?: (file: File) => void;
     children?: React.ReactNode;
     fileType?: "image" | "document";
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children, fileType, ...restProps }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChange, children, fileType, extraClass, ...restProps }) => {
     const [_, meta, helpers] = useField(name);
     const [fileName, setFileName] = useState("");
     const [uploadError, setUploadError] = useState("");
@@ -96,7 +97,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
     return (
         <div className={`flex flex-col ${wrapperClass}`}>
             <div
-                className={`relative bg-primary bg-opacity-10 h-[165px] mt-1 border border-[#470e812b] rounded py-6 px-3 flex flex-col items-center justify-center ${dragOver ? 'bg-blue-100' : ''}`}
+                className={`relative bg-primary bg-opacity-10 !h-full mt-1 border border-[#470e812b] rounded flex flex-col items-center justify-center ${extraClass} ${dragOver ? 'bg-blue-100' : ''}`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
