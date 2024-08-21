@@ -123,7 +123,7 @@ console.log("form.Values", form.values);
 
   return (
     <div className="px-4 pt-8 h-full">
-      <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+      <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
         <div className="w-full">
           <BreadCrumbWithBackButton
             backText="Blog"
@@ -203,8 +203,8 @@ console.log("form.Values", form.values);
                     Blog Image
                   </span>
                   <FileUpload
-                        disabled={form.isSubmitting}
-                        setIsBlogEditing={setIsBlogEditing}
+                    disabled={form.isSubmitting}
+                    setIsBlogEditing={setIsBlogEditing}
                     // {...form.getFieldProps("image")}
                     extraClass="min-h-[15rem]"
                     name="image"

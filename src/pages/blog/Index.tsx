@@ -31,7 +31,7 @@ const Index = () => {
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
-        <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+        <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
           <div className="w-full">
             <BreadCrumbWithBackButton
               backText=""
