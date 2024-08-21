@@ -19,7 +19,7 @@ export default function BlogCard({
   return (
     <div
       key={index}
-      className="w-[290px] xl:w-[320px] h-[21rem] max-h-[21rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
+      className="w-[290px] xl:w-[340px] h-[21rem] max-h-[21rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
         <Link to={`/blog/view/${blog._id}`} className="font-bold">

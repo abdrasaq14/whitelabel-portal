@@ -24,7 +24,8 @@ const Index = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
+    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName })
+    setPosts(AllPosts);
   }, [fetchAllPosts, profile?.whiteLabelName]);
 
   console.log("dataBlog", AllPosts);

@@ -9,9 +9,9 @@ export const useBlogStore = create(
   persist(
     combine(
       {
-        posts: [] as BlogPayload[], // Array to hold posts
-        loading: false, // Loading state
-        error: null as string | null // Error state
+        posts: [] as BlogPayload[], 
+        loading: false, 
+        error: null as string | null
       },
       (set) => ({
         // Add a new post
@@ -70,7 +70,20 @@ export const useBlogStore = create(
           id: string,
           updatedPayload: Partial<BlogPayload>
         ) => {
-          // Update logic goes here
+          try {
+            set({ loading: true, error: null });
+            // const response = await BlogService.updateBlog(id, updatedPayload);
+            set((state) => ({
+              posts: state.posts.map((post) =>
+                post._id === id ? { ...post, ...updatedPayload } : post
+              ),
+              loading: false
+            }));
+            
+          } catch (error:any) {
+            set({ loading: false, error: error.message });
+            
+          }
         },
         // Placeholder for deleting a post
         deletePost: async (id: string) => {

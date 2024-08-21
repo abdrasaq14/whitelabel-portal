@@ -1,6 +1,4 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
-import { noContentImage } from "../../assets/blog";
-
 import { GoDotFill } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { BlogPayload } from "../../services/blog.service";

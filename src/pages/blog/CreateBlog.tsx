@@ -4,18 +4,19 @@ import { IoCalendarOutline } from "react-icons/io5";
 import FileUpload from "../../components/Blog/Inputs";
 import { FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BlogDescription from "../../components/Blog/CkEditor/CkEditor";
 import { useMutation } from "react-query";
 import { BlogPayload, BlogService } from "../../services/blog.service";
 import { useAuth } from "../../zustand/auth.store";
 import toast from "react-hot-toast";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { decrypt, encrypt } from "../../utils/Helpfunctions";
 import { useBlogStore } from "../../zustand/blog.tore";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
+import { Button } from "../../components/Button/Button";
 
 const validationSchema = Yup.object({
   title: Yup.string().trim().required("Title is required"),
@@ -24,12 +25,13 @@ const validationSchema = Yup.object({
   image: Yup.string().url(),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean()
+  allowLikes: Yup.boolean(),
 });
 
 const CreateBlogPost = () => {
   const profile: any = useAuth((s) => s.profile);
   const addPost = useBlogStore((state) => state.addPost);
+  const updatePost = useBlogStore((state) => state.updatePost);
   const { id }: any = useParams();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -47,27 +49,35 @@ const CreateBlogPost = () => {
       shares: 0,
       allowComments: true,
       allowLikes: true,
-      whiteLabelName: profile?.whiteLabelName
+      whiteLabelName: profile?.whiteLabelName,
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
-    }
+    },
     // validateOnMount: false,
     // validateOnChange: true,
     // validateOnBlur: true
   });
   const handleSubmit = useMutation(
     async (values: BlogPayload) => {
+      if (id) {
+        return await BlogService.updateBlog(id, values);
+      }
       return await BlogService.create(values);
     },
     {
       onSuccess: (response) => {
         form.setSubmitting(false);
         form.resetForm();
-        addPost(response.data?.result?.results);
+        if (id) {
+          updatePost(id, response.data?.result);
+        }
+        else {
+          addPost(response.data?.result?.results);
+        }
         localStorage.removeItem("_Blog");
-        toast.success("Blog post created successfully");
+        toast.success(id ? "Blog post updated" : "Blog post created");
         // show success toast
       },
       onError: (error) => {
@@ -75,10 +85,10 @@ const CreateBlogPost = () => {
         toast.error("Failed to create blog post");
         console.log("erro", error);
         // show error toast
-      }
+      },
     }
   );
-console.log("form.Values", form.values);
+  console.log("form.Values", form.values);
   const handlePreview = (value: BlogPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigate("/blog/preview");
@@ -86,39 +96,54 @@ console.log("form.Values", form.values);
   };
 
   useEffect(() => {
+    if (id) {
+      const localBlogDetails = localStorage.getItem("_Blog");
+      if (localBlogDetails) {
+        const blogDetails: BlogPayload = decrypt(localBlogDetails);
+        if (blogDetails._id === id) {
+          form.setValues(decrypt(localBlogDetails));
+          setTimeout(() => {
+            // toast.success("Pick up from where you left off");
+            setIsLoading(false);
+          }, 1500);
+          return;
+        }
+      }
+
+      BlogService.viewBlog(id)
+        .then((res) => {
+          try {
+            if (res.data.result) {
+              setError("");
+              const blogDetails = res.data.result;
+              blogDetails.createdAt = new Date(blogDetails.createdAt)
+                .toISOString()
+                .split("T")[0]; // Format the date to YYYY-MM-DD
+              form.setValues(blogDetails);
+              setTimeout(() => setIsLoading(false), 1500);
+              return;
+            }
+            setError("Post Detail not found");
+            return;
+          } catch (error) {
+            setIsLoading(false);
+            setError("Failed to fetch blog post");
+          }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setError("Failed to fetch blog post");
+        });
+      return;
+    }
     const localBlogDetails = localStorage.getItem("_Blog");
     if (localBlogDetails) {
-      setIsLoading(false);
       form.setValues(decrypt(localBlogDetails));
-      return
+      setTimeout(() => setIsLoading(false), 900);
+      // setIsLoading(false);
+      return;
     }
-    if (id) {
-      BlogService.viewBlog(id).then((res) => {
-        try {
-          setIsLoading(false);
-          if (res.data.result) {
-            setError("");
-            const blogDetails = res.data.result;
-            blogDetails.createdAt = new Date(blogDetails.createdAt)
-              .toISOString()
-              .split("T")[0]; // Format the date to YYYY-MM-DD
-            form.setValues(blogDetails);
-
-            return;
-          }
-          setError("Post Detail not found");
-          return
-        } catch (error) {
-          setIsLoading(false);
-          setError("Failed to fetch blog post");
-        }
-      })
-        .catch((error) => { 
-          setIsLoading(false);
-          setError("Failed to fetch blog post");
-        })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
@@ -259,26 +284,34 @@ console.log("form.Values", form.values);
 
                 {/* save as draft and publish */}
                 <div className="flex flex-col  col-span-1 md:flex-row md:justify-between gap-2 md:gap-6 text-primary-text mt-4">
-                  <button
-                    type="button"
+                  <Button
+                    isLoading={form.isSubmitting && form.values.status === "draft"}
+                    disabled={
+                      form.isSubmitting ||
+                      !form.values.title ||
+                      !form.values.content
+                    }
+                    label="Save as Draft"
                     onClick={() => {
                       form.setFieldValue("status", "draft");
                       form.handleSubmit();
                     }}
-                    className="border border-primary font-semibold rounded-md text-primary min-w-[7.5rem] w-[50%] py-3"
-                  >
-                    Save as Draft
-                  </button>
-                  <button
-                    type="submit"
+                    className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
+                  />
+                  <Button
+                    isLoading={form.isSubmitting && form.values.status === "published"}
+                    disabled={
+                      form.isSubmitting ||
+                      !form.values.title ||
+                      !form.values.content
+                    }
+                    label="Publish"
                     onClick={() => {
                       form.setFieldValue("status", "published");
                       form.handleSubmit();
                     }}
                     className="bg-primary font-semibold  text-white rounded-md  min-w-[7.5rem] w-[50%] py-2"
-                  >
-                    Publish
-                  </button>
+                  />
                 </div>
               </form>
             </FormikProvider>

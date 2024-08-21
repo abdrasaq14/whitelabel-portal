@@ -36,4 +36,6 @@ export const BlogService = {
     createApiClient(false).get(`/blog/query`, { params: IQueryParams }),
   viewBlog: (id: string) =>
     createApiClient(false).get(`/blog/view/${id}`),
+  updateBlog: (id: string, payload: BlogPayload) =>
+    createApiClient(false).put(`/blog/update/${id}`, payload),
 };
