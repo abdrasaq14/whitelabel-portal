@@ -12,6 +12,7 @@ import { useAuth } from "../../zustand/auth.store";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { decrypt, encrypt } from "../../utils/Helpfunctions";
+import { useBlogStore } from "../../zustand/blog.tore";
 
 const validationSchema = Yup.object({
   title: Yup.string().trim().required("Title is required"),
@@ -25,6 +26,7 @@ const validationSchema = Yup.object({
 
 const CreateBlogPost = () => {
   const profile: any = useAuth((s) => s.profile);
+  const addPost = useBlogStore((state) => state.addPost);
   const navigate = useNavigate();
   const form = useFormik({
     initialValues: {
@@ -53,9 +55,10 @@ const CreateBlogPost = () => {
       return await BlogService.create(values);
     },
     {
-      onSuccess: () => {
+      onSuccess: (response) => {
         form.setSubmitting(false);
         form.resetForm();
+        addPost(response.data?.result?.results);
         localStorage.removeItem("_Blog");
         toast.success("Blog post created successfully");
         // show success toast

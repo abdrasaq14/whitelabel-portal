@@ -24,8 +24,17 @@ export function TextInput({
   icon,
   ...restProps
 }: TextInputProps) {
-  const [field, meta] = useField(name);
+  const [field, meta, helpers] = useField(name);
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  let value = e.target.value;
 
+  if (type === "date") {
+    const dateValue = new Date(value).toISOString(); // Convert to ISO 8601 format
+    helpers.setValue(dateValue);
+  } else {
+    helpers.setValue(value);
+  }
+};
   return (
     <div className={`flex flex-col gap-2 col-span-1 ${wrapperClass}`}>
       {" "}
@@ -37,6 +46,7 @@ export function TextInput({
           {...restProps}
           type={type}
           disabled={disabled}
+          onChange={handleChange}
           placeholder={placeholder}
           className={`outline:none focus:outline-none border-none placeholder:text-[12px] w-full text-primary-text ${inputClass}`}
         />

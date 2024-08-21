@@ -1,38 +1,33 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
 import { noContentImage } from "../../assets/blog";
 import { Link, useNavigate } from "react-router-dom";
-import useFetchWithParams from "../../hooks/useFetchWithParams";
 import { useAuth } from "../../zustand/auth.store";
-import { BlogPayload, BlogService } from "../../services/blog.service";
+import { BlogPayload } from "../../services/blog.service";
 import BlogCard from "../../components/Blog/BlogCard";
-import { Suspense, useState } from "react";
-import { AppFallback } from "../../Routes/Layout";
+import { Suspense, useEffect, useState } from "react";
+import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
+import { useBlogStore } from "../../zustand/blog.tore";
 
 const Index = () => {
   const profile: any = useAuth((s) => s.profile);
+  const fetchAllPosts = useBlogStore((state) => state.fetchAllPosts);
+  const fetchDrafts = useBlogStore((state) => state.fetchDrafts);
+  const fetchPublished = useBlogStore((state) => state.fetchPublished);
+  const AllPosts = useBlogStore((state) => state.posts);
+  const [posts, setPosts] = useState<BlogPayload[]>(AllPosts);
+  const totalPosts = useBlogStore((state) => state.countPosts());
+  const totalDrafts = useBlogStore((state) => state.countDrafts());
+  const totalPublished = useBlogStore((state) => state.countPublished());
+  const loading = useBlogStore((state) => state.loading);
+  const error = useBlogStore((state) => state.error);
+  const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-  const [status, setStatus] = useState<string | null>(null);
- const handleStatusChange = (newStatus: string | null) => {
-    setStatus(newStatus);
-    refetch();
-  };
-  const { data, isLoading, isFetching, refetch } = useFetchWithParams(
-    [
-      "query-all-blog",
-      { page: 1, limit: 1000, whiteLabelName: profile.whiteLabelName, status },
-    ],
-    BlogService.fetchAll,
-    {
-      onSuccess: () => {
-        // console.log(data.data);
-      },
-      keepPreviousData: false,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-    }
-  );
+  
+  useEffect(() => {
+    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
+  }, [fetchAllPosts, profile?.whiteLabelName]);
 
-  console.log("dataBlog", data);
+  console.log("dataBlog", AllPosts);
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
@@ -62,50 +57,80 @@ const Index = () => {
                 Post Blog
               </Link>
             </div>
-            <div className="flex justify-start my-5 gap-4">
-              <button
-                // onClick={() => refetch()}
-                className="flex gap-2 items-center border border-primary font-semibold bg-primary bg-opacity-15 text-sm rounded-md text-primary-text p-2"
-              >
-                All Blog
-                <span className="flex bg-primary py-1 px-3 text-white rounded-xl text-xs">
-                  {data?.result?.totalResults}
-                </span>
-              </button>
-              <button
-                onClick={() => handleStatusChange("draft")}
-                className={`flex gap-2 items-center border font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                  status === "draft"
-                    ? "bg-primary border-primary text-white"
-                    : "bg-inherit border-transparent text-primary-text hover:bg-primary hover:text-white hover:border-primary"
-                }`}
-              >
-                Draft
-                <span className="flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs">
-                  {/* {data?.totalResults} */}2456
-                </span>
-              </button>
-              <button
-                onClick={() => handleStatusChange("published")}
-                className={`flex gap-2 items-center border font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                  status === "published"
-                    ? "bg-primary border-primary text-white"
-                    : "bg-inherit border-transparent text-primary-text hover:bg-primary hover:text-white hover:border-primary"
-                }`}
-              >
-                Published
-                <span className="flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs">
-                  {/* {data?.totalResults} */}2456
-                </span>
-              </button>
-            </div>
-            {!isLoading && !isFetching && data?.result?.results?.length > 0 ? (
-              data.result.results.map((blog: BlogPayload, index: number) => (
-                <BlogCard index={index} blog={blog} />
-              ))
-            ) : !isLoading &&
-              !isFetching &&
-              data?.result?.results?.length === 0 ? (
+
+            {!loading && posts && posts?.length > 0 ? (
+              <>
+                <div className="flex justify-start my-5 gap-4">
+                  <button
+                    onClick={() => {
+                      setActiveTab("all");
+                      setPosts(AllPosts);
+                    }}
+                    className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
+                      activeTab === "all"
+                        ? "border border-primary bg-primary bg-opacity-15"
+                        : ""
+                    }`}
+                  >
+                    All Blog
+                    <span
+                      className={`flex  py-1 px-3  rounded-xl text-xs ${
+                        activeTab === "all"
+                          ? "bg-primary text-white"
+                          : "bg-[#EEEFF0] text-[#464749] "
+                      }`}
+                    >
+                      {totalPosts}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("draft");
+                      setPosts(fetchDrafts());
+                    }}
+                    className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                      activeTab === "draft"
+                        ? "border border-primary bg-primary bg-opacity-15"
+                        : ""
+                    }`}
+                  >
+                    Draft
+                    <span
+                      className={`flex bg-[#EEEFF0] text-[#464749] py-1 px-3  rounded-xl text-xs ${
+                        activeTab === "draft" ? "bg-primary text-white" : ""
+                      }`}
+                    >
+                      {totalDrafts}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("published");
+                      setPosts(fetchPublished());
+                    }}
+                    className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                      activeTab === "published"
+                        ? "border border-primary bg-primary bg-opacity-15"
+                        : ""
+                    }`}
+                  >
+                    Published
+                    <span
+                      className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+                        activeTab === "published" ? "bg-primary text-white" : ""
+                      }`}
+                    >
+                      {totalPublished}
+                    </span>
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
+                  {posts.map((blog: BlogPayload, index: number) => (
+                    <BlogCard index={index} blog={blog} />
+                  ))}
+                </div>
+              </>
+            ) : !loading && posts && posts?.length === 0 ? (
               <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
                 <img
                   src={noContentImage}
@@ -113,10 +138,16 @@ const Index = () => {
                   className="object-contain max-h-[300px]"
                 />
                 <span className="text-primary-text text-lg font-semibold mx-auto text-center w-[80%]">
-                  No Blog Content has been added yet.
+                  {activeTab === "all"
+                    ? "No blog post available"
+                    : activeTab === "draft"
+                    ? "No draft post yet"
+                    : "No published post available"}
                 </span>
               </div>
-            ) : null}
+            ) : (
+              <AppFallback />
+            )}
           </div>
         </div>
       </div>
