@@ -1,7 +1,6 @@
 import { AES, enc } from "crypto-js";
 import { Config } from "./config";
-import parse from "html-react-parser";
-import { htmlToText } from "html-to-text";
+
 
 export const decodeHtml = (html: any) => {
     const txt = document.createElement("textarea");
