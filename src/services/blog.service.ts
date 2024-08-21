@@ -5,7 +5,7 @@ export interface BlogPayload {
   authorId: string;
   title: string;
   content: string;
-  date?: string;
+  // date?: string;
   image: string;
   comments: {
     userId: string;

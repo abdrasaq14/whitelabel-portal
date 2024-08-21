@@ -27,7 +27,7 @@ const Preview = () => {
             backText="Blog"
             showBackButton={true}
             currentPath="Preview"
-            handleBackAction={() => {navigate("/blog/create")}}
+            handleBackAction={() => {navigate(-1)}}
           />
 
           <div className="flex justify-between items-center text-primary-text">
@@ -37,7 +37,7 @@ const Preview = () => {
               </h2>
               <div className="flex gap-4 text-primary-text text-sm">
                 <span className="flex items-center gap-1">
-                  {formatDate(blogDetails?.date as string)}
+                  {formatDate(blogDetails?.createdAt as string)}
                   <GoDotFill />3 mins read
                 </span>
               </div>

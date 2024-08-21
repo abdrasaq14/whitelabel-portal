@@ -1,5 +1,5 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
-import { noContentImage } from "../../assets/blog";
+import { noContentImage, postNotAvailableImage } from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
@@ -34,7 +34,7 @@ const ViewBlogDetail = () => {
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
-        <div className="bg-white rounded-md h-auto min-h-[80%] w-full p-8 flex flex-col">
+        <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
           <div className="w-full">
             <BreadCrumbWithBackButton
               backText="Blog"
@@ -47,7 +47,7 @@ const ViewBlogDetail = () => {
 
             {isLoading ? (
               <AppFallback />
-            ) : (
+            ) : blogDetails?.title.trim() ? (
               <>
                 <div className="flex justify-between items-center text-primary-text">
                   <div className="flex flex-col gap-2">
@@ -55,7 +55,7 @@ const ViewBlogDetail = () => {
                       {blogDetails?.title}
                     </h2>
                     <div className="flex gap-4 text-primary-text">
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-1">
                         <TiHeartFullOutline
                           size={20}
                           className="text-[#D42620]"
@@ -65,7 +65,7 @@ const ViewBlogDetail = () => {
                           ? "Likes"
                           : "Like"}
                       </span>
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-1">
                         <BsChatSquareText size={20} />
                         {blogDetails?.comments.length}{" "}
                         {blogDetails && blogDetails?.comments.length > 1
@@ -121,7 +121,7 @@ const ViewBlogDetail = () => {
                             All Comments
                             <span
                               className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                                activeTab === "published"
+                                activeTab === "all"
                                   ? "bg-primary text-white"
                                   : ""
                               }`}
@@ -129,7 +129,7 @@ const ViewBlogDetail = () => {
                               {blogDetails?.comments.length}
                             </span>
                           </button>
-                          <button
+                          {/* <button
                             onClick={() => {}}
                             className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                               activeTab === "all"
@@ -145,7 +145,7 @@ const ViewBlogDetail = () => {
                                   : ""
                               }`}
                             ></span>
-                          </button>
+                          </button> */}
                         </div>
                         <Link
                           to={`/blog/${id}/comments`}
@@ -163,6 +163,20 @@ const ViewBlogDetail = () => {
                   )}
                 </div>
               </>
+              ) : (
+                <div className="w-full flex  flex-col items-center justify-center mt-8">
+                  <img
+                    src={postNotAvailableImage}
+                    alt=""
+                    className="object-cover  max-h-[450px] mb-6"
+                  />
+                  <p className="text-primary-text font-black text-xl text-center">
+                    Oopss!!!
+                  </p>
+                  <p className="text-primary-text text-center">
+                    Post deleted from Blog page
+                  </p>
+                </div>
             )}
           </div>
         </div>

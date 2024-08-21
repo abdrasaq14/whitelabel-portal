@@ -6,8 +6,16 @@ import { TiHeartFullOutline } from "react-icons/ti";
 import { truncateText } from "../../utils/Helpfunctions";
 import { stripHtml } from "../../utils/Helpfunctions";
 import { Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+export default function BlogCard({
+  blog,
+  index
+}: {
+  blog: BlogPayload;
+  index: number;
+}) {
+  // const navigate  = useNavigate();
 
-export default function BlogCard ({  blog, index }:{ blog: BlogPayload, index: number }) {
   return (
     <div
       key={index}
@@ -15,10 +23,12 @@ export default function BlogCard ({  blog, index }:{ blog: BlogPayload, index: n
     >
       <div className="flex justify-between">
         <Link to={`/blog/view/${blog._id}`} className="font-bold">
-          Real Estate the New Oil
+          {blog?.title}
         </Link>
         <span className="flex gap-2">
-          <FiEdit size={20} color="#8f9092" className="cursor-pointer" />
+          <Link to={`/blog/edit/${blog._id}`}>
+            <FiEdit size={20} color="#8f9092" className="cursor-pointer" />
+          </Link>
           <GoTrash size={20} color="#D42620" className="cursor-pointer" />
         </span>
       </div>
@@ -32,7 +42,10 @@ export default function BlogCard ({  blog, index }:{ blog: BlogPayload, index: n
           className="object-cover w-full max-h-[6rem]"
         />
       </Link>
-      <Link to={`/blog/view/${blog._id}`} className="w-full h-[12rem] max-h-[12rem] flex-1">
+      <Link
+        to={`/blog/view/${blog._id}`}
+        className="w-full h-[12rem] max-h-[12rem] flex-1"
+      >
         <p className="text-justify">{truncateText(stripHtml(blog?.content))}</p>
       </Link>
       <div className="flex items-center gap-4">
@@ -48,4 +61,4 @@ export default function BlogCard ({  blog, index }:{ blog: BlogPayload, index: n
       </div>
     </div>
   );
-};
+}

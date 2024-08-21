@@ -24,17 +24,8 @@ export function TextInput({
   icon,
   ...restProps
 }: TextInputProps) {
-  const [field, meta, helpers] = useField(name);
-const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  let value = e.target.value;
+  const [field, meta] = useField(name);
 
-  if (type === "date") {
-    const dateValue = new Date(value).toISOString(); // Convert to ISO 8601 format
-    helpers.setValue(dateValue);
-  } else {
-    helpers.setValue(value);
-  }
-};
   return (
     <div className={`flex flex-col gap-2 col-span-1 ${wrapperClass}`}>
       {" "}
@@ -46,7 +37,6 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           {...restProps}
           type={type}
           disabled={disabled}
-          onChange={handleChange}
           placeholder={placeholder}
           className={`outline:none focus:outline-none border-none placeholder:text-[12px] w-full text-primary-text ${inputClass}`}
         />
@@ -94,6 +84,7 @@ interface FileUploadProps {
   onFileChange?: (file: File) => void;
   children?: React.ReactNode;
   fileType?: "image" | "document";
+  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
@@ -104,6 +95,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   fileType,
   disabled,
   extraClass,
+  setIsBlogEditing,
   ...restProps
 }) => {
   const [_, meta, helpers] = useField(name);
@@ -149,6 +141,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (onFileChange) {
       onFileChange(file);
     }
+    setIsBlogEditing && setIsBlogEditing(false);
     setFileName(file?.name || "");
 
     const formData = new FormData();
