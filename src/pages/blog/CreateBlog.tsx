@@ -48,7 +48,6 @@ const CreateBlogPost = () => {
     // validateOnChange: true,
     // validateOnBlur: true
   });
-  console.log("form.Values", form.values);
   const handleSubmit = useMutation(
     async (values: BlogPayload) => {
       return await BlogService.create(values);
