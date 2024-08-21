@@ -84,6 +84,7 @@ interface FileUploadProps {
   onFileChange?: (file: File) => void;
   children?: React.ReactNode;
   fileType?: "image" | "document";
+  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
@@ -94,6 +95,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   fileType,
   disabled,
   extraClass,
+  setIsBlogEditing,
   ...restProps
 }) => {
   const [_, meta, helpers] = useField(name);
@@ -139,6 +141,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (onFileChange) {
       onFileChange(file);
     }
+    setIsBlogEditing && setIsBlogEditing(false);
     setFileName(file?.name || "");
 
     const formData = new FormData();

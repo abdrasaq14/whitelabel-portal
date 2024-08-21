@@ -21,13 +21,15 @@ const Preview = () => {
   console.log("blogDetails", blogDetails);
   return (
     <div className="px-4 pt-8 h-full">
-      <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+      <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
         <div className="w-full">
           <BreadCrumbWithBackButton
             backText="Blog"
             showBackButton={true}
             currentPath="Preview"
-            handleBackAction={() => {navigate("/blog/create")}}
+            handleBackAction={() => {
+              navigate(-1);
+            }}
           />
 
           <div className="flex justify-between items-center text-primary-text">
@@ -37,7 +39,7 @@ const Preview = () => {
               </h2>
               <div className="flex gap-4 text-primary-text text-sm">
                 <span className="flex items-center gap-1">
-                  {formatDate(blogDetails?.date as string)}
+                  {formatDate(blogDetails?.createdAt as string)}
                   <GoDotFill />3 mins read
                 </span>
               </div>
@@ -50,13 +52,15 @@ const Preview = () => {
             </button>
           </div>
           <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
-            <div className="w-full">
-              <img
-                src={blogDetails?.image || noContentImage}
-                alt=""
-                className="object-cover w-full max-h-[300px]"
-              />
-            </div>
+            {blogDetails?.image && (
+              <div className="w-full">
+                <img
+                  src={blogDetails?.image}
+                  alt=""
+                  className="object-cover w-full max-h-[300px]"
+                />
+              </div>
+            )}
             <div className="">
               <p
                 className="text-primary-text style-image"
