@@ -38,4 +38,6 @@ export const BlogService = {
     createApiClient(false).get(`/blog/view/${id}`),
   updateBlog: (id: string, payload: BlogPayload) =>
     createApiClient(false).put(`/blog/update/${id}`, payload),
+  deleteBlog: (id: string) =>
+    createApiClient(false).delete(`/blog/delete/${id}`),
 };

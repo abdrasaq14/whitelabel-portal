@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
 import { BlogService, BlogPayload, IQueryParams } from "../services/blog.service";
+import toast from "react-hot-toast";
 
 
 
@@ -33,18 +34,30 @@ export const useBlogStore = create(
             set({ loading: true, error: null });
             const response = await BlogService.fetchAll(params);
             set({ posts: response.data?.result?.results, loading: false });
-          } catch (error:any) {
-            set({ loading: false, error: error.message });
+            return
+          } catch (error: any) {
+            set({ loading: false, error: "An error occured while fetching Post" });
+            console.log("FetchError", error);
+          toast.error("An error occurred while fetching blog posts");
           }
         },
         // Fetch drafts
         fetchDrafts: () => {
+          set({ loading: true, error: null });
+          setTimeout(() => { 
+            set({ loading: false, error: null });
+          },1000)
           return useBlogStore
             .getState()
             .posts.filter((post) => post.status === "draft");
         },
         // Fetch published posts
         fetchPublished: () => {
+          set({ loading: true, error: null });
+          setTimeout(() => {
+            set({ loading: false, error: null });
+          }, 1000);
+          
           return useBlogStore
             .getState()
             .posts.filter((post) => post.status === "published");
@@ -87,7 +100,21 @@ export const useBlogStore = create(
         },
         // Placeholder for deleting a post
         deletePost: async (id: string) => {
-          // Delete logic goes here
+          try {
+            set({ loading: true, error: null });
+            // const response = await BlogService.deleteBlog(id);
+            set((state) => ({
+              posts: state.posts.splice(
+                state.posts.findIndex((post) => post._id === id),
+                1
+              ),
+              loading: false,
+            }));
+          } catch (error: any) {
+            console.log("DeleteErrorrr", error);
+            toast.error("An error occurred while deleting blog post");
+            set({ loading: false, error: error.message });
+          }
         }
       })
     ),

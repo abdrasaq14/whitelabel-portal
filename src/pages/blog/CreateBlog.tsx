@@ -17,11 +17,15 @@ import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
 import { Button } from "../../components/Button/Button";
-  export interface HandlePreviewPayload extends BlogPayload {
-    isFromEdit: boolean;
-  }
+export interface HandlePreviewPayload extends BlogPayload {
+  isFromEdit: boolean;
+}
 const validationSchema = Yup.object({
-  title: Yup.string().trim().required("Title is required"),
+  title: Yup.string()
+    .trim()
+    .required("Title is required")
+    .min(2, "Title is too short")
+    .max(100, "Title is too long"),
   createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
   image: Yup.string().url(),
@@ -51,6 +55,7 @@ const CreateBlogPost = () => {
       shares: 0,
       allowComments: true,
       allowLikes: true,
+      createdAt: "",
       whiteLabelName: profile?.whiteLabelName,
     },
     validationSchema,
@@ -73,9 +78,8 @@ const CreateBlogPost = () => {
         form.setSubmitting(false);
         if (id) {
           updatePost(id, response.data?.result);
-        }
-        else {
-          addPost(response.data?.result?.results);
+        } else {
+          addPost(response.data?.result);
         }
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
@@ -91,7 +95,7 @@ const CreateBlogPost = () => {
       },
     }
   );
-  console.log("form.Values", form.values);
+  // console.log("form.Values", form.values);
 
   const handlePreview = (value: HandlePreviewPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
@@ -202,6 +206,7 @@ const CreateBlogPost = () => {
             <FormikProvider value={form}>
               <form className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8">
                 <TextInput
+                  maxLength={100}
                   {...form.getFieldProps("title")}
                   title="Blog Title"
                   type="text"
@@ -291,13 +296,15 @@ const CreateBlogPost = () => {
                 {/* save as draft and publish */}
                 <div className="flex flex-col  col-span-1 sm:flex-row sm:justify-between gap-2 sm:gap-6 text-primary-text mt-4">
                   <Button
+                    type="button"
                     isLoading={
                       form.isSubmitting && form.values.status === "draft"
                     }
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content
+                      !form.values.content ||
+                      !form.values.createdAt
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "draft"
@@ -311,13 +318,15 @@ const CreateBlogPost = () => {
                     className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
                   />
                   <Button
+                    type="button"
                     isLoading={
                       form.isSubmitting && form.values.status === "published"
                     }
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content
+                      !form.values.content ||
+                      !form.values.createdAt
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "published"

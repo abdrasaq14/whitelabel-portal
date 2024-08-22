@@ -1,12 +1,16 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
-import { noContentImage } from "../../assets/blog";
+import { depressedEmoji, noContentImage } from "../../assets/blog";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../zustand/auth.store";
-import { BlogPayload } from "../../services/blog.service";
-import BlogCard from "../../components/Blog/BlogCard";
+import { BlogPayload, BlogService } from "../../services/blog.service";
+import PostCard from "../../components/Blog/PostCard";
 import { Suspense, useEffect, useState } from "react";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { useBlogStore } from "../../zustand/blog.tore";
+import Modal from "../../components/Modal/Modal";
+import { useMutation } from "react-query";
+import toast from "react-hot-toast";
+import { Button } from "../../components/Button/Button";
 
 const Index = () => {
   const profile: any = useAuth((s) => s.profile);
@@ -15,20 +19,55 @@ const Index = () => {
   const fetchPublished = useBlogStore((state) => state.fetchPublished);
   const AllPosts = useBlogStore((state) => state.posts);
   const [posts, setPosts] = useState<BlogPayload[]>(AllPosts);
-  const totalPosts = useBlogStore((state) => state.countPosts());
-  const totalDrafts = useBlogStore((state) => state.countDrafts());
-  const totalPublished = useBlogStore((state) => state.countPublished());
-  const loading = useBlogStore((state) => state.loading);
   const error = useBlogStore((state) => state.error);
+  // const totalPosts = useBlogStore((state) => state.countPosts());
+  // const totalDrafts = useBlogStore((state) => state.countDrafts());
+  // const totalPublished = useBlogStore((state) => state.countPublished());
+  const deletePost = useBlogStore((state) => state.deletePost);
+  const loading = useBlogStore((state) => state.loading);
+  const [openModal, setOpenModal] = useState(false);
+  const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-
+console.log("loadingIndex", loading, AllPosts, posts);
   useEffect(() => {
     fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
     setPosts(AllPosts);
-  }, [fetchAllPosts, profile?.whiteLabelName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ profile?.whiteLabelName]);
+  const handleDelete = (id: string) => {
+    setOpenModal(true);
+    setIdToDelete(id);
+  };
+  const handleClickOutside = () => {
+    setOpenModal(false);
+    setIdToDelete("");
+  };
+  const handleDeleteApi = useMutation(
+    async (id: string) => {
+      return await BlogService.deleteBlog(id);
+    },
+    {
+      onSuccess: (response) => {
+        // eslint-disable-next-line eqeqeq
+        if (response.data?.status == "Success") {
+          deletePost(idToDelete);
+          console.log("DeleteErrorrrAll", AllPosts);
+          setPosts(AllPosts);
+          // fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
+          setOpenModal(false);
+          setIdToDelete("");
+          toast.success("Blog post deleted successfully");
+        }
+      },
+      onError: (error) => {
+        toast.error("An error occurred while deleting blog post");
+        setOpenModal(false);
+      },
+    }
+  );
 
-  console.log("dataBlog", AllPosts);
+  console.log("idToDelete", idToDelete);
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
@@ -79,7 +118,7 @@ const Index = () => {
                       : "bg-[#EEEFF0] text-[#464749] "
                   }`}
                 >
-                  {totalPosts}
+                  {AllPosts.length}
                 </span>
               </button>
               <button
@@ -99,7 +138,7 @@ const Index = () => {
                     activeTab === "draft" ? "bg-primary text-white" : ""
                   }`}
                 >
-                  {totalDrafts}
+                  {fetchDrafts().length}
                 </span>
               </button>
               <button
@@ -119,14 +158,18 @@ const Index = () => {
                     activeTab === "published" ? "bg-primary text-white" : ""
                   }`}
                 >
-                  {totalPublished}
+                  {fetchPublished().length}
                 </span>
               </button>
             </div>
             {!loading && posts && posts?.length > 0 ? (
               <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
                 {posts.map((blog: BlogPayload, index: number) => (
-                  <BlogCard index={index} blog={blog} />
+                  <PostCard
+                    index={index}
+                    blog={blog}
+                    handleDelete={() => handleDelete(blog?._id as string)}
+                  />
                 ))}
               </div>
             ) : !loading && posts && posts?.length === 0 ? (
@@ -144,12 +187,61 @@ const Index = () => {
                     : "No published post available"}
                 </span>
               </div>
+            ) : !loading ? (
+              <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
+                <img
+                  src={noContentImage}
+                  alt=""
+                  className="object-contain max-h-[300px]"
+                />
+                <span className="text-primary-text text-lg font-semibold mx-auto text-center w-[80%]">
+                  {error}
+                </span>
+              </div>
             ) : (
               <AppFallback />
             )}
           </div>
         </div>
       </div>
+      <Modal open={openModal} onClick={() => handleClickOutside()}>
+        <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
+          <div className="flex-1 h-[65%] flex items-center justify-center ">
+            <img
+              src={depressedEmoji}
+              alt=""
+              className="max-h-[15rem] w-full h-full object-cover"
+            />
+          </div>
+          <p className="text-primary-text font-black text-xl text-center my-2">
+            Oopss!!!
+          </p>
+          <span className="text-primary-text w-[80%] text-center mx-auto">
+            Are you sure you want to delete this post from your blog?
+          </span>
+
+          <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
+            <Button
+              label={`${
+                handleDeleteApi.isLoading ? "Deleting..." : "Yes Proceed"
+              }`}
+              disabled={handleDeleteApi.isLoading}
+              isLoading={handleDeleteApi.isLoading}
+              onClick={() => {
+                handleDeleteApi.mutate(idToDelete);
+              }}
+              className="border w-[50%] border-primary bg-[white] font-semibold rounded-md !text-primary p-2"
+            />
+
+            <Button
+              label="No"
+              disabled={handleDeleteApi.isLoading}
+              onClick={() => handleClickOutside()}
+              className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
+            />
+          </div>
+        </div>
+      </Modal>
     </Suspense>
   );
 };

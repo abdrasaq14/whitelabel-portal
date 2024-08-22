@@ -8,12 +8,14 @@ import { stripHtml } from "../../utils/Helpfunctions";
 import { Link } from "react-router-dom";
 import { noPostImage } from "../../assets/blog";
 // import { useNavigate } from "react-router-dom";
-export default function BlogCard({
+export default function PostCard({
   blog,
-  index
+  index,
+  handleDelete,
 }: {
   blog: BlogPayload;
   index: number;
+  handleDelete: (id: string) => void;
 }) {
   // const navigate  = useNavigate();
 
@@ -23,14 +25,22 @@ export default function BlogCard({
       className="w-[290px] xl:w-[340px] h-[21rem] max-h-[21rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
-        <Link to={`/blog/view/${blog._id}`} className="font-bold">
-          {blog?.title}
+        <Link to={`/blog/view/${blog._id}`} className="font-bold hidden xl:block">
+          {truncateText(blog?.title, 65)}
+        </Link>
+        <Link to={`/blog/view/${blog._id}`} className="font-bold xl:hidden">
+          {truncateText(blog?.title, 45)}
         </Link>
         <span className="flex gap-2">
           <Link to={`/blog/edit/${blog._id}`}>
             <FiEdit size={20} color="#8f9092" className="cursor-pointer" />
           </Link>
-          <GoTrash size={20} color="#D42620" className="cursor-pointer" />
+          <GoTrash
+            onClick={() => handleDelete(blog._id as string)}
+            size={20}
+            color="#D42620"
+            className="cursor-pointer"
+          />
         </span>
       </div>
       <Link
