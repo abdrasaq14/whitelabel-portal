@@ -11,30 +11,55 @@ import Modal from "../../components/Modal/Modal";
 import { useMutation } from "react-query";
 import toast from "react-hot-toast";
 import { Button } from "../../components/Button/Button";
+import { handleError } from "../../utils/Helpfunctions";
 
 const Index = () => {
   const profile: any = useAuth((s) => s.profile);
   const fetchAllPosts = useBlogStore((state) => state.fetchAllPosts);
   const fetchDrafts = useBlogStore((state) => state.fetchDrafts);
+  const totalDrafts = useBlogStore((state) => state.countDrafts());
+  const totalPublished = useBlogStore((state) => state.countPublished());
   const fetchPublished = useBlogStore((state) => state.fetchPublished);
   const AllPosts = useBlogStore((state) => state.posts);
-  const [posts, setPosts] = useState<BlogPayload[]>(AllPosts);
+  const [posts, setPosts] = useState<BlogPayload[]>();
   const error = useBlogStore((state) => state.error);
-  // const totalPosts = useBlogStore((state) => state.countPosts());
-  // const totalDrafts = useBlogStore((state) => state.countDrafts());
-  // const totalPublished = useBlogStore((state) => state.countPublished());
   const deletePost = useBlogStore((state) => state.deletePost);
   const loading = useBlogStore((state) => state.loading);
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-console.log("loadingIndex", loading, AllPosts, posts);
+  console.log("loadingIndex", AllPosts, posts);
   useEffect(() => {
-    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
-    setPosts(AllPosts);
+    // Fetch all posts only once on component mount
+    useBlogStore.getState().startLoading();
+    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName })
+      .then((res) => {
+        if (res.data?.result?.results) {
+          fetchAllPosts(res.data?.result?.results);
+          setPosts(res.data?.result?.results);
+          useBlogStore.getState().stopLoading();
+        }
+      })
+      .catch((error) => {
+        useBlogStore.getState().stopLoading();
+        console.log("FetchError", error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ profile?.whiteLabelName]);
+  }, [profile?.whiteLabelName]);
+
+  const handleTabClick = async (tab: "all" | "draft" | "published") => {
+    setActiveTab(tab);
+    if (tab === "all") {
+      setPosts(AllPosts);
+    } else if (tab === "draft") {
+      const posts = await fetchDrafts();
+      setPosts(posts);
+    } else if (tab === "published") {
+      const posts = await fetchPublished();
+      setPosts(posts);
+    }
+  };
   const handleDelete = (id: string) => {
     setOpenModal(true);
     setIdToDelete(id);
@@ -52,8 +77,14 @@ console.log("loadingIndex", loading, AllPosts, posts);
         // eslint-disable-next-line eqeqeq
         if (response.data?.status == "Success") {
           deletePost(idToDelete);
-          console.log("DeleteErrorrrAll", AllPosts);
-          setPosts(AllPosts);
+          setPosts(useBlogStore.getState().posts);
+          console.log("loadingIndex Before deletion:", AllPosts);
+          console.log(
+            "loadingIndex After deletion:",
+            useBlogStore.getState().posts
+          );
+          // console.log("loadingIndex", AllPosts, useBlogStore.getState().posts);
+          // setPosts(AllPosts);
           // fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
           setOpenModal(false);
           setIdToDelete("");
@@ -61,7 +92,9 @@ console.log("loadingIndex", loading, AllPosts, posts);
         }
       },
       onError: (error) => {
-        toast.error("An error occurred while deleting blog post");
+        const e = handleError(error);
+        toast.error(e);
+        // toast.error("An error occurred while deleting blog post");
         setOpenModal(false);
       },
     }
@@ -100,10 +133,7 @@ console.log("loadingIndex", loading, AllPosts, posts);
 
             <div className="flex justify-start my-5 gap-4">
               <button
-                onClick={() => {
-                  setActiveTab("all");
-                  setPosts(AllPosts);
-                }}
+                onClick={() => handleTabClick("all")}
                 className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
                   activeTab === "all"
                     ? "border border-primary bg-primary bg-opacity-15"
@@ -122,10 +152,7 @@ console.log("loadingIndex", loading, AllPosts, posts);
                 </span>
               </button>
               <button
-                onClick={() => {
-                  setActiveTab("draft");
-                  setPosts(fetchDrafts());
-                }}
+                onClick={() => handleTabClick("draft")}
                 className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                   activeTab === "draft"
                     ? "border border-primary bg-primary bg-opacity-15"
@@ -138,14 +165,11 @@ console.log("loadingIndex", loading, AllPosts, posts);
                     activeTab === "draft" ? "bg-primary text-white" : ""
                   }`}
                 >
-                  {fetchDrafts().length}
+                  {totalDrafts}
                 </span>
               </button>
               <button
-                onClick={() => {
-                  setActiveTab("published");
-                  setPosts(fetchPublished());
-                }}
+                onClick={() => handleTabClick("published")}
                 className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                   activeTab === "published"
                     ? "border border-primary bg-primary bg-opacity-15"
@@ -158,11 +182,13 @@ console.log("loadingIndex", loading, AllPosts, posts);
                     activeTab === "published" ? "bg-primary text-white" : ""
                   }`}
                 >
-                  {fetchPublished().length}
+                  {totalPublished}
                 </span>
               </button>
             </div>
-            {!loading && posts && posts?.length > 0 ? (
+            {loading ? (
+              <AppFallback />
+            ) : !loading && posts && posts?.length > 0 ? (
               <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
                 {posts.map((blog: BlogPayload, index: number) => (
                   <PostCard
@@ -187,7 +213,7 @@ console.log("loadingIndex", loading, AllPosts, posts);
                     : "No published post available"}
                 </span>
               </div>
-            ) : !loading ? (
+            ) : (
               <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
                 <img
                   src={noContentImage}
@@ -195,11 +221,9 @@ console.log("loadingIndex", loading, AllPosts, posts);
                   className="object-contain max-h-[300px]"
                 />
                 <span className="text-primary-text text-lg font-semibold mx-auto text-center w-[80%]">
-                  {error}
+                  {error ?? "Unable to fetch blog post"}
                 </span>
               </div>
-            ) : (
-              <AppFallback />
             )}
           </div>
         </div>
@@ -230,7 +254,7 @@ console.log("loadingIndex", loading, AllPosts, posts);
               onClick={() => {
                 handleDeleteApi.mutate(idToDelete);
               }}
-              className="border w-[50%] border-primary bg-[white] font-semibold rounded-md !text-primary p-2"
+              className="border w-[50%] border-primary !bg-white font-semibold rounded-md !text-primary p-2"
             />
 
             <Button

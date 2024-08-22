@@ -11,7 +11,7 @@ import { BlogPayload, BlogService } from "../../services/blog.service";
 import { useAuth } from "../../zustand/auth.store";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { decrypt, encrypt } from "../../utils/Helpfunctions";
+import { decrypt, encrypt, handleError } from "../../utils/Helpfunctions";
 import { useBlogStore } from "../../zustand/blog.tore";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { postNotAvailableImage } from "../../assets/blog";
@@ -89,7 +89,8 @@ const CreateBlogPost = () => {
       },
       onError: (error) => {
         form.setSubmitting(false);
-        toast.error("Failed to create blog post");
+        const e = handleError(error);
+        toast.error(e);
         console.log("erro", error);
         // show error toast
       },

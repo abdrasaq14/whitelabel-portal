@@ -60,3 +60,27 @@ export const stripHtml = (str: any) => {
   const textContent = tempDiv.textContent || tempDiv.innerText || "";
   return textContent.trim();
 };
+
+export const delay = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const handleError = (error: any) => {
+  if (
+    error?.code === "ERR_NETWORK" ||
+    error?.message?.includes("Network Error") ||
+    error?.message?.includes("Failed to fetch") ||
+    error?.message?.includes("Cannot read properties of undefined")
+  ) {
+    return "Network error";
+  } else if (error.response.data.message) {
+    const message = error.response.data.message;
+    return message === "Invalid token"
+      ? "Session expired, kindly login again"
+      : message;
+  } else if (error?.message) {
+    return error.message == "Invalid token"
+      ? "Session expired, kindly login again"
+      : error.message;
+  } else {
+    return error ?? "An unexpected error occurred.";
+  }
+};

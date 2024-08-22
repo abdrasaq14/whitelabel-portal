@@ -1,84 +1,62 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import { BlogService, BlogPayload, IQueryParams } from "../services/blog.service";
+import {
+  BlogService,
+  BlogPayload,
+  IQueryParams,
+} from "../services/blog.service";
 import toast from "react-hot-toast";
-
-
-
+import { delay } from "../utils/Helpfunctions";
 
 export const useBlogStore = create(
   persist(
     combine(
       {
-        posts: [] as BlogPayload[], 
-        loading: false, 
-        error: null as string | null
+        posts: [] as BlogPayload[],
+        loading: false,
+        error: null as string | null,
       },
       (set) => ({
         // Add a new post
         addPost: async (payload: BlogPayload) => {
           try {
-            set({ loading: true, error: null });
+            // set({ loading: true, error: null });
             // const response = await BlogService.create(payload);
             set((state) => ({
               posts: [...state.posts, { ...payload }],
-              loading: false
+              loading: false,
             }));
-          } catch (error:any) {
+          } catch (error: any) {
             set({ loading: false, error: error.message });
           }
         },
         // Fetch all posts based on query parameters
-        fetchAllPosts: async (params: IQueryParams) => {
-          try {
-            set({ loading: true, error: null });
-            const response = await BlogService.fetchAll(params);
-            set({ posts: response.data?.result?.results, loading: false });
-            return
-          } catch (error: any) {
-            set({ loading: false, error: "An error occured while fetching Post" });
-            console.log("FetchError", error);
-          toast.error("An error occurred while fetching blog posts");
-          }
+        fetchAllPosts: async (payload: BlogPayload[]) => {
+          set({ posts: payload });
+          useBlogStore.getState().stopLoading();
         },
         // Fetch drafts
-        fetchDrafts: () => {
-          set({ loading: true, error: null });
-          setTimeout(() => { 
-            set({ loading: false, error: null });
-          },1000)
-          return useBlogStore
+        fetchDrafts: async () => {
+          useBlogStore.getState().startLoading();
+          await delay(1200);
+          const drafts = useBlogStore
             .getState()
             .posts.filter((post) => post.status === "draft");
+          useBlogStore.getState().stopLoading();
+          return drafts;
         },
         // Fetch published posts
-        fetchPublished: () => {
-          set({ loading: true, error: null });
-          setTimeout(() => {
-            set({ loading: false, error: null });
-          }, 1000);
-          
-          return useBlogStore
+        fetchPublished: async () => {
+          useBlogStore.getState().startLoading();
+          await delay(1200);
+          const published = useBlogStore
             .getState()
             .posts.filter((post) => post.status === "published");
+          useBlogStore.getState().stopLoading();
+          return published;
         },
-        // Count total posts
-        countPosts: () => {
-          return useBlogStore.getState().posts.length;
-        },
-        // Count drafts
-        countDrafts: () => {
-          return useBlogStore
-            .getState()
-            .posts.filter((post) => post.status === "draft").length;
-        },
-        // Count published posts
-        countPublished: () => {
-          return useBlogStore
-            .getState()
-            .posts.filter((post) => post.status === "published").length;
-        },
-
+        startLoading: () => set({ loading: true }),
+        stopLoading: () => set({ loading: false }),
         updatePost: async (
           id: string,
           updatedPayload: Partial<BlogPayload>
@@ -90,37 +68,42 @@ export const useBlogStore = create(
               posts: state.posts.map((post) =>
                 post._id === id ? { ...post, ...updatedPayload } : post
               ),
-              loading: false
+              loading: false,
             }));
-            
-          } catch (error:any) {
+          } catch (error: any) {
             set({ loading: false, error: error.message });
-            
           }
         },
         // Placeholder for deleting a post
         deletePost: async (id: string) => {
           try {
             set({ loading: true, error: null });
-            // const response = await BlogService.deleteBlog(id);
             set((state) => ({
-              posts: state.posts.splice(
-                state.posts.findIndex((post) => post._id === id),
-                1
-              ),
+              posts: state.posts.filter((post) => post._id !== id),
               loading: false,
             }));
+            console.log("loadingIndex", useBlogStore.getState().posts);
           } catch (error: any) {
-            console.log("DeleteErrorrr", error);
+            console.log("DeleteError", error);
             toast.error("An error occurred while deleting blog post");
             set({ loading: false, error: error.message });
           }
-        }
+        },
+        countDrafts: () => {
+          return useBlogStore
+            .getState()
+            .posts.filter((post) => post.status === "draft").length;
+        },
+        countPublished: () => {
+          return useBlogStore
+            .getState()
+            .posts.filter((post) => post.status === "published").length;
+        },
       })
     ),
     {
       name: "blog-store",
-      getStorage: () => sessionStorage // Persist to sessionStorage
+      getStorage: () => sessionStorage, // Persist to sessionStorage
     }
   )
 );
