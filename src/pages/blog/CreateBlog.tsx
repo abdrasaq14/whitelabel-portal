@@ -17,7 +17,9 @@ import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
 import { Button } from "../../components/Button/Button";
-
+  export interface HandlePreviewPayload extends BlogPayload {
+    isFromEdit: boolean;
+  }
 const validationSchema = Yup.object({
   title: Yup.string().trim().required("Title is required"),
   createdAt: Yup.date().required("Date is required"),
@@ -69,7 +71,6 @@ const CreateBlogPost = () => {
     {
       onSuccess: (response) => {
         form.setSubmitting(false);
-        form.resetForm();
         if (id) {
           updatePost(id, response.data?.result);
         }
@@ -78,6 +79,8 @@ const CreateBlogPost = () => {
         }
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
+        form.resetForm();
+        navigate("/blog");
         // show success toast
       },
       onError: (error) => {
@@ -89,7 +92,8 @@ const CreateBlogPost = () => {
     }
   );
   console.log("form.Values", form.values);
-  const handlePreview = (value: BlogPayload) => {
+
+  const handlePreview = (value: HandlePreviewPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigate("/blog/preview");
     // toast.success("Blog previewed successfully");
@@ -153,8 +157,8 @@ const CreateBlogPost = () => {
           <BreadCrumbWithBackButton
             backText="Blog"
             showBackButton={true}
-            currentPath="Create"
-            handleBackAction={() => navigate("/blog")}
+            currentPath={id ? "Edit Post" : "Create Post"}
+            handleBackAction={() => navigate(-1)}
           />
           <div className="flex justify-between items-center text-primary-text">
             <div className="flex flex-col gap-2">
@@ -166,7 +170,9 @@ const CreateBlogPost = () => {
             </div>
             <button
               type="button"
-              onClick={() => handlePreview({ ...form.values })}
+              onClick={() =>
+                handlePreview({ ...form.values, isFromEdit: id ? true : false })
+              } // pass isFromEdit to differentiate between edit and create
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
               }
@@ -283,15 +289,21 @@ const CreateBlogPost = () => {
                 </div>
 
                 {/* save as draft and publish */}
-                <div className="flex flex-col  col-span-1 md:flex-row md:justify-between gap-2 md:gap-6 text-primary-text mt-4">
+                <div className="flex flex-col  col-span-1 sm:flex-row sm:justify-between gap-2 sm:gap-6 text-primary-text mt-4">
                   <Button
-                    isLoading={form.isSubmitting && form.values.status === "draft"}
+                    isLoading={
+                      form.isSubmitting && form.values.status === "draft"
+                    }
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
                       !form.values.content
                     }
-                    label="Save as Draft"
+                    label={`${
+                      form.isSubmitting && form.values.status === "draft"
+                        ? "Saving..."
+                        : "Save as Draft"
+                    }`}
                     onClick={() => {
                       form.setFieldValue("status", "draft");
                       form.handleSubmit();
@@ -299,13 +311,19 @@ const CreateBlogPost = () => {
                     className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
                   />
                   <Button
-                    isLoading={form.isSubmitting && form.values.status === "published"}
+                    isLoading={
+                      form.isSubmitting && form.values.status === "published"
+                    }
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
                       !form.values.content
                     }
-                    label="Publish"
+                    label={`${
+                      form.isSubmitting && form.values.status === "published"
+                        ? "Publishing..."
+                        : "Publish"
+                    }`}
                     onClick={() => {
                       form.setFieldValue("status", "published");
                       form.handleSubmit();

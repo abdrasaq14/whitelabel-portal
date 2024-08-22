@@ -1,5 +1,5 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
-import { noContentImage, postNotAvailableImage } from "../../assets/blog";
+import { noPostImage, postNotAvailableImage } from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
@@ -78,19 +78,19 @@ const ViewBlogDetail = () => {
                       </span>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+                  <Link
+                    to={`/blog/edit/${id}`}
+                      className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
                   >
                     Edit Blog
-                  </button>
+                  </Link>
                 </div>
                 <div className="w-full flex gap-8 flex-col items-start justify-center mt-8">
                   <div className="flex flex-col items-start w-full lg:w-[80%]">
                     {/* Blog image */}
                     <div className="w-full mb-4">
                       <img
-                        src={blogDetails?.image || noContentImage}
+                        src={blogDetails?.image || noPostImage}
                         alt=""
                         className="object-cover w-full max-h-[200px]"
                       />

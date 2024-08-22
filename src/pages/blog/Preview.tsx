@@ -1,9 +1,14 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
 import { GoDotFill } from "react-icons/go";
 import { useEffect, useState } from "react";
-import { BlogPayload } from "../../services/blog.service";
+import {  BlogService } from "../../services/blog.service";
 import { useNavigate } from "react-router-dom";
 import { decrypt, formatDate } from "../../utils/Helpfunctions";
+import { Button } from "../../components/Button/Button";
+import { HandlePreviewPayload } from "./CreateBlog";
+import { useMutation } from "react-query";
+import { useBlogStore } from "../../zustand/blog.tore";
+import toast from "react-hot-toast";
 
 const Preview = () => {
   useEffect(() => {
@@ -13,9 +18,54 @@ const Preview = () => {
       setBlogDetails(decrypt(localBlogDetails));
     }
   }, []);
+  const addPost = useBlogStore((state) => state.addPost);
+  const updatePost = useBlogStore((state) => state.updatePost);
 
-  const [blogDetails, setBlogDetails] = useState<BlogPayload>();
+  const [blogDetails, setBlogDetails] = useState<HandlePreviewPayload>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const handleStatusChange = (newStatus: "draft" | "published") => {
+    // @ts-ignore
+    setBlogDetails((prevDetails) => {
+      // @ts-ignore
+      const updatedDetails:HandlePreviewPayload = { ...prevDetails, status: newStatus };
+      handleSubmit.mutate(updatedDetails);
+      return 
+    });
+  };
+
+  const handleSubmit = useMutation(
+    async (values: HandlePreviewPayload) => {
+      setIsSubmitting(true);
+
+      if (values.isFromEdit) {
+        return await BlogService.updateBlog(values._id as string, values);
+      } else {
+        return await BlogService.create(values);
+      }
+    },
+    {
+      onSuccess: (response) => {
+        setIsSubmitting(false);
+        if (blogDetails && blogDetails.isFromEdit) {
+          updatePost(blogDetails._id as string, response.data?.result);
+        } else {
+          addPost(response.data?.result?.results);
+        }
+        localStorage.removeItem("_Blog");
+        toast.success(blogDetails?.isFromEdit ? "Blog post updated" : "Blog post created");
+        navigate("/blog");
+      },
+      onError: (error) => {
+        setIsSubmitting(false);
+        toast.error("Failed to create blog post");
+        console.log("erro", error);
+        
+      },
+    }
+  );
+
   console.log("blogDetails", blogDetails);
   return (
     <div className="px-4 pt-8 h-full">
@@ -42,12 +92,34 @@ const Preview = () => {
                 </span>
               </div>
             </div>
-            <button
-              type="button"
-              className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
-            >
-              Post Blog
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                isLoading={isSubmitting && blogDetails?.status === "draft"}
+                disabled={
+                  isSubmitting ||
+                  blogDetails?.title === "" ||
+                  blogDetails?.content === ""
+                }
+                label={`${
+                  isSubmitting && blogDetails?.status === "draft"
+                    ? "Saving..."
+                    : "Save as Draft"
+                }`}
+                onClick={() => handleStatusChange("draft")}
+                className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
+              />
+              <Button
+                isLoading={isSubmitting && blogDetails?.status === "published"}
+                disabled={
+                  isSubmitting ||
+                  blogDetails?.title === "" ||
+                  blogDetails?.content === ""
+                }
+                label={`${isSubmitting && blogDetails?.status === "published" ? "Publishing..." : "Publish"}`}
+                onClick={() => handleStatusChange("published")} 
+                className="border border-primary font-semibold bg-primary text-white rounded-md  p-2"
+              />
+            </div>
           </div>
           <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
             {blogDetails?.image && (
@@ -63,7 +135,7 @@ const Preview = () => {
               <p
                 className="text-primary-text style-image"
                 dangerouslySetInnerHTML={{
-                  __html: blogDetails?.content || ""
+                  __html: blogDetails?.content || "",
                 }}
               />
             </div>

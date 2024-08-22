@@ -6,6 +6,7 @@ import { TiHeartFullOutline } from "react-icons/ti";
 import { truncateText } from "../../utils/Helpfunctions";
 import { stripHtml } from "../../utils/Helpfunctions";
 import { Link } from "react-router-dom";
+import { noPostImage } from "../../assets/blog";
 // import { useNavigate } from "react-router-dom";
 export default function BlogCard({
   blog,
@@ -34,10 +35,10 @@ export default function BlogCard({
       </div>
       <Link
         to={`/blog/view/${blog._id}`}
-        className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-[red] overflow-hidden"
+        className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-primary bg-opacity-60 overflow-hidden"
       >
         <img
-          src={blog?.image}
+          src={blog?.image || noPostImage}
           alt=""
           className="object-cover w-full max-h-[6rem]"
         />
@@ -55,8 +56,8 @@ export default function BlogCard({
         </span>
         <span className="flex items-center gap-2">
           <BsChatSquareText size={20} />
-          {blog?.comments.length}
-          {blog?.comments.length > 1 ? " Comments" : " Comment"}
+          {blog?.comments?.length}
+          {blog?.comments?.length > 1 ? " Comments" : " Comment"}
         </span>
       </div>
     </div>

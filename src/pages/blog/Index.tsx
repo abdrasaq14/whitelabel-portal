@@ -22,9 +22,9 @@ const Index = () => {
   const error = useBlogStore((state) => state.error);
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName })
+    fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
     setPosts(AllPosts);
   }, [fetchAllPosts, profile?.whiteLabelName]);
 
@@ -59,78 +59,76 @@ const Index = () => {
               </Link>
             </div>
 
+            <div className="flex justify-start my-5 gap-4">
+              <button
+                onClick={() => {
+                  setActiveTab("all");
+                  setPosts(AllPosts);
+                }}
+                className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
+                  activeTab === "all"
+                    ? "border border-primary bg-primary bg-opacity-15"
+                    : ""
+                }`}
+              >
+                All Blog
+                <span
+                  className={`flex  py-1 px-3  rounded-xl text-xs ${
+                    activeTab === "all"
+                      ? "bg-primary text-white"
+                      : "bg-[#EEEFF0] text-[#464749] "
+                  }`}
+                >
+                  {totalPosts}
+                </span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("draft");
+                  setPosts(fetchDrafts());
+                }}
+                className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                  activeTab === "draft"
+                    ? "border border-primary bg-primary bg-opacity-15"
+                    : ""
+                }`}
+              >
+                Draft
+                <span
+                  className={`flex bg-[#EEEFF0] text-[#464749] py-1 px-3  rounded-xl text-xs ${
+                    activeTab === "draft" ? "bg-primary text-white" : ""
+                  }`}
+                >
+                  {totalDrafts}
+                </span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("published");
+                  setPosts(fetchPublished());
+                }}
+                className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                  activeTab === "published"
+                    ? "border border-primary bg-primary bg-opacity-15"
+                    : ""
+                }`}
+              >
+                Published
+                <span
+                  className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+                    activeTab === "published" ? "bg-primary text-white" : ""
+                  }`}
+                >
+                  {totalPublished}
+                </span>
+              </button>
+            </div>
             {!loading && posts && posts?.length > 0 ? (
-              <>
-                <div className="flex justify-start my-5 gap-4">
-                  <button
-                    onClick={() => {
-                      setActiveTab("all");
-                      setPosts(AllPosts);
-                    }}
-                    className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
-                      activeTab === "all"
-                        ? "border border-primary bg-primary bg-opacity-15"
-                        : ""
-                    }`}
-                  >
-                    All Blog
-                    <span
-                      className={`flex  py-1 px-3  rounded-xl text-xs ${
-                        activeTab === "all"
-                          ? "bg-primary text-white"
-                          : "bg-[#EEEFF0] text-[#464749] "
-                      }`}
-                    >
-                      {totalPosts}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActiveTab("draft");
-                      setPosts(fetchDrafts());
-                    }}
-                    className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                      activeTab === "draft"
-                        ? "border border-primary bg-primary bg-opacity-15"
-                        : ""
-                    }`}
-                  >
-                    Draft
-                    <span
-                      className={`flex bg-[#EEEFF0] text-[#464749] py-1 px-3  rounded-xl text-xs ${
-                        activeTab === "draft" ? "bg-primary text-white" : ""
-                      }`}
-                    >
-                      {totalDrafts}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActiveTab("published");
-                      setPosts(fetchPublished());
-                    }}
-                    className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                      activeTab === "published"
-                        ? "border border-primary bg-primary bg-opacity-15"
-                        : ""
-                    }`}
-                  >
-                    Published
-                    <span
-                      className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                        activeTab === "published" ? "bg-primary text-white" : ""
-                      }`}
-                    >
-                      {totalPublished}
-                    </span>
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
-                  {posts.map((blog: BlogPayload, index: number) => (
-                    <BlogCard index={index} blog={blog} />
-                  ))}
-                </div>
-              </>
+              <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
+                {posts.map((blog: BlogPayload, index: number) => (
+                  <BlogCard index={index} blog={blog} />
+                ))}
+              </div>
             ) : !loading && posts && posts?.length === 0 ? (
               <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
                 <img
