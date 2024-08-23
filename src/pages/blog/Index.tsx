@@ -12,6 +12,7 @@ import { useMutation } from "react-query";
 import toast from "react-hot-toast";
 import { Button } from "../../components/Button/Button";
 import { handleError } from "../../utils/Helpfunctions";
+import Pagination from "../../components/Blog/Pagination";
 
 const Index = () => {
   const profile: any = useAuth((s) => s.profile);
@@ -29,13 +30,29 @@ const Index = () => {
   const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-  console.log("loadingIndex", AllPosts, posts);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10
+  const [total, setTotal] = useState(0);
+
+  const handlePagination = (page: number) => {
+    setCurrentPage(page);
+  };
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const handlePrevious = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  // console.log("loadingIndex", AllPosts, posts);
   useEffect(() => {
     // Fetch all posts only once on component mount
     useBlogStore.getState().startLoading();
-    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName })
+    useBlogStore.getState().setError("");
+    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName, page: currentPage, limit })
       .then((res) => {
         if (res.data?.result?.results) {
+          setTotal(res.data?.result?.totalResults);
+
           fetchAllPosts(res.data?.result?.results);
           setPosts(res.data?.result?.results);
           useBlogStore.getState().stopLoading();
@@ -44,6 +61,8 @@ const Index = () => {
       .catch((error) => {
         useBlogStore.getState().stopLoading();
         console.log("FetchError", error);
+        const e = handleError(error);
+        useBlogStore.getState().setError(e);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.whiteLabelName]);
@@ -78,14 +97,6 @@ const Index = () => {
         if (response.data?.status == "Success") {
           deletePost(idToDelete);
           setPosts(useBlogStore.getState().posts);
-          console.log("loadingIndex Before deletion:", AllPosts);
-          console.log(
-            "loadingIndex After deletion:",
-            useBlogStore.getState().posts
-          );
-          // console.log("loadingIndex", AllPosts, useBlogStore.getState().posts);
-          // setPosts(AllPosts);
-          // fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
           setOpenModal(false);
           setIdToDelete("");
           toast.success("Blog post deleted successfully");
@@ -100,7 +111,7 @@ const Index = () => {
     }
   );
 
-  console.log("idToDelete", idToDelete);
+  // console.log("idToDelete", idToDelete);
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
@@ -189,14 +200,25 @@ const Index = () => {
             {loading ? (
               <AppFallback />
             ) : !loading && posts && posts?.length > 0 ? (
-              <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
-                {posts.map((blog: BlogPayload, index: number) => (
-                  <PostCard
-                    index={index}
-                    blog={blog}
-                    handleDelete={() => handleDelete(blog?._id as string)}
-                  />
-                ))}
+              <div className="flex flex-col gap-8">
+                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
+                  {posts.map((blog: BlogPayload, index: number) => (
+                    <PostCard
+                      index={index}
+                      blog={blog}
+                      handleDelete={() => handleDelete(blog?._id as string)}
+                    />
+                  ))}
+                  </div>
+                  
+                <Pagination
+                  total={total}
+                  limit={limit}
+                  page={currentPage}
+                  onPageChange={handlePagination}
+                  increase={handleNext}
+                  decrease={handlePrevious}
+                />
               </div>
             ) : !loading && posts && posts?.length === 0 ? (
               <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">

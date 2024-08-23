@@ -1,5 +1,12 @@
 import { createApiClient } from "../utils/api";
 
+export interface Comments {
+  userId: string;
+  name?: string;
+  comment: string;
+  isDeleted: boolean;
+  createdAt: Date;
+}
 export interface BlogPayload {
   _id?: string;
   authorId: string;
@@ -7,12 +14,7 @@ export interface BlogPayload {
   content: string;
   // date?: string;
   image: string;
-  comments: {
-    userId: string;
-    name?: string;
-    comment: string;
-    createdAt: Date;
-  }[];
+  comments: Comments[];
   likes: number;
   shares: number;
   allowComments: boolean;
@@ -26,8 +28,11 @@ export interface IQueryParams {
   whiteLabelName?: string;
   page?: number;
   limit?: number;
+  totalPages?: number;
+  totalResults?: number;
   search?: string;
   status?: string;
+
 }
 export const BlogService = {
   create: (payload: BlogPayload) =>

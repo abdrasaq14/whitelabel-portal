@@ -6,7 +6,7 @@ import {
   IQueryParams,
 } from "../services/blog.service";
 import toast from "react-hot-toast";
-import { delay } from "../utils/Helpfunctions";
+import { delay, handleError } from "../utils/Helpfunctions";
 
 export const useBlogStore = create(
   persist(
@@ -57,6 +57,7 @@ export const useBlogStore = create(
         },
         startLoading: () => set({ loading: true }),
         stopLoading: () => set({ loading: false }),
+        setError: (e:string) => set({ error: e }),
         updatePost: async (
           id: string,
           updatedPayload: Partial<BlogPayload>
@@ -71,7 +72,8 @@ export const useBlogStore = create(
               loading: false,
             }));
           } catch (error: any) {
-            set({ loading: false, error: error.message });
+            const e = handleError(error);
+            set({ loading: false, error: e });
           }
         },
         // Placeholder for deleting a post

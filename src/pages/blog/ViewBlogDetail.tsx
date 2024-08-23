@@ -1,12 +1,20 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
-import { noPostImage, postNotAvailableImage } from "../../assets/blog";
+import {
+  noCommentImage,
+  noPostImage,
+  postNotAvailableImage,
+} from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { BlogPayload, BlogService } from "../../services/blog.service";
+import {
+  BlogPayload,
+  BlogService,
+  Comments,
+} from "../../services/blog.service";
 import { useState, useEffect, Suspense } from "react";
-import { formatDate } from "../../utils/Helpfunctions";
+import { formatDate, handleError } from "../../utils/Helpfunctions";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import CommentCard from "../../components/Blog/CommentCard";
 
@@ -15,21 +23,52 @@ const ViewBlogDetail = () => {
   const { id }: any = useParams();
   const [activeTab, setActiveTab] = useState("all");
   const [blogDetails, setBlogDetails] = useState<BlogPayload>();
+  const [comments, setComments] = useState<Comments[]>(
+    blogDetails?.comments || []
+  );
+  const deletedComments = blogDetails?.comments.filter(
+    (comment) => comment.isDeleted
+  );
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleTabClick = async (tab: "all" | "deleted") => {
+    setIsLoading(true);
+    setActiveTab(tab);
+    if (tab === "all") {
+      setComments(blogDetails?.comments || []);
+    } else {
+      const deletedComments = blogDetails?.comments.filter(
+        (comment) => comment.isDeleted
+      );
+      setComments(deletedComments || []);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    BlogService.viewBlog(id).then((res) => {
-      try {
-        setIsLoading(false);
-        if (res.data.result) {
-          setBlogDetails(res.data.result);
-          return;
+    BlogService.viewBlog(id)
+      .then((res) => {
+        try {
+          setError(null);
+          setIsLoading(false);
+          if (res.data.result) {
+            setBlogDetails(res.data.result);
+            return;
+          }
+          setBlogDetails({} as BlogPayload);
+        } catch (error) {
+          setIsLoading(false);
+          setBlogDetails({} as BlogPayload);
+          const e = handleError(error);
+          console.log("Errorrrrr", e);
+          setError(e);
         }
-        setBlogDetails({} as BlogPayload);
-      } catch (error) {
+      })
+      .catch((error) => {
         setIsLoading(false);
-        setBlogDetails({} as BlogPayload);
-      }
-    });
+        const e = handleError(error);
+        setError(e);
+      });
   }, [id]);
   return (
     <Suspense fallback={<AppFallback />}>
@@ -51,7 +90,7 @@ const ViewBlogDetail = () => {
               <>
                 <div className="flex justify-between items-center text-primary-text">
                   <div className="flex flex-col gap-2">
-                    <h2 className="text-lg md:text-2xl font-bold font-gooperSemiBold">
+                    <h2 className="text-lg md:text-2xl font-bold font-gooperSemiBold lg:w-[80%]">
                       {blogDetails?.title}
                     </h2>
                     <div className="flex gap-4 text-primary-text">
@@ -80,7 +119,7 @@ const ViewBlogDetail = () => {
                   </div>
                   <Link
                     to={`/blog/edit/${id}`}
-                      className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+                    className="border border-primary font-semibold hover:bg-primary min-w-[5rem] hover:text-white rounded-md text-primary-text p-2"
                   >
                     Edit Blog
                   </Link>
@@ -100,83 +139,98 @@ const ViewBlogDetail = () => {
                       <p
                         className="text-primary-text style-image"
                         dangerouslySetInnerHTML={{
-                          __html: blogDetails?.content || ""
+                          __html: blogDetails?.content || "",
                         }}
                       />
                     </div>
                   </div>
                   {/* blog comments */}
-                  {blogDetails?.comments && blogDetails?.comments.length > 0 && (
-                    <div className="flex flex-col items-start w-full mt-8">
-                      <div className="flex justify-between w-full">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {}}
-                            className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                              activeTab === "all"
-                                ? "border border-primary bg-primary bg-opacity-15"
-                                : ""
-                            }`}
-                          >
-                            All Comments
-                            <span
-                              className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                                activeTab === "all"
-                                  ? "bg-primary text-white"
-                                  : ""
-                              }`}
-                            >
-                              {blogDetails?.comments.length}
-                            </span>
-                          </button>
-                          {/* <button
-                            onClick={() => {}}
-                            className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
-                              activeTab === "all"
-                                ? "border border-primary bg-primary bg-opacity-15"
-                                : ""
-                            }`}
-                          >
-                            Deleted Comments
-                            <span
-                              className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                                activeTab === "published"
-                                  ? "bg-primary text-white"
-                                  : ""
-                              }`}
-                            ></span>
-                          </button> */}
-                        </div>
-                        <Link
-                          to={`/blog/${id}/comments`}
-                          className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+                  <div className="flex justify-between w-full mt-8 ">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleTabClick("all")}
+                        className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                          activeTab === "all"
+                            ? "border border-primary bg-primary bg-opacity-15"
+                            : ""
+                        }`}
+                      >
+                        All Comments
+                        <span
+                          className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+                            activeTab === "all" ? "bg-primary text-white" : ""
+                          }`}
                         >
-                          View all comments
-                        </Link>
+                          {comments?.length}
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => handleTabClick("deleted")}
+                        className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                          activeTab === "deleted"
+                            ? "border border-primary bg-primary bg-opacity-15"
+                            : ""
+                        }`}
+                      >
+                        Deleted Comments
+                        <span
+                          className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+                            activeTab === "deleted"
+                              ? "bg-primary text-white"
+                              : ""
+                          }`}
+                        >
+                          {deletedComments?.length}
+                        </span>
+                      </button>
+                    </div>
+                    {comments?.length > 0 && activeTab === "all" && (
+                      <Link
+                        to={`/blog/${id}/comments`}
+                        className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+                      >
+                        View all comments
+                      </Link>
+                    )}
+                  </div>
+                  {comments && comments.length > 0 ? (
+                    <div className="flex items-start w-full overlow-x-auto gap-2 mt-4">
+                      {comments.map((comment, index) => (
+                        <CommentCard key={index} comment={comment} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full flex flex-col gap-4 items-center justify-center mt-8">
+                      <div className="">
+                        <img
+                          src={noCommentImage}
+                          alt=""
+                          className="object-cover w-full max-h-[150px]"
+                        />
                       </div>
-                      <div className="flex overlow-x-auto gap-2 mt-4">
-                        {blogDetails?.comments.map((comment, index) => (
-                          <CommentCard key={index} comment={comment as any} />
-                        ))}
-                      </div>
+                      <p className="text-primary-text text-base">
+                        {activeTab === "all"
+                          ? "No Comment on this post yet.!!!"
+                          : "No deleted comments"}
+                      </p>
                     </div>
                   )}
                 </div>
               </>
-              ) : (
-                <div className="w-full flex  flex-col items-center justify-center mt-8">
-                  <img
-                    src={postNotAvailableImage}
-                    alt=""
-                    className="object-cover  max-h-[450px] mb-6"
-                  />
-                  <p className="text-primary-text font-black text-xl text-center">
-                    Oopss!!!
-                  </p>
-                  <p className="text-primary-text text-center">
-                    Post deleted from Blog page
-                  </p>
-                </div>
+            ) : (
+              <div className="w-full flex  flex-col items-center justify-center mt-8">
+                <img
+                  src={postNotAvailableImage}
+                  alt=""
+                  className="object-cover  max-h-[450px] mb-6"
+                />
+                <p className="text-primary-text font-black text-xl text-center">
+                  Oopss!!!
+                </p>
+                <p className="text-primary-text text-center">
+                  {error || "Post deleted from Blog page"}
+                </p>
+              </div>
             )}
           </div>
         </div>

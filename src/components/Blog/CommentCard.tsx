@@ -1,13 +1,9 @@
 import { GoTrash } from "react-icons/go";
 import React from "react";
+import { Comments } from "../../services/blog.service";
 
 interface CommentCardProps {
-  comment: {
-    comment: string;
-    name: string;
-    userId: string;
-    createdAt?: any;
-  };
+  comment: Comments;
 }
 const  CommentCard:React.FC<CommentCardProps> = ({comment})=> {
   return (
