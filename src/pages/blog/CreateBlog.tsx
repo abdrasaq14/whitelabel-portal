@@ -44,7 +44,7 @@ const CreateBlogPost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isBlogEditing, setIsBlogEditing] = useState(true);
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
