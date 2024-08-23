@@ -30,14 +30,8 @@ const Index = () => {
   const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
-  console.log("loadingIndex", loading);
-  // useEffect(() => {
-  //   fetchAllPosts({ whiteLabelName: profile?.whiteLabelName });
-  //   setPosts(AllPosts);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [fetchAllPosts, profile?.whiteLabelName]);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10;
+  const limit = 10
   const [total, setTotal] = useState(0);
 
   const handlePagination = (page: number) => {
@@ -54,11 +48,7 @@ const Index = () => {
     // Fetch all posts only once on component mount
     useBlogStore.getState().startLoading();
     useBlogStore.getState().setError("");
-    BlogService.fetchAll({
-      whiteLabelName: profile?.whiteLabelName,
-      page: currentPage,
-      limit
-    })
+    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName, page: currentPage, limit })
       .then((res) => {
         if (res.data?.result?.results) {
           setTotal(res.data?.result?.totalResults);
@@ -117,7 +107,7 @@ const Index = () => {
         toast.error(e);
         // toast.error("An error occurred while deleting blog post");
         setOpenModal(false);
-      }
+      },
     }
   );
 
@@ -219,8 +209,8 @@ const Index = () => {
                       handleDelete={() => handleDelete(blog?._id as string)}
                     />
                   ))}
-                </div>
-
+                  </div>
+                  
                 <Pagination
                   total={total}
                   limit={limit}
