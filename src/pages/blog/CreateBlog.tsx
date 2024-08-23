@@ -45,6 +45,7 @@ const CreateBlogPost = () => {
   const [isBlogEditing, setIsBlogEditing] = useState(true);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [blogId, setBlogId] = useState("");
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
@@ -82,11 +83,12 @@ const CreateBlogPost = () => {
           updatePost(id, response.data?.result);
         } else {
           addPost(response.data?.result);
+          setBlogId(response.data?.result._id);
         }
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
-        form.resetForm();
-        navigate("/blog");
+        setOpenModal(true);
+        // form.resetForm();
         // show success toast
       },
       onError: (error) => {
@@ -98,14 +100,17 @@ const CreateBlogPost = () => {
       },
     }
   );
-  // console.log("form.Values", form.values);
+  console.log("form.Values", form.values);
 
   const handlePreview = (value: HandlePreviewPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigate("/blog/preview");
     // toast.success("Blog previewed successfully");
   };
-
+  const handleClickOutside = () => {
+    form.resetForm()
+    setOpenModal(false)
+}
   useEffect(() => {
     if (id) {
       const localBlogDetails = localStorage.getItem("_Blog");
@@ -348,7 +353,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={() => setOpenModal(false)}>
+      <Modal open={openModal} onClick={() => handleClickOutside}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img
@@ -358,21 +363,35 @@ const CreateBlogPost = () => {
             />
           </div>
           <p className="text-primary-text font-black text-xl text-center my-2">
-            Saved to Draft!!!
+            {form.values.status === "draft"
+              ? "Saved to Draft!!! "
+              : "Published!!!"}
           </p>
-
+          {form.values.status === "published" && (
+            <p className="text-primary-text">
+              Your post has been published and its now live!!
+            </p>
+          )}
           <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
-            
             <Button
               label="Dismiss"
-              onClick={() => setOpenModal(false)}
-              className="border w-[50%] border-primary font-semibold bg-white text-primary rounded-md p-2"
+              onClick={handleClickOutside}
+              className={`border border-primary font-semibold ${
+                form.values.status === "draft"
+                  ? "bg-primary !text-white w-full"
+                  : "bg-white !text-primary-text w-[50%]"
+              } rounded-md p-2`}
             />
-            <Button
-              label="Dismiss"
-              onClick={() => setOpenModal(false)}
-              className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
-            />
+            {form.values.status === "published" && (
+              <Button
+                label="View"
+                onClick={() => {
+                  handleClickOutside();
+                  navigate(`/blog/view/${blogId}`);
+                }}
+                className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
+              />
+            )}
           </div>
         </div>
       </Modal>
