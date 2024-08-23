@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import {
-  BlogService,
-  BlogPayload,
-  IQueryParams,
-} from "../services/blog.service";
+import { BlogPayload } from "../services/blog.service";
 import toast from "react-hot-toast";
 import { delay, handleError } from "../utils/Helpfunctions";
 
@@ -14,7 +10,7 @@ export const useBlogStore = create(
       {
         posts: [] as BlogPayload[],
         loading: false,
-        error: null as string | null,
+        error: null as string | null
       },
       (set) => ({
         // Add a new post
@@ -24,7 +20,7 @@ export const useBlogStore = create(
             // const response = await BlogService.create(payload);
             set((state) => ({
               posts: [...state.posts, { ...payload }],
-              loading: false,
+              loading: false
             }));
           } catch (error: any) {
             set({ loading: false, error: error.message });
@@ -57,19 +53,20 @@ export const useBlogStore = create(
         },
         startLoading: () => set({ loading: true }),
         stopLoading: () => set({ loading: false }),
-        setError: (e:string) => set({ error: e }),
+        setError: (e: string) => set({ error: e }),
         updatePost: async (
           id: string,
           updatedPayload: Partial<BlogPayload>
         ) => {
           try {
+            console.log("Imacoausingrendereding update");
             set({ loading: true, error: null });
             // const response = await BlogService.updateBlog(id, updatedPayload);
             set((state) => ({
               posts: state.posts.map((post) =>
                 post._id === id ? { ...post, ...updatedPayload } : post
               ),
-              loading: false,
+              loading: false
             }));
           } catch (error: any) {
             const e = handleError(error);
@@ -79,10 +76,11 @@ export const useBlogStore = create(
         // Placeholder for deleting a post
         deletePost: async (id: string) => {
           try {
+            console.log("Imacoausingrendereding delete");
             set({ loading: true, error: null });
             set((state) => ({
               posts: state.posts.filter((post) => post._id !== id),
-              loading: false,
+              loading: false
             }));
             console.log("loadingIndex", useBlogStore.getState().posts);
           } catch (error: any) {
@@ -100,12 +98,12 @@ export const useBlogStore = create(
           return useBlogStore
             .getState()
             .posts.filter((post) => post.status === "published").length;
-        },
+        }
       })
     ),
     {
       name: "blog-store",
-      getStorage: () => sessionStorage, // Persist to sessionStorage
+      getStorage: () => sessionStorage // Persist to sessionStorage
     }
   )
 );
