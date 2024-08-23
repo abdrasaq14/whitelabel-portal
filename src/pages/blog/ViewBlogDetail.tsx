@@ -1,8 +1,9 @@
 import { BreadCrumbWithBackButton } from "../../components/Breadcrumb";
 import {
+  depressedEmoji,
   noCommentImage,
   noPostImage,
-  postNotAvailableImage,
+  postNotAvailableImage
 } from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
@@ -11,12 +12,16 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   BlogPayload,
   BlogService,
-  Comments,
+  Comments
 } from "../../services/blog.service";
 import { useState, useEffect, Suspense } from "react";
 import { formatDate, handleError } from "../../utils/Helpfunctions";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import CommentCard from "../../components/Blog/CommentCard";
+import Modal from "../../components/Modal/Modal";
+import { useMutation } from "react-query";
+import toast from "react-hot-toast";
+import { Button } from "../../components/Button/Button";
 
 const ViewBlogDetail = () => {
   const navigate = useNavigate();
@@ -26,6 +31,8 @@ const ViewBlogDetail = () => {
   const [comments, setComments] = useState<Comments[]>(
     blogDetails?.comments || []
   );
+  const [openModal, setOpenModal] = useState(false);
+  const [idToDelete, setIdToDelete] = useState("");
   const deletedComments = blogDetails?.comments.filter(
     (comment) => comment.isDeleted
   );
@@ -45,6 +52,35 @@ const ViewBlogDetail = () => {
     }
     setIsLoading(false);
   };
+  const handleDeleteComment = (id: string) => {
+    setOpenModal(true);
+    setIdToDelete(id);
+  };
+// console.log("idTodElete", openModal, idToDelete);
+  const handleClickOutside = () => { 
+    setOpenModal(false);
+    setIdToDelete("");
+  }
+  const handleDeleteCommentApi = useMutation(
+    async (id: string) => {
+      return await BlogService.deleteComment(blogDetails?._id as string, id);
+    },
+    {
+      onSuccess: (response) => {
+        toast.success("Comment deleted successfully");
+        setOpenModal(false);
+        // const updatedComments = comments.filter(
+        //   (comment) => comment._id !== id
+        // );
+        // setComments(updatedComments);
+      },
+      onError: (error) => {
+        const e = handleError(error);
+        toast.error(e);
+        setOpenModal(false);
+      }
+    }
+  );
   useEffect(() => {
     BlogService.viewBlog(id)
       .then((res) => {
@@ -53,6 +89,7 @@ const ViewBlogDetail = () => {
           setIsLoading(false);
           if (res.data.result) {
             setBlogDetails(res.data.result);
+            setComments(res.data.result.comments);
             return;
           }
           setBlogDetails({} as BlogPayload);
@@ -139,7 +176,7 @@ const ViewBlogDetail = () => {
                       <p
                         className="text-primary-text style-image"
                         dangerouslySetInnerHTML={{
-                          __html: blogDetails?.content || "",
+                          __html: blogDetails?.content || ""
                         }}
                       />
                     </div>
@@ -161,7 +198,7 @@ const ViewBlogDetail = () => {
                             activeTab === "all" ? "bg-primary text-white" : ""
                           }`}
                         >
-                          {comments?.length}
+                          {blogDetails?.comments?.length}
                         </span>
                       </button>
                       <button
@@ -196,7 +233,14 @@ const ViewBlogDetail = () => {
                   {comments && comments.length > 0 ? (
                     <div className="flex items-start w-full overlow-x-auto gap-2 mt-4">
                       {comments.map((comment, index) => (
-                        <CommentCard key={index} comment={comment} />
+                        <CommentCard
+                          key={index}
+                          comment={comment}
+                          showDeleteIcon={activeTab === "all" ? true : false}
+                          handleDelete={() =>
+                            handleDeleteComment(comment._id as string)
+                          }
+                        />
                       ))}
                     </div>
                   ) : (
@@ -235,6 +279,44 @@ const ViewBlogDetail = () => {
           </div>
         </div>
       </div>
+      <Modal open={openModal} onClick={handleClickOutside}>
+        <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
+          <div className="flex-1 h-[65%] flex items-center justify-center ">
+            <img
+              src={depressedEmoji}
+              alt=""
+              className="max-h-[15rem] w-full h-full object-cover"
+            />
+          </div>
+          <p className="text-primary-text font-black text-xl text-center my-2">
+            Oopss!!!
+          </p>
+          <span className="text-primary-text w-[80%] text-center mx-auto">
+            Are you sure you want to delete this comment from your blog??
+          </span>
+
+          <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
+            <Button
+              label={`${
+                handleDeleteCommentApi.isLoading ? "Deleting..." : "Yes Proceed"
+              }`}
+              disabled={handleDeleteCommentApi.isLoading}
+              isLoading={handleDeleteCommentApi.isLoading}
+              onClick={() => {
+                handleDeleteCommentApi.mutate(idToDelete);
+              }}
+              className="border w-[50%] border-primary !bg-white font-semibold rounded-md !text-primary p-2"
+            />
+
+            <Button
+              label="No"
+              disabled={handleDeleteCommentApi.isLoading}
+              onClick={handleClickOutside}
+              className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
+            />
+          </div>
+        </div>
+      </Modal>
     </Suspense>
   );
 };

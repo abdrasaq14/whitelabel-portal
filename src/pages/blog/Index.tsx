@@ -31,7 +31,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 4
+  const limit = 10
   const [total, setTotal] = useState(0);
 
   const handlePagination = (page: number) => {
