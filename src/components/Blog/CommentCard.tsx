@@ -32,7 +32,7 @@ const  CommentCard:React.FC<CommentCardProps> = ({comment, showDeleteIcon, handl
             {comment?.name ? comment.name : "Anonymous"}
           </span>
         </div>
-        {showDeleteIcon && handleDelete && (
+        {showDeleteIcon && handleDelete && !comment.isDeleted && (
           <div
             className="flex gap-1 items-center justify-center px-2 py-1 text-[#D42620] cursor-pointer bg-[#FBE9E9] rounded-md text-sm"
             onClick={() => handleDelete(comment._id as string)}
