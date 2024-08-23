@@ -109,7 +109,8 @@ const CreateBlogPost = () => {
   };
   const handleClickOutside = () => {
     form.resetForm()
-    setOpenModal(false)
+    navigate(`/blog/view/${id}`);
+    return;
 }
   useEffect(() => {
     if (id) {
@@ -353,7 +354,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={() => handleClickOutside}>
+      <Modal open={openModal} onClick={handleClickOutside}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img
@@ -385,10 +386,7 @@ const CreateBlogPost = () => {
             {form.values.status === "published" && (
               <Button
                 label="View"
-                onClick={() => {
-                  handleClickOutside();
-                  navigate(`/blog/view/${blogId}`);
-                }}
+                onClick={handleClickOutside}
                 className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
               />
             )}
