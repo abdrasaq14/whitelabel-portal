@@ -14,9 +14,10 @@ import { useEffect, useState } from "react";
 import { decrypt, encrypt, handleError } from "../../utils/Helpfunctions";
 import { useBlogStore } from "../../zustand/blog.tore";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
-import { postNotAvailableImage } from "../../assets/blog";
+import { noContentImage, postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
 import { Button } from "../../components/Button/Button";
+import Modal from "../../components/Modal/Modal";
 export interface HandlePreviewPayload extends BlogPayload {
   isFromEdit: boolean;
 }
@@ -43,6 +44,7 @@ const CreateBlogPost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isBlogEditing, setIsBlogEditing] = useState(true);
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(true);
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
@@ -346,6 +348,34 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
+      <Modal open={openModal} onClick={() => setOpenModal(false)}>
+        <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
+          <div className="flex-1 h-[65%] flex items-center justify-center ">
+            <img
+              src={noContentImage}
+              alt=""
+              className="max-h-[15rem] w-full h-full object-cover"
+            />
+          </div>
+          <p className="text-primary-text font-black text-xl text-center my-2">
+            Saved to Draft!!!
+          </p>
+
+          <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
+            
+            <Button
+              label="Dismiss"
+              onClick={() => setOpenModal(false)}
+              className="border w-[50%] border-primary font-semibold bg-white text-primary rounded-md p-2"
+            />
+            <Button
+              label="Dismiss"
+              onClick={() => setOpenModal(false)}
+              className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
