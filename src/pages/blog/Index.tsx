@@ -31,7 +31,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10
+  const limit = 4
   const [total, setTotal] = useState(0);
 
   const handlePagination = (page: number) => {
@@ -65,7 +65,7 @@ const Index = () => {
         useBlogStore.getState().setError(e);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile?.whiteLabelName]);
+  }, [profile?.whiteLabelName, currentPage]);
 
   const handleTabClick = async (tab: "all" | "draft" | "published") => {
     setActiveTab(tab);
@@ -201,7 +201,7 @@ const Index = () => {
               <AppFallback />
             ) : !loading && posts && posts?.length > 0 ? (
               <div className="flex flex-col gap-8">
-                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-0">
+                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-6">
                   {posts.map((blog: BlogPayload, index: number) => (
                     <PostCard
                       index={index}
