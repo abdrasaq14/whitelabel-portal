@@ -108,10 +108,16 @@ const CreateBlogPost = () => {
     // toast.success("Blog previewed successfully");
   };
   const handleClickOutside = () => {
-    form.resetForm()
-    navigate(`/blog/view/${blogId}`);
+    form.resetForm();
+    if (id) {
+      navigate(`/blog/view/${id}`);
+    } else {
+      navigate(`/blog/view/${blogId}`);
+    }
+    setOpenModal(false);
+
     return;
-}
+  };
   useEffect(() => {
     if (id) {
       const localBlogDetails = localStorage.getItem("_Blog");

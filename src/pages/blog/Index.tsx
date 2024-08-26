@@ -48,7 +48,7 @@ const Index = () => {
     // Fetch all posts only once on component mount
     useBlogStore.getState().startLoading();
     useBlogStore.getState().setError("");
-    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName, page: currentPage, limit })
+    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName, page: currentPage, limit, status: activeTab === "all" ? undefined : activeTab })
       .then((res) => {
         if (res.data?.result?.results) {
           setTotal(res.data?.result?.totalResults);
