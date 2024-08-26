@@ -109,7 +109,7 @@ const CreateBlogPost = () => {
   };
   const handleClickOutside = () => {
     form.resetForm()
-    navigate(`/blog/view/${id}`);
+    navigate(`/blog/view/${blogId}`);
     return;
 }
   useEffect(() => {

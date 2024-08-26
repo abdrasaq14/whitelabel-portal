@@ -159,7 +159,7 @@ const Index = () => {
                       : "bg-[#EEEFF0] text-[#464749] "
                   }`}
                 >
-                  {AllPosts.length}
+                  {total}
                 </span>
               </button>
               <button
