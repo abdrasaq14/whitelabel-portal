@@ -589,7 +589,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             </div>
           </div>
           <div className='col-span-1 sm:col-span-2 flex gap-4 mt-4 justify-between flex-wrap items-center'>
-            <div>
+            {/* <div>
               <p className='font-satoshiMedium text-sm text-primary-subtext flex gap-1 items-center'>
                 <button
                   type='button'
@@ -599,7 +599,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
                 by uploading csv</p>
 
-            </div>
+            </div> */}
             <div className='flex gap-4 justify-end w-full sm:w-auto'>
               <button
                 type='submit'

@@ -41,7 +41,7 @@ const Index = () => {
   const handlePrevious = () => {
     setCurrentPage(currentPage - 1);
   };
-  // fetching all post adn stroing in the store
+// fetching all post adn stroing in the store
   useEffect(() => {
     useBlogStore.getState().startLoading();
     useBlogStore.getState().setError("");
@@ -63,6 +63,7 @@ const Index = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Fetch all posts when current page changes
   useEffect(() => {
@@ -238,12 +239,7 @@ const Index = () => {
               <AppFallback />
             ) : !loading && posts && posts?.length > 0 ? (
               <div className="flex flex-col gap-8">
-                <div
-                  className="grid gap-4 xl:gap-6"
-                  style={{
-                    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))"
-                  }}
-                >
+                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-6">
                   {posts.map((blog: BlogPayload, index: number) => (
                     <PostCard
                       index={index}

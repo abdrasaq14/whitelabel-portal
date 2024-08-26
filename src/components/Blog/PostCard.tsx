@@ -22,7 +22,7 @@ export default function PostCard({
   return (
     <div
       key={index}
-      className="h-[22rem] max-h-[22rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
+      className="w-[290px] xl:w-[330px] h-[22rem] max-h-[22rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
         <Link to={`/blog/view/${blog._id}`} className="font-bold hidden xl:block">
