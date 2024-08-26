@@ -23,7 +23,7 @@ const AllProducts = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [search, setSearch] = useState("")
   const [showFilter, setShowFilter] = useState<boolean>(false)
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
 

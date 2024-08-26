@@ -248,7 +248,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                   <TextInput
                     name='firstName'
                     type='text'
-                    placeholder='john Doe'
+                    placeholder='John'
                     label="First Name"
                     disabled={!isEditing}
                   />
@@ -257,7 +257,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                   <TextInput
                     name='lastName'
                     type='text'
-                    placeholder='john Doe'
+                    placeholder='Doe'
                     label="Last Name"
                     disabled={!isEditing}
                   />
@@ -394,7 +394,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
 
 
 export const AddStaffModal = ({ isOpen, closeModal }: any) => {
-  const accountTabTitle = ['Add Staff', 'Upload CSV']
+  const accountTabTitle = ['Add Staff']
   const [tabIndex, setTabIndex] = useState<number>(0)
 
   const displayAccountContent = (tabIndex: number) => {
@@ -524,7 +524,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             <TextInput
               name='firstName'
               type='text'
-              placeholder='john Doe'
+              placeholder='John'
               label="First Name"
             />
           </div>
@@ -532,7 +532,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             <TextInput
               name='lastName'
               type='text'
-              placeholder='john Doe'
+              placeholder='Doe'
               label="Last Name"
             />
           </div>

@@ -6,6 +6,8 @@ import { MerchantService } from '../../../services/merchant.service';
 import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import SearchInput from '../../../components/FormInputs/SearchInput';
 import { useAuth } from '../../../zustand/auth.store';
+import Filter from '../../../components/Filter/Filter';
+import { MdFilterList } from 'react-icons/md';
 
 
 
@@ -18,11 +20,11 @@ interface PaginationInfo {
 const Merchants = () => {
   const [merchant, setMerchant] = useState<any>({})
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
   const [search, setSearch] = useState("")
-
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
     return (currentPage - 1) * pageSize + index + 1;
@@ -77,8 +79,13 @@ const Merchants = () => {
               setCurrentPage(1)
             }} className='w-[200px]' placeholder='Search for merchant' />
           </div>
+          {
+          allMerchants && (
+            <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
-          <p>Filter</p>
+          )
+        }
+         <Filter onClose={() => setShowFilter(false)} open={showFilter} />
         </div>
 
         {
