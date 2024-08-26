@@ -108,7 +108,6 @@ function Step3({
       setCharacterCount(strippedContent.length);
       return;
     } else {
-      // If content exceeds character limit, you can optionally truncate or reject the change
       const truncatedContent = strippedContent.slice(0, characterLimit);
       form.setFieldValue("heroText", truncatedContent);
       setCharacterCount(characterLimit);
