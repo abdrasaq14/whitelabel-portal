@@ -135,6 +135,8 @@ const Index = () => {
           setPosts(useBlogStore.getState().posts);
           setOpenModal(false);
           setIdToDelete("");
+          // @ts-ignore
+          handleTabClick(activeTab);
           toast.success("Blog post deleted successfully");
         }
       },
