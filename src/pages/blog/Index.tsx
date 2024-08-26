@@ -17,11 +17,9 @@ import Pagination from "../../components/Blog/Pagination";
 const Index = () => {
   const profile: any = useAuth((s) => s.profile);
   const fetchAllPosts = useBlogStore((state) => state.fetchAllPosts);
-  const fetchDrafts = useBlogStore((state) => state.fetchDrafts);
+  const allPosts = useBlogStore((state) => state.posts).length;
   const totalDrafts = useBlogStore((state) => state.countDrafts());
   const totalPublished = useBlogStore((state) => state.countPublished());
-  const fetchPublished = useBlogStore((state) => state.fetchPublished);
-  const AllPosts = useBlogStore((state) => state.posts);
   const [posts, setPosts] = useState<BlogPayload[]>();
   const error = useBlogStore((state) => state.error);
   const deletePost = useBlogStore((state) => state.deletePost);
@@ -31,7 +29,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 9
+  const limit = 9;
   const [total, setTotal] = useState(0);
 
   const handlePagination = (page: number) => {
@@ -43,17 +41,43 @@ const Index = () => {
   const handlePrevious = () => {
     setCurrentPage(currentPage - 1);
   };
-  // console.log("loadingIndex", AllPosts, posts);
+// fetching all post adn stroing in the store
   useEffect(() => {
-    // Fetch all posts only once on component mount
     useBlogStore.getState().startLoading();
     useBlogStore.getState().setError("");
-    BlogService.fetchAll({ whiteLabelName: profile?.whiteLabelName, page: currentPage, limit, status: activeTab === "all" ? undefined : activeTab })
+    BlogService.fetchAll({
+      whiteLabelName: profile?.whiteLabelName,
+      limit: 10000
+    })
+      .then((res) => {
+        if (res.data?.result?.results) {
+          fetchAllPosts(res.data?.result?.results);
+          useBlogStore.getState().stopLoading();
+        }
+      })
+      .catch((error) => {
+        useBlogStore.getState().stopLoading();
+        console.log("FetchError", error);
+        const e = handleError(error);
+        useBlogStore.getState().setError(e);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  // Fetch all posts when current page changes
+  useEffect(() => {
+    useBlogStore.getState().startLoading();
+    useBlogStore.getState().setError("");
+    BlogService.fetchAll({
+      whiteLabelName: profile?.whiteLabelName,
+      page: currentPage,
+      limit,
+      status: activeTab === "all" ? undefined : activeTab
+    })
       .then((res) => {
         if (res.data?.result?.results) {
           setTotal(res.data?.result?.totalResults);
-
-          fetchAllPosts(res.data?.result?.results);
           setPosts(res.data?.result?.results);
           useBlogStore.getState().stopLoading();
         }
@@ -65,19 +89,31 @@ const Index = () => {
         useBlogStore.getState().setError(e);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile?.whiteLabelName, currentPage]);
+  }, [currentPage]);
 
   const handleTabClick = async (tab: "all" | "draft" | "published") => {
+    useBlogStore.getState().startLoading();
     setActiveTab(tab);
-    if (tab === "all") {
-      setPosts(AllPosts);
-    } else if (tab === "draft") {
-      const posts = await fetchDrafts();
-      setPosts(posts);
-    } else if (tab === "published") {
-      const posts = await fetchPublished();
-      setPosts(posts);
-    }
+    BlogService.fetchAll({
+      whiteLabelName: profile?.whiteLabelName,
+      page: currentPage,
+      limit,
+      status: tab === "all" ? undefined : tab
+    })
+      .then((res) => {
+        if (res.data?.result?.results) {
+          setPosts(res.data?.result?.results);
+          setTotal(res.data?.result?.totalResults);
+          setCurrentPage(1);
+          useBlogStore.getState().stopLoading();
+        }
+      })
+      .catch((error) => {
+        useBlogStore.getState().stopLoading();
+        console.log("FetchError", error);
+        const e = handleError(error);
+        useBlogStore.getState().setError(e);
+      });
   };
   const handleDelete = (id: string) => {
     setOpenModal(true);
@@ -107,7 +143,7 @@ const Index = () => {
         toast.error(e);
         // toast.error("An error occurred while deleting blog post");
         setOpenModal(false);
-      },
+      }
     }
   );
 
@@ -159,7 +195,7 @@ const Index = () => {
                       : "bg-[#EEEFF0] text-[#464749] "
                   }`}
                 >
-                  {total}
+                  {allPosts}
                 </span>
               </button>
               <button
@@ -209,8 +245,8 @@ const Index = () => {
                       handleDelete={() => handleDelete(blog?._id as string)}
                     />
                   ))}
-                  </div>
-                  
+                </div>
+
                 <Pagination
                   total={total}
                   limit={limit}
