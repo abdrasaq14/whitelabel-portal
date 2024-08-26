@@ -63,21 +63,22 @@ function Step3({
   const [dragging, setDragging] = useState<boolean>(false);
   const form = useFormik({
     initialValues: {
-      heroText: "",
+      heroText: data?.banner?.text as string || "",
       heroImage: ""
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
-    validateOnMount: false,
+    validateOnMount: true,
     validateOnChange: true,
     validateOnBlur: true
   });
-  
+  console.log("form.values", form.values, data?.banner?.text);
   useEffect(() => {
     if (data?.banner?.text) {
       form.setFieldValue("heroText", data.banner.text);
+      form.validateField("heroText");
     }
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
@@ -93,7 +94,7 @@ function Step3({
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const [characterCount, setCharacterCount] = useState(
-    form.values.heroText.length
+    stripHtml(form.values.heroText).length
   );
   const characterLimit = 70; 
   const handleTemplateClick = (index: number) => {
@@ -105,9 +106,15 @@ function Step3({
     if (strippedContent.length <= characterLimit) {
       form.setFieldValue("heroText", content);
       setCharacterCount(strippedContent.length);
+      return;
+    } else {
+      // If content exceeds character limit, you can optionally truncate or reject the change
+      const truncatedContent = strippedContent.slice(0, characterLimit);
+      form.setFieldValue("heroText", truncatedContent);
+      setCharacterCount(characterLimit);
       return
     }
-    return
+
   };
   const handleBeforeInput = (e:any) => {
     if (
@@ -341,6 +348,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
                         }
                         modules={modules}
                         formats={formats}
+
                         placeholder="Provide your hero section text here..."
                         className=" placeholder:text-sm placeholder:text-[#667085] text-sm min-h-[10rem] focus:outline-none overflow-hidden rounded-lg border border-[#C8CCD0] "
                         theme="snow"

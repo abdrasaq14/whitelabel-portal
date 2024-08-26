@@ -239,7 +239,7 @@ const Index = () => {
               <AppFallback />
             ) : !loading && posts && posts?.length > 0 ? (
               <div className="flex flex-col gap-8">
-                <div className="flex flex-wrap gap-4 xl:grid xl:grid-cols-3 xl:items-start xl:justify-start xl:gap-6">
+                <div className="flex flex-wrap gap-4 xl:gap-6">
                   {posts.map((blog: BlogPayload, index: number) => (
                     <PostCard
                       index={index}
