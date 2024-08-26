@@ -1,5 +1,8 @@
 import React from 'react'
-
+import { Comments } from '../../services/blog.service';
+interface AllCommentProps {
+ comment: Comments 
+}
 function ViewAllComments() {
   return (
     <div className="flex flex-col gap-8">
