@@ -15,7 +15,7 @@ import {
   Comments
 } from "../../services/blog.service";
 import { useState, useEffect, Suspense } from "react";
-import { formatDate, handleError } from "../../utils/Helpfunctions";
+import { encrypt, formatDate, handleError } from "../../utils/Helpfunctions";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import CommentCard from "../../components/Blog/CommentCard";
 import Modal from "../../components/Modal/Modal";
@@ -81,6 +81,10 @@ const ViewBlogDetail = () => {
       }
     }
   );
+
+  const saveCommentsToLocalStorage = (comments: Comments[]) => { 
+    localStorage.setItem("comments", encrypt(JSON.stringify(comments)));
+  }
   useEffect(() => {
     BlogService.viewBlog(id)
       .then((res) => {
@@ -223,7 +227,8 @@ const ViewBlogDetail = () => {
                     </div>
                     {comments?.length > 0 && activeTab === "all" && (
                       <Link
-                        to={`/blog/${id}/comments`}
+                          to={`/blog/view/${id}/comments`}
+                          onClick={() => saveCommentsToLocalStorage(blogDetails?.comments)}
                         className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
                       >
                         View all comments

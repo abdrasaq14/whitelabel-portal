@@ -9,7 +9,7 @@ interface CommentCardProps {
 }
 const  CommentCard:React.FC<CommentCardProps> = ({comment, showDeleteIcon, handleDelete})=> {
   return (
-    <div className="flex p-4 flex-col w-[270px] h-[10rem] max-h-[15rem] bg-[#F2F2F2] rounded-md overflow-y-scroll scrollbar-hide">
+    <div className="flex p-4 flex-col w-[250px] h-[10rem] max-h-[15rem] bg-[#F2F2F2] rounded-md overflow-y-scroll scrollbar-hide">
       <div className="min-h-[60%] flex-1">
         <span className="text-primary-text text-sm">{comment.comment}</span>
       </div>
