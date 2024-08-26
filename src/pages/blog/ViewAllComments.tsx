@@ -1,10 +1,10 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { BlogService, Comments } from "../../services/blog.service";
 import CommentCard from "../../components/Blog/CommentCard";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
 import { decrypt, handleError } from "../../utils/Helpfunctions";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import { depressedEmoji, noCommentImage } from "../../assets/blog";
 import { Button } from "../../components/Button/Button";
@@ -14,14 +14,14 @@ import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 
 const ViewAllComments = () => {
   const { id }: any = useParams();
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+     const location = useLocation();
   const [activeTab, setActiveTab] = useState("all");
   const [AllComments, setAllComments] = useState<Comments[]>([]);
   const [comments, setComments] = useState<Comments[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
   const deletedComments = comments.filter((comment) => comment.isDeleted);
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleTabClick = async (tab: "all" | "deleted") => {
@@ -67,14 +67,28 @@ const ViewAllComments = () => {
     }
   );
 
-  useEffect(() => {
-    //retrieve comments frm local storage
-    const comments = localStorage.getItem("comments");
-    if (comments) {
-      setAllComments(decrypt(comments) as Comments[]);
+useEffect(() => {
+  // Retrieve comments from local storage
+  const comments = localStorage.getItem("comments");
+  if (comments) {
+    setAllComments(decrypt(comments) as Comments[]);
+  }
+
+  const handleUnload = (event: Event) => {
+    if (location.pathname !== window.location.pathname) {
+      // If the user is navigating away from the page, clear comments
+      localStorage.removeItem("comments");
     }
-    setIsLoading(false);
-  }, []);
+  };
+
+  window.addEventListener("beforeunload", handleUnload);
+  window.addEventListener("popstate", handleUnload);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleUnload);
+    window.removeEventListener("popstate", handleUnload);
+  };
+}, [location.pathname]);
 
   useEffect(() => {
       setComments(AllComments);
