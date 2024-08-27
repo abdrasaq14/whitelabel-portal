@@ -115,7 +115,7 @@ export default function Authenticate() {
     return (
         <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple rounded-lg h-auto  w-full sm:w-[464px] py-4 px-9 sm:shadow-custom max-h-[624px]'>
             <h2 className='text-xl font-extrabold sm:text-center font-gooperBlack text-black mb-2'>
-                Account Aunthentication
+                Account Authentication
             </h2>
             <p className='text-sm xs:mb-4  font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
                 Enter your OTP to proceed
