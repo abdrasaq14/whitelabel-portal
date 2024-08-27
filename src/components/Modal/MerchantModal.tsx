@@ -234,15 +234,15 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
     return (
         <Modal isOpen={isOpen} closeModal={closeModal} containerStyle='flex flex-col p-4 sm:p-8 align-middle max-w-2xl items-center rounded z-24 bg-white w-[70%] sm:w-[400px] h-auto'>
             {
-                isConfirm ? <>
+                isConfirm ? <div className='flex flex-col items-center justify-center'>
                 <h3 className='font-medium'>Please provide a reason to suspend this account to sell on this platform</h3>
 
-                <div className="mt-4">
+                <div className="mt-4 w-full">
                     <label className='text-xs text-gray-600'>Kindly provide a reason</label>
                     <textarea onChange={(e) => setReason(e.target.value)} className='w-full mt-1 text-sm h-[90px] px-3 py-3 border rounded focus:outline-none' placeholder='Provide reason' />
 
                 </div>
-                <div className='w-full flex mt-4 justify-end gap-2  '>
+                <div className='w-full flex mt-4 justify-center gap-2  '>
                 <button
                     type='button'
                     onClick={() => closeModal()}
@@ -260,7 +260,7 @@ export const SuspendModal = ({ isOpen, closeModal, confirmDelete, merchant }: an
                     Submit  <span><MdOutlineArrowForward size={12} /></span>
                 </button>
             </div>
-                </> : <>
+                </div> : <>
                 <div className=''>
                 <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
             </div>

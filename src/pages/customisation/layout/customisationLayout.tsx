@@ -4,7 +4,7 @@ import { useAuth } from "../../../zustand/auth.store";
 export default function CustomisationLayout() {
   const whiteLabelDetails = useAuth(
     // @ts-ignore
-    (s) => s.profile?.customisationData?.image?.logo
+    (s) => s.profile?.companyLogo
   );
   return (
     <div className=" w-screen h-screen ">

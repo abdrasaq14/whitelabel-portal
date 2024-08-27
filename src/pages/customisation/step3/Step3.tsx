@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import Spinner from "../../../components/spinner/Spinner";
 import {
   MdOutlineArrowForward,
-  MdOutlineKeyboardBackspace,
+  MdOutlineKeyboardBackspace
 } from "react-icons/md";
 import { uploadIcon } from "../../../assets/customisation";
 import axios from "axios";
@@ -40,7 +40,6 @@ export const stripHtml = (str: any) => {
 const validationSchema = Yup.object({
   heroText: Yup.string()
     .trim()
-    .required("Hero Section text is required")
     .test(
       "max-length",
       "Hero Text must not be greater than 70 characters",
@@ -48,24 +47,81 @@ const validationSchema = Yup.object({
         const plainText = stripHtml(value);
         return plainText.length <= 70;
       }
-    ),
-  heroImage: Yup.string().trim().required("Hero Image is required"),
+    )
+    .required("Hero Section text is required"),
+  heroImage: Yup.string().trim().required("Hero Image is required")
 });
-
 
 function Step3({
   primaryColor,
   secondaryColor,
   step,
   setStep,
-  data,
+  data
 }: Step3Props) {
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [dragging, setDragging] = useState<boolean>(false);
+  const form = useFormik({
+    initialValues: {
+      heroText: "",
+      heroImage: ""
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      handleSubmit.mutate(values);
+    },
+    validateOnMount: false,
+    validateOnChange: true,
+    validateOnBlur: true
+  });
+  
+  useEffect(() => {
+    if (data?.banner?.text) {
+      form.setFieldValue("heroText", data.banner.text);
+    }
+    if (data?.banner?.imageUrl) {
+      form.setFieldValue("heroImage", data.banner.imageUrl);
+    }
+    if(data?.completeSetup === "completed"){
+      setIsOpen(true);
+      const localUserData: string | null = localStorage.getItem("userObject");
+      if (localUserData) {
+        const localData = JSON.parse(localUserData);
+        setUpdatedUserObject(localData)
+      }
+    }
+    // form.validateForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+  const [characterCount, setCharacterCount] = useState(
+    form.values.heroText.length
+  );
+  const characterLimit = 70; 
   const handleTemplateClick = (index: number) => {
     setSelectedTemplate(index);
+  };
+ 
+  const handleTextChange = (content: string) => {
+    const strippedContent = stripHtml(content);
+    if (strippedContent.length <= characterLimit) {
+      form.setFieldValue("heroText", content);
+      setCharacterCount(strippedContent.length);
+      return
+    }
+    return
+  };
+  const handleBeforeInput = (e:any) => {
+    if (
+      characterCount >= characterLimit &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete"
+    ) {
+      e.preventDefault();
+    }
   };
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const scrollToSection = () => {
@@ -84,8 +140,8 @@ function Step3({
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            "Content-Type": "multipart/form-data"
+          }
         }
       );
       return response;
@@ -102,73 +158,74 @@ function Step3({
         setIsUploading(false);
         form.setSubmitting(false);
         console.error("Error uploading file:", err);
-      },
+      }
     }
   );
-
-  const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
-    event
+const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+  event.preventDefault();
+  setDragging(false);
+  if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+    const file = event.dataTransfer.files[0];
+    setIsUploading(true);
+    await validateAndUploadFile(file);
+    event.dataTransfer.clearData();
+  }
+  };
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.currentTarget.files) {
       setIsUploading(true);
       const file = event.currentTarget.files[0];
-      const validFormats = ["image/jpeg", "image/png", "image/jpg"];
-      const minSize = 50 * 1024; // 50 KB
-      const maxSize = 5 * 1024 * 1024; // 5 MB
-
-      if (!validFormats.includes(file.type)) {
-        setUploadError(
-          "Invalid image format. Supported formats: JPEG, PNG, JPG."
-        );
-        setIsUploading(false);
-        return;
-      }
-
-      if (file.size < minSize || file.size > maxSize) {
-        setUploadError("Image size must be between 50 KB and 5 MB.");
-        setIsUploading(false);
-        return;
-      }
-
-      setUploadError("");
-      if (selectedTemplate !== 2) {
-        const bgRemovedImage = await removeBackground(file);
-        if (bgRemovedImage) {
-          // Continue with your image upload logic, using the bgRemovedImage URL
-          handleImageUpload.mutate(bgRemovedImage);
-        } else {
-          setUploadError("Failed to remove background from the image.");
-          setIsUploading(false);
-          return;
-        }
-      } else {
-        handleImageUpload.mutate(file);
-        return;
-      }
-      // handleImageUpload.mutate(file);
+      await validateAndUploadFile(file);
     }
+  };
+  const validateAndUploadFile = async (file: File) => {
+    setIsUploading(true);
+    const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+    const minSize = 50 * 1024; // 50 KB
+    const maxSize = 5 * 1024 * 1024; // 5 MB
+
+    if (!validFormats.includes(file.type)) {
+      setUploadError(
+        "Invalid image format. Supported formats: JPEG, PNG, JPG."
+      );
+      setIsUploading(false);
+      return;
+    }
+
+    if (file.size < minSize || file.size > maxSize) {
+      setUploadError("Image size must be between 50 KB and 5 MB.");
+      setIsUploading(false);
+      return;
+    }
+
+    setUploadError("");
+    if (selectedTemplate !== 2) {
+      const bgRemovedImage = await removeBackground(file);
+      if (bgRemovedImage) {
+        // Continue with your image upload logic, using the bgRemovedImage URL
+        handleImageUpload.mutate(bgRemovedImage);
+      } else {
+        setUploadError("Failed to remove background from the image.");
+        setIsUploading(false);
+        return;
+      }
+    } else {
+      handleImageUpload.mutate(file);
+      return;
+    }
+    // handleImageUpload.mutate(file);
   };
 
   const handleProceed = () => {
     localStorage.removeItem("setupData");
-    setStep(1);
     AuthActions.setProfile(updatedUserObject);
     navigate("/dashboard");
+    localStorage.removeItem("userObject");
     setIsOpen(false);
     return;
   };
-  const form = useFormik({
-    initialValues: {
-      heroText: "",
-      heroImage: "",
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      handleSubmit.mutate(values);
-    },
-    validateOnChange: true, 
-    validateOnBlur: true, 
-  });
 
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
@@ -176,9 +233,9 @@ function Step3({
         banner: {
           text: values.heroText,
           imageUrl: values.heroImage,
-          template: templates[selectedTemplate].title,
+          template: templates[selectedTemplate].title
         },
-        completeSetup: "completed",
+        completeSetup: "completed"
       });
     },
     {
@@ -186,10 +243,18 @@ function Step3({
         form.setSubmitting(false);
         setIsUploading(false);
         setUploadError("");
-        setUpdatedUserObject(response.data.result);
+        setUpdatedUserObject(response.data.result)
+        // in case the user refershes without clicking on proceed button
+        localStorage.setItem("userObject", JSON.stringify(response.data.result));
+        const localData: string | null = localStorage.getItem("setupData");
+        if (localData) { 
+          const updateLocalData = JSON.parse(localData);
+          updateLocalData.banner = response.data.result.customisationData.banner;
+          updateLocalData.completeSetup = response.data.result.customisationData.completeSetup
+          updateLocalData.stage = response.data.result.customisationData.stage;
+          localStorage.setItem("setupData", JSON.stringify(updateLocalData));
+        }
         setIsOpen(true);
-        // AuthActions.setProfile(response.data.result)
-        // return
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -197,7 +262,7 @@ function Step3({
         form.setSubmitting(false);
         toast.error("An error occurred. Please try again.");
         console.log("erro", err);
-      },
+      }
     }
   );
 
@@ -213,27 +278,18 @@ function Step3({
     // toast.success("herotext successfully");
   };
 
-
   const modules = {
     toolbar: [
       // [{ font: fonts }],
       ["bold", "italic", "underline"],
       ["clean"],
-      [{ color: [] }],
-    ],
+      [{ color: [] }]
+    ]
   };
-console.log("formValues", form.values)
+
   const formats = ["font", "bold", "italic", "underline", "strike", "color"];
-  const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    if (data?.banner?.text) {
-      form.setFieldValue("heroText", data.banner.text);
-    }
-    if (data?.banner?.imageUrl) {
-      form.setFieldValue("heroImage", data.banner.imageUrl);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  
+
   return (
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
@@ -283,9 +339,8 @@ console.log("formValues", form.values)
                       </span>
                       <ReactQuill
                         value={form.values.heroText}
-                        onChange={(content) =>
-                          form.setFieldValue("heroText", content)
-                        }
+                        onChange={handleTextChange}
+                        onKeyDown={handleBeforeInput}
                         onBlur={() =>
                           saveDataToLocaStorage({ text: form.values.heroText })
                         }
@@ -368,7 +423,7 @@ console.log("formValues", form.values)
                           </span>
                         )}
                         <span className="font-satoshiLight text-sm text-[#667085]">
-                          Max. of 70 Characters
+                          {characterCount}/{characterLimit} characters
                         </span>
                       </div>
                     </div>
@@ -386,7 +441,17 @@ console.log("formValues", form.values)
                         </span>
                       </div>
                     ) : (
-                      <div className="flex flex-col cursor-pointer  items-center justify-center rounded-lg gap-2 relative border-[0.8px] border-dashed border-[#384eb74d] h-[15rem] bg-[#f8f8ff]">
+                      <div
+                        className={`flex flex-col cursor-pointer items-center justify-center rounded-lg gap-2 relative border-[0.8px] border-dashed border-[#384eb74d] h-[15rem] bg-[#f8f8ff] ${
+                          dragging ? "bg-[#e6e6fa]" : ""
+                        }`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          setDragging(true);
+                        }}
+                        onDragLeave={() => setDragging(false)}
+                        onDrop={handleDrop}
+                      >
                         <div className="w-80px h-[50px]">
                           <img
                             src={uploadIcon}
@@ -421,7 +486,8 @@ console.log("formValues", form.values)
                         {uploadError}
                       </span>
                     ) : (
-                      form.touched && form.errors.heroImage && (
+                      form.touched &&
+                      form.errors.heroImage && (
                         <span className="text-[#D42620] text-sm">
                           {form.errors.heroImage}
                         </span>
@@ -432,13 +498,13 @@ console.log("formValues", form.values)
                 <button
                   type="button"
                   disabled={
-                    !form.values.heroText.trim() ||
+                    !stripHtml(form.values.heroText).trim() ||
                     !form.values.heroImage.trim() ||
                     form.isSubmitting ||
                     isUploading
                   }
                   onClick={() => form.handleSubmit()}
-                  className="bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-opacity-50 disabled:cursor-not-allowed"
+                  className="bg-primary w-full rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center p-2.5 font-medium disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
                   {form.isSubmitting ? (
                     <Spinner />

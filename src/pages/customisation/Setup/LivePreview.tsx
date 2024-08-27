@@ -23,7 +23,7 @@ export default function LivePreview({data, stage}: any) {
                 <p className="text-[#FFFFFF] text-[18px] tracking-tighter leading-6 font-satoshiBold">Live Preview</p>
 
                 <div className="w-full mt-10">
-                    {stage === 1 && <div className="flex p-2 w-full bg-[#380062] items-center">
+                    {stage === 1 && <div className="flex p-2 w-full bg-[#380062] items-center" style={{ backgroundColor: primaryColor }}>
                         <div className="flex items-center px-10">
                             <BiEnvelope color="#ffffff" size={14}/>
                             <span className="text-[#ffffff] text-[12px] mx-2">{email.supportEmail}</span>
@@ -37,7 +37,7 @@ export default function LivePreview({data, stage}: any) {
                     {stage === 1 && <div className="bg-[#ffffff] px-10 py-3">
                         <div className="grid grid-cols-7">
                             <div className="col-start-1 col-end-3"><img alt="logo" src={data.image.logo}
-                                                                        style={{maxWidth: 100}}/></div>
+                                                                        style={{maxWidth: 60}}/></div>
                             <div className="col-start-3 col-end-5 flex justify-center items-center">
                                 <div
                                     className={`border border-[${primaryColor}] w-full h-[35px] flex justify-between items-center pl-2 rounded-md`}>
@@ -125,8 +125,8 @@ export default function LivePreview({data, stage}: any) {
                     </div>
 
                     {stage === 2 && <div className="bg-[#ffffff] pt-10 px-10">
-                        <p className="text-center text-[18px] font-satoshi" style={{color: primaryColor}}>About Us</p>
-                        <p className="text-[12px] text-center mt-5">{shortText}</p>
+                        <div className="text-center text-[18px] font-satoshi" style={{color: primaryColor}}>About Us</div>
+                        <div className="text-[12px] text-center mt-5 w-full border text-balance">{shortText}</div>
 
                         <div className="mt-10 grid grid-cols-4 gap-5">
                             <div className="flex items-center justify-around p-2 border rounded-md"

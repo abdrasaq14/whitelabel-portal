@@ -55,14 +55,15 @@ function CustomisationPage() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<customisationData>(customizationData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [isError, setIsError] = useState<any>({});
+  const [isAboutError, setIsAboutError] = useState<any>({});
   // pick the color from redux store
   useEffect(() => {
     console.log(">>>>>>>>>>>>>>")
     const localData: string | null = localStorage.getItem("setupData");
     if(localData){
       const fineLocalData = JSON.parse(localData);
-      console.log("Local data", fineLocalData)
+      // console.log("Local data", fineLocalData)
       setData(fineLocalData);
       setStep(fineLocalData.stage);
     }else{
@@ -71,7 +72,7 @@ function CustomisationPage() {
   }, []);
 
   const saveCustomizationData = () => {
-    console.log("User profile", profile)
+    // console.log("User profile", profile)
     const existingData = {
       ...profile.customisationData,
       theme: {
@@ -122,9 +123,46 @@ function CustomisationPage() {
       setData({...data, contact: {...data.contact, email: {...data.contact?.email, ...info}}})
     }else if(info.hasOwnProperty("phone")){
       setData({...data, contact: {...data.contact, ...info}})
-    }else{
+    }else if(info.hasOwnProperty("senderEmail")){
       setData({...data, contact: {...data.contact, email: {...data.contact?.email, ...info}}})
     }
+  }
+
+  const setError = (error: any) => {
+    console.log("Info.error", error);
+    
+    setIsError((prevError: any) => {
+      let newErrorState = { ...prevError };
+      if (error.hasOwnProperty("contactEmail")) {
+        newErrorState.contactEmail = error.contactEmail;
+      }
+      if (error.hasOwnProperty("senderEmail")) {
+          newErrorState.senderEmail = error.senderEmail;
+      }
+      if (error.hasOwnProperty("contactPhone")) {
+          newErrorState.contactPhone = error.contactPhone;
+      }
+
+      return newErrorState;
+    })
+  }
+
+  const setAboutError = (error: any) => {
+    console.log("Info.aboutError", error);
+    
+    setIsAboutError((prevError: any) => {
+      let newErrorState = { ...prevError };
+      if (error.hasOwnProperty("aboutUs")) {
+        newErrorState.aboutUs = error.aboutUs;
+      }
+      if (error.hasOwnProperty("aboutUsFull")) {
+          newErrorState.aboutUsFull = error.aboutUsFull;
+      }
+
+      return newErrorState;
+    })
+
+    console.log("Error info aboutus ", isAboutError)
   }
 
   const setAboutData = (aboutData: any) => {
@@ -132,8 +170,9 @@ function CustomisationPage() {
   }
 
   const setSocial = (socialData: any) => {
+    console.log("Social Data", socialData);
     setData({...data, socialMedia: {...data.socialMedia, ...socialData}})
-    // console.log(data);
+    console.log("Final socials", data);
   }
 
   const prev = () => {
@@ -145,6 +184,7 @@ function CustomisationPage() {
   const processStage1 = useMutation(
       async () => {
         console.log("Processing data", data);
+        setIsLoading(true);
         return await CustomisationService.updateCustomisation({...data, stage: 2});
       },
       {
@@ -165,8 +205,16 @@ function CustomisationPage() {
 
   const processStage2 = useMutation(
       async () => {
-        console.log("Processing data", data);
-        return await CustomisationService.updateCustomisation({...data, stage: 3});
+        const mData: any = {...data}
+        console.log("Processing data", mData);
+        const socialData: any = mData.socialMedia;
+        const result: any[] | undefined = Object.entries(socialData).map(([key, value]) => ({
+          title: key,
+          link: value
+        })).filter(item => item.link);
+        setIsLoading(true);
+        mData["socialMedia"] = result;
+        return await CustomisationService.updateCustomisation({...mData, stage: 3});
       },
       {
         onSuccess: (response) => {
@@ -186,8 +234,8 @@ function CustomisationPage() {
 
   return (
     <div className="w-full">
-      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setInfo={setInfo} processStage1={() => processStage1.mutate()} isLoading={!isLoading} />}
-      {step === 2 && data && <Step2 data={data} isLoading={!isLoading} setAboutData={setAboutData} setSocial={setSocial} prev={prev} processStage2={() => processStage2.mutate()} />}
+      {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setError={setError} setInfo={setInfo} processStage1={() => !isError.contactEmail && !isError.senderEmail && !isError.contactPhone && processStage1.mutate()} isLoading={isLoading} />}
+      {step === 2 && data && <Step2 data={data} isLoading={isLoading} setAboutData={setAboutData} setError={setAboutError} setSocial={setSocial} prev={prev} processStage2={() => !isAboutError.aboutUs && !isAboutError.aboutUsFull && processStage2.mutate()} />}
       {step === 3 && <Step3 primaryColor={data.theme?.primaryColor} secondaryColor={data.theme?.secondaryColor} step={step} setStep={setStep} data={data}/>}
     </div>
   );
