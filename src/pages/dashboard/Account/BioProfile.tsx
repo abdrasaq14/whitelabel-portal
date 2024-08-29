@@ -49,7 +49,7 @@ const BioProfile = () => {
     adminEmail: Yup.string().email('Invalid email').required('Admin email is required'),
     companyPhoneNumber: Yup.string().required('Company Phone Number is required'),
     adminPhoneNumber: Yup.string().required('Admin Phone number is required'),
-    companyAddress: Yup.string().required('Company address is required'),
+    // companyAddress: Yup.string().required('Company address is required'),
   });
 
   const validationSchemaStaff = Yup.object().shape({
@@ -79,7 +79,7 @@ const BioProfile = () => {
       onSuccess: (response) => {
         toast.success('Account Information Updated Successfully');
         form.setSubmitting(false);
-        AuthActions.setProfile(response.data.user)
+        AuthActions.setProfile(response.data.result.user)
 
       },
       onError: (err: any) => {
@@ -143,7 +143,7 @@ const BioProfile = () => {
   console.log(companyDetails)
 
 
-
+console.log("ErrorForm", form.errors)
   return (
     <div>
       <div className='flex flex-wrap-reverse gap-4'>

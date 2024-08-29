@@ -1,5 +1,7 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../../zustand/auth.store";
+import { Link } from "react-router-dom";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
@@ -9,7 +11,7 @@ interface BreadcrumbProp {
 export const BreadCrumb = ({
   handleBackAction,
   backText,
-  currentPath,
+  currentPath
 }: BreadcrumbProp) => (
   <div className="flex mb-6">
     <div className="flex cursor-pointer" onClick={handleBackAction}>
@@ -31,20 +33,57 @@ interface BreadcrumbPropClient {
 export const BreadCrumbClient = ({
   brand,
   backText,
-  currentPath,
+  currentPath
 }: BreadcrumbPropClient) => {
-  const profile:any = useAuth((s) => s.profile)
+  const profile: any = useAuth((s) => s.profile);
   return (
     <div className="flex mb-6">
       <div className="flex  font-medium  text-sm text-primary-text">
         <p className=" ">
-          {profile?.whiteLabelName} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
+          {profile?.whiteLabelName}{" "}
+          <span className="mx-3 text-gray-300">{" / "}</span>{" "}
         </p>
       </div>
 
-      <h6 className="text-foundation-darkPurple text-sm font-medium ">{currentPath}</h6>
+      <h6 className="text-foundation-darkPurple text-sm font-medium ">
+        {currentPath}
+      </h6>
     </div>
   );
+};
+interface BreadCrumbWithBackButtonProps {
+  backText: string;
+  showBackButton?: boolean;
+  currentPath: string;
+  handleBackAction: () => void;
 }
 
+export const BreadCrumbWithBackButton = ({
+  backText,
+  currentPath,
+  handleBackAction,
+  showBackButton
+}: BreadCrumbWithBackButtonProps) => {
+  // const profile: any = useAuth((s) => s.profile);
+  return (
+    <div className="flex mb-6 items-center">
+      <div className="flex cursor-pointer items-center">
+        {showBackButton && (
+          <span onClick={handleBackAction}>
+            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-primary text-[18px]" />
+          </span>
+        )}
+        {backText && (
+          <>
+            <Link to="/blog" className="mx-1">
+              {backText}{" "}
+            </Link>
+            <span className="text-gray-300"> {" / "}</span>
+          </>
+        )}
+      </div>
 
+      <span className="ml-1 text-primary font-semibold">{currentPath}</span>
+    </div>
+  );
+};

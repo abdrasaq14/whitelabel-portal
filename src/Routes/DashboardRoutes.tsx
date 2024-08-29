@@ -103,6 +103,43 @@ export const AdminDashRouter: IModuleRouter = {
       },
       () => import("../pages/dashboard/Account/AccountInfo")
     ),
+    // Blog
+    LazyRoute(
+      {
+        path: "/blog",
+      },
+      () => import("../pages/blog/Index")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/create",
+      },
+      () => import("../pages/blog/CreateBlog")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/edit/:id",
+      },
+      () => import("../pages/blog/CreateBlog")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/view/:id",
+      },
+      () => import("../pages/blog/ViewBlogDetail")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/view/:id/comments",
+      },
+      () => import("../pages/blog/ViewAllComments")
+    ),
+    LazyRoute(
+      {
+        path: "/blog/preview",
+      },
+      () => import("../pages/blog/Preview")
+    ),
     //Orders & Transaction
     LazyRoute(
       {

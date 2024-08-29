@@ -248,7 +248,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                   <TextInput
                     name='firstName'
                     type='text'
-                    placeholder='john Doe'
+                    placeholder='John'
                     label="First Name"
                     disabled={!isEditing}
                   />
@@ -257,7 +257,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                   <TextInput
                     name='lastName'
                     type='text'
-                    placeholder='john Doe'
+                    placeholder='Doe'
                     label="Last Name"
                     disabled={!isEditing}
                   />
@@ -394,7 +394,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
 
 
 export const AddStaffModal = ({ isOpen, closeModal }: any) => {
-  const accountTabTitle = ['Add Staff', 'Upload CSV']
+  const accountTabTitle = ['Add Staff']
   const [tabIndex, setTabIndex] = useState<number>(0)
 
   const displayAccountContent = (tabIndex: number) => {
@@ -524,7 +524,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             <TextInput
               name='firstName'
               type='text'
-              placeholder='john Doe'
+              placeholder='John'
               label="First Name"
             />
           </div>
@@ -532,7 +532,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             <TextInput
               name='lastName'
               type='text'
-              placeholder='john Doe'
+              placeholder='Doe'
               label="Last Name"
             />
           </div>
@@ -548,7 +548,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
           <div className='col-span-1'>
             <TextInput
               name='phoneNumber'
-              placeholder='linda@framcreative.com'
+              placeholder='+2348000000011'
               label="Phone Number"
             />
           </div>
@@ -589,7 +589,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
             </div>
           </div>
           <div className='col-span-1 sm:col-span-2 flex gap-4 mt-4 justify-between flex-wrap items-center'>
-            <div>
+            {/* <div>
               <p className='font-satoshiMedium text-sm text-primary-subtext flex gap-1 items-center'>
                 <button
                   type='button'
@@ -599,7 +599,7 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
                 by uploading csv</p>
 
-            </div>
+            </div> */}
             <div className='flex gap-4 justify-end w-full sm:w-auto'>
               <button
                 type='submit'

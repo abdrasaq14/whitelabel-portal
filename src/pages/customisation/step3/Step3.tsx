@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ChangeEventHandler, useState } from "react";
+import { useState } from "react";
 import TemplateCard, { templates } from "./templateCard";
 import * as Yup from "yup";
 import { FormikProvider, useFormik } from "formik";
@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
+import { stripHtml } from "../../../utils/Helpfunctions";
 
 interface Step3Props {
   primaryColor: any;
@@ -29,12 +30,7 @@ interface Step3Props {
   data: any;
 }
 
-export const stripHtml = (str: any) => {
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = str;
-  const textContent = tempDiv.textContent || tempDiv.innerText || "";
-  return textContent.trim();
-};
+
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -67,21 +63,22 @@ function Step3({
   const [dragging, setDragging] = useState<boolean>(false);
   const form = useFormik({
     initialValues: {
-      heroText: "",
+      heroText: data?.banner?.text as string || "",
       heroImage: ""
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
     },
-    validateOnMount: false,
+    validateOnMount: true,
     validateOnChange: true,
     validateOnBlur: true
   });
-  
+  console.log("form.values", form.values, data?.banner?.text);
   useEffect(() => {
     if (data?.banner?.text) {
       form.setFieldValue("heroText", data.banner.text);
+      form.validateField("heroText");
     }
     if (data?.banner?.imageUrl) {
       form.setFieldValue("heroImage", data.banner.imageUrl);
@@ -94,11 +91,10 @@ function Step3({
         setUpdatedUserObject(localData)
       }
     }
-    // form.validateForm()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const [characterCount, setCharacterCount] = useState(
-    form.values.heroText.length
+    stripHtml(form.values.heroText).length
   );
   const characterLimit = 70; 
   const handleTemplateClick = (index: number) => {
@@ -110,9 +106,14 @@ function Step3({
     if (strippedContent.length <= characterLimit) {
       form.setFieldValue("heroText", content);
       setCharacterCount(strippedContent.length);
+      return;
+    } else {
+      const truncatedContent = strippedContent.slice(0, characterLimit);
+      form.setFieldValue("heroText", truncatedContent);
+      setCharacterCount(characterLimit);
       return
     }
-    return
+
   };
   const handleBeforeInput = (e:any) => {
     if (
@@ -346,6 +347,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
                         }
                         modules={modules}
                         formats={formats}
+
                         placeholder="Provide your hero section text here..."
                         className=" placeholder:text-sm placeholder:text-[#667085] text-sm min-h-[10rem] focus:outline-none overflow-hidden rounded-lg border border-[#C8CCD0] "
                         theme="snow"

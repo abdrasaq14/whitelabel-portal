@@ -29,6 +29,7 @@ export const sidebar: SideItem[] = [
     ]
   },
   { name: "Order & Transaction", path: "/orders", iconName: "orders" },
+  { name: "Blog", path: "/blog", iconName: "blog" },
   { name: "Message", path: "/message", iconName: "sms" },
   { name: "Account", path: "/account", iconName: "account" },
   { name: "Settings", path: "/settings", iconName: "settings" },

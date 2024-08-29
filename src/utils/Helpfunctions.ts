@@ -1,3 +1,6 @@
+import { AES, enc } from "crypto-js";
+import { Config } from "./config";
+
 
 export const decodeHtml = (html: any) => {
     const txt = document.createElement("textarea");
@@ -21,3 +24,63 @@ export function formatAmount(amount: number): string {
 
   return formattedAmount;
 }
+
+const $key: string = Config.encodingKey ?? "$@A^&GHDQW$@!@#";
+
+export const encrypt = (data: string) => {
+  return AES.encrypt(data, $key).toString();
+};
+
+export const decrypt = (data: string) => {
+  if (data) {
+    var bytes = AES.decrypt(data, $key);
+    return JSON.parse(bytes.toString(enc.Utf8));
+  }
+
+  return null;
+};
+
+export const formatDate = (date: string) => {
+  const dateObj = new Date(date);
+
+// Format the date
+return dateObj.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+}
+
+export const truncateText = (text:string, maxLength = 150) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+export const stripHtml = (str: any) => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = str;
+  const textContent = tempDiv.textContent || tempDiv.innerText || "";
+  return textContent.trim();
+};
+
+export const delay = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const handleError = (error: any) => {
+  if (
+    error?.code === "ERR_NETWORK" ||
+    error?.message?.includes("Network Error") ||
+    error?.message?.includes("Failed to fetch") ||
+    error?.message?.includes("Cannot read properties of undefined")
+  ) {
+    return "Network error";
+  } else if (error.response.data.message) {
+    const message = error.response.data.message;
+    return message === "Invalid token"
+      ? "Session expired, kindly login again"
+      : message;
+  } else if (error?.message) {
+    return error.message == "Invalid token"
+      ? "Session expired, kindly login again"
+      : error.message;
+  } else {
+    return error ?? "An unexpected error occurred.";
+  }
+};
