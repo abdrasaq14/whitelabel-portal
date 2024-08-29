@@ -8,7 +8,7 @@ import { fDateTime } from '../../../utils/formatTime'
 import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
-import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
+import { AddInventory, ViewInventory, ViewInventoryHistory } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
 
 
@@ -36,6 +36,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
             refetchOnMount: true,
         }
     )
+
     const mockData = {
         data: [
             {
@@ -140,6 +141,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
 
         return totalPrice;
     }
+
     const handlePageSize = (val: any) => {
         setPageSize(val);
         // setFilterParams({ ...filterParams, pageSize: val });
@@ -154,15 +156,19 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
         console.log(isMakeModalOpen)
         refetch()
     }, [isMakeModalOpen])
+
     return (
         <div>
-
             {
                 data && data?.result.requests.length > 0 ? (
                     <div className='h-full flex-grow '>
                         <Table data={data?.result.requests}
                             hideActionName={true}
-                            // clickRowAction={(row) => setModalOpen(true)}
+                            clickRowAction={(row) => {
+                                console.log("Selected media", row)
+                                setSelectedInventory(row)
+                                setIsViewModalOpen(true)
+                            }}
                             // rowActions={(row) => [
                             //     {
                             //         name: "View Item",
@@ -233,7 +239,11 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
             <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
                 await refetch()
                 closeViewModal()
+            }} />
 
+            <ViewInventoryHistory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+                await refetch()
+                setIsViewModalOpen(false)
 
             }} />
         </div>

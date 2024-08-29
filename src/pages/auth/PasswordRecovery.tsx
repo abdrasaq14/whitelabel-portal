@@ -35,7 +35,7 @@ export const PasswordRecovery = () => {
     <main className='bg-white mt-8 sm:border-[0.4px] sm:border-foundation-darkPurple h-auto  rounded-lg  w-full sm:w-[444px] py-4 px-12 sm:shadow-custom max-h-[450px]'>
          <h2 className='text-xl font-gooperBlack font-extrabold sm:text-center  text-black mb-2'> Password Recovery </h2>
             <p className='text-sm mb-4 font-normal sm:text-center mt-2 font-satoshiMedium text-grayish3'>
-            Lorem ipsum dolor sit amet consectetur. Urna eget lobortis rhoncus suspendisse cursus tristique eu turpis.
+            A password reset link will be sent to your email. Click on it to reset your password.
         </p>
         <Formik initialValues={initialValues} onSubmit={handleSubmit}  validationSchema={validationSchema} >
             <Form>

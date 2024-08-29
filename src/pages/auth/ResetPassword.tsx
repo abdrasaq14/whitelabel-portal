@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
  export const ResetPassword = () => {
     const { showPassword, handleClickShowPassword } = usePasswordToggle();
     const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
   
     const openModal = () => {
       setIsOpen(true);
@@ -58,6 +59,7 @@ const form = useFormik({
   }),
   onSubmit: async (values) => {
     try {
+      setLoading(true)
        handleSubmit.mutate({ password: values.password, token });
       // toast.success("Password updated successfully!");
     } catch (error: any) {
@@ -82,11 +84,12 @@ const form = useFormik({
           requestAnimationFrame(() => {
             router("/login");
           });
+          setLoading(false)
         },
         onError: (err: any) => {
           toast.error(err.response.data.message);
           form.setSubmitting(false)
-          
+          setLoading(false)
         },
       }
     );
@@ -141,7 +144,7 @@ const form = useFormik({
                 disabled={form.isSubmitting}
                 onClick={() => form.handleSubmit()}  
                 className='bg-primary w-full rounded-lg text-white text-base inline-flex gap-2 items-center justify-center text-center p-3 font-normal disabled:bg-opacity-50 disabled:cursor-not-allowed' >
-                  {form.isSubmitting ? <Spinner /> : "Set up password"}
+                  {loading ? <Spinner /> : "Set up password"}
                </button>
             </form>
 
