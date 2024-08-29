@@ -62,7 +62,7 @@ export default function AboutUs({data, setAboutData, setFormError,}: any) {
                         ref={inputAboutUs}
                         onChange={(e) => handleSetAboutData(e)}
                         rows={5}
-                        maxLength={500}
+                        maxLength={300}
                         placeholder='Provide your about us summary text here...'
                         className="outline-none border border-[#D0D5DD] rounded-md px-[14px]">
                     </textarea>

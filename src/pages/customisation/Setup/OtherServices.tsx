@@ -2,7 +2,7 @@ import {BiSolidDownArrow} from "react-icons/bi";
 import Modal from "../../../components/Modal/Modal";
 import {useEffect, useState} from "react";
 
-const services = ["Cafeteria", "Electricity"];
+const services = ["Cafeteria", "Electricity", "Blog"];
 
 export default function OtherServices({setService, data}: any) {
     const [selectService, setSelectService] = useState<boolean>(false)

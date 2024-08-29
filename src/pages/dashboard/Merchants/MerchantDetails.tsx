@@ -15,6 +15,7 @@ import { SuspendModal } from '../../../components/Modal/MerchantModal'
 import toast from 'react-hot-toast'
 import { useMutation } from 'react-query'
 import { useAuth } from '../../../zustand/auth.store'
+import Spinner from '../../../components/spinner/Spinner'
 
 interface PaginationInfo {
     currentPage: number;
@@ -27,6 +28,7 @@ const MerchantDetails = () => {
     const accountTabTitle = ['Overview', 'All Products', 'Product Sold']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [isSuspendOpen, setIsSuspendOpen] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const { id }: any = useParams()
 
@@ -109,14 +111,17 @@ const MerchantDetails = () => {
                 secondUser: {id: merchant.result.id, userName: merchant.result.userName, firstName: merchant.result.firstName, lastName: merchant.result.lastName, phone: merchant.result.phone, image: merchant.result.image, email: merchant.result.email}
             }
             console.log("Conversation users", values);
+            setLoading(true);
             return await MerchantService.startConversation(values);
         },
         {
             onSuccess: () => {
+                setLoading(false)
                 toast.success("Conversation started")
                 navigate("/message");
             },
             onError: () => {
+                setLoading(false)
                 toast.error("Failed to start conversation")
             }
         }
@@ -150,7 +155,7 @@ const MerchantDetails = () => {
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
                         <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
                     </div>
-                    <button className='border border-primary rounded bg-white px-3 py-2 whitespace-nowrap' onClick={() => startConversation.mutate()}>Message Merchant
+                    <button className='border border-primary flex items-center rounded bg-white px-3 py-2 whitespace-nowrap' onClick={() => startConversation.mutate()}>Message Merchant {loading && <Spinner color="#6F7174" width={15} height={15} />}
                     </button>
 
                 </div>

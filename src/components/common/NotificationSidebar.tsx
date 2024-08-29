@@ -165,7 +165,7 @@ const NotificationSidebar = ({
                         {
                           notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
                         }
-                      </> : <div className="text-center w-full mt-12 text-sm">No Notifation</div>
+                      </> : <div className="text-center w-full mt-12 text-sm">No Notification</div>
                   }
                 </div>
 

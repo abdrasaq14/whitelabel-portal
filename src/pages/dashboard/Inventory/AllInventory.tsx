@@ -23,7 +23,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-page", {
-            page: currentPage, limit: pageSize,whiteLabelName: profile.whiteLabelName,
+            page: currentPage, limit: pageSize, whiteLabelName: profile.whiteLabelName,
         }],
         InventoryService.getInventoroes,
         {
@@ -134,6 +134,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
         setCurrentPage(val);
         // setFilterParams({ ...filterParams, pageNum: val - 1 });
     };
+
     return (
         <div>
 
@@ -168,9 +169,16 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                     view: (row: any) => <div>{row.name}</div>,
                                 },
                                 {
-                                    header: "Quantity",
+                                    header: "Qty In",
                                     view: (row: any) => {
-                                        const quantity = row.quantityIn - row.quantityOut;
+                                        const quantity = row.quantityIn;
+                                        return <div>{quantity}</div>;
+                                    }
+                                },
+                                {
+                                    header: "Qty Out",
+                                    view: (row: any) => {
+                                        const quantity = row.quantityOut;
                                         return <div>{quantity}</div>;
                                     }
                                 },
@@ -185,10 +193,11 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                 {
                                     header: "Date Listed",
                                     view: (row: any) => <div>{fDateTime(row.createdAt)}</div>,
-                                },{
+                                },
+                                {
                                     header: "Status",
                                     view: (row: any) => {
-                                        const quantity = row.quantityIn - row.quantityOut;
+                                        const quantity = row.quantityIn;
                                         return calculateStockStatus(quantity);
                                     }
                                 },

@@ -17,7 +17,8 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const isExpanded = hovered.get || !collapsed.get;
   const isCollapsed = !isExpanded;
 
-// console.log("Company details >>>>>>>>>>>>>> ", companyDetails)
+  // console.log("Company details>>>>>>>>>>>>>>>>", companyDetails.customisationData.domain)
+
   return (
     <aside
       className={clsx(
