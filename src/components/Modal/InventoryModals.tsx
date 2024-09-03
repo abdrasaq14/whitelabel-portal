@@ -200,9 +200,9 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
 }
 
 export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onDelete, isAdmin = true }: { isOpen: boolean, closeViewModal: any, data: any, onEdit?: any, onDelete?: any, isAdmin?: boolean }) => {
-  console.log("Inside View Inventory History", data)
+  // console.log("Inside View Inventory History", data)
   return (
-    <div>
+    data.itemDetails && <div>
       <Modal open={isOpen} onClick={closeViewModal}>
         <div className='md:w-[552px] w-full h-auto px-5'>
           <div className='bg-[#F2F2F2] w-full h-[230px]'>
@@ -214,7 +214,7 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
           <div className="my-3 ">
             <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-semibold'>{data.name}</h3>
+              <h3 className='text-lg font-semibold'>{data?.itemDetails[0].name}</h3>
 
               <h3>{formatAmount(data?.itemDetails[0]?.unitPrice)}</h3>
 
@@ -234,24 +234,6 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
               </div>
 
             </div>
-
-            {/* {
-              isAdmin && <div className='flex items-center  gap-4 my-4 justify-end'>
-                <Button onClick={async () => {
-                  await closeViewModal()
-                  onDelete()
-                }} variant='outlined' className='bg-white border border-primary !text-primary' label='Delete Item' />
-                <Button onClick={async () => {
-                  await closeViewModal()
-                  onEdit()
-                }
-
-                } variant='outlined' label='Edit Item' />
-
-              </div>
-            } */}
-
-
 
           </div>
 

@@ -25,14 +25,12 @@ const Notifications = () => {
 
         }
     );
+
     return (
         <div className='px-4 pt-8 h-full  '>
             <div className='flex items-center gap-6'>
                 <button onClick={() => navigate(-1)} className='flex items-center -mt-6 text-primary gap-2'><img alt="arrow-left-img" className='h-4 w-auto' src="/icons/arrow-left.svg" />Back</button>
                 <BreadCrumbClient backText="Dashboard" currentPath="Notifications" brand='Landmark' />
-
-
-
             </div>
             <div className='grid  gap-3  grid-cols-2'>
                 <div className='col-span-1 mb-3 overflow-y-auto  h-[80vh] rounded bg-white '>
@@ -48,13 +46,12 @@ const Notifications = () => {
                     <div className="h-[95%]  scrollbar px-6 py-4 ">
 
                         <div className="mb-24 h-full">
-                            {notifications?.data.result &&
+                            {notifications?.data.result.length > 0 ? <>
+                            {
                                 notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
                             }
+                            </> : <div className="text-center w-full mt-12 text-sm">No Notification</div>}
                         </div>
-
-
-
                     </div>
                 </div>
                 {/* <div className='col-span-1 h-[60vh] rounded bg-white'>
