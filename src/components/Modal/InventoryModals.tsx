@@ -249,7 +249,7 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
 export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
-  console.log(profile)
+  console.log("My profile", profile)
   const [inventoryItems, setInventoryItems] = useState<any>([]);
   const [selected, setSelected] = useState<any>({})
 
@@ -317,7 +317,8 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   );
 
   const handleAddInventory = useMutation(
-    async (values) => {
+    async (values: any) => {
+      values["whiteLabelName"] = profile?._doc?.whiteLabelName;
       return await InventoryService.makeRequest(values);
     },
     {
@@ -514,8 +515,6 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
                 header: "Quantity",
                 view: (row: any) => <div>{row.quantity}</div>,
               }
-
-
             ]}
             loading={false}
           />

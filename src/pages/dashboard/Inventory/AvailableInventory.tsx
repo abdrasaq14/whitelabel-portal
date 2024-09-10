@@ -35,6 +35,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
             refetchOnMount: true,
         }
     )
+
     const mockData = {
         data: [
             {
@@ -135,6 +136,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
         setCurrentPage(val);
         // setFilterParams({ ...filterParams, pageNum: val - 1 });
     };
+
     return (
         <div>
 
@@ -166,9 +168,16 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
                                     view: (row: any) => <div>{row.name}</div>,
                                 },
                                 {
-                                    header: "Quantity",
+                                    header: "In Stock",
                                     view: (row: any) => {
-                                        const quantity = row.quantityIn - row.quantityOut;
+                                        const quantity = row.quantityIn;
+                                        return <div>{quantity}</div>;
+                                    }
+                                },
+                                {
+                                    header: "Dispensed",
+                                    view: (row: any) => {
+                                        const quantity = row.quantityOut;
                                         return <div>{quantity}</div>;
                                     }
                                 },

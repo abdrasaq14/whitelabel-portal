@@ -31,21 +31,25 @@ const DashboardHeader = () => {
   const notification = useContext(NotificationContext)
 
   const profile: any = useAuth((s) => s.profile)
-    const { data: notifications, } = useQuery(
-        ["query-user-Notifications-sales", profile],
-        async () => {
-            return await NotificationService.getUsersNotification();
-        },
-        {
-            enabled: true,
-            onSuccess: (res) => {
-            },
-            onError: (err: any) => {
-                console.log("Error Occured:", err.response);
-            },
 
-        }
-    );
+  // console.log("User profile", profile)
+  // console.log("Company profile", companyDetails)
+
+  const { data: notifications, } = useQuery(
+    ["query-user-Notifications-sales", profile],
+    async () => {
+        return await NotificationService.getUsersNotification();
+    },
+    {
+        enabled: true,
+        onSuccess: (res) => {
+        },
+        onError: (err: any) => {
+            console.log("Error Occured:", err.response);
+        },
+
+    }
+  );
 
   // console.log("Notification>>>>>>>>>>>>>>>", notifications)
 
@@ -62,7 +66,7 @@ const DashboardHeader = () => {
             <span className="font-medium font-satoshiRegular text-base text-[#464749] mr-1">
               Hi,
             </span>
-            {companyDetails?.whiteLabelName}
+            {profile?._doc?.role === 'Staff' ? profile?._doc?.firstName : companyDetails?.whiteLabelName}
           </p>
         </div>
         <div className="flex items-center gap-4">

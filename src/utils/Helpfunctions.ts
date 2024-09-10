@@ -77,7 +77,7 @@ export const handleError = (error: any) => {
       ? "Session expired, kindly login again"
       : message;
   } else if (error?.message) {
-    return error.message == "Invalid token"
+    return error.message === "Invalid token"
       ? "Session expired, kindly login again"
       : error.message;
   } else {
