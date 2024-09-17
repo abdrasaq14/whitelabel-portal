@@ -23,6 +23,10 @@ export interface HandlePreviewPayload extends BlogPayload {
 }
 const validationSchema = Yup.object({
   title: Yup.string()
+    .matches(
+      /^(?=.*[A-Za-z])(?!.*[^A-Za-z0-9\s&-]{4,})[A-Za-z0-9\s&-]*$/,
+      "Title must contain at least one letter, and can have a maximum of 3 special characters ('-' and '&')"
+    )
     .trim()
     .required("Title is required")
     .min(2, "Title is too short")
@@ -32,7 +36,7 @@ const validationSchema = Yup.object({
   image: Yup.string().url(),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean()
+  allowLikes: Yup.boolean(),
 });
 
 const CreateBlogPost = () => {
