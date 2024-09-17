@@ -106,7 +106,8 @@ export default function BlogDescription({ name }: { name: string }) {
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const { setFieldValue } = useFormikContext();
-  const [field, meta] = useField<string>(name);
+  const [field] = useField<string>(name);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     setIsLayoutReady(true);
 
@@ -276,10 +277,12 @@ export default function BlogDescription({ name }: { name: string }) {
                   config={editorConfig}
                   data={field.value}
                   onChange={(event: any, editor: any) => {
+                    setError(null);
                     const data = editor.getData();
                     setFieldValue(name, data);
                   }}
                   onReady={(editor: any) => {
+                    setError(null);
                     editor.plugins.get("FileRepository").createUploadAdapter = (
                       loader: any
                     ) => {
@@ -290,14 +293,20 @@ export default function BlogDescription({ name }: { name: string }) {
                       );
                     };
                   }}
+                  onBlur={(event: any, editor: any) => {
+                    if (editor.getData().trim() === "") {
+                      setError("This field is required");
+                    }
+                  }
+                  }
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {meta.touched && meta.error ? (
-        <small className="text-xs text-red-600"> &#x26A0; {meta.error}</small>
+      {error?.trim() ? (
+        <small className="text-xs text-red-600"> &#x26A0; {error}</small>
       ) : null}
     </div>
   );

@@ -77,7 +77,7 @@ const Preview = () => {
         } else {
           console.log("blogDetailsFourth", blogDetails);
           addPost(response.data?.result?.results);
-          setBlogId(response.data?.result?.results._id);
+          setBlogId(response.data?.result?._id);
         }
         setOpenModal(true);
         toast.success(

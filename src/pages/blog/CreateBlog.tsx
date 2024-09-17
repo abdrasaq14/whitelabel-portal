@@ -170,7 +170,7 @@ const CreateBlogPost = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  console.log("formDetails", form.values);
+  console.log("formDetails", form.values, form.errors);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
