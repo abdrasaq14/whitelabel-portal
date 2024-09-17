@@ -84,3 +84,33 @@ export const handleError = (error: any) => {
     return error ?? "An unexpected error occurred.";
   }
 };
+
+const formatReadingTime = (minutes:number) => {
+  if (minutes < 1) {
+    // If reading time is less than 1 minute, round up and show in seconds
+    const seconds = Math.ceil(minutes * 60);
+    return `${seconds} seconds`;
+  } else if (minutes >= 60) {
+    // If reading time is more than 60 minutes, show hours and minutes
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = Math.ceil(minutes % 60); // Round up remaining minutes
+    return remainingMinutes > 0
+      ? `${hours} hours and ${remainingMinutes} minutes`
+      : `${hours} hours`;
+  } else {
+    // For reading time less than 60 minutes, round up and show in minutes
+    return `${Math.ceil(minutes)} minutes`;
+  }
+};
+
+export const calculateReadingTime = (htmlContent:string) => {
+  const wordsPerMinute = 200; // Average reading speed (words per minute)
+
+  const text = stripHtml(htmlContent);
+
+  const wordCount = text.split(/\s+/).filter((word) => word.length > 0).length;
+
+  const readingTimeInMinutes = wordCount / wordsPerMinute;
+
+  return formatReadingTime(readingTimeInMinutes);
+};

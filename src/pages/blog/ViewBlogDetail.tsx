@@ -15,7 +15,7 @@ import {
   Comments
 } from "../../services/blog.service";
 import { useState, useEffect, Suspense } from "react";
-import { encrypt, formatDate, handleError } from "../../utils/Helpfunctions";
+import { calculateReadingTime, encrypt, formatDate, handleError } from "../../utils/Helpfunctions";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import CommentCard from "../../components/Blog/CommentCard";
 import Modal from "../../components/Modal/Modal";
@@ -36,6 +36,7 @@ const ViewBlogDetail = () => {
   const deletedComments = blogDetails?.comments.filter(
     (comment) => comment.isDeleted
   );
+  const [readingTime, setReadingTime] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -111,6 +112,13 @@ const ViewBlogDetail = () => {
         setError(e);
       });
   }, [id]);
+
+   useEffect(() => {
+    const time = calculateReadingTime(blogDetails?.content as string);
+    setReadingTime(time);
+  }, [blogDetails?.content]);
+
+
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
@@ -158,7 +166,7 @@ const ViewBlogDetail = () => {
                       </span>
                       <span className="flex items-center">
                         {formatDate(blogDetails?.createdAt as string)}
-                        <GoDotFill />3 mins read
+                        <GoDotFill />{readingTime} read
                       </span>
                     </div>
                   </div>
