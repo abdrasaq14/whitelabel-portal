@@ -106,7 +106,7 @@ export default function BlogDescription({ name }: { name: string }) {
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const { setFieldValue } = useFormikContext();
-  const [field] = useField<string>(name);
+  const [field, meta] = useField<string>(name);
   useEffect(() => {
     setIsLayoutReady(true);
 
@@ -296,6 +296,9 @@ export default function BlogDescription({ name }: { name: string }) {
           </div>
         </div>
       </div>
+      {meta.touched && meta.error ? (
+        <small className="text-xs text-red-600"> &#x26A0; {meta.error}</small>
+      ) : null}
     </div>
   );
 }
