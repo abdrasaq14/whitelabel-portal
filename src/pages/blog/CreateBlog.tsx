@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
   image: Yup.string().url(),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean(),
+  allowLikes: Yup.boolean()
 });
 
 const CreateBlogPost = () => {
@@ -45,6 +45,7 @@ const CreateBlogPost = () => {
   const [isBlogEditing, setIsBlogEditing] = useState(true);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
   const [blogId, setBlogId] = useState("");
   const form = useFormik({
     initialValues: {
@@ -59,12 +60,12 @@ const CreateBlogPost = () => {
       allowComments: true,
       allowLikes: true,
       createdAt: "",
-      whiteLabelName: profile?.whiteLabelName,
+      whiteLabelName: profile?.whiteLabelName
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
-    },
+    }
     // validateOnMount: false,
     // validateOnChange: true,
     // validateOnBlur: true
@@ -97,7 +98,7 @@ const CreateBlogPost = () => {
         toast.error(e);
         console.log("erro", error);
         // show error toast
-      },
+      }
     }
   );
   console.log("form.Values", form.values);
@@ -107,12 +108,12 @@ const CreateBlogPost = () => {
     navigate("/blog/preview");
     // toast.success("Blog previewed successfully");
   };
-  const handleClickOutside = () => {
+  const handleClickOutside = (isView: boolean) => {
     form.resetForm();
-    if (id) {
-      navigate(`/blog/view/${id}`);
-    } else {
+    if (isView) {
       navigate(`/blog/view/${blogId}`);
+    } else {
+      navigate(`/blog`);
     }
     setOpenModal(false);
 
@@ -169,6 +170,7 @@ const CreateBlogPost = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  console.log("formDetails", form.values);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
@@ -233,6 +235,7 @@ const CreateBlogPost = () => {
                   icon={<IoCalendarOutline />}
                   title="Date"
                   type="date"
+                  min={today}
                   placeholder="Blog title"
                   wrapperClass=" !w-[50%]"
                 />
@@ -360,7 +363,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={handleClickOutside}>
+      <Modal open={openModal} onClick={()=>handleClickOutside(false)}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img
@@ -382,7 +385,7 @@ const CreateBlogPost = () => {
           <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
             <Button
               label="Dismiss"
-              onClick={handleClickOutside}
+              onClick={() => handleClickOutside(false)}
               className={`border border-primary font-semibold ${
                 form.values.status === "draft"
                   ? "bg-primary !text-white w-full"
@@ -392,7 +395,7 @@ const CreateBlogPost = () => {
             {form.values.status === "published" && (
               <Button
                 label="View"
-                onClick={handleClickOutside}
+                onClick={() => handleClickOutside(true)}
                 className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
               />
             )}

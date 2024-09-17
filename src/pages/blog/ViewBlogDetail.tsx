@@ -7,7 +7,7 @@ import {
 } from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
-import { GoDotFill } from "react-icons/go";
+import { GoDotFill, GoHeart } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   BlogPayload,
@@ -136,10 +136,14 @@ const ViewBlogDetail = () => {
                     </h2>
                     <div className="flex gap-4 text-primary-text">
                       <span className="flex items-center gap-1">
-                        <TiHeartFullOutline
-                          size={20}
-                          className="text-[#D42620]"
-                        />
+                        {blogDetails?.likes >= 1 ? (
+                          <TiHeartFullOutline
+                            size={20}
+                            className="text-[#D42620]"
+                          />
+                        ) : (
+                          <GoHeart size={20} className="text-[#D42620]" />
+                        )}
                         {blogDetails?.likes}{" "}
                         {blogDetails && blogDetails?.likes > 1
                           ? "Likes"
@@ -227,8 +231,10 @@ const ViewBlogDetail = () => {
                     </div>
                     {comments?.length > 0 && activeTab === "all" && (
                       <Link
-                          to={`/blog/view/${id}/comments`}
-                          onClick={() => saveCommentsToLocalStorage(blogDetails?.comments)}
+                        to={`/blog/view/${id}/comments`}
+                        onClick={() =>
+                          saveCommentsToLocalStorage(blogDetails?.comments)
+                        }
                         className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
                       >
                         View all comments
