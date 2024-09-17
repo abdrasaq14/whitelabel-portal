@@ -21,11 +21,20 @@ import Modal from "../../components/Modal/Modal";
 export interface HandlePreviewPayload extends BlogPayload {
   isFromEdit: boolean;
 }
+const countSpecialCharacters = (str: string): number => {
+  const specialCharCount = (str.match(/[^A-Za-z0-9\s]/g) || []).length;
+  return specialCharCount;
+};
+
 const validationSchema = Yup.object({
   title: Yup.string()
-    .matches(
-      /^(?=.*[A-Za-z])(?!.*[^A-Za-z0-9\s&-]{4,})[A-Za-z0-9\s&-]*$/,
-      "Title must contain at least one letter, and can have a maximum of 3 special characters ('-' and '&')"
+    .test("has-alphabet", "Title must contain at least one letter", (value) =>
+      value ? /[A-Za-z]/.test(value) : false
+    )
+    .test(
+      "max-special-chars",
+      "Title can have a maximum of 3 special characters",
+      (value) => (value ? countSpecialCharacters(value) <= 3 : true)
     )
     .trim()
     .required("Title is required")
