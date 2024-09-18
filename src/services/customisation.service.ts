@@ -32,7 +32,7 @@ export interface customisationData {
     template: string;
   };
   contact?: {
-    phone?: string;
+    phone?: {cCode?: string, val?: string};
     email?: {
       supportEmail?: string;
       senderEmail?: string;

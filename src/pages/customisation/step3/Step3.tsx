@@ -145,6 +145,7 @@ function Step3({
           }
         }
       );
+      console.log("Upload completed", response);
       return response;
     },
     {
