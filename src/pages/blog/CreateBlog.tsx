@@ -123,8 +123,10 @@ const CreateBlogPost = () => {
   };
   const handleClickOutside = (isView: boolean) => {
     form.resetForm();
+    console.log("isViewBlogOutside", blogId, isView);
     if (isView) {
-      navigate(`/blog/view/${blogId}`);
+      console.log("isViewBlog", blogId, isView);
+      navigate(`/blog/view/${id || blogId}`);
     } else {
       navigate(`/blog`);
     }

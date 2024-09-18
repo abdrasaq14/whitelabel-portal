@@ -99,7 +99,7 @@ const Dashboard = () => {
         <InfoCard header='Total Merchants' value={infoCardDetails ? infoCardDetails.data?.result.totalMerchants.toString() : '0'} iconName='people' />
         <InfoCard header="Total Products" value={infoCardDetails ? infoCardDetails.data?.result.totalProducts.toString() : '0'} iconName='3dcube' className='' />
         <InfoCard header="Total Inventory" value={infoCardDetails ? infoCardDetails.data?.result.inventory?.totalInventory.toString() : '0'} iconName='ic_deals' className='' />
-        <InfoCard header="Total Inventory Disbursed" value={infoCardDetails ? infoCardDetails.data?.result?.inventory.approveTotalInventory.toString() : '0'} iconName='3dcube' className='' />
+        <InfoCard header="Total Inventory Disbursed" value={infoCardDetails ? infoCardDetails.data?.result?.inventory?.approveTotalInventory.toString() : '0'} iconName='3dcube' className='' />
       </div>
 
       <div className="grid lg:grid-cols-5 h-auto grid-cols-1 px-2 md:px-6 gap-3 mt-6">

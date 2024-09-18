@@ -33,7 +33,7 @@ export const encrypt = (data: string) => {
 
 export const decrypt = (data: string) => {
   if (data) {
-    var bytes = AES.decrypt(data, $key);
+    const bytes = AES.decrypt(data, $key);
     return JSON.parse(bytes.toString(enc.Utf8));
   }
 
