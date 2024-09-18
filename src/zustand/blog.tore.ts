@@ -89,6 +89,17 @@ export const useBlogStore = create(
             set({ loading: false, error: error.message });
           }
         },
+        fetchComments: async (id: string) => {
+          try {
+            console.log("Imacoausingrendereding fetch");
+            set({ loading: true, error: null });
+            // const response = await BlogService.viewBlog(id);
+            set({ loading: false });
+          } catch (error: any) {
+            console.log("FetchError", error);
+            set({ loading: false, error: error.message });
+          }
+        },
         countDrafts: () => {
           return useBlogStore
             .getState()

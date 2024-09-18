@@ -24,12 +24,14 @@ const  CommentCard:React.FC<CommentCardProps> = ({comment, showDeleteIcon, handl
               />
             ) : (
               <span className="bg-[#EDE6F3] flex items-center justify-center text-primary-text text-xl w-full h-full">
-                {comment?.name ? comment?.name?.charAt(0).toUpperCase() : "A"}
+                {comment?.firstName
+                  ? comment?.firstName?.charAt(0).toUpperCase()
+                  : "A"}
               </span>
             )}
           </span>
           <span className="text-primary-text text-sm">
-            {comment?.name ? comment.name : "Anonymous"}
+            {comment?.firstName ? comment.firstName : "Anonymous"}
           </span>
         </div>
         {showDeleteIcon && handleDelete && !comment.isDeleted && (

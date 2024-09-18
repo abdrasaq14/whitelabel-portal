@@ -70,6 +70,7 @@ const ViewBlogDetail = () => {
       onSuccess: (response) => {
         toast.success("Comment deleted successfully");
         setOpenModal(false);
+        console.log("deleteREsponse", response);
         // const updatedComments = comments.filter(
         //   (comment) => comment._id !== id
         // );
