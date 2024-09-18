@@ -42,7 +42,7 @@ const validationSchema = Yup.object({
     .max(100, "Title is too long"),
   createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
-  image: Yup.string().url(),
+  image: Yup.string().url().required("Image is required"),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
   allowLikes: Yup.boolean(),
