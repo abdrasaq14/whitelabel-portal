@@ -69,8 +69,14 @@ const ViewBlogDetail = () => {
     {
       onSuccess: (response) => {
         toast.success("Comment deleted successfully");
-        setOpenModal(false);
+        setBlogDetails(response.data.result);
         setComments(response.data.result.comments);
+        setDeletedComments(
+          response.data.result.comments.filter(
+            (comment: Comments) => comment.isDeleted
+          )
+        );
+        setOpenModal(false);
         console.log("deleteREsponse", response);
         // const updatedComments = comments.filter(
         //   (comment) => comment._id !== id
@@ -97,6 +103,9 @@ const ViewBlogDetail = () => {
           if (res.data.result) {
             setBlogDetails(res.data.result);
             setComments(res.data.result.comments);
+            setDeletedComments(
+              res.data.result.comments.filter((comment:Comments) => comment.isDeleted)
+            );
             return;
           }
           setBlogDetails({} as BlogPayload);
@@ -115,12 +124,12 @@ const ViewBlogDetail = () => {
       });
   }, [id]);
 
-  useEffect(() => {
-    const deletedComments = comments.filter(
-      (comment) => comment.isDeleted
-    );
-    setDeletedComments(deletedComments || []);
-  }, [comments]);
+  // useEffect(() => {
+  //   const deletedComments = comments.filter(
+  //     (comment) => comment.isDeleted
+  //   );
+  //   setDeletedComments(deletedComments || []);
+  // }, [comments]);
   
   
    useEffect(() => {
