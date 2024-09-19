@@ -77,11 +77,6 @@ const ViewBlogDetail = () => {
           )
         );
         setOpenModal(false);
-        console.log("deleteREsponse", response);
-        // const updatedComments = comments.filter(
-        //   (comment) => comment._id !== id
-        // );
-        // setComments(updatedComments);
       },
       onError: (error) => {
         const e = handleError(error);
