@@ -33,9 +33,9 @@ const ViewBlogDetail = () => {
   );
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
-  const deletedComments = blogDetails?.comments.filter(
+  const [deletedComments, setDeletedComments] = useState(blogDetails?.comments.filter(
     (comment) => comment.isDeleted
-  );
+  ));
   const [readingTime, setReadingTime] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +70,7 @@ const ViewBlogDetail = () => {
       onSuccess: (response) => {
         toast.success("Comment deleted successfully");
         setOpenModal(false);
+        setComments(response.data.result.comments);
         console.log("deleteREsponse", response);
         // const updatedComments = comments.filter(
         //   (comment) => comment._id !== id
@@ -114,6 +115,14 @@ const ViewBlogDetail = () => {
       });
   }, [id]);
 
+  useEffect(() => {
+    const deletedComments = comments.filter(
+      (comment) => comment.isDeleted
+    );
+    setDeletedComments(deletedComments || []);
+  }, [comments]);
+  
+  
    useEffect(() => {
     const time = calculateReadingTime(blogDetails?.content as string);
     setReadingTime(time);
