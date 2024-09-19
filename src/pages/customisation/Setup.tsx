@@ -8,7 +8,6 @@ import Spinner from "../../components/spinner/Spinner";
 import React from "react";
 
 export default function Setup({data, setColor, setService, setInfo, processStage1, isLoading, setError}: any) {
-
     return (
         <main className="bg-[#fffefe] grid grid-cols-5 gap-4 w-[95%] mx-2">
             <div className="col-start-1 col-end-3 p-3">

@@ -18,19 +18,26 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
     const [search, setSearch] = useState("")
     const [selectedInventory, setSelectedInventory] = useState()
     const [isViewModalOpen, setIsViewModalOpen] = useState(false)
+    const [inventoryRequests, setInventoryRequests] = useState([])
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-    // console.log(profile)
+    console.log("Request Inventory profile", profile?._doc.whiteLabelName)
     console.log(isMakeModalOpen)
+
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-user-inventory-request", {
-            page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+            page: currentPage, limit: pageSize, search, whiteLabelName: profile?._doc?.whiteLabelName
         }],
         InventoryService.getUsersRequest,
         {
             onSuccess: (data: any) => {
-                // console.log(data.data);
+                console.log("All inventory requests", data.data);
+                setInventoryRequests(data?.result.requests)
+            },
+            onError: (err: any) => {
+                console.log("Error Occured:", err.response);
+                setInventoryRequests([])
             },
             keepPreviousData: false,
             refetchOnWindowFocus: false,
@@ -38,10 +45,13 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
         }
     )
 
+    console.log("Request data", data)
+
     useEffect(() => {
         refetch()
         // console.log(isMakeModalOpen)
     }, [isMakeModalOpen])
+
     const mockData = {
         data: [
             {
@@ -121,6 +131,7 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
             totalRows: 40,
         },
     }
+
     const calculateTotalPrice = (items: any, itemDetails: any) => {
         // Create a dictionary from itemDetails for quick lookup
         const itemDetailsDict = itemDetails.reduce((dict: any, item: any) => {
@@ -158,9 +169,9 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
         <div>
 
             {
-                data && data?.result.requests.length > 0 ? (
+                inventoryRequests.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result.requests}
+                        <Table data={inventoryRequests}
                             hideActionName={true}
                             clickRowAction={(row) => {
                                 setSelectedInventory(row)
@@ -196,7 +207,7 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
                                 },
                                 {
                                     header: "No of Item",
-                                    view: (row: any) => <div>{row.items.length}</div>,
+                                    view: (row: any) => <div>{row.items[0].quantity}</div>,
                                 },
                                 // {
                                 //     header: "Total Price",

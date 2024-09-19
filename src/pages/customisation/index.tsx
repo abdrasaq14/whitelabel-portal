@@ -37,7 +37,7 @@ const customizationData = {
     template: "",
   },
   contact: {
-    phone: "",
+    phone: {cCode: "", val: ""},
     email: {
       supportEmail: "",
       senderEmail: "",
@@ -57,6 +57,7 @@ function CustomisationPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<any>({});
   const [isAboutError, setIsAboutError] = useState<any>({});
+  // const [phoneCode, setPhoneCode] = useState<string>('');
   // pick the color from redux store
   useEffect(() => {
     console.log(">>>>>>>>>>>>>>")
@@ -117,6 +118,10 @@ function CustomisationPage() {
   const setServices = (services: any) => {
     setData({...data, services})
   }
+
+  // const setUpPhoneCode = (code: string) => {
+  //   setPhoneCode(code);
+  // }
 
   const setInfo = (info: any) => {
     if(info.hasOwnProperty("supportEmail")){
@@ -183,6 +188,7 @@ function CustomisationPage() {
 
   const processStage1 = useMutation(
       async () => {
+        // const newData = {...data, contact: {...data.contact, phone: phoneCode+data?.contact?.phone}}
         console.log("Processing data", data);
         setIsLoading(true);
         return await CustomisationService.updateCustomisation({...data, stage: 2});

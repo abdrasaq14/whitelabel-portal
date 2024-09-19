@@ -37,6 +37,8 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
         }
     )
 
+    console.log("Inventory History>>>>>>>>>>", data)
+
     const mockData = {
         data: [
             {
@@ -160,9 +162,9 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
     return (
         <div>
             {
-                data && data?.result.requests.length > 0 ? (
+                data && data?.result?.requests?.length > 0 ? (
                     <div className='h-full flex-grow '>
-                        <Table data={data?.result.requests}
+                        <Table data={data?.result?.requests}
                             hideActionName={true}
                             clickRowAction={(row) => {
                                 console.log("Selected media", row)
@@ -199,7 +201,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                 },
                                 {
                                     header: "No of Item",
-                                    view: (row: any) => <div>{row.items.length}</div>,
+                                    view: (row: any) => <div>{row.items[0].quantity}</div>,
                                 },
                                 // {
                                 //     header: "Total Price",
@@ -219,7 +221,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                 {
                                     page: currentPage,
                                     pageSize: pageSize,
-                                    totalRows: data?.result.totalResults,
+                                    totalRows: data?.result?.totalResults,
                                     setPageSize: handlePageSize,
                                     setPage: handleCurrentPage
                                 }

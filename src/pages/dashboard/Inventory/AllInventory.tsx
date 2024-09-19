@@ -169,14 +169,14 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                                     view: (row: any) => <div>{row.name}</div>,
                                 },
                                 {
-                                    header: "Qty In",
+                                    header: "In Stock",
                                     view: (row: any) => {
                                         const quantity = row.quantityIn;
                                         return <div>{quantity}</div>;
                                     }
                                 },
                                 {
-                                    header: "Qty Out",
+                                    header: "Dispensed",
                                     view: (row: any) => {
                                         const quantity = row.quantityOut;
                                         return <div>{quantity}</div>;

@@ -30,7 +30,7 @@ export default function LivePreview({data, stage}: any) {
                         </div>
                         <div className="flex items-center px-3">
                             <IoCall color="#ffffff" size={14}/>
-                            <span className="text-[#ffffff] text-[12px] mx-2">{phone}</span>
+                            <span className="text-[#ffffff] text-[12px] mx-2">{phone.cCode}{phone.val}</span>
                         </div>
                     </div>}
 

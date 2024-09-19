@@ -1,6 +1,9 @@
 import {useState, useEffect, useRef} from "react";
 import {MdMailOutline} from "react-icons/md";
 import TextInput from "../../../components/FormInputs/TextInput2";
+import { BiSolidDownArrow } from "react-icons/bi";
+import Modal from "../../../components/Modal/Modal";
+import { countries } from "../../../utils/countries";
 
 const errorMessages = {email: {error: false, message: "Add a valid support email"}, phone: {error: false, message: "Add a valid mobile (Ex: +1488384)"}, noreply_email: {error: false, message: "Add a valid no-reply email"}}
 
@@ -8,7 +11,9 @@ export default function OtherInformation({setInfo, setFormError, contact}: any) 
     const [error, setError] = useState(errorMessages)
     const [contactEmail, setContactEmail] = useState(null);
     const [senderEmail, setSenderEmail] = useState(null);
-    const [contactPhone, setContactPhone] = useState(null);
+    const [contactPhone, setContactPhone] = useState("");
+    const [openCountryCodes, setOpenCountryCodes] = useState(false);
+    const [chosenCountryCode, setChosenCountryCode] = useState<string>(`${countries[0].phone_code}`);
 
     const inputContactEmail: any = useRef(null);
     const inputSenderEmail: any = useRef(null);
@@ -81,8 +86,8 @@ export default function OtherInformation({setInfo, setFormError, contact}: any) 
     }
 
     const validatePhone = (phone: string) => {
-        const pattern = /^\+\d{1,4}\d{5,}$/;
-        return pattern.test(phone);
+        const pattern = /^\d+$/;
+        return phone.length >= 5 && pattern.test(phone);
     }
 
     return (
@@ -108,16 +113,23 @@ export default function OtherInformation({setInfo, setFormError, contact}: any) 
 
                     <div className="flex flex-col gap-2 mt-3 w-full">
                         <p className="font-satoshiMedium text-[14px] leading-5 tracking-tighter text-[#000000]">Contact
-                            Phone Number</p>
-                        <input
-                            name='phone'
-                            type='phone'
-                            ref={inputContactPhone}
-                            value={contact.phone}
-                            onChange={(e) => handleSetContactPhone(e)}
-                            placeholder='+1(555)000-0000'
-                            className="outline-none border border-[#D0D5DD] rounded-md h-[40px] px-[14px]"
-                        />
+                        Phone Number</p>
+                        <div className="flex items-center w-full">
+                            <div
+                                className="h-[40px] bg-primary px-2 rounded-l-md flex justify-center items-center cursor-pointer" onClick={() => setOpenCountryCodes(true)}>
+                                <span className="text-[#ffffff] text-[16px] leading-6">+{contact.phone.cCode || chosenCountryCode}</span>
+                                <BiSolidDownArrow color="#ffffff" className="ml-1"/>
+                            </div>
+                            <input
+                                name='phone'
+                                type='phone'
+                                ref={inputContactPhone}
+                                value={contact.phone.val}
+                                onChange={(e) => handleSetContactPhone(e)}
+                                placeholder=""
+                                className="outline-none border border-[#D0D5DD] rounded-r-md h-[40px] px-[14px] w-full"
+                            />
+                        </div>
                         {error.phone.error && <small className="text-[#cc0000] leading-4 font-satoshiMedium text-[12px]">{error.phone.message}</small>}
                     </div>
 
@@ -137,6 +149,19 @@ export default function OtherInformation({setInfo, setFormError, contact}: any) 
                     </div>
                 </div>
             </div>
+
+            <Modal open={openCountryCodes} onClick={() => setOpenCountryCodes(!openCountryCodes)}>
+                <div className="flex flex-col px-5 w-[400px]">
+                    <h2 className="font-satoshiBold text-[20px] leading-7 text-[#000000] tracking-tighter">Select
+                        Service</h2>
+                    <div className="mt-3 gap-2 flex flex-col h-[500px] overflow-auto">
+                        {countries.map((country: any, index: number) => <div key={index} className="flex items-center">
+                            <p onClick={() => {setChosenCountryCode(country.phone_code); setOpenCountryCodes(!openCountryCodes)}}
+                               className="cursor-pointer hover:text-[#4B0082] hover:font-satoshi text-[#000000] font-satoshiRegular text-[16px] leading-6">{country.name} (+{country.phone_code})</p>
+                        </div>)}
+                    </div>
+                </div>
+            </Modal>
         </>
     );
 }

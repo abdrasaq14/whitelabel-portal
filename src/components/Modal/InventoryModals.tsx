@@ -200,9 +200,9 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
 }
 
 export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onDelete, isAdmin = true }: { isOpen: boolean, closeViewModal: any, data: any, onEdit?: any, onDelete?: any, isAdmin?: boolean }) => {
-  console.log("Inside View Inventory History", data)
+  // console.log("Inside View Inventory History", data)
   return (
-    <div>
+    data.itemDetails && <div>
       <Modal open={isOpen} onClick={closeViewModal}>
         <div className='md:w-[552px] w-full h-auto px-5'>
           <div className='bg-[#F2F2F2] w-full h-[230px]'>
@@ -214,7 +214,7 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
           <div className="my-3 ">
             <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-semibold'>{data.name}</h3>
+              <h3 className='text-lg font-semibold'>{data?.itemDetails[0].name}</h3>
 
               <h3>{formatAmount(data?.itemDetails[0]?.unitPrice)}</h3>
 
@@ -235,24 +235,6 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
             </div>
 
-            {/* {
-              isAdmin && <div className='flex items-center  gap-4 my-4 justify-end'>
-                <Button onClick={async () => {
-                  await closeViewModal()
-                  onDelete()
-                }} variant='outlined' className='bg-white border border-primary !text-primary' label='Delete Item' />
-                <Button onClick={async () => {
-                  await closeViewModal()
-                  onEdit()
-                }
-
-                } variant='outlined' label='Edit Item' />
-
-              </div>
-            } */}
-
-
-
           </div>
 
         </div>
@@ -267,7 +249,7 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
 export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
-  console.log(profile)
+  console.log("My profile", profile)
   const [inventoryItems, setInventoryItems] = useState<any>([]);
   const [selected, setSelected] = useState<any>({})
 
@@ -335,7 +317,8 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
   );
 
   const handleAddInventory = useMutation(
-    async (values) => {
+    async (values: any) => {
+      values["whiteLabelName"] = profile?._doc?.whiteLabelName;
       return await InventoryService.makeRequest(values);
     },
     {
@@ -532,8 +515,6 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
                 header: "Quantity",
                 view: (row: any) => <div>{row.quantity}</div>,
               }
-
-
             ]}
             loading={false}
           />

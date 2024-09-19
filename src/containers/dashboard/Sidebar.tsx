@@ -115,9 +115,9 @@ export const SidebarItem = ({
       {sidebar.map((items, index) =>
         <div className="w-full my-[18px] px-3">
           {items.children ?
-            <SubItem key={items.name} items={items} />
+            <SubItem key={index} items={items} />
             :
-            <NavLink to={items.path ?? "/"} className={({ isActive }) =>
+            <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
               clsx(
                 "flex items-center gap-3  px-3 py-2 text-sm",
                 isActive ? "bg-primary rounded " : ""

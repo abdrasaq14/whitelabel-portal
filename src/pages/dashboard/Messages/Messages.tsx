@@ -7,7 +7,7 @@ import { fToNow } from '../../../utils/formatTime';
 import { io } from "socket.io-client";
 import Spinner from '../../../components/spinner/Spinner';
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
-const socket = io('https://socket.profitall.co.uk');
+const socket = io('https://devsocket.profitall.co.uk');
 
 interface Conversation{
   id: string,
@@ -35,6 +35,7 @@ const Messages = () => {
   const [text, setText] = useState("")
   const [loadingConversation, setLoadingConversation] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(true);
+  const [isSender, setIsSender] = useState(false);
 
   useEffect(() => {
 
@@ -44,16 +45,17 @@ const Messages = () => {
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("Socket Message", message);
-        addMessage(message, true);    
+      // console.log("Socket Message", message);
+        addMessage(message, isSender);    
     });
   }, [messages]);
 
   const addMessage = (message: any, replacement: boolean) => {
     const copyMessages = [...messages];
-    if(replacement){
+    if(isSender){
       copyMessages[0] = message;
       setMessages([...copyMessages]);
+      setIsSender(false);
       return;
     }
     setMessages([message, ...copyMessages]);
@@ -95,11 +97,11 @@ const Messages = () => {
     },
     {
         onSuccess: async (response) => {
-            console.log("Success happened", response.data.result)
+            // console.log("Success happened", response.data.result)
             const conversations = response.data.result;
             if(conversations.length > 0){
             const conversationList: Conversation[] = await createConversationList(conversations);
-            console.log("Checking conversations>>>>>>>>>>>>> ", conversations);
+            // console.log("Checking conversations>>>>>>>>>>>>> ", conversations);
                 setConversations(conversationList)
                 setActiveConversationId(conversationList[0].conversationId)
                 setMessageInfo({ name: conversationList[0].businessName == null ? `${conversationList[0].firstName} ${conversationList[0].lastName}` : `${conversationList[0].businessName}`, image: conversationList[0].image, id: conversationList[0].id })
@@ -109,7 +111,7 @@ const Messages = () => {
             setLoadingConversation(false);
         },
         onError: (err: any) => {
-          console.log("error happened", err);
+          // console.log("error happened", err);
         },
     }
   )
@@ -120,32 +122,34 @@ const Messages = () => {
     },
     {
         onSuccess: async (response) => {
-          console.log("All messages", response.data.result.results);
+          // console.log("All messages", response.data.result.results);
           setMessages(response.data.result.results)
           setLoadingMessages(false);
         },
         onError: (err: any) => {
-            console.log("error happened", err);
+            // console.log("error happened", err);
         },
     }
   )
 
   const sendMessage = useMutation(
     async (values: {conversationId: string, message: {senderId: string, text: string}}) => {
+      setIsSender(true)
       addMessage({conversationId: activeConversationId, text, sender: userId, createdAt: new Date().toISOString(), loading: true }, false);
       return await MessageService.sendMessage(values);
     },
     {
         onSuccess: async (response) => {
-          console.log("Message sent", response.data)
+          // console.log("Message sent", response.data)
 
           setText("");
+
           if(response.data.result.status === "success"){
             socket.emit("message", {roomId: `room-${activeConversationId}`, message: response.data.result.data});
           }
         },
         onError: (err: any) => {
-            console.log("error happened", err);
+            // console.log("error happened", err);
         },
     }
   )
