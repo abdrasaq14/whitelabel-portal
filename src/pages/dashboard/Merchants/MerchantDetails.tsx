@@ -25,6 +25,7 @@ interface PaginationInfo {
 const MerchantDetails = () => {
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
+    console.log("TestingProdile", profile)
     const accountTabTitle = ['Overview', 'All Products', 'Product Sold']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [isSuspendOpen, setIsSuspendOpen] = useState(false)
@@ -159,8 +160,11 @@ const MerchantDetails = () => {
                     </button>
 
                 </div>
-
-                {merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase()) == "active") ? <Button label='Suspend Merchant' onClick={() => setIsSuspendOpen(true)} className='px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white' /> : <Button isLoading={unSuspendMerchant.isLoading} disabled={unSuspendMerchant.isLoading} label='Activate Merchant' onClick={() => unSuspendMerchant.mutate()} className='px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white' />}
+                {profile?.role !== "Staff" &&
+                    <>
+                    {merchant && (getStatusById(merchant?.result.platformAccess, profile.whiteLabelName.toUpperCase()) == "active") ? <Button label='Suspend Merchant' onClick={() => setIsSuspendOpen(true)} className='px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white' /> : <Button isLoading={unSuspendMerchant.isLoading} disabled={unSuspendMerchant.isLoading} label='Activate Merchant' onClick={() => unSuspendMerchant.mutate()} className='px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white' />}
+                    </>
+                }
 
             </div>
             <div className="pt-4 pb-10 px-6 rounded-2xl mx-2">

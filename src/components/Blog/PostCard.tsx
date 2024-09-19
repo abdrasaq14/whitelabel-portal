@@ -1,6 +1,6 @@
 import { FiEdit } from "react-icons/fi";
 import { BlogPayload } from "../../services/blog.service";
-import { GoTrash } from "react-icons/go";
+import { GoHeart, GoTrash } from "react-icons/go";
 import { BsChatSquareText } from "react-icons/bs";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { truncateText } from "../../utils/Helpfunctions";
@@ -25,7 +25,10 @@ export default function PostCard({
       className="w-[290px] xl:w-[330px] h-[22rem] max-h-[22rem] text-primary-text border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
-        <Link to={`/blog/view/${blog._id}`} className="font-bold hidden xl:block">
+        <Link
+          to={`/blog/view/${blog._id}`}
+          className="font-bold hidden xl:block"
+        >
           {truncateText(blog?.title, 65)}
         </Link>
         <Link to={`/blog/view/${blog._id}`} className="font-bold xl:hidden">
@@ -61,7 +64,11 @@ export default function PostCard({
       </Link>
       <div className="flex items-center gap-4">
         <span className="flex items-center gap-2">
-          <TiHeartFullOutline size={20} className="text-[#D42620]" />
+          {blog?.likes >= 1 ? (
+            <TiHeartFullOutline size={20} className="text-[#D42620]" />
+          ) : (
+            <GoHeart size={20} className="text-[#D42620]" />
+          )}
           {blog?.likes} {blog?.likes > 1 ? "Likes" : "Like"}
         </span>
         <span className="flex items-center gap-2">

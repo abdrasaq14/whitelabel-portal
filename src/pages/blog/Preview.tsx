@@ -40,11 +40,23 @@ const Preview = () => {
       return updatedDetails;
     });
   };
-  const handleClickOutside = () => {
-    setOpenModal(false);
-    localStorage.removeItem("_Blog");
-    navigate(`/blog/view/${blogId}`);
-  };
+    const handleClickOutside = (isView: boolean) => {
+      setOpenModal(false);
+      localStorage.removeItem("_Blog");
+      if (isView) {
+        navigate(`/blog/view/${blogId}`);
+      } else {
+        navigate(`/blog`);
+      }
+      setOpenModal(false);
+
+      return;
+    };
+  // const handleClickOutside = () => {
+  //   setOpenModal(false);
+  //   localStorage.removeItem("_Blog");
+  //   navigate(`/blog/view/${blogId}`);
+  // };
   const handleSubmit = useMutation(
     async (values: HandlePreviewPayload) => {
       setIsSubmitting(true);
@@ -65,7 +77,7 @@ const Preview = () => {
         } else {
           console.log("blogDetailsFourth", blogDetails);
           addPost(response.data?.result?.results);
-          setBlogId(response.data?.result?.results._id);
+          setBlogId(response.data?.result?._id);
         }
         setOpenModal(true);
         toast.success(
@@ -165,7 +177,7 @@ const Preview = () => {
         </div>
       </div>
 
-      <Modal open={openModal} onClick={handleClickOutside}>
+      <Modal open={openModal} onClick={()=>handleClickOutside(false)}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img
@@ -187,7 +199,7 @@ const Preview = () => {
           <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
             <Button
               label="Dismiss"
-              onClick={handleClickOutside}
+              onClick={()=>handleClickOutside(false)}
               className={`border border-primary font-semibold ${
                 blogDetails?.status === "draft"
                   ? "bg-primary !text-white w-full"
@@ -197,7 +209,7 @@ const Preview = () => {
             {blogDetails?.status === "published" && (
               <Button
                 label="View"
-                onClick={handleClickOutside}
+                onClick={()=>handleClickOutside(true)}
                 className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
               />
             )}

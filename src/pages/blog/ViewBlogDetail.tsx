@@ -7,7 +7,7 @@ import {
 } from "../../assets/blog";
 import { TiHeartFullOutline } from "react-icons/ti";
 import { BsChatSquareText } from "react-icons/bs";
-import { GoDotFill } from "react-icons/go";
+import { GoDotFill, GoHeart } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   BlogPayload,
@@ -15,7 +15,7 @@ import {
   Comments
 } from "../../services/blog.service";
 import { useState, useEffect, Suspense } from "react";
-import { encrypt, formatDate, handleError } from "../../utils/Helpfunctions";
+import { calculateReadingTime, encrypt, formatDate, handleError } from "../../utils/Helpfunctions";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import CommentCard from "../../components/Blog/CommentCard";
 import Modal from "../../components/Modal/Modal";
@@ -33,9 +33,10 @@ const ViewBlogDetail = () => {
   );
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
-  const deletedComments = blogDetails?.comments.filter(
+  const [deletedComments, setDeletedComments] = useState(blogDetails?.comments.filter(
     (comment) => comment.isDeleted
-  );
+  ));
+  const [readingTime, setReadingTime] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -69,6 +70,8 @@ const ViewBlogDetail = () => {
       onSuccess: (response) => {
         toast.success("Comment deleted successfully");
         setOpenModal(false);
+        setComments(response.data.result.comments);
+        console.log("deleteREsponse", response);
         // const updatedComments = comments.filter(
         //   (comment) => comment._id !== id
         // );
@@ -111,6 +114,21 @@ const ViewBlogDetail = () => {
         setError(e);
       });
   }, [id]);
+
+  useEffect(() => {
+    const deletedComments = comments.filter(
+      (comment) => comment.isDeleted
+    );
+    setDeletedComments(deletedComments || []);
+  }, [comments]);
+  
+  
+   useEffect(() => {
+    const time = calculateReadingTime(blogDetails?.content as string);
+    setReadingTime(time);
+  }, [blogDetails?.content]);
+
+
   return (
     <Suspense fallback={<AppFallback />}>
       <div className="px-4 pt-8 h-full">
@@ -136,10 +154,14 @@ const ViewBlogDetail = () => {
                     </h2>
                     <div className="flex gap-4 text-primary-text">
                       <span className="flex items-center gap-1">
-                        <TiHeartFullOutline
-                          size={20}
-                          className="text-[#D42620]"
-                        />
+                        {blogDetails?.likes >= 1 ? (
+                          <TiHeartFullOutline
+                            size={20}
+                            className="text-[#D42620]"
+                          />
+                        ) : (
+                          <GoHeart size={20} className="text-[#D42620]" />
+                        )}
                         {blogDetails?.likes}{" "}
                         {blogDetails && blogDetails?.likes > 1
                           ? "Likes"
@@ -154,7 +176,7 @@ const ViewBlogDetail = () => {
                       </span>
                       <span className="flex items-center">
                         {formatDate(blogDetails?.createdAt as string)}
-                        <GoDotFill />3 mins read
+                        <GoDotFill />{readingTime} read
                       </span>
                     </div>
                   </div>
@@ -227,8 +249,10 @@ const ViewBlogDetail = () => {
                     </div>
                     {comments?.length > 0 && activeTab === "all" && (
                       <Link
-                          to={`/blog/view/${id}/comments`}
-                          onClick={() => saveCommentsToLocalStorage(blogDetails?.comments)}
+                        to={`/blog/view/${id}/comments`}
+                        onClick={() =>
+                          saveCommentsToLocalStorage(blogDetails?.comments)
+                        }
                         className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
                       >
                         View all comments

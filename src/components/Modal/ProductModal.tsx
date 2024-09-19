@@ -151,14 +151,14 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
                         Back
                     </button>
 
-                    <button
+                    {profile?.role !== "Staff" && <button
                         type='button'
                         onClick={toggleProductBan}
                         disabled={false}
                         className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${product.status == "ACTIVE" ? 'border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500' : 'text-white bg-green-500 hover:bg-green-800'} `}
                     >
                         {product.status !== "ACTIVE" ? 'Unban product' : 'Ban product'}
-                    </button>
+                    </button>}
                 </div>
 
             </div>

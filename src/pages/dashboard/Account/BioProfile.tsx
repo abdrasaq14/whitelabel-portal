@@ -98,11 +98,12 @@ const BioProfile = () => {
       onSuccess: (response) => {
         toast.success('Account Information Updated Successfully');
         form.setSubmitting(false);
-        console.log(response)
-        AuthActions.setProfile(response.data.user)
+        console.log("staffResponse",response)
+        AuthActions.setProfile(response.data.result.user)
 
       },
       onError: (err: any) => {
+        console.log("staffResponseError", err)
         form.setSubmitting(false)
         toast.error('An error occurred. Please try again');
       },
@@ -171,7 +172,7 @@ console.log("ErrorForm", form.errors)
 
         {/* Client Logo Section */}
         <div>
-          <img src={companyDetails?.companyLogo ?? '/client-asset/landmark_logo.png'} className='w-auto h-20' alt='brand_logo' />
+          <img src={companyDetails?.companyLogo ?? ''} className='w-auto h-20' alt='brand_logo' />
           <p className='text-base font-satoshiMedium font-medium text-primary-text text-center'>Administrator</p>
         </div>
       </div>

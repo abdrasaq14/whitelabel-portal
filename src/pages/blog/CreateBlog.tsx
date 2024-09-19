@@ -21,15 +21,28 @@ import Modal from "../../components/Modal/Modal";
 export interface HandlePreviewPayload extends BlogPayload {
   isFromEdit: boolean;
 }
+const countSpecialCharacters = (str: string): number => {
+  const specialCharCount = (str.match(/[^A-Za-z0-9\s]/g) || []).length;
+  return specialCharCount;
+};
+
 const validationSchema = Yup.object({
   title: Yup.string()
+    .test("has-alphabet", "Title must contain at least one letter", (value) =>
+      value ? /[A-Za-z]/.test(value) : false
+    )
+    .test(
+      "max-special-chars",
+      "Title can have a maximum of 3 special characters",
+      (value) => (value ? countSpecialCharacters(value) <= 3 : true)
+    )
     .trim()
     .required("Title is required")
     .min(2, "Title is too short")
     .max(100, "Title is too long"),
   createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
-  image: Yup.string().url(),
+  image: Yup.string().url().required("Image is required"),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
   allowLikes: Yup.boolean(),
@@ -45,6 +58,7 @@ const CreateBlogPost = () => {
   const [isBlogEditing, setIsBlogEditing] = useState(true);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
   const [blogId, setBlogId] = useState("");
   const form = useFormik({
     initialValues: {
@@ -59,12 +73,12 @@ const CreateBlogPost = () => {
       allowComments: true,
       allowLikes: true,
       createdAt: "",
-      whiteLabelName: profile?.whiteLabelName,
+      whiteLabelName: profile?.whiteLabelName
     },
     validationSchema,
     onSubmit: (values) => {
       handleSubmit.mutate(values);
-    },
+    }
     // validateOnMount: false,
     // validateOnChange: true,
     // validateOnBlur: true
@@ -97,7 +111,7 @@ const CreateBlogPost = () => {
         toast.error(e);
         console.log("erro", error);
         // show error toast
-      },
+      }
     }
   );
   console.log("form.Values", form.values);
@@ -107,12 +121,14 @@ const CreateBlogPost = () => {
     navigate("/blog/preview");
     // toast.success("Blog previewed successfully");
   };
-  const handleClickOutside = () => {
+  const handleClickOutside = (isView: boolean) => {
     form.resetForm();
-    if (id) {
-      navigate(`/blog/view/${id}`);
+    console.log("isViewBlogOutside", blogId, isView);
+    if (isView) {
+      console.log("isViewBlog", blogId, isView);
+      navigate(`/blog/view/${id || blogId}`);
     } else {
-      navigate(`/blog/view/${blogId}`);
+      navigate(`/blog`);
     }
     setOpenModal(false);
 
@@ -169,6 +185,7 @@ const CreateBlogPost = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  console.log("formDetails", form.values, form.errors);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
@@ -233,6 +250,7 @@ const CreateBlogPost = () => {
                   icon={<IoCalendarOutline />}
                   title="Date"
                   type="date"
+                  min={today}
                   placeholder="Blog title"
                   wrapperClass=" !w-[50%]"
                 />
@@ -360,7 +378,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={handleClickOutside}>
+      <Modal open={openModal} onClick={()=>handleClickOutside(false)}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img
@@ -382,7 +400,7 @@ const CreateBlogPost = () => {
           <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
             <Button
               label="Dismiss"
-              onClick={handleClickOutside}
+              onClick={() => handleClickOutside(false)}
               className={`border border-primary font-semibold ${
                 form.values.status === "draft"
                   ? "bg-primary !text-white w-full"
@@ -392,7 +410,7 @@ const CreateBlogPost = () => {
             {form.values.status === "published" && (
               <Button
                 label="View"
-                onClick={handleClickOutside}
+                onClick={() => handleClickOutside(true)}
                 className="border w-[50%] border-primary font-semibold bg-primary text-white rounded-md p-2"
               />
             )}

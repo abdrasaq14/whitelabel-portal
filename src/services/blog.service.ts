@@ -3,7 +3,8 @@ import { createApiClient } from "../utils/api";
 export interface Comments {
   _id?: string;
   userId: string;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   image?: string;
   comment: string;
   isDeleted: boolean;
@@ -48,5 +49,5 @@ export const BlogService = {
   deleteBlog: (id: string) =>
     createApiClient(false).delete(`/blog/delete/${id}`),
   deleteComment: (postId: string, commentId: string) =>
-    createApiClient(false).delete(`/blog/comment/${postId}/delete/${commentId}`),
+    createApiClient(false).delete(`/blog/comment/delete/?postId=${postId}&commentId=${commentId}`),
 };
