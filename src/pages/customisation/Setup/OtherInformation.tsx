@@ -153,7 +153,7 @@ export default function OtherInformation({setInfo, setFormError, contact}: any) 
             <Modal open={openCountryCodes} onClick={() => setOpenCountryCodes(!openCountryCodes)}>
                 <div className="flex flex-col px-5 w-[400px]">
                     <h2 className="font-satoshiBold text-[20px] leading-7 text-[#000000] tracking-tighter">Select
-                        Service</h2>
+                        Country Code</h2>
                     <div className="mt-3 gap-2 flex flex-col h-[500px] overflow-auto">
                         {countries.map((country: any, index: number) => <div key={index} className="flex items-center">
                             <p onClick={() => {setChosenCountryCode(country.phone_code); setOpenCountryCodes(!openCountryCodes)}}
