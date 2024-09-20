@@ -10,6 +10,7 @@ export const AdminLayout = () => {
     </DashboardWrapper>
   );
 };
+
 export const sidebar: SideItem[] = [
   { name: "Dashboard", path: "/dashboard", iconName: "dashboard" },
   { name: "Product Discovery", path: "/discover-products", iconName: "discover" },

@@ -39,7 +39,6 @@ const Notifications = () => {
                     >
                         <div className="flex items-center">
                             <h6 className="text-[#101010] font-semibold text-lg">Notification Area</h6>
-
                         </div>
 
                     </div>

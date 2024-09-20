@@ -27,6 +27,7 @@ const user = {
 
 const DashboardHeader = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
   const companyDetails: any = useAuth(state => state.profile);
   const notification = useContext(NotificationContext)
 
@@ -43,9 +44,12 @@ const DashboardHeader = () => {
     {
         enabled: true,
         onSuccess: (res) => {
+          console.log("Notifications response", res)
+          res?.data?.result?.length > 0 ? setShowIndicator(true) : setShowIndicator(false) 
         },
         onError: (err: any) => {
             console.log("Error Occured:", err.response);
+            setShowIndicator(false)
         },
 
     }
@@ -88,7 +92,7 @@ const DashboardHeader = () => {
                 } flex justify-center items-center`}
             >
               <div className="relative p-2 mr-3 mt-1">
-                {notifications?.data.result.length > 0 && <span className="w-3 h-3 absolute bg-red-500 rounded-full z-10 top-1 right-[0.45rem] "></span>}
+                {showIndicator && <span className="w-3 h-3 absolute bg-red-500 rounded-full z-10 top-1 right-[0.45rem] "></span>}
                 <NotificationIcon fill="#06C270" />
               </div>
 
