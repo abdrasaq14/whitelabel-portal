@@ -188,16 +188,16 @@ const AllMerchants = () => {
                 // onSelectRows={(e: any) => { console.log(e) }}
                 hideActionName={true}
 
-                rowActions={(row) => [
-                  {
-                    name: "View Hub",
-                    action: () => { },
-                  },
-                  {
-                    name: "Do Something",
-                    action: () => { },
-                  },
-                ]}
+                // rowActions={(row) => [
+                //   {
+                //     name: "View Hub",
+                //     action: () => { },
+                //   },
+                //   {
+                //     name: "Do Something",
+                //     action: () => { },
+                //   },
+                // ]}
                 columns={[
                   {
                     header: "S/N",

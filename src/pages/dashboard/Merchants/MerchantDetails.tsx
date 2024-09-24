@@ -148,7 +148,7 @@ const MerchantDetails = () => {
                 <div className='flex items-center gap-3'>
 
                     <div className='relative'>
-                        <img src={merchant?.result && merchant?.result.image} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
+                        <img src={merchant?.result && merchant?.result.image && merchant?.result.image.trim() ? merchant?.result.image: "/images/no-profile-pics.jpg"} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
 
                         <span className='h-2 w-2 absolute rounded-full bottom-0  right-0 bg-green-500' />
                     </div>

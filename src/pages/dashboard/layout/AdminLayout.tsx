@@ -26,6 +26,7 @@ export const sidebar: SideItem[] = [
     name: "Product", iconName:"note", path:"product", children: [
       { name: "All Products", path: "/product/all-products" },
       { name: "Blocked Products", path: "/product/blocked-products", },
+      { name: "Product Request", path: "/product/request", },
     ]
   },
   { name: "Order & Transaction", path: "/orders", iconName: "orders" },
