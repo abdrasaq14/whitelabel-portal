@@ -30,6 +30,10 @@ const Preview = () => {
 
   const handleStatusChange = (newStatus: "draft" | "published") => {
     // @ts-ignore
+    if (!blogDetails?.image.trim() && newStatus === "published") {
+      return toast.error("Please upload an image to publish");
+
+    }
     setBlogDetails((prevDetails) => {
       // @ts-ignore
       const updatedDetails: HandlePreviewPayload = {
@@ -70,12 +74,10 @@ const Preview = () => {
     {
       onSuccess: (response) => {
         setIsSubmitting(false);
-        console.log("blogDetailsSecond", blogDetails);
         if (blogDetails && blogDetails.isFromEdit) {
           updatePost(blogDetails._id as string, response.data?.result);
           setBlogId(response.data?.result?._id as string);
         } else {
-          console.log("blogDetailsFourth", blogDetails);
           addPost(response.data?.result?.results);
           setBlogId(response.data?.result?._id);
         }

@@ -306,7 +306,7 @@ export default function BlogDescription({ name }: { name: string }) {
         </div>
       </div>
       {error?.trim() ? (
-        <small className="text-xs text-red-600"> &#x26A0; {error}</small>
+        <small className="text-xs text-red-600"> &#x26A0; Post Description is required</small>
       ) : null}
     </div>
   );

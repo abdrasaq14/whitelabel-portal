@@ -42,10 +42,16 @@ const validationSchema = Yup.object({
     .max(100, "Title is too long"),
   createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
-  image: Yup.string().url().required("Image is required"),
+  image: Yup.string()
+    .url("Image must be a valid URL")
+    .when("status", {
+      is: "published",
+      then: Yup.string().required("Image is required"),
+      otherwise: Yup.string().nullable().notRequired()
+    }),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean(),
+  allowLikes: Yup.boolean()
 });
 
 const CreateBlogPost = () => {
@@ -83,6 +89,7 @@ const CreateBlogPost = () => {
     // validateOnChange: true,
     // validateOnBlur: true
   });
+  console.log("formValuesss", form.values);
   const handleSubmit = useMutation(
     async (values: BlogPayload) => {
       if (id) {
@@ -114,8 +121,7 @@ const CreateBlogPost = () => {
       }
     }
   );
-  console.log("form.Values", form.values);
-
+  
   const handlePreview = (value: HandlePreviewPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigate("/blog/preview");
@@ -344,8 +350,15 @@ const CreateBlogPost = () => {
                         ? "Saving..."
                         : "Save as Draft"
                     }`}
-                    onClick={() => {
-                      form.setFieldValue("status", "draft");
+                    onClick={async () => {
+                      // Set the status to 'draft' before validation
+                      await form.setFieldValue("status", "draft");
+
+                      // Manually reset the validation for the 'image' field since it's optional for draft
+                      await form.setFieldTouched("image", false);
+                      await form.validateField("image"); // Re-run validation on image
+
+                      // Submit form without worrying about image when draft
                       form.handleSubmit();
                     }}
                     className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
@@ -366,8 +379,14 @@ const CreateBlogPost = () => {
                         ? "Publishing..."
                         : "Publish"
                     }`}
-                    onClick={() => {
-                      form.setFieldValue("status", "published");
+                    onClick={async () => {
+                      // Set status to 'published'
+                      await form.setFieldValue("status", "published");
+
+                      // Mark the image field as touched so the validation message can be shown
+                      await form.setFieldTouched("image", true);
+
+                      // Trigger form validation and handle form submission
                       form.handleSubmit();
                     }}
                     className="bg-primary font-semibold  text-white rounded-md  min-w-[7.5rem] w-[50%] py-2"
@@ -378,7 +397,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={()=>handleClickOutside(false)}>
+      <Modal open={openModal} onClick={() => handleClickOutside(false)}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img

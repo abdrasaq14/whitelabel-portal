@@ -33,7 +33,8 @@ export const Button = ({
   ...rest
 }: ButtonProps) => {
   return (
-    <button
+      <button
+      type="button"
       {...rest}
       disabled={isLoading ? true : disabled}
       aria-label="button"
