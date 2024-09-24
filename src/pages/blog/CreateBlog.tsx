@@ -16,7 +16,7 @@ import { useBlogStore } from "../../zustand/blog.tore";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { noContentImage, postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
-import { Button } from "../../components/Button/Button";
+import { Button } from "../../components/Blog/Button";
 import Modal from "../../components/Modal/Modal";
 export interface HandlePreviewPayload extends BlogPayload {
   isFromEdit: boolean;

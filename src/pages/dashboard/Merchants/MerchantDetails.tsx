@@ -81,10 +81,13 @@ const MerchantDetails = () => {
     },
         {
             onSuccess: () => {
+                console.log("SuspendMerchant", SuspendMerchant)
                 toast.success("account suspended")
                 refetch()
             },
             onError: () => {
+                console.log("SuspendMerchant", SuspendMerchant)
+                toast.error("Failed to suspend account")
                 refetch()
             }
         }
@@ -101,6 +104,11 @@ const MerchantDetails = () => {
         {
             onSuccess: () => {
                 toast.success("account Activated")
+                refetch()
+            },
+            onError: () => {
+                console.log("unSuspendMerchant", unSuspendMerchant)
+                toast.error("Failed to activate account")
                 refetch()
             }
         }
