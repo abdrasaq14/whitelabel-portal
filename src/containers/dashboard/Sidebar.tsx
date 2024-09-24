@@ -17,7 +17,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const isExpanded = hovered.get || !collapsed.get;
   const isCollapsed = !isExpanded;
 
-  // console.log("Company details>>>>>>>>>>>>>>>>", companyDetails.customisationData.domain)
+  console.log("Company details>>>>>>>>>>>>>>>>", companyDetails)
 
   return (
     <aside
@@ -81,7 +81,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
                 )}
                 alt="Brand_logo"
               />
-              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email}</p>
+              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email || companyDetails?._doc?.email}</p>
             </div>
             <img
               src={`/icons/sidebar/logout.svg`}

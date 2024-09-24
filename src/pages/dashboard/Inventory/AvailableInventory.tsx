@@ -145,7 +145,10 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
                     <div className='h-full flex-grow '>
                         <Table data={data.result.results && data?.result?.results}
                             hideActionName={true}
-                            // clickRowAction={(row) => setModalOpen(true)}
+                            clickRowAction={(row) => {
+                                setSelectedInventory(row)
+                                setIsViewModalOpen(true)
+                            }}
                             rowActions={(row) => [
                                 {
                                     name: "View Item",
@@ -226,14 +229,11 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
             <AddInventory isOpen={isAddModalOpen} closeViewModal={async () => {
                 await refetch()
                 closeViewModal()
-
-
             }} />
+            
             <ViewInventory isAdmin={false} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
                 await refetch()
                 setIsViewModalOpen(false)
-
-
             }} />
         </div>
     )

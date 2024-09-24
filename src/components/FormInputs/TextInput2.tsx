@@ -63,7 +63,7 @@ const TextInput = ({
                 ? "border-red-600"
                 : "border-[#470e812b]"
             } p-1.5`}
-            buttonClass={` !border-none !bg-white`}
+            buttonClass={`!border-none !bg-white`}
             placeholder='+23420202020'
             onChange={handlePhoneChange}
             onBlur={handlePhoneBlur}

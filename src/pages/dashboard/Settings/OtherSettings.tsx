@@ -153,14 +153,16 @@ const Pricing = () => {
         },
         {
             onSuccess: (response) => {
-                toast.success("Language Changed Successfully")
-                AuthActions.setProfile(response.data.user)
+                // console.log(response.data)
+                toast.success("Commission Percentage Changed Successfully")
+                AuthActions.setProfile(response.data.result.user)
                 // AuthActions.logout()
                 form.setSubmitting(false)
             },
             onError: (err: any) => {
                 form.setSubmitting(false)
                 toast.error("something went wrong!!! Please try again")
+                console.log(err)
             }
 
 

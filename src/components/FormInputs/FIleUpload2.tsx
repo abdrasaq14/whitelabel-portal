@@ -22,7 +22,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
         const validFormats = fileType === "document"
             ? ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
             : ["image/jpeg", "image/png", "image/jpg"];
-        const minSize = 50 * 1024; // 50 KB
+        const minSize = 10 * 1024; // 10 KB
         const maxSize = 5 * 1024 * 1024; // 5 MB
 
         if (!validFormats.includes(file.type)) {
@@ -31,7 +31,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ name, wrapperClass, onFileChang
         }
 
         if (file.size < minSize || file.size > maxSize) {
-            setUploadError("File size must be between 50KB and 5MB");
+            setUploadError("File size must be between 10KB and 5MB");
             return false;
         }
 
