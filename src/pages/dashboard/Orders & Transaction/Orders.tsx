@@ -17,7 +17,6 @@ interface PaginationInfo {
   pageSize: number;
 }
 
-
 const Orders = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [order, setOrder] = useState({})
@@ -30,7 +29,6 @@ const Orders = () => {
     const { currentPage, pageSize } = pageInfo;
     return (currentPage - 1) * pageSize + index + 1;
   };
-
 
   const { data: allOrders, isLoading, refetch } = useFetchWithParams(
     ["query-all-orders", {
@@ -49,10 +47,9 @@ const Orders = () => {
 
   console.log(allOrders && allOrders.result.results)
 
-
   useEffect(() => {
     refetch()
-  })
+  }, [])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -64,17 +61,17 @@ const Orders = () => {
     // setFilterParams({ ...filterParams, pageNum: val - 1 });
   };
 
-
-
-
   const handleViewOrderInfo = (row: any) => {
     setOrder(row)
     setIsViewModalOpen(true);
   }
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
+
   const timeline = ["All", "Last Month", "This Month"]
+
   return (
     <div className='px-4 pt-8 h-full flex flex-col '>
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>

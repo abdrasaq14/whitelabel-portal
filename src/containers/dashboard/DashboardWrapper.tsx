@@ -25,7 +25,7 @@ export const DashboardWrapper = ({
     <section className="flex relative h-screen w-full pc-bg-gray text-[15px] max-w-[1560px] mx-auto">
       <DashboardSidebar items={sidebar} />
       <section className="flex-1 flex flex-col">
-        <DashboardHeader />
+        <DashboardHeader isNewNotificationAvailable={notification?.isNewNotificationAvailable} setNotificationIndicator={notification?.setNotificationIndicator} />
         <main className="flex-1 grid overflow-y-auto relative">
           <Modal onClick={logout.closeLogout} open={logout.isLogoutOpen}>
             <div className="w-[300px] p-5">
@@ -67,6 +67,7 @@ export const DashboardWrapper = ({
             <NotificationSidebar
               setIsNotificationOpen={notification?.cloesNotification}
               isNotificationOpen={notification?.isNotificationOpen}
+              setNotificationIndicator={notification?.setNotificationIndicator}
             />
           </div>
         </main>

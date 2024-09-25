@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -7,94 +7,96 @@ import { NotificationService } from "../../services/notification.service";
 import { fDate, fToNow } from "../../utils/formatTime";
 
 
-export const SampleNotification = [
-  {
-    "date": "Today",
-    "notifications": [
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": true,
-        "time": "9:30"
-      },
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": false,
-        "time": "14:45"
-      }
-    ]
-  },
-  {
-    "date": "Yesterday",
-    "notifications": [
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": false,
-        "time": "8:20"
-      },
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": true,
-        "time": "10:55"
-      }
-    ]
-  },
-  {
-    "date": "2024-03-15",
-    "notifications": [
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": true,
-        "time": "11:10"
-      },
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": false,
-        "time": "15:25"
-      },
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": true,
-        "time": "18:40"
-      }
-    ]
-  },
-  {
-    "date": "2024-03-14",
-    "notifications": [
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": false,
-        "time": "12:15"
-      },
-      {
-        "title": "New Merchant Added",
-        "description": "You added a new merchant",
-        "isRead": true,
-        "time": "16:30"
-      }
-    ]
-  }
-]
+// export const SampleNotification = [
+//   {
+//     "date": "Today",
+//     "notifications": [
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": true,
+//         "time": "9:30"
+//       },
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": false,
+//         "time": "14:45"
+//       }
+//     ]
+//   },
+//   {
+//     "date": "Yesterday",
+//     "notifications": [
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": false,
+//         "time": "8:20"
+//       },
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": true,
+//         "time": "10:55"
+//       }
+//     ]
+//   },
+//   {
+//     "date": "2024-03-15",
+//     "notifications": [
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": true,
+//         "time": "11:10"
+//       },
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": false,
+//         "time": "15:25"
+//       },
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": true,
+//         "time": "18:40"
+//       }
+//     ]
+//   },
+//   {
+//     "date": "2024-03-14",
+//     "notifications": [
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": false,
+//         "time": "12:15"
+//       },
+//       {
+//         "title": "New Merchant Added",
+//         "description": "You added a new merchant",
+//         "isRead": true,
+//         "time": "16:30"
+//       }
+//     ]
+//   }
+// ]
 interface INO {
   isNotificationOpen: boolean;
   setIsNotificationOpen: any;
+  setNotificationIndicator: any
 }
 
 const NotificationSidebar = ({
   isNotificationOpen,
   setIsNotificationOpen,
+  setNotificationIndicator
 }: INO) => {
   const sideNavRef = useRef<any>();
   const profile: any = useAuth((s) => s.profile)
-  console.log(profile)
+  // console.log(profile)
 
   const navigate = useNavigate()
 
@@ -103,14 +105,18 @@ const NotificationSidebar = ({
     setIsNotificationOpen(false);
   });
 
-  const { data: notifications, } = useQuery(
+  const [notifications, setNotifications] = useState<any>({})
+
+  const { data } = useQuery(
     ["query-user-Notifications-sales", profile],
     async () => {
-      return await NotificationService.getUsersNotification();
+      return await NotificationService.getUsersNewNotification();
     },
     {
       enabled: true,
       onSuccess: (res) => {
+        console.log("From the sidebar", res.data)
+        setNotifications(res.data)
       },
       onError: (err: any) => {
         console.log("Error Occured:", err.response);
@@ -119,7 +125,19 @@ const NotificationSidebar = ({
     }
   );
 
-  console.log(notifications)
+  const takeAction = async (action: string) => {
+    if(action === "close"){
+      const allNotifications = await NotificationService.getUsersNewNotification();
+      console.log("After click", allNotifications)
+      if(allNotifications.data){
+          setNotifications(allNotifications.data);
+          setNotificationIndicator(allNotifications.data.result.length > 0 ? true : false)
+      }
+      setIsNotificationOpen(false)
+    }
+  }
+
+  // console.log(notifications)
 
   return (
     <>
@@ -156,12 +174,12 @@ const NotificationSidebar = ({
                 <div className="mb-24">
                  
                   {
-                    notifications?.data.result.length > 0 ?
+                    notifications?.result?.length > 0 ?
                       <>
                         {
-                          notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
+                          notifications?.result?.map((items: any, index: number) => <Notification key={index} data={items} action={takeAction} />)
                         }
-                      </> : <div className="text-center w-full mt-12 text-sm">No Notification</div>
+                      </> : <div className="text-center w-full mt-12 text-sm">No New Notification</div>
                   }
                 </div>
 
@@ -191,24 +209,33 @@ const NotificationSidebar = ({
 };
 
 
-export const Notification = ({ data }: any) => {
+export const Notification = ({ data, action=null }: any) => {
+  const navigate = useNavigate()
+  const viewNotification = async () => {
+    const viewNotification = await NotificationService.updateNotification(data?._id);
+    console.log(viewNotification)
+    if(viewNotification.data?.status === 'Success'){
+      if(data?.event_type === 'WHITELABEL_REQUEST'){
+        action !== null && action("close")
+        navigate("/merchant/request-merchants")
+      }
+    }
+  }
 
   return (
-    <div>
+    <div className="cursor-pointer" onClick={viewNotification}>
       <h3 className="text-xs border-b py-2 mt-3 ">{fDate(data?.createdAt)}</h3>
       <div >
-
 
         <div className="w-full flex items-end justify-between py-2 border-b">
           <div>
             <h3 className="font-medium">{data.title}</h3>
             <h5 className="text-xs text-[#6F7174]">{data.body[0][1]}</h5>
           </div>
-          <div>
+          <div className="flex flex-col items-end">
+            {data.seen_at === null && <img src="/images/red_dot.svg" alt="red_dot" />}
             <h3 className="text-xs text-[#4D5154] ">{fToNow(data?.createdAt)}</h3>
           </div>
-
-
         </div>
 
       </div>
