@@ -24,8 +24,7 @@ export interface BlogPayload {
   allowLikes: boolean;
   status: string;
   whiteLabelName: string;
-  createdAt?: string;
-  updatedAt?: string;
+  publishedDate?: string;
 }
 export interface IQueryParams { 
   whiteLabelName?: string;

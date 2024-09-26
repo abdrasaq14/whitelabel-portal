@@ -29,6 +29,7 @@ const Preview = () => {
   const navigate = useNavigate();
 
   const handleStatusChange = (newStatus: "draft" | "published") => {
+     const publishedDate = new Date().toISOString();
     // @ts-ignore
     if (!blogDetails?.image.trim() && newStatus === "published") {
       return toast.error("Please upload an image to publish");
@@ -38,7 +39,8 @@ const Preview = () => {
       // @ts-ignore
       const updatedDetails: HandlePreviewPayload = {
         ...prevDetails,
-        status: newStatus
+        status: newStatus,
+        publishedDate: newStatus === "published" ? publishedDate : "",
       };
       handleSubmit.mutate(updatedDetails);
       return updatedDetails;
@@ -117,7 +119,7 @@ const Preview = () => {
               </h2>
               <div className="flex gap-4 text-primary-text text-sm">
                 <span className="flex items-center gap-1">
-                  {formatDate(blogDetails?.createdAt as string)}
+                  {formatDate(blogDetails?.publishedDate as string)}
                   <GoDotFill />3 mins read
                 </span>
               </div>

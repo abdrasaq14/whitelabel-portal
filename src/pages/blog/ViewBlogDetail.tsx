@@ -179,7 +179,7 @@ const ViewBlogDetail = () => {
                           : "Comment"}
                       </span>
                       <span className="flex items-center">
-                        {formatDate(blogDetails?.createdAt as string)}
+                        {blogDetails?.publishedDate ? (formatDate(blogDetails?.publishedDate as string)): "Not Published"}
                         <GoDotFill />{readingTime} read
                       </span>
                     </div>

@@ -40,7 +40,6 @@ const validationSchema = Yup.object({
     .required("Title is required")
     .min(2, "Title is too short")
     .max(100, "Title is too long"),
-  createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
   image: Yup.string()
     .url("Image must be a valid URL")
@@ -78,7 +77,7 @@ const CreateBlogPost = () => {
       shares: 0,
       allowComments: true,
       allowLikes: true,
-      createdAt: "",
+      publishedDate: "",
       whiteLabelName: profile?.whiteLabelName
     },
     validationSchema,
@@ -161,7 +160,7 @@ const CreateBlogPost = () => {
             if (res.data.result) {
               setError("");
               const blogDetails = res.data.result;
-              blogDetails.createdAt = new Date(blogDetails.createdAt)
+              blogDetails.publishedDate = new Date(blogDetails.publishedDate)
                 .toISOString()
                 .split("T")[0]; // Format the date to YYYY-MM-DD
               form.setValues(blogDetails);
@@ -213,7 +212,7 @@ const CreateBlogPost = () => {
             <button
               type="button"
               onClick={() =>
-                handlePreview({ ...form.values, isFromEdit: id ? true : false })
+                handlePreview({ ...form.values, isFromEdit: id ? true : false, publishedDate: new Date().toISOString() })
               } // pass isFromEdit to differentiate between edit and create
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
@@ -251,9 +250,11 @@ const CreateBlogPost = () => {
                   placeholder="Blog title"
                   wrapperClass=""
                 />
-                <TextInput
-                  {...form.getFieldProps("createdAt")}
+                    <TextInput
+                      name="publishedDate"
+                      value={today}
                   icon={<IoCalendarOutline />}
+                  disabled={true}
                   title="Date"
                   type="date"
                   min={today}
@@ -342,8 +343,7 @@ const CreateBlogPost = () => {
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content ||
-                      !form.values.createdAt
+                      !form.values.content 
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "draft"
@@ -371,8 +371,7 @@ const CreateBlogPost = () => {
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content ||
-                      !form.values.createdAt
+                      !form.values.content 
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "published"
@@ -381,7 +380,10 @@ const CreateBlogPost = () => {
                     }`}
                     onClick={async () => {
                       // Set status to 'published'
+                      const publishedDate = new Date()
+                        .toISOString()
                       await form.setFieldValue("status", "published");
+                      await form.setFieldValue("publishedDate", publishedDate);
 
                       // Mark the image field as touched so the validation message can be shown
                       await form.setFieldTouched("image", true);
