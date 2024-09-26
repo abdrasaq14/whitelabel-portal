@@ -8,7 +8,7 @@ import { LogoutContext } from "../../context/LogoutContext";
 import { sidebar } from "../../pages/dashboard/layout/AdminLayout";
 import { useAuth } from "../../zustand/auth.store";
 
-const restrictedNavLinkFromStaff = ['Product Discovery', 'Merchant', 'Product', 'Order & Transaction']
+const restrictedNavLinkFromStaff = ['Product Discovery', 'Merchant', 'Product', 'Order & Transaction', 'Message']
 
 export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const companyDetails: any = useAuth(state => state.profile);

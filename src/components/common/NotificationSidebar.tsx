@@ -190,7 +190,7 @@ const NotificationSidebar = ({
                       setIsNotificationOpen(false);
                       navigate("/notifications")
                     }} className="whitespace-nowrap px-3 py-3 text-sm text-white bg-primary rounded ">View all Notifications</button>
-                    <button className="whitespace-nowrap px-3 py-3 text-sm bg-transparent border rounded ">Mark all as read</button>
+                    {/* <button className="whitespace-nowrap px-3 py-3 text-sm bg-transparent border rounded ">Mark all as read</button> */}
                   </div>
 
                 </div>
