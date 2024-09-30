@@ -118,6 +118,7 @@ export const calculateReadingTime = (htmlContent:string) => {
 
 
 export const customHTMLParser = (str: any) => {
+  console.log("CustomPArser", str)
   const decoded = parse(str);
   const cleanString = htmlToText(decoded.toString(), {
     wordwrap: 130,

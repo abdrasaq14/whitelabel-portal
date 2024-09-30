@@ -17,6 +17,7 @@ import { customHTMLParser } from '../../utils/Helpfunctions';
 
 
 export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: any) => {
+    console.log("CustomPArser", product);
     const [isProductBan, setIsProductBan] = useState(false);
     const profile: any = useAuth((s) => s.profile);
     const navigate = useNavigate()
@@ -63,109 +64,133 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
     )
 
     return (
-        <Modal isOpen={isOpen} closeModal={closeViewModal} containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4">
-            <div className='grid grid-cols-2 w-full gap-8'>
-                <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
-                    <ProductImageCarousel
-                        images={[
-                            product?.image,
-                            ...(product?.gallery_image || []),
-                        ]}
-                    />
-                </div>
-                <div className='col-span-2 sm:col-span-1 flex flex-col gap-4 '>
-                    <div className='w-full flex justify-between font-satoshiBold text-primary-text items-center'>
-                        <h1 className=' text-2xl'>{product.name}</h1>
-                        <p className='text-sm '>N{product.price}</p>
-                    </div>
-                    <p className='text-primary-subtext font-normal text-sm'>
-                        {product.caption}
-                    </p>
-                    <div className='flex justify-between'>
-                        <div>
-                            <h2 className='font-bold font-satoshiBold text-sm text-primary-subtext'>Product Type</h2>
-                            <p className='text-primary text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 '>{product.type} Product</p>
-                        </div>
-                        <div>
-                            <h2 className='font-bold font-satoshiBold text-sm text-primary-subtext'>Categories</h2>
-                            <div className='w-auto flex gap-2 mt-2'>
-                                <Categories categories={product.categories} />
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
-                    <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
-                    <p className='text-primary-subtext font-normal text-sm'>
-                        {customHTMLParser(product.description)}
-                    </p>
-                    <div>
-                        <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
-                        <div className='mt-4'>
-                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Name</p>
-                            <p className='mt-1 text-primary-text text-base font-medum font-satoshiMedium '>{product.businessName ?? product.merchantName}</p>
-                        </div>
-                        <div className='mt-4'>
-                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Rating</p>
-                            <div className='flex gap-2 items-center mt-1'>
-                                <p className=' text-primary-text text-base font-medum font-satoshiMedium'>{product.rating}/5</p>
-                                <StarRating totalRatings={product.rating} />
-                            </div>
-                        </div>
-                        <div>
-                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Link</p>
-                            <div className=' flex justify-between w-full'>
-                                <p className='text-primary-text text-base font-medum font-satoshiMedium'>{product.storeLink}</p>
-                                <CopyToClipboard text={product.storeLink} />
-                            </div>
-                        </div>
-                        <div className='mt-4 w-full'>
-                            <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Product  Categories</p>
-                            <Categories categories={product.categories} />
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeViewModal}
+        containerStyle="flex flex-col p-4 sm:p-8 align-middle sm:max-w-[600px] items-center rounded z-24 bg-white w-[80%] overflow-y-auto max-h-[70%] sm:w-full h-auto gap-4"
+      >
+        <div className="grid grid-cols-2 w-full gap-8">
+          <div className="col-span-2 sm:col-span-1 flex flex-col gap-4">
+            <ProductImageCarousel
+              images={[product?.image, ...(product?.gallery_image || [])]}
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1 flex flex-col gap-4 ">
+            <div className="w-full flex justify-between font-satoshiBold text-primary-text items-center">
+              <h1 className=" text-2xl">{product.name}</h1>
+              <p className="text-sm ">N{product.price}</p>
             </div>
-            <div className='w-full flex flex-wrap justify-between gap-4'>
-                <button
-                    type='button'
-                    onClick={() => navigate(`/merchant/profile/${product.merchantId}`)}
-                    disabled={false}
-                    className='border-primary hover:bg-primary border-[1px] rounded-lg text-primary hover:text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium '>
-                    View Merchant
-                </button>
-                <div className='gap-4 flex w-full sm:w-auto justify-between'>
-                    <button
-                        type='button'
-                        onClick={() => closeViewModal()}
-                        disabled={false}
-                        className='border-gray-300 hover:bg-primary-text border-[1px] rounded-lg text-primary-text hover:text-white text-sm inline-flex gap-2  items-center justify-center text-center  px-8 py-2 font-medium '
-                    >
-                        Back
-                    </button>
-
-                    {profile?.role !== "Staff" && <button
-                        type='button'
-                        onClick={toggleProductBan}
-                        disabled={false}
-                        className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${product.status == "ACTIVE" ? 'border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500' : 'text-white bg-green-500 hover:bg-green-800'} `}
-                    >
-                        {product.status !== "ACTIVE" ? 'Unban product' : 'Ban product'}
-                    </button>}
+            <p className="text-primary-subtext font-normal text-sm">
+              {product.caption}
+            </p>
+            <div className="flex justify-between">
+              <div>
+                <h2 className="font-bold font-satoshiBold text-sm text-primary-subtext">
+                  Product Type
+                </h2>
+                <p className="text-primary text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
+                  {product.type} Product
+                </p>
+              </div>
+              <div>
+                <h2 className="font-bold font-satoshiBold text-sm text-primary-subtext">
+                  Categories
+                </h2>
+                <div className="w-auto flex gap-2 mt-2">
+                  <Categories categories={product.categories} />
                 </div>
-
+              </div>
             </div>
+          </div>
+          <div className=" col-span-2 w-full  flex flex-col mt-8 gap-4">
+            <h2 className="font-bold font-satoshiBold text-base text-primary-text">
+              Product Description
+            </h2>
+            <p className="text-primary-subtext font-normal text-sm">
+              {product?.description &&
+                product?.description.trim() &&
+                customHTMLParser(product?.description)}
+            </p>
+            <div>
+              <h2 className="font-bold font-satoshiBold text-base text-primary-text">
+                Merchant Description
+              </h2>
+              <div className="mt-4">
+                <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+                  Store Name
+                </p>
+                <p className="mt-1 text-primary-text text-base font-medum font-satoshiMedium ">
+                  {product.businessName ?? product.merchantName}
+                </p>
+              </div>
+              <div className="mt-4">
+                <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+                  Rating
+                </p>
+                <div className="flex gap-2 items-center mt-1">
+                  <p className=" text-primary-text text-base font-medum font-satoshiMedium">
+                    {product.rating}/5
+                  </p>
+                  <StarRating totalRatings={product.rating} />
+                </div>
+              </div>
+              <div>
+                <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+                  Store Link
+                </p>
+                <div className=" flex justify-between w-full">
+                  <p className="text-primary-text text-base font-medum font-satoshiMedium">
+                    {product.storeLink}
+                  </p>
+                  <CopyToClipboard text={product.storeLink} />
+                </div>
+              </div>
+              <div className="mt-4 w-full">
+                <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+                  Product Categories
+                </p>
+                <Categories categories={product.categories} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full flex flex-wrap justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => navigate(`/merchant/profile/${product.merchantId}`)}
+            disabled={false}
+            className="border-primary hover:bg-primary border-[1px] rounded-lg text-primary hover:text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium "
+          >
+            View Merchant
+          </button>
+          <div className="gap-4 flex w-full sm:w-auto justify-between">
+            <button
+              type="button"
+              onClick={() => closeViewModal()}
+              disabled={false}
+              className="border-gray-300 hover:bg-primary-text border-[1px] rounded-lg text-primary-text hover:text-white text-sm inline-flex gap-2  items-center justify-center text-center  px-8 py-2 font-medium "
+            >
+              Back
+            </button>
 
-        </Modal>
-    )
+            {profile?.role !== "Staff" && (
+              <button
+                type="button"
+                onClick={toggleProductBan}
+                disabled={false}
+                className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
+                  product.status == "ACTIVE"
+                    ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
+                    : "text-white bg-green-500 hover:bg-green-800"
+                } `}
+              >
+                {product.status !== "ACTIVE" ? "Unban product" : "Ban product"}
+              </button>
+            )}
+          </div>
+        </div>
+      </Modal>
+    );
 }
 
 export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: any) => {
