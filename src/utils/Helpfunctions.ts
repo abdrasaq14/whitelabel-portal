@@ -1,6 +1,7 @@
 import { AES, enc } from "crypto-js";
 import { Config } from "./config";
-
+import parse from "html-react-parser";
+import { htmlToText } from "html-to-text";
 
 export const decodeHtml = (html: any) => {
     const txt = document.createElement("textarea");
@@ -77,7 +78,7 @@ export const handleError = (error: any) => {
       ? "Session expired, kindly login again"
       : message;
   } else if (error?.message) {
-    return error.message === "Invalid token"
+    return error.message == "Invalid token"
       ? "Session expired, kindly login again"
       : error.message;
   } else {
@@ -113,4 +114,13 @@ export const calculateReadingTime = (htmlContent:string) => {
   const readingTimeInMinutes = wordCount / wordsPerMinute;
 
   return formatReadingTime(readingTimeInMinutes);
+};
+
+
+export const customHTMLParser = (str: any) => {
+  const decoded = parse(str);
+  const cleanString = htmlToText(decoded.toString(), {
+    wordwrap: 130,
+  });
+  return cleanString;
 };
