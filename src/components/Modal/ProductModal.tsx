@@ -17,7 +17,6 @@ import { customHTMLParser } from '../../utils/Helpfunctions';
 
 
 export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: any) => {
-    console.log("CustomPArser", product);
     const [isProductBan, setIsProductBan] = useState(false);
     const profile: any = useAuth((s) => s.profile);
     const navigate = useNavigate()
@@ -107,9 +106,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
               Product Description
             </h2>
             <p className="text-primary-subtext font-normal text-sm">
-              {product?.description &&
-                product?.description.trim() &&
-                customHTMLParser(product?.description)}
+              {product?.description && product?.description.trim() && customHTMLParser(product?.description)}
             </p>
             <div>
               <h2 className="font-bold font-satoshiBold text-base text-primary-text">
