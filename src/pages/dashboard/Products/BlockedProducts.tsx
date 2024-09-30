@@ -122,7 +122,7 @@ const BlockedProducts = () => {
                   // },
                   {
                     header: "Merchant",
-                    view: (row: any) => <div>{row.merchantName}</div>,
+                    view: (row: any) => <div>{row.userId.businessName}</div>,
                   },
                   {
                     header: "Product Name",
