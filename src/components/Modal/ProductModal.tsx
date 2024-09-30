@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../../zustand/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { HtmlToString } from '../common/HtmlToString';
+import { customHTMLParser } from '../../utils/Helpfunctions';
 
 
 
@@ -99,7 +100,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
                 <div className=' col-span-2 w-full  flex flex-col mt-8 gap-4'>
                     <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Product Description</h2>
                     <p className='text-primary-subtext font-normal text-sm'>
-                        {product.description}
+                        {customHTMLParser(product.description)}
                     </p>
                     <div>
                         <h2 className='font-bold font-satoshiBold text-base text-primary-text'>Merchant Description</h2>
