@@ -37,7 +37,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
         }
     )
 
-    console.log("Inventory History>>>>>>>>>>", data)
+    console.log("Inventory History user profile>>>>>>>>>>", profile)
 
     const mockData = {
         data: [
@@ -171,22 +171,6 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                 setSelectedInventory(row)
                                 setIsViewModalOpen(true)
                             }}
-                            // rowActions={(row) => [
-                            //     {
-                            //         name: "View Item",
-                            //         action: () => {
-                            //             setSelectedInventory(row)
-                            //             setIsViewModalOpen(true)
-                            //         },
-                            //     },
-                            //     {
-                            //         name: "Update Item",
-                            //         action: () => { },
-                            //     }, {
-                            //         name: "Delete",
-                            //         action: () => { },
-                            //     },
-                            // ]}
                             columns={[
                                 {
                                     header: "S/N",
@@ -196,7 +180,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                                     })}</div>
                                 },
                                 {
-                                    header: "Request From",
+                                    header: "Request Froms",
                                     view: (row: any) => <div>{row.requesterName ?? row.requesterId}</div>,
                                 },
                                 {
@@ -243,7 +227,7 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                 closeViewModal()
             }} />
 
-            <ViewInventoryHistory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+            <ViewInventoryHistory isAdmin={!profile._doc} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
                 await refetch()
                 setIsViewModalOpen(false)
 

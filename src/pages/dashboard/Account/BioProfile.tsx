@@ -37,10 +37,10 @@ const BioProfile = () => {
 
 
   const BioInfoInitialValuesStaff = {
-    firstName: companyDetails?.firstName,
-    lastName: companyDetails?.lastName,
-    email: companyDetails?.email || '',
-    phoneNumber: companyDetails?.phoneNumber ? '+234' + companyDetails.phoneNumber.substring(1) : '',
+    firstName: companyDetails?._doc?.firstName,
+    lastName: companyDetails?._doc?.lastName,
+    email: companyDetails?._doc?.email || '',
+    phoneNumber: companyDetails?._doc?.phoneNumber ? '+234' + companyDetails._doc?.phoneNumber.substring(1) : '',
   };
   const validationSchema = Yup.object().shape({
     companyName: Yup.string().required('Company name is required'),

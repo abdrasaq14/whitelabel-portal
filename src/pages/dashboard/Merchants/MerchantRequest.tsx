@@ -31,7 +31,8 @@ const MerchantRequest = () => {
       refetchOnMount: true,
     }
   )
-  console.log(allRequest)
+  // console.log(allRequest)
+  
   const handlePageSize = (val: any) => {
     setPageSize(val);
     // setFilterParams({ ...filterParams, pageSize: val });
@@ -41,6 +42,7 @@ const MerchantRequest = () => {
     setCurrentPage(val);
     // setFilterParams({ ...filterParams, pageNum: val - 1 });
   };
+
   return (
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
@@ -50,7 +52,7 @@ const MerchantRequest = () => {
           <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allRequest ? allRequest?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput placeholder='Search' />
+              <SearchInput placeholder='Search' onChange={() => {}} />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -60,7 +62,7 @@ const MerchantRequest = () => {
           allRequest ? <div className='py-4'>
 
             {
-              allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
+              allRequest && allRequest.result.results.map((items: any, index: number) => <Request items={items} key={index}/>)
             }
 
             {/* <Request />

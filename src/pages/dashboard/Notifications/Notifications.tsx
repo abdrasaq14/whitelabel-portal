@@ -1,30 +1,56 @@
-import React from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { BreadCrumbClient } from '../../../components/Breadcrumb'
 import { Notification } from '../../../components/common/NotificationSidebar'
 import { useNavigate } from 'react-router-dom'
 import { NotificationService } from '../../../services/notification.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { useQuery } from 'react-query'
+import { NotificationContext } from "../../../context/NotificationContext";
 
 const Notifications = () => {
-
+    const [notifications, setNotifications] = useState<any>({})
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
-    const { data: notifications, } = useQuery(
-        ["query-user-Notifications-sales", profile],
-        async () => {
-            return await NotificationService.getUsersNotification();
-        },
-        {
-            enabled: true,
-            onSuccess: (res) => {
-            },
-            onError: (err: any) => {
-                console.log("Error Occured:", err.response);
-            },
+    const {setNotificationIndicator}: any = useContext(NotificationContext)
 
+    useEffect(() => {
+        fetchAllNotifications()
+    }, [])
+
+    const fetchAllNotifications = async () => {
+        const allNotifications = await NotificationService.getUsersNotification();
+        if(allNotifications.data){
+            setNotifications(allNotifications.data);
         }
-    );
+    }
+
+    const takeAction = async (action: string) => {
+        if(action === "close"){
+          const allNotifications = await NotificationService.getUsersNewNotification();
+          console.log("After click", allNotifications)
+          if(allNotifications.data){
+              setNotifications(allNotifications.data);
+              setNotificationIndicator(allNotifications.data.result.length > 0 ? true : false)
+          }
+        //   setIsNotificationOpen(false)
+        }
+      }
+
+    // const { data: notifications, } = useQuery(
+    //     ["query-user-Notifications-sales", profile],
+    //     async () => {
+    //         return await NotificationService.getUsersNotification();
+    //     },
+    //     {
+    //         enabled: true,
+    //         onSuccess: (res) => {
+    //         },
+    //         onError: (err: any) => {
+    //             console.log("Error Occured:", err.response);
+    //         },
+
+    //     }
+    // );
 
     return (
         <div className='px-4 pt-8 h-full  '>
@@ -45,9 +71,9 @@ const Notifications = () => {
                     <div className="h-[95%]  scrollbar px-6 py-4 ">
 
                         <div className="mb-24 h-full">
-                            {notifications?.data.result.length > 0 ? <>
+                            {notifications?.result?.length > 0 ? <>
                             {
-                                notifications?.data.result.map((items: any, index: number) => <Notification key={index} data={items} />)
+                                notifications?.result?.map((items: any, index: number) => <Notification key={index} data={items} action={takeAction} />)
                             }
                             </> : <div className="text-center w-full mt-12 text-sm">No Notification</div>}
                         </div>

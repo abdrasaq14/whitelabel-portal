@@ -16,6 +16,7 @@ import { Table } from '../Table/Table2'
 import { fDate } from '../../utils/formatTime'
 import { mergeItemsWithDetails } from '../../utils/functions'
 import { Label } from '../Label/Label'
+import { generateSerialNumber } from '../../utils/functions'
 
 export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, closeViewModal: any }) => {
   const profile: any = useAuth((s) => s.profile)
@@ -43,9 +44,9 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
       "name": "",
       "image": "",
       "categoryName": "",
-      "quantityIn": 0,
+      "quantityIn": "",
       "quantityOut": 0,
-      "unitPrice": 0,
+      "unitPrice": "",
       "whiteLabelName": profile.whiteLabelName
     },
     validationSchema,
@@ -108,7 +109,7 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
                 </div>
 
                 <TextInput placeholder="Item name" name='name' label='Item Name*' />
-                <TextInput placeholder="Enter Quantity" name='quantityIn' label='Quantity*' />
+                <TextInput placeholder="0" name='quantityIn' label='Quantity*' />
                 <TextInput {...form.getFieldProps("unitPrice")} placeholder="0.00" name='unitPrice' label='Unit Price*' />
 
                 <div>
@@ -120,9 +121,6 @@ export const AddInventory = ({ closeViewModal, isOpen }: { isOpen: boolean, clos
               </div>
 
               <Button isLoading={handleAddInventory.isLoading} className='mt-4 mb-5 w-full' label='Add Inventory' />
-
-
-
 
             </form>
 
@@ -148,11 +146,11 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
 
           </div>
 
-          <div className="my-3 ">
+          <div className="my-3">
             <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-semibold'>{data.name}</h3>
+              <h3 className='text-lg font-semibold mb-10'>{data.name}</h3>
 
-              <h3>{formatAmount(data.unitPrice)}</h3>
+              {/* <h3>{formatAmount(data.unitPrice)}</h3> */}
 
             </div>
             <div className='flex items-center gap-3'>
@@ -163,11 +161,24 @@ export const ViewInventory = ({ closeViewModal, isOpen, data, onEdit, onDelete, 
 
               </div>
               <div className='flex flex-col gap-3'>
-                <h3>Item Quantity</h3>
+                <h3>In Stock</h3>
 
                 <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{data.quantityIn}</span>
 
               </div>
+              {isAdmin && <div className='flex flex-col gap-3'>
+                <h3>Unit Price</h3>
+
+                <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{formatAmount(data.unitPrice)}</span>
+
+              </div>}
+
+              {isAdmin && <div className='flex flex-col gap-3'>
+                <h3>Total</h3>
+
+                <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{formatAmount(data.unitPrice * data.quantityIn)}</span>
+
+              </div>}
 
             </div>
 
@@ -212,11 +223,11 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
           </div>
 
-          <div className="my-3 ">
+          <div className="my-3">
             <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-semibold'>{data?.itemDetails[0].name}</h3>
+              <h3 className='text-lg font-semibold mb-10'>{data?.itemDetails[0]?.name}</h3>
 
-              <h3>{formatAmount(data?.itemDetails[0]?.unitPrice)}</h3>
+              {/* <h3>{formatAmount(data.unitPrice)}</h3> */}
 
             </div>
             <div className='flex items-center gap-3'>
@@ -227,11 +238,24 @@ export const ViewInventoryHistory = ({ closeViewModal, isOpen, data, onEdit, onD
 
               </div>
               <div className='flex flex-col gap-3'>
-                <h3>Item Quantity</h3>
+                <h3>In Stock</h3>
 
                 <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{data?.items[0]?.quantity}</span>
 
               </div>
+              {isAdmin && <div className='flex flex-col gap-3'>
+                <h3>Unit Price</h3>
+
+                <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{formatAmount(data?.itemDetails[0]?.unitPrice)}</span>
+
+              </div>}
+
+              {isAdmin && <div className='flex flex-col gap-3'>
+                <h3>Total</h3>
+
+                <span className='bg-primary-light text-center text-primary px-3 py-2 whitespace-nowrap rounded'>{formatAmount(data?.itemDetails[0]?.unitPrice * data?.items[0]?.quantity)}</span>
+
+              </div>}
 
             </div>
 
@@ -445,6 +469,8 @@ export const MakeRequest = ({ closeViewModal, isOpen }: { isOpen: boolean, close
 }
 
 export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdmin = true, isHistory }: { isOpen: boolean, closeViewModal: any, details: any, isAdmin?: boolean, isHistory?: boolean }) => {
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleApprove = useMutation(
     async () => {
@@ -505,7 +531,10 @@ export const InventoryRequestDetails = ({ closeViewModal, isOpen, details, isAdm
             columns={[
               {
                 header: "S/N",
-                view: (row: any) => <div className="pc-text-blue">{row.serialNumber}</div>
+                view: (row: any, index: number) => <div className="pc-text-blue">{generateSerialNumber(index, {
+                    currentPage,
+                    pageSize
+                })}</div>
               },
               {
                 header: "Item",

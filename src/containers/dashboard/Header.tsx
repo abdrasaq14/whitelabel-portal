@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import NotificationIcon from "../../components/common/NotificationIcon";
 import NotificationSidebar from "../../components/common/NotificationSidebar";
 import { IoIosHelpCircleOutline } from "react-icons/io";
@@ -25,31 +25,34 @@ const user = {
 }
 
 
-const DashboardHeader = () => {
+const DashboardHeader = ({setNotificationIndicator}: any) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [showIndicator, setShowIndicator] = useState(false);
   const companyDetails: any = useAuth(state => state.profile);
-  const notification = useContext(NotificationContext)
+  const {isNewNotificationAvailable, toggleOpen}: any = useContext(NotificationContext)
 
   const profile: any = useAuth((s) => s.profile)
 
   // console.log("User profile", profile)
   // console.log("Company profile", companyDetails)
 
+  useEffect(() => {
+    console.log("Last notification", isNewNotificationAvailable)
+  }, [isNewNotificationAvailable])
+
   const { data: notifications, } = useQuery(
     ["query-user-Notifications-sales", profile],
     async () => {
-        return await NotificationService.getUsersNotification();
+        return await NotificationService.getUsersNewNotification();
     },
     {
         enabled: true,
         onSuccess: (res) => {
           console.log("Notifications response", res)
-          res?.data?.result?.length > 0 ? setShowIndicator(true) : setShowIndicator(false) 
+          res?.data?.result?.length > 0 ? setNotificationIndicator(true) : setNotificationIndicator(false) 
+          console.log("Checking new notification", isNewNotificationAvailable)
         },
         onError: (err: any) => {
             console.log("Error Occured:", err.response);
-            setShowIndicator(false)
         },
 
     }
@@ -58,7 +61,7 @@ const DashboardHeader = () => {
   // console.log("Notification>>>>>>>>>>>>>>>", notifications)
 
   const _openNav = () => {
-    notification?.toggleOpen();
+    toggleOpen();
   };
 
   return (
@@ -92,7 +95,7 @@ const DashboardHeader = () => {
                 } flex justify-center items-center`}
             >
               <div className="relative p-2 mr-3 mt-1">
-                {showIndicator && <span className="w-3 h-3 absolute bg-red-500 rounded-full z-10 top-1 right-[0.45rem] "></span>}
+                {isNewNotificationAvailable && <span className="w-3 h-3 absolute bg-red-500 rounded-full z-10 top-1 right-[0.45rem] "></span>}
                 <NotificationIcon fill="#06C270" />
               </div>
 

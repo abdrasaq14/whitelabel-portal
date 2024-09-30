@@ -230,7 +230,7 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                 closeViewModal()
 
             }} />
-            <ViewInventory onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
+            <ViewInventory isAdmin={true} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
                 await refetch()
                 setIsViewModalOpen(false)
 

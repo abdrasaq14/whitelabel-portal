@@ -49,13 +49,13 @@ const PhoneInputField: React.FC<PhoneInputProps> = ({
         areaCodes={{ng: ['234']}}
         disabled={disabled}
         value={field.value}
-        inputClass={`w-full !border-none !w-full`}
+        inputClass={`!border-none !w-full ${disabled ? '!bg-gray-100' : '!bg-white'}`}
         containerClass={`w-full rounded-md border mt-1 ${
           meta.touched && meta.error
             ? "border-red-600"
             : "border-[#470e812b]"
-        } `}
-        buttonClass={` !border-none !bg-white`}
+        }`}
+        buttonClass={`!border-none ${disabled ? '!bg-grey-100' : '!bg-white'}`}
         placeholder='+23420202020'
         onChange={handlePhoneChange}
         onBlur={handlePhoneBlur}
