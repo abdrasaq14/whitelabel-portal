@@ -95,6 +95,7 @@ const AllProducts = () => {
               hideActionName={true}
               emptyMessage={<div className='h-full flex-grow flex justify-center items-center'>
                 <img src='/images/NoProduct.svg' alt='No Product Found' />
+                <p className='text-center'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
               </div>}
               rowActions={(row) => [
                 {
@@ -134,7 +135,7 @@ const AllProducts = () => {
                 },
                 {
                   header: "Product Name",
-                  view: (row: any) => <div  className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row?.name} </div>,
+                  view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row?.name} </div>,
                 },
                 {
                   header: "Date Listed",
@@ -153,8 +154,9 @@ const AllProducts = () => {
                 }
               }
 
-            /> : <div className='h-full flex-grow flex justify-center items-center'>
+            /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
               <img src='/images/NoProduct.svg' alt='No Product Found' />
+              <p className='font-normal text-primary-text text-center text-sm sm:text-xl'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
             </div>
           }
 
