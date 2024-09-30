@@ -73,7 +73,8 @@ const MerchantRequest = () => {
           </div> :
             <div className='w-full h-[60vh] flex  items-center justify-center'>
               <div>
-                <h3>No request at the moment</h3>
+                <h3>You have no active vendor requests. Browse through our merchant discovery to onboard and list a product on your marketplace now.
+                </h3>
               </div>
 
             </div>
