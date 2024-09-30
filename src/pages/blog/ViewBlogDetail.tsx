@@ -69,13 +69,14 @@ const ViewBlogDetail = () => {
     {
       onSuccess: (response) => {
         toast.success("Comment deleted successfully");
-        setOpenModal(false);
+        setBlogDetails(response.data.result);
         setComments(response.data.result.comments);
-        console.log("deleteREsponse", response);
-        // const updatedComments = comments.filter(
-        //   (comment) => comment._id !== id
-        // );
-        // setComments(updatedComments);
+        setDeletedComments(
+          response.data.result.comments.filter(
+            (comment: Comments) => comment.isDeleted
+          )
+        );
+        setOpenModal(false);
       },
       onError: (error) => {
         const e = handleError(error);
@@ -97,6 +98,9 @@ const ViewBlogDetail = () => {
           if (res.data.result) {
             setBlogDetails(res.data.result);
             setComments(res.data.result.comments);
+            setDeletedComments(
+              res.data.result.comments.filter((comment:Comments) => comment.isDeleted)
+            );
             return;
           }
           setBlogDetails({} as BlogPayload);
@@ -115,12 +119,12 @@ const ViewBlogDetail = () => {
       });
   }, [id]);
 
-  useEffect(() => {
-    const deletedComments = comments.filter(
-      (comment) => comment.isDeleted
-    );
-    setDeletedComments(deletedComments || []);
-  }, [comments]);
+  // useEffect(() => {
+  //   const deletedComments = comments.filter(
+  //     (comment) => comment.isDeleted
+  //   );
+  //   setDeletedComments(deletedComments || []);
+  // }, [comments]);
   
   
    useEffect(() => {
@@ -175,7 +179,7 @@ const ViewBlogDetail = () => {
                           : "Comment"}
                       </span>
                       <span className="flex items-center">
-                        {formatDate(blogDetails?.createdAt as string)}
+                        {blogDetails?.publishedDate ? (formatDate(blogDetails?.publishedDate as string)): "Not Published"}
                         <GoDotFill />{readingTime} read
                       </span>
                     </div>

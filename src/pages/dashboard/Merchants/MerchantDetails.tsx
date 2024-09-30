@@ -81,10 +81,13 @@ const MerchantDetails = () => {
     },
         {
             onSuccess: () => {
+                console.log("SuspendMerchant", SuspendMerchant)
                 toast.success("account suspended")
                 refetch()
             },
             onError: () => {
+                console.log("SuspendMerchant", SuspendMerchant)
+                toast.error("Failed to suspend account")
                 refetch()
             }
         }
@@ -101,6 +104,11 @@ const MerchantDetails = () => {
         {
             onSuccess: () => {
                 toast.success("account Activated")
+                refetch()
+            },
+            onError: () => {
+                console.log("unSuspendMerchant", unSuspendMerchant)
+                toast.error("Failed to activate account")
                 refetch()
             }
         }
@@ -148,7 +156,7 @@ const MerchantDetails = () => {
                 <div className='flex items-center gap-3'>
 
                     <div className='relative'>
-                        <img src={merchant?.result && merchant?.result.image} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
+                        <img src={merchant?.result && merchant?.result.image && merchant?.result.image.trim() ? merchant?.result.image: "/images/no-profile-pics.jpg"} className='w-8 h-8 bg-gray-500 border-primary border rounded-full' />
 
                         <span className='h-2 w-2 absolute rounded-full bottom-0  right-0 bg-green-500' />
                     </div>

@@ -51,10 +51,12 @@ export interface ITableProps<TRow> {
     totalRows?: number;
   };
   noDivider?: boolean;
+  showCheckbox?: boolean;
 }
 
 export function Table<TRow extends {}>({
   id = "",
+  showCheckbox = true,
   columns,
   hideActionName = false,
   noDivider = false,
@@ -146,7 +148,7 @@ export function Table<TRow extends {}>({
       <Filter open={filter} onClose={() => setFilter(false)} />
       <div
         className={clsx([
-          "flex flex-col relative overflow-y-hidden overflow-x-auto w-full h-full bg-white rounded-lg",
+          "flex flex-col relative overflow-y-hidden overflow-x-auto w-full h-full bg-white rounded-lg"
         ])}
       >
         {/* <!-- body --> */}
@@ -179,23 +181,24 @@ export function Table<TRow extends {}>({
           <div>
             {props.topSlot && <div className="px-3  py-3">{props.topSlot}</div>}
           </div>
-          {
-            !props.loading && <div className="h-full w-full overflow-x-hidden hover:overflow-x-auto custom-scrollbar relative">
+          {!props.loading && (
+            <div className="h-full w-full overflow-x-hidden hover:overflow-x-auto custom-scrollbar relative">
               <table className="table  table-auto w-full border-collapse !border-[#E4E7EC] ">
                 <thead className=" sticky top-0">
                   <tr className="py-1  border-b !border-[#E4E7EC] h-[2.813rem]">
                     {props.bulkAction && <th></th>}
-                    <th className="px-4 mx-2 bg-[#F4F5F6] w-0">
-                      <input
-
-                        type="checkbox"
-                        checked={selectAll}
-                        onChange={handleSelectAll}
-                        name=""
-                        id=""
-                        className="w-4 h-4 bg-red-500"
-                      />
-                    </th>
+                    {showCheckbox && (
+                      <th className="px-4 mx-2 bg-[#F4F5F6] w-0">
+                        <input
+                          type="checkbox"
+                          checked={selectAll}
+                          onChange={handleSelectAll}
+                          name=""
+                          id=""
+                          className="w-4 h-4 bg-red-500"
+                        />
+                      </th>
+                    )}
                     {columns.map((col) => {
                       const view = data[0] && col.view(data[0], 0);
                       const isAnObject =
@@ -240,7 +243,6 @@ export function Table<TRow extends {}>({
                       <td colSpan={columns.length + 1} className="py-40">
                         <div className="w-full grid place-content-center">
                           {props.emptyMessage ?? props.emptyMessage}
-
                         </div>
                       </td>
                     </tr>
@@ -256,19 +258,21 @@ export function Table<TRow extends {}>({
                           : "border-b last:border-b-0 !border-[#E4E7EC]",
                         "bg-white ",
                         props.clickRowAction &&
-                        "hover:bg-fara-blue/10 cursor-pointer"
+                          "hover:bg-fara-blue/10 cursor-pointer"
                       )}
                     >
-                      <td className="px-4">
-                        <input
-                          type="checkbox"
-                          name=""
-                          id=""
-                          checked={selectedRows.has(rowIndex)}
-                          onChange={() => handleRowSelect(rowIndex, row)}
-                          className="w-4 h-4 checked:shadow-xl border border-gray-500"
-                        />
-                      </td>
+                      {showCheckbox && (
+                        <td className="px-4">
+                          <input
+                            type="checkbox"
+                            name=""
+                            id=""
+                            checked={selectedRows.has(rowIndex)}
+                            onChange={() => handleRowSelect(rowIndex, row)}
+                            className="w-4 h-4 checked:shadow-xl border border-gray-500"
+                          />
+                        </td>
+                      )}
                       {columns.map((col, colIndex) => (
                         <TableCol
                           key={`row-${rowIndex} + col-${colIndex}`}
@@ -278,7 +282,7 @@ export function Table<TRow extends {}>({
                             rowIndex,
                             id,
                             isMobile: isMobile.get,
-                            clickRowAction: props.clickRowAction,
+                            clickRowAction: props.clickRowAction
                           }}
                         />
                       ))}
@@ -298,8 +302,7 @@ export function Table<TRow extends {}>({
                 </tbody>
               </table>
             </div>
-          }
-
+          )}
         </div>
 
         {/* footer */}

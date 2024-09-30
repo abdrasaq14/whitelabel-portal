@@ -16,7 +16,7 @@ import { useBlogStore } from "../../zustand/blog.tore";
 import { AppFallback } from "../../containers/dashboard/LayoutWrapper";
 import { noContentImage, postNotAvailableImage } from "../../assets/blog";
 import { GoTrash } from "react-icons/go";
-import { Button } from "../../components/Button/Button";
+import { Button } from "../../components/Blog/Button";
 import Modal from "../../components/Modal/Modal";
 export interface HandlePreviewPayload extends BlogPayload {
   isFromEdit: boolean;
@@ -40,12 +40,17 @@ const validationSchema = Yup.object({
     .required("Title is required")
     .min(2, "Title is too short")
     .max(100, "Title is too long"),
-  createdAt: Yup.date().required("Date is required"),
   content: Yup.string().trim().required("Description is required"),
-  image: Yup.string().url().required("Image is required"),
+  image: Yup.string()
+    .url("Image must be a valid URL")
+    .when("status", {
+      is: "published",
+      then: Yup.string().required("Image is required"),
+      otherwise: Yup.string().nullable().notRequired()
+    }),
   status: Yup.string().trim().required("Status is required"),
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean(),
+  allowLikes: Yup.boolean()
 });
 
 const CreateBlogPost = () => {
@@ -72,7 +77,7 @@ const CreateBlogPost = () => {
       shares: 0,
       allowComments: true,
       allowLikes: true,
-      createdAt: "",
+      publishedDate: "",
       whiteLabelName: profile?.whiteLabelName
     },
     validationSchema,
@@ -83,6 +88,7 @@ const CreateBlogPost = () => {
     // validateOnChange: true,
     // validateOnBlur: true
   });
+  console.log("formValuesss", form.values);
   const handleSubmit = useMutation(
     async (values: BlogPayload) => {
       if (id) {
@@ -114,8 +120,7 @@ const CreateBlogPost = () => {
       }
     }
   );
-  console.log("form.Values", form.values);
-
+  
   const handlePreview = (value: HandlePreviewPayload) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigate("/blog/preview");
@@ -155,7 +160,7 @@ const CreateBlogPost = () => {
             if (res.data.result) {
               setError("");
               const blogDetails = res.data.result;
-              blogDetails.createdAt = new Date(blogDetails.createdAt)
+              blogDetails.publishedDate = new Date(blogDetails.publishedDate)
                 .toISOString()
                 .split("T")[0]; // Format the date to YYYY-MM-DD
               form.setValues(blogDetails);
@@ -207,7 +212,7 @@ const CreateBlogPost = () => {
             <button
               type="button"
               onClick={() =>
-                handlePreview({ ...form.values, isFromEdit: id ? true : false })
+                handlePreview({ ...form.values, isFromEdit: id ? true : false, publishedDate: new Date().toISOString() })
               } // pass isFromEdit to differentiate between edit and create
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
@@ -245,9 +250,11 @@ const CreateBlogPost = () => {
                   placeholder="Blog title"
                   wrapperClass=""
                 />
-                <TextInput
-                  {...form.getFieldProps("createdAt")}
+                    <TextInput
+                      name="publishedDate"
+                      value={today}
                   icon={<IoCalendarOutline />}
+                  disabled={true}
                   title="Date"
                   type="date"
                   min={today}
@@ -336,16 +343,22 @@ const CreateBlogPost = () => {
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content ||
-                      !form.values.createdAt
+                      !form.values.content 
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "draft"
                         ? "Saving..."
                         : "Save as Draft"
                     }`}
-                    onClick={() => {
-                      form.setFieldValue("status", "draft");
+                    onClick={async () => {
+                      // Set the status to 'draft' before validation
+                      await form.setFieldValue("status", "draft");
+
+                      // Manually reset the validation for the 'image' field since it's optional for draft
+                      await form.setFieldTouched("image", false);
+                      await form.validateField("image"); // Re-run validation on image
+
+                      // Submit form without worrying about image when draft
                       form.handleSubmit();
                     }}
                     className="border bg-white border-primary font-semibold rounded-md !text-primary min-w-[7.5rem] w-[50%] py-3"
@@ -358,16 +371,24 @@ const CreateBlogPost = () => {
                     disabled={
                       form.isSubmitting ||
                       !form.values.title ||
-                      !form.values.content ||
-                      !form.values.createdAt
+                      !form.values.content 
                     }
                     label={`${
                       form.isSubmitting && form.values.status === "published"
                         ? "Publishing..."
                         : "Publish"
                     }`}
-                    onClick={() => {
-                      form.setFieldValue("status", "published");
+                    onClick={async () => {
+                      // Set status to 'published'
+                      const publishedDate = new Date()
+                        .toISOString()
+                      await form.setFieldValue("status", "published");
+                      await form.setFieldValue("publishedDate", publishedDate);
+
+                      // Mark the image field as touched so the validation message can be shown
+                      await form.setFieldTouched("image", true);
+
+                      // Trigger form validation and handle form submission
                       form.handleSubmit();
                     }}
                     className="bg-primary font-semibold  text-white rounded-md  min-w-[7.5rem] w-[50%] py-2"
@@ -378,7 +399,7 @@ const CreateBlogPost = () => {
           )}
         </div>
       </div>
-      <Modal open={openModal} onClick={()=>handleClickOutside(false)}>
+      <Modal open={openModal} onClick={() => handleClickOutside(false)}>
         <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
           <div className="flex-1 h-[65%] flex items-center justify-center ">
             <img

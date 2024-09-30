@@ -40,7 +40,8 @@ const Products = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products-discovery", {
-      page: currentPage, limit: pageSize, search
+      page: currentPage, limit: pageSize, search,
+      whiteLabelName: profile?.whiteLabelName
     }],
     ProductService.getProductDiscovery,
     {
