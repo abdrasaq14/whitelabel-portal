@@ -74,6 +74,7 @@ export default function Authenticate() {
                 console.log("Response from login", response.data)
                 AuthActions.setToken(response.data.result.authToken);
                 if (response.data.result.user.roleId) {
+                    console.log("My login result", response.data)
                     AuthActions.setProfile(response.data.result.user)
                     toast.success("login successful");
                     form.setSubmitting(false)

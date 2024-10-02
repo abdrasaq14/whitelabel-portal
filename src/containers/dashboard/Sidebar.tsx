@@ -58,7 +58,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         }}
         className={clsx(
           isCollapsed ? "w-full" : "w-full",
-          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto   custom-scrollbar"
+          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto custom-scrollbar"
         )}
       >
 
@@ -112,6 +112,7 @@ export const SidebarItem = ({
 }) => {
 
   const profile: any = useAuth((s) => s.profile)
+  console.log("Admin profile", profile)
 
   return (
     <div className="mb-8 ">
@@ -119,11 +120,11 @@ export const SidebarItem = ({
         <div className="w-full my-[18px] px-3" key={index}>
           {items.children ?
             restrictedNavLinkFromStaff.includes(items.name) ? 
-            profile?.roleId === "663a5c848b1a1f64469b98bf" && <SubItem key={index} items={items} /> : 
+            (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") && <SubItem key={index} items={items} /> : 
             <SubItem key={index} items={items} />
             :
             restrictedNavLinkFromStaff.includes(items.name) ? 
-            profile?.roleId === "663a5c848b1a1f64469b98bf" && <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
+            (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") && <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
               clsx(
                 "flex items-center gap-3  px-3 py-2 text-sm",
                 isActive ? "bg-primary rounded " : ""

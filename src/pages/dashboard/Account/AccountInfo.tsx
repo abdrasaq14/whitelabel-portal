@@ -8,7 +8,7 @@ import InviteMerchant from './InviteMerchant'
 
 const AccountInfo = () => {
   const profile: any = useAuth((s) => s.profile)
-  const accountTabTitle = profile?.roleId === "663a5c848b1a1f64469b98bf" ? ['Account', 'Staff Management', 'Invite Merchant'] : ["Account"]
+  const accountTabTitle = (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ? ['Account', 'Staff Management', 'Invite Merchant'] : ["Account"]
   const [tabIndex, setTabIndex] = useState<number>(0)
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {

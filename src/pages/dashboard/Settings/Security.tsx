@@ -236,7 +236,7 @@ const SecurityTFA = () => {
 
 const Security = () => {
   const profile: any = useAuth((s) => s.profile)
-  const securityTabList = profile?.roleId === "663a5c848b1a1f64469b98bf" ? [
+  const securityTabList = (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
     {
       Icon: BsShieldLockFill,
       name: "Password",
