@@ -125,7 +125,7 @@ const Merchants = () => {
               // },
               {
                 header: "Location",
-                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : row.location?.address }</div>,
+                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state}` : row.location?.address }</div>,
               },
 
             ]}
