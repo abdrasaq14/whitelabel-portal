@@ -52,6 +52,7 @@ export default function Login() {
             router("/authenticate");
           });
         } else {
+          console.log("Response from login", response.data)
           AuthActions.setToken(response.data.result.authToken);
           AuthActions.setProfile(response.data.result.user)
           requestAnimationFrame(() => {
