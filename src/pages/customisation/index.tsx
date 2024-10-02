@@ -1,11 +1,12 @@
 
-import Step3 from "./step3/Step3";
 import {useEffect, useState} from "react";
 import Setup from "./Setup";
 import {useMutation} from "react-query";
 import {CustomisationService, customisationData} from "../../services/customisation.service";
 import {useAuth} from "../../zustand/auth.store";
 import Step2 from "./Step2";
+import Step3 from "./step3/Step3";
+import Step4 from "./step4/Step4";
 import toast from "react-hot-toast";
 
 const customizationData = {
@@ -243,6 +244,7 @@ function CustomisationPage() {
       {step === 1 && data && <Setup data={data} setColor={setColor} setService={setServices} setError={setError} setInfo={setInfo} processStage1={() => !isError.contactEmail && !isError.senderEmail && !isError.contactPhone && processStage1.mutate()} isLoading={isLoading} />}
       {step === 2 && data && <Step2 data={data} isLoading={isLoading} setAboutData={setAboutData} setError={setAboutError} setSocial={setSocial} prev={prev} processStage2={() => !isAboutError.aboutUs && !isAboutError.aboutUsFull && processStage2.mutate()} />}
       {step === 3 && <Step3 primaryColor={data.theme?.primaryColor} secondaryColor={data.theme?.secondaryColor} step={step} setStep={setStep} data={data}/>}
+      {step === 4 && <Step4 primaryColor={data.theme?.primaryColor} secondaryColor={data.theme?.secondaryColor} step={step} setStep={setStep} data={data}/>}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import {MdOutlineKeyboardBackspace} from "react-icons/md";
 import React from "react";
 
-export default function SetupHeader({stage, prev}: any) {
-    const arrayOf3: number[] = Array.from({length: 3}, (_, i) => i);
+export default function SetupHeader({stage, prev, isBlogChosen}: any) {
+    const arrayOf3: number[] = Array.from({length: isBlogChosen ? 4 : 3}, (_, i) => i);
     return (
         <div className="flex flex-col mt-10">
             {stage !== 0 && <div
