@@ -8,6 +8,8 @@ import { LogoutContext } from "../../context/LogoutContext";
 import { sidebar } from "../../pages/dashboard/layout/AdminLayout";
 import { useAuth } from "../../zustand/auth.store";
 
+const restrictedNavLinkFromStaff = ['Product Discovery', 'Merchant', 'Product', 'Order & Transaction', 'Message']
+
 export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const companyDetails: any = useAuth(state => state.profile);
   const logout: any = useContext(LogoutContext)
@@ -17,7 +19,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
   const isExpanded = hovered.get || !collapsed.get;
   const isCollapsed = !isExpanded;
 
-  // console.log("Company details>>>>>>>>>>>>>>>>", companyDetails.customisationData.domain)
+  // console.log("Company details>>>>>>>>>>>>>>>>", companyDetails)
 
   return (
     <aside
@@ -56,7 +58,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
         }}
         className={clsx(
           isCollapsed ? "w-full" : "w-full",
-          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto   custom-scrollbar"
+          "flex-1 overflow-y-hidden pb-40 hover:overflow-y-auto custom-scrollbar"
         )}
       >
 
@@ -81,7 +83,7 @@ export const DashboardSidebar = ({ items }: { items: SideItem[] }) => {
                 )}
                 alt="Brand_logo"
               />
-              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email}</p>
+              <p className="font-normal  font-satoshiRegular text-xs text-primary-text">{companyDetails?.email || companyDetails?._doc?.email}</p>
             </div>
             <img
               src={`/icons/sidebar/logout.svg`}
@@ -109,15 +111,35 @@ export const SidebarItem = ({
   className?: any;
 }) => {
 
+  const profile: any = useAuth((s) => s.profile)
+  console.log("Admin profile", profile)
 
   return (
     <div className="mb-8 ">
       {sidebar.map((items, index) =>
-        <div className="w-full my-[18px] px-3">
+        <div className="w-full my-[18px] px-3" key={index}>
           {items.children ?
+            restrictedNavLinkFromStaff.includes(items.name) ? 
+            (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") && <SubItem key={index} items={items} /> : 
             <SubItem key={index} items={items} />
             :
-            <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
+            restrictedNavLinkFromStaff.includes(items.name) ? 
+            (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") && <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
+              clsx(
+                "flex items-center gap-3  px-3 py-2 text-sm",
+                isActive ? "bg-primary rounded " : ""
+
+              )
+            }>
+              {({ isActive }) => <>
+                <img className={clsx(
+                  isActive ? "invert-[100%] brightness-0 " : ""
+                )} src={`/icons/sidebar/${items.iconName}.svg`} alt={items.path} />
+
+                <h3 className={clsx("capitalize", isActive ? "text-white" : "")}>{items.name}</h3>
+              </>}
+
+            </NavLink> : <NavLink key={index} to={items.path ?? "/"} className={({ isActive }) =>
               clsx(
                 "flex items-center gap-3  px-3 py-2 text-sm",
                 isActive ? "bg-primary rounded " : ""

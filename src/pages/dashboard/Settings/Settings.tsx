@@ -3,11 +3,13 @@ import { BreadCrumbClient } from '../../../components/Breadcrumb'
 import Button from '../../../components/Button/Button2'
 import Security from './Security'
 import OtherSettings from './OtherSettings'
+import { useAuth } from '../../../zustand/auth.store'
 // import ApiIntegration from './ApiIntegration'
 // import Promotion from './Promotion'
 
 const Settings = () => {
-  const accountTabTitle = ['security', 'settings']
+  const profile: any = useAuth((s) => s.profile)
+  const accountTabTitle = (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ? ['security', 'settings'] : ['security']
   const [tabIndex, setTabIndex] = useState<number>(0)
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {

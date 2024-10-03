@@ -8,6 +8,10 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../zustand/auth.store';
+import { useMutation } from 'react-query';
+import { Button } from '../../../components/Blog/Button';
+import toast from 'react-hot-toast';
+import { handleError } from '../../../utils/Helpfunctions';
 
 const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
@@ -18,6 +22,7 @@ const MerchantRequest = () => {
     ["query-all-merchants-request", {
       page: currentPage,
       limit: pageSize,
+      status: "pending",
       whiteLabelId: profile._id
 
     }],
@@ -31,7 +36,8 @@ const MerchantRequest = () => {
       refetchOnMount: true,
     }
   )
-  console.log(allRequest)
+  // console.log(allRequest)
+  
   const handlePageSize = (val: any) => {
     setPageSize(val);
     // setFilterParams({ ...filterParams, pageSize: val });
@@ -41,6 +47,7 @@ const MerchantRequest = () => {
     setCurrentPage(val);
     // setFilterParams({ ...filterParams, pageNum: val - 1 });
   };
+
   return (
     <div className='px-4 pt-8 h-full'>
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
@@ -50,7 +57,7 @@ const MerchantRequest = () => {
           <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allRequest ? allRequest?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput placeholder='Search' />
+              <SearchInput placeholder='Search' onChange={() => {}} />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -60,7 +67,7 @@ const MerchantRequest = () => {
           allRequest ? <div className='py-4'>
 
             {
-              allRequest && allRequest.result.results.map((items: any) => <Request items={items} />)
+              allRequest && allRequest.result.results.map((items: any, index: number) => <Request items={items} key={index}/>)
             }
 
             {/* <Request />
@@ -90,9 +97,27 @@ const MerchantRequest = () => {
 }
 
 const Request = ({ items }: { items: any }) => {
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
-
+    const updateRequest = useMutation(
+      async (payload: { id: string, action: string }) => {
+        setIsLoading(true);
+        return await MerchantService.updateMerchantRequest(payload.id, {status: payload.action});
+      },
+      {
+        onSuccess: (response) => {
+          setIsLoading(false);
+          console.log("response", response);
+          toast.success("Request updated successfully");
+        },
+        onError: (error) => {
+          setIsLoading(false);
+          const e = handleError(error);
+          toast.error(e);
+          console.log("erro", error);
+        }
+      }
+    );
   return (
     <div className='w-full flex items-center justify-between'>
       <div className='flex items-center gap-2 '>
@@ -108,8 +133,20 @@ const Request = ({ items }: { items: any }) => {
 
       </div>
       <div className='flex gap-3'>
-        <button className='font-medium text-[#D42620]'>Decline</button>
-        <button className='px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] '>Accept</button>
+        <Button
+          isLoading={isLoading}
+              label="Decline"
+              onClick={() => updateRequest.mutate({ id: items._id, action: "reject" })}
+              className={`font-medium text-[#D42620]`}
+            />
+        <Button
+          isLoading={isLoading}
+              label="Accept"
+              onClick={() => updateRequest.mutate({ id: items._id, action: "accept" })}
+              className={`px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] `}
+            />
+        {/* <button className='font-medium text-[#D42620]'>Decline</button>
+        <button className='px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] '>Accept</button> */}
         <button onClick={() => navigate(`/merchant/profile/${items.merchant.merchantId}`)} className='px-3 py-2 border border-primary rounded font-medium w-[140px] '>View Account</button>
 
       </div>

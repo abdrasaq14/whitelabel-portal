@@ -25,6 +25,7 @@ const events = [
 
 export const NotificationProvider = ({ children }: notificationITF) => {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+    const [isNewNotificationAvailable, setIsNewNotificatioAvailable] = useState(false)
 
     function toggleOpen() {
         setIsNotificationOpen(!isNotificationOpen)
@@ -34,17 +35,21 @@ export const NotificationProvider = ({ children }: notificationITF) => {
         setIsNotificationOpen(false)
     }
 
+    function setNotificationIndicator(value: boolean){
+        console.log("Setting indicator", value)
+        setIsNewNotificatioAvailable(value)
+    }
+
     const value = useMemo(
         () => ({
             isNotificationOpen,
+            isNewNotificationAvailable,
             toggleOpen,
             cloesNotification,
+            setNotificationIndicator
         }),
-        [isNotificationOpen]
+        [isNotificationOpen, isNewNotificationAvailable]
     )
-
-
-
 
     return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>
 }

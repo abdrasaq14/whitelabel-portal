@@ -31,7 +31,7 @@ interface PaginationInfo {
 const Inventory = () => {
     const navigate = useNavigate()
     const profile: any = useAuth((s) => s.profile)
-    const accountTabTitle = profile.roleId === "663a5c848b1a1f64469b98bf" ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
+    const accountTabTitle = (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ? ['All Inventory', 'Inventory Request', 'History'] : ['Available Inventory', 'Requested Inventory', 'History']
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [isAddModalOpen, setIsAddModalOpen] = useState(false) 
     const [isMakeModalOpen, setIsMakeModalOpen] = useState(false) 
@@ -59,7 +59,7 @@ const Inventory = () => {
 
     const displayAccountContent = (tabIndex: number) => {
 
-        if (profile.roleId === "663a5c848b1a1f64469b98bf") {
+        if (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") {
             switch (tabIndex) {
                 case 0:
                     return <AllInventory isAddModalOpen={isAddModalOpen} closeViewModal={() => setIsAddModalOpen(false)} />
@@ -98,7 +98,7 @@ const Inventory = () => {
             <div className="pt-4 bg-white pb-10 px-6 rounded-2xl mx-2">
                 <div className='flex item-center justify-between py-3'>
                     <BreadCrumbClient backText="Dashboard" currentPath="Inventory" brand='Landmark' />
-                   { profile.roleId === "663a5c848b1a1f64469b98bf" ?  <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' /> : <Button onClick={() => setIsMakeModalOpen(true)} label='Make Request' /> }
+                   { (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ?  <Button onClick={() => setIsAddModalOpen(true)} label='Add Inventory' /> : <Button onClick={() => setIsMakeModalOpen(true)} label='Make Request' /> }
                 </div>
                 <div className="flex items-center justify-between gap-10 border-b w-full">
                     <div className="flex items-center w-5/6 gap-2 flex-wrap">

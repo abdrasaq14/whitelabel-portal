@@ -48,7 +48,7 @@ const Merchants = () => {
     }
   )
 
-  console.log(allMerchants && allMerchants.result.results)
+  console.log("allMerchants", allMerchants && allMerchants.result.results)
 
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const Merchants = () => {
         </div>
 
         {
-          allMerchants ? <Table data={allMerchants?.result?.results && allMerchants.result.results}
+          allMerchants ? <Table data={allMerchants?.result?.results && allMerchants.result.results.filter((merchant: any) => merchant.location && merchant.location.state !== "State not found")}
             emptyMessage={<div className='h-auto flex-grow flex justify-center flex-col items-center'>
               <img src='/images/NoVendor.svg' alt='No Product Found' />
               <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
@@ -124,13 +124,15 @@ const Merchants = () => {
                 header: "Customer Rating",
                 view: (row: any) => <StarRating totalRatings={5} />,
               },
-              {
-                header: "Category",
-                view: (row: any) => row?.category,
-              },
+              // {
+              //   header: "Category",
+              //   view: (row: any) => row?.category,
+              // },
               {
                 header: "Location",
+
                 view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+
               },
 
             ]}

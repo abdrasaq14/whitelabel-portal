@@ -47,6 +47,12 @@ export const AdminDashRouter: IModuleRouter = {
     ),
     LazyRoute(
       {
+        path: "/product/request",
+      },
+      () => import("../pages/dashboard/Products/ProductRequest")
+    ),
+    LazyRoute(
+      {
         path: "/product/blocked-products",
       },
       () => import("../pages/dashboard/Products/BlockedProducts")

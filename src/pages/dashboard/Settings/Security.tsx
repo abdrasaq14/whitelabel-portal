@@ -13,6 +13,7 @@ import { useMutation } from "react-query";
 import { UserService } from "../../../services/user";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
+import { useAuth } from '../../../zustand/auth.store'
 
 
 const SecurityPassword = () => {
@@ -234,7 +235,8 @@ const SecurityTFA = () => {
 
 
 const Security = () => {
-  const securityTabList = [
+  const profile: any = useAuth((s) => s.profile)
+  const securityTabList = (profile?.roleId === "663a5c848b1a1f64469b98bf" || profile?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
     {
       Icon: BsShieldLockFill,
       name: "Password",
@@ -243,7 +245,13 @@ const Security = () => {
       Icon: BsShield,
       name: "2FA",
     },
+  ] : [
+    {
+      Icon: BsShieldLockFill,
+      name: "Password",
+    }
   ];
+
   const [selectedSecurityTab, setSelectedSecurityTab] = useState<number>(0);
   const displaySecurityContent = (selectedSecurityTab: number) => {
     switch (selectedSecurityTab) {
