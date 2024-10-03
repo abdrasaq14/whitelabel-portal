@@ -10,6 +10,7 @@ import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
+import Spinner from '../../../components/spinner/Spinner'
 
 const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOpen?: boolean, closeViewModal?: any }) => {
     const [pageSize, setPageSize] = useState(10);
@@ -219,9 +220,15 @@ const AllInventory = ({ isAddModalOpen = false, closeViewModal }: { isAddModalOp
                     </div>
                 )
                     : (
-                        <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here.</p>
+
+                        <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+                            {
+                                isLoading ? <Spinner color='#000' /> : <>
+                                    <img src='/images/add-product.svg' alt='No Product Found' />
+                                    <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here.</p>
+                                </>
+                            }
+
                         </div>
                     )
             }

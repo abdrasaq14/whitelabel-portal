@@ -10,6 +10,7 @@ import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory, ViewInventoryHistory } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
+import Spinner from '../../../components/spinner/Spinner'
 
 
 const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen?: any }) => {
@@ -216,9 +217,14 @@ const History = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { 
                     </div>
                 )
                     : (
-                        <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory history would appear here</p>
+                        <div className='h-auto py-20 flex-grow flex justify-center flex-col items-center'>
+                            {
+                                isLoading ? <Spinner /> : <>
+                                <img src='/images/add-product.svg' alt='No Product Found' />
+                                <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory history would appear here</p>
+                                </>
+                            }
+                            
                         </div>
                     )
             }

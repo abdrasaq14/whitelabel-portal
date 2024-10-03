@@ -10,8 +10,9 @@ import { InventoryService } from '../../../services/inventory.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { AddInventory, ViewInventory } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
+import Spinner from '../../../components/spinner/Spinner'
 
-const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any,isMakeModalOpen?: any }) => {
+const AvailableInventory = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const profile: any = useAuth((s) => s.profile)
@@ -23,7 +24,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
 
     const { data, isLoading, refetch } = useFetchWithParams(
         ["query-all-inventory-page", {
-            page: currentPage, limit: pageSize,whiteLabelName: profile.whiteLabelName,
+            page: currentPage, limit: pageSize, whiteLabelName: profile.whiteLabelName,
         }],
         InventoryService.getInventoroes,
         {
@@ -220,9 +221,16 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
                     </div>
                 )
                     : (
-                        <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/add-product.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here</p>
+                        <div className='h-auto py-20 flex-grow flex justify-center flex-col items-center'>
+                            {
+                                isLoading ? <Spinner color='#000' /> : <>
+                                    <img src='/images/add-product.svg' alt='No Product Found' />
+                                    <p className='font-normal text-primary-text text-sm sm:text-xl'>Your available Inventory list would appear here</p>
+
+                                </>
+                            }
+
+
                         </div>
                     )
             }
@@ -230,7 +238,7 @@ const AvailableInventory = ({ isAddModalOpen = false, closeViewModal,isMakeModal
                 await refetch()
                 closeViewModal()
             }} />
-            
+
             <ViewInventory isAdmin={false} onEdit={() => setIsEditModalOpen(true)} onDelete={() => setIsDeleteModalOpen(true)} data={selectedInventory} isOpen={isViewModalOpen} closeViewModal={async () => {
                 await refetch()
                 setIsViewModalOpen(false)

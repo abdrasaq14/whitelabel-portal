@@ -13,6 +13,7 @@ interface FilterITF {
     open?: boolean;
     onClose?: () => void;
     type?: "merchant" | "product";
+    isLoading? : boolean;
 }
 
 interface FilterState {
@@ -28,7 +29,8 @@ const Filter: FunctionComponent<FilterITF> = ({
     onClear = () => { },
     open,
     type = "product",
-    onClose = () => { }
+    onClose = () => { },
+    isLoading = false
 }) => {
     const filterRef = useRef<any>();
 
@@ -203,6 +205,7 @@ const Filter: FunctionComponent<FilterITF> = ({
                                     <Button
                                         className='w-full mx-auto mt-8'
                                         label="Search"
+                                        isLoading={isLoading}
                                         onClick={handleSearch}
                                     />
                                 </div>

@@ -14,6 +14,7 @@ import { useAuth } from '../../../zustand/auth.store';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 import Filter from '../../../components/Filter/Filter';
+import Spinner from '../../../components/spinner/Spinner';
 
 
 interface PaginationInfo {
@@ -112,7 +113,7 @@ const Products = () => {
 
   return (
     <div className='h-full flex-grow'>
-      <Filter type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+      <Filter isLoading={isLoading} type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
         setShowFilter(false)
         setFilterParams({})
       }} open={showFilter} />
@@ -196,9 +197,14 @@ const Products = () => {
 
             }
 
-          /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-            <img src='/images/NoVendor.svg' alt='No Product Found' />
-            <p className='font-normal text-primary-text text-sm'>No merchants are currently available to sell on your platform.</p>
+          /> : <div className='h-auto flex-grow flex py-20 justify-center flex-col items-center'>
+            {
+              isLoading ? <Spinner color='#000' /> : <>
+               <img src='/images/NoVendor.svg' className='max-w-[400px] h-auto' alt='No Product Found' />
+               <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>No merchants are currently available to sell on your platform.</p>
+              </>
+            }
+           
           </div>
         }
 

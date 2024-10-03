@@ -8,6 +8,7 @@ import SearchInput from '../../../components/FormInputs/SearchInput';
 import { useAuth } from '../../../zustand/auth.store';
 import Filter from '../../../components/Filter/Filter';
 import { MdFilterList } from 'react-icons/md';
+import Spinner from '../../../components/spinner/Spinner';
 
 
 
@@ -87,7 +88,7 @@ const Merchants = () => {
 
             )
           }
-          <Filter type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+          <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
             setShowFilter(false)
             setFilterParams({})
           }} open={showFilter} />
@@ -150,9 +151,14 @@ const Merchants = () => {
             }
 
           />
-            : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-              <img src='/images/NoVendor.svg' alt='No Product Found' />
-              <p className='font-normal text-primary-text text-sm '>No merchants are currently available to sell on your platform.</p>
+            : <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+              {
+                isLoading ? <Spinner color='#000' /> : <>
+                  <img src='/images/NoVendor.svg' className='max-w-[400px] h-auto' alt='No Product Found' />
+                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>No merchants are currently available to sell on your platform.</p>
+                </>
+              }
+
             </div>
         }
 
