@@ -21,6 +21,7 @@ import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
 import { stripHtml } from "../../../utils/Helpfunctions";
+import SetupHeader from "../Setup/SetupHeader";
 
 interface Step3Props {
   primaryColor: any;
@@ -58,8 +59,9 @@ function Step3({
   const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
-  const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
   const [isOpen, setIsOpen] = useState(false);
+  const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
+  // const [isOpen, setIsOpen] = useState(false);
   const [dragging, setDragging] = useState<boolean>(false);
   const form = useFormik({
     initialValues: {
@@ -84,7 +86,6 @@ function Step3({
       form.setFieldValue("heroImage", data.banner.imageUrl);
     }
     if(data?.completeSetup === "completed"){
-      setIsOpen(true);
       const localUserData: string | null = localStorage.getItem("userObject");
       if (localUserData) {
         const localData = JSON.parse(localUserData);
@@ -237,7 +238,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
           imageUrl: values.heroImage,
           template: templates[selectedTemplate].title
         },
-        completeSetup: "completed"
+        completeSetup: data?.services?.includes("Blog") ? "ongoing" : "completed"
       });
     },
     {
@@ -256,7 +257,8 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
           updateLocalData.stage = response.data.result.customisationData.stage;
           localStorage.setItem("setupData", JSON.stringify(updateLocalData));
         }
-        setIsOpen(true);
+
+        data?.services.includes("Blog") ? setStep(4) : setIsOpen(true);
       },
       onError: (err: any) => {
         setIsUploading(false);
@@ -296,25 +298,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
         <div className="w-[45%] h-full bg-white text-foundation-black p-8 font-satoshiBold">
-          <div
-            className="flex gap-1 items-center cursor-pointer mb-6"
-            onClick={goBack}
-          >
-            <MdOutlineKeyboardBackspace size={22} />
-            <span className="font-satoshiMedium">Back</span>
-          </div>
-          <h1 className="text-3xl mb-1">Customise your Account</h1>
-          <p className="mb-4 text-sm text-[#5a5a5a] font-satoshiRegular w-[60%]">
-            Choose a template and provide the hero section image and content
-            below
-          </p>
-          {/* step */}
-          <div className="flex max-w-[10rem] gap-2 my-4">
-            <span className="h-2 w-1/3 bg-[#4b00821f] rounded-xl"></span>
-            <span className="h-2 w-1/3 bg-[#4b00821f] rounded-xl"></span>
-            <span className="h-2 w-2/3 bg-foundation-darkPurple rounded-xl"></span>
-          </div>
-          {/* templates */}
+          <SetupHeader stage={2} prev={goBack} isBlogChosen={data?.services.includes("Blog")}/>
           <div className="flex gap-4 max-w-[90%] my-6">
             {templates.map((template, index) => (
               <TemplateCard

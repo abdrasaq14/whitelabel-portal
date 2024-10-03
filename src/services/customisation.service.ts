@@ -31,6 +31,10 @@ export interface customisationData {
     imageUrl: string;
     template: string;
   };
+  blogHero?: {
+    text: string;
+    imageUrl: string;
+  },
   contact?: {
     phone?: {cCode?: string, val?: string};
     email?: {

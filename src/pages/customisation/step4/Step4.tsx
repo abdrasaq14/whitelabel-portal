@@ -21,6 +21,7 @@ import LivePreview from "../LivePreviewComponent/LivePreview";
 import toast from "react-hot-toast";
 import { AuthActions } from "../../../zustand/auth.store";
 import { stripHtml } from "../../../utils/Helpfunctions";
+import SetupHeader from "../Setup/SetupHeader";
 
 interface Step4Props {
   primaryColor: any;
@@ -55,7 +56,7 @@ function Step4({
   setStep,
   data
 }: Step4Props) {
-  const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
+  const [selectedTemplate, setSelectedTemplate] = useState<number>(3);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [updatedUserObject, setUpdatedUserObject] = useState<any>({});
@@ -63,7 +64,7 @@ function Step4({
   const [dragging, setDragging] = useState<boolean>(false);
   const form = useFormik({
     initialValues: {
-      heroText: data?.banner?.text as string || "",
+      heroText: data?.blogHero?.text as string || "",
       heroImage: ""
     },
     validationSchema,
@@ -74,14 +75,14 @@ function Step4({
     validateOnChange: true,
     validateOnBlur: true
   });
-  console.log("form.values", form.values, data?.banner?.text);
+  console.log("form.values", form.values, data?.blogHero?.text);
   useEffect(() => {
-    if (data?.banner?.text) {
-      form.setFieldValue("heroText", data.banner.text);
+    if (data?.blogHero?.text) {
+      form.setFieldValue("heroText", data?.blogHero?.text);
       form.validateField("heroText");
     }
-    if (data?.banner?.imageUrl) {
-      form.setFieldValue("heroImage", data.banner.imageUrl);
+    if (data?.blogHero?.imageUrl) {
+      form.setFieldValue("heroImage", data?.blogHero?.imageUrl);
     }
     if(data?.completeSetup === "completed"){
       setIsOpen(true);
@@ -93,14 +94,15 @@ function Step4({
     }
 // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  // console.log("Data from", data)
+  
   const [characterCount, setCharacterCount] = useState(
     stripHtml(form.values.heroText).length
   );
+
   const characterLimit = 70; 
-  const handleTemplateClick = (index: number) => {
-    setSelectedTemplate(index);
-  };
- 
+  
   const handleTextChange = (content: string) => {
     const strippedContent = stripHtml(content);
     if (strippedContent.length <= characterLimit) {
@@ -115,6 +117,7 @@ function Step4({
     }
 
   };
+
   const handleBeforeInput = (e:any) => {
     if (
       characterCount >= characterLimit &&
@@ -124,12 +127,14 @@ function Step4({
       e.preventDefault();
     }
   };
+
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const scrollToSection = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   const navigate = useNavigate();
   const handleImageUpload = useMutation(
     async (file: File) => {
@@ -163,6 +168,7 @@ function Step4({
       }
     }
   );
+
 const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();
   setDragging(false);
@@ -173,6 +179,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.clearData();
   }
   };
+
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -182,6 +189,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
       await validateAndUploadFile(file);
     }
   };
+
   const validateAndUploadFile = async (file: File) => {
     setIsUploading(true);
     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
@@ -232,10 +240,9 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
   const handleSubmit = useMutation(
     async (values: { heroText: string; heroImage: string }) => {
       return await CustomisationService.createCustomisation({
-        banner: {
+        blogHero: {
           text: values.heroText,
-          imageUrl: values.heroImage,
-          template: templates[selectedTemplate].title
+          imageUrl: values.heroImage
         },
         completeSetup: "completed"
       });
@@ -251,7 +258,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
         const localData: string | null = localStorage.getItem("setupData");
         if (localData) { 
           const updateLocalData = JSON.parse(localData);
-          updateLocalData.banner = response.data.result.customisationData.banner;
+          updateLocalData.blogHero = response?.data?.result?.customisationData?.blogHero;
           updateLocalData.completeSetup = response.data.result.customisationData.completeSetup
           updateLocalData.stage = response.data.result.customisationData.stage;
           localStorage.setItem("setupData", JSON.stringify(updateLocalData));
@@ -275,7 +282,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
   const saveDataToLocaStorage = (item: Record<string, any>) => {
     localStorage.setItem(
       "setupData",
-      JSON.stringify({ ...data, banner: { ...data.banner, ...item } })
+      JSON.stringify({ ...data, blogHero: { ...data?.blogHero, ...item } })
     );
     // toast.success("herotext successfully");
   };
@@ -296,48 +303,19 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     <>
       <div className="flex w-full bg-[#F3F3F3] h-full">
         <div className="w-[45%] h-full bg-white text-foundation-black p-8 font-satoshiBold">
-          <div
-            className="flex gap-1 items-center cursor-pointer mb-6"
-            onClick={goBack}
-          >
-            <MdOutlineKeyboardBackspace size={22} />
-            <span className="font-satoshiMedium">Back</span>
-          </div>
-          <h1 className="text-3xl mb-1">Customise your Account</h1>
-          <p className="mb-4 text-sm text-[#5a5a5a] font-satoshiRegular w-[60%]">
-            Choose a template and provide the hero section image and content
-            below
-          </p>
-          {/* step */}
-          <div className="flex max-w-[10rem] gap-2 my-4">
-            <span className="h-2 w-1/3 bg-[#4b00821f] rounded-xl"></span>
-            <span className="h-2 w-1/3 bg-[#4b00821f] rounded-xl"></span>
-            <span className="h-2 w-2/3 bg-foundation-darkPurple rounded-xl"></span>
-          </div>
-          {/* templates */}
-          <div className="flex gap-4 max-w-[90%] my-6">
-            {templates.map((template, index) => (
-              <TemplateCard
-                key={index}
-                index={index}
-                image={template.image}
-                title={template.title}
-                selectedTemplate={selectedTemplate}
-                onClick={handleTemplateClick}
-              />
-            ))}
-          </div>
+          <SetupHeader stage={3} prev={goBack} isBlogChosen={data?.services.includes("Blog")}/>
+          
           {/* hero section */}
           <div className="max-w-[90%]  my-6">
             <FormikProvider value={form}>
               <form className="flex flex-col gap-4 font-satoshiMedium w-full">
                 <div className="rounded-lg p-4 border border-[#C8CCD0]">
-                  <p className="font-satoshiBold text-lg mb-4"> Hero Section</p>
+                  <p className="font-satoshiBold text-lg mb-4">Blog Hero Section</p>
                   {/* hero text */}
                   <div className="flex flex-col gap-4 mb-4">
                     <div className="flex flex-col">
                       <span className="text-[#344054] mb-2 ">
-                        Hero section Text
+                        Blog Hero section Text
                       </span>
                       <ReactQuill
                         value={form.values.heroText}
@@ -434,7 +412,7 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
                   {/* hero image */}
                   <div className="flex flex-col">
                     <span className="text-[#344054] mb-2">
-                      Upload Hero section Image
+                      Upload Blog Hero section Image
                     </span>
                     {isUploading ? (
                       <div className="flex flex-col gap-2 items-center justify-center rounded-lg h-[15rem] bg-[#f8f8ff]">
@@ -501,8 +479,8 @@ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
                 <button
                   type="button"
                   disabled={
-                    !stripHtml(form.values.heroText).trim() ||
-                    !form.values.heroImage.trim() ||
+                    !stripHtml(form.values?.heroText).trim() ||
+                    !form.values?.heroImage?.trim() ||
                     form.isSubmitting ||
                     isUploading
                   }

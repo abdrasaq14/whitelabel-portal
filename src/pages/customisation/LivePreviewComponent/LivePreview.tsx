@@ -18,6 +18,7 @@ interface BannerTemplateProps {
   template: number;
   data: any;
 }
+
 function LivePreview({
   scrollRef,
   primaryColor,
@@ -138,7 +139,7 @@ console.log("changed", heroImage)
         />
       </div>
       {/* Explore categories */}
-      <div className="w-full bg-[#ffffff] px-8 py-5">
+      {data?.services?.includes("Blog") ? <img src="/blogShot.png" /> : <div className="w-full bg-[#ffffff] px-8 py-5">
         <h2 className="font-satoshi text-[14px] text-[#2B2C34] leading-2 tracking-tighter">
           Explore Categories
         </h2>
@@ -160,10 +161,10 @@ console.log("changed", heroImage)
           <img src="/images/cat6.svg" />
           <img src="/images/cat7.svg" />
         </div>
-      </div>
+      </div>}
 
       {/* products */}
-      <div className="w-full bg-[#ffffff] px-8 py-5">
+      {!data?.services?.includes("Blog") && <div className="w-full bg-[#ffffff] px-8 py-5">
         <h2 className="font-gooperRegular text-[14px] text-[#2B2C34] leading-2 tracking-tighter">
           Top Selling Products
         </h2>
@@ -172,7 +173,7 @@ console.log("changed", heroImage)
             <Item key={index} itemData={item} color={primaryColor} />
           ))}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

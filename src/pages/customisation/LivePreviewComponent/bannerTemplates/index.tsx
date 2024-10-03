@@ -2,6 +2,7 @@ import React from "react";
 import Template1 from "./template1";
 import Template2 from "./template2";
 import Template3 from "./template3";
+import Template4 from "./template4";
 
 interface BannerTemplateProps {
   scrollRef?: React.RefObject<HTMLDivElement>;
@@ -51,7 +52,7 @@ function BannerTemplate({
         );
       default:
         return (
-          <Template1
+          <Template4
             primaryColor={primaryColor}
             secondaryColor={secondaryColor}
             heroImage={heroImage}
