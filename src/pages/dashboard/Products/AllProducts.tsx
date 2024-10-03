@@ -10,6 +10,11 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { ProductService } from '../../../services/product.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { fDateTime } from '../../../utils/formatTime'
+import { Button } from '../../../components/Button/Button'
+import { FaArrowRight } from 'react-icons/fa6'
+import { useNavigate } from 'react-router-dom'
+import { formatAmount } from '../../../utils/Helpfunctions'
+import Spinner from '../../../components/spinner/Spinner'
 
 
 interface PaginationInfo {
@@ -26,6 +31,9 @@ const AllProducts = () => {
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
+  const [filterParams, setFilterParams] = useState<any>({})
+
+  const navigate = useNavigate()
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row)
@@ -38,7 +46,7 @@ const AllProducts = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy,whiteLabelName: profile?.whiteLabelName
     }],
     ProductService.getallProducts,
     {
@@ -73,7 +81,10 @@ const AllProducts = () => {
 
   return (
     <div className='px-4 pt-8 h-full'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+      <Filter isLoading={isLoading} type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Landmark' />
         <div className='flex justify-between'>
@@ -138,6 +149,20 @@ const AllProducts = () => {
                   view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]' >{row?.name} </div>,
                 },
                 {
+                  header: "Listing Price",
+                  view: (row: any) => <div>{row?.price && formatAmount(row.price)} </div>,
+                },
+                {
+                  header: "Selling Price",
+                  view: (row: any) => {
+                    const sellingPrice = row?.price && profile?.commisionPecentage
+                      ? (row.price * parseFloat(profile?.commisionPecentage) / 100) + row.price
+                      : row?.price; // Fallback to 0 if price or commission is missing
+
+                    return <div>{formatAmount(sellingPrice)}</div>;
+                  },
+                },
+                {
                   header: "Date Listed",
                   view: (row: any) => <div>{row.createdAt && fDateTime(row.createdAt)}</div>,
                 },
@@ -154,9 +179,16 @@ const AllProducts = () => {
                 }
               }
 
-            /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-              <img src='/images/NoProduct.svg' alt='No Product Found' />
-              <p className='font-normal text-primary-text text-center text-sm'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
+            /> : <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+              {
+                isLoading ? <Spinner color='#000' /> : <>
+                  <img src='/images/NoProduct.svg' alt='No Product Found' />
+                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
+
+                  <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
+                </>
+              }
+
             </div>
           }
 

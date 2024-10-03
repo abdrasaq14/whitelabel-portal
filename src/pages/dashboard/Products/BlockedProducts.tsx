@@ -10,6 +10,7 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { ProductService } from '../../../services/product.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { fDateTime } from '../../../utils/formatTime'
+import Spinner from '../../../components/spinner/Spinner'
 
 
 interface PaginationInfo {
@@ -26,6 +27,7 @@ const BlockedProducts = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
+  const [filterParams, setFilterParams] = useState<any>({})
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row)
@@ -38,7 +40,7 @@ const BlockedProducts = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-blocked-products", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, status: 'BLOCKED'
+      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy,whiteLabelName: profile?.whiteLabelName, status: 'BLOCKED'
     }],
     ProductService.getallProducts,
     {
@@ -54,7 +56,7 @@ const BlockedProducts = () => {
 
   useEffect(() => {
     refetch()
-  })
+  },[])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -73,7 +75,10 @@ const BlockedProducts = () => {
 
   return (
     <div className='px-4 pt-8 h-full'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+       <Filter isLoading={isLoading} type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Products" brand='Landmark' />
         <div className='flex justify-between'>
@@ -126,7 +131,7 @@ const BlockedProducts = () => {
                   },
                   {
                     header: "Product Name",
-                    view: (row: any) => <div  className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row?.name} </div>,
+                    view: (row: any) => <div className='whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]'>{row?.name} </div>,
                   },
                   {
                     header: "Date Listed",
@@ -149,9 +154,14 @@ const BlockedProducts = () => {
               <ViewProductModal refetch={refetch} isOpen={isViewModalOpen} product={product} closeViewModal={closeViewModal} />
 
             </div>
-          ) : <div className='h-full flex-grow flex flex-col justify-center items-center'>
-            <img src='/images/NoProduct.svg' alt='No Product Found' />
-            <p className='font-normal text-primary-text text-center text-sm '>You have not blocked any product from appearing on your marketplace. All blocked products will appear here.</p>
+          ) : <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+            {
+              isLoading ? <Spinner color='#000' /> : <>
+                <img src='/images/NoProduct.svg' alt='No Product Found' />
+                <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You have not blocked any product from appearing on your marketplace. All blocked products will appear here.</p>
+              </>
+            }
+
           </div>
         }
 

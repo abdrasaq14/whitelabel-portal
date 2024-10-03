@@ -11,18 +11,22 @@ import { useAuth } from "../../../zustand/auth.store";
 import { Table } from "../../../components/Table/Table2";
 import { generateSerialNumber } from "../../../utils/functions";
 import { formatDate } from "../../../utils/Helpfunctions";
+import Spinner from "../../../components/spinner/Spinner";
 
 const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile);
+  const [filterParams, setFilterParams] = useState<any>({})
+
+  
   const { data: allRequest, isLoading } = useFetchWithParams(
     [
       "query-all-products-request",
       {
         page: currentPage,
-          limit: pageSize,
+        limit: pageSize,
         status: "not-accepted",
         whiteLabelClientId: profile._id
       }
@@ -112,7 +116,7 @@ const MerchantRequest = () => {
               },
               {
                 header: "Status",
-                view: (row: any) => <div className={`py-1 px-2 flex items-center justify-center w-[70%] ${row.status === "rejected"? 'bg-red-300': "bg-blue-100"} rounded-md`}>{row.status}</div>
+                view: (row: any) => <div className={`py-1 px-2 flex items-center justify-center w-[70%] ${row.status === "rejected" ? 'bg-red-300' : "bg-blue-100"} rounded-md`}>{row.status}</div>
               }
             ]}
             loading={isLoading}
@@ -125,11 +129,16 @@ const MerchantRequest = () => {
             }}
           />
         ) : (
-          <div className="h-auto flex-grow flex justify-center flex-col items-center">
-            <img src="/images/NoVendor.svg" alt="No Product Found" />
-            <p className="font-normal text-primary-text text-sm sm:text-xl">
-              No products request available.
-            </p>
+          <div className="h-auto py-20 flex-grow flex justify-center flex-col items-center">
+            {
+              isLoading ? <Spinner color="#000" /> : <>
+                <img src="/images/NoVendor.svg" alt="No Product Found" />
+                <p className="font-normal text-primary-text text-sm sm:text-xl">
+                  No products request available.
+                </p>
+              </>
+            }
+
           </div>
         )}
       </div>

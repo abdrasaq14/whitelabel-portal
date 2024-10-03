@@ -10,6 +10,9 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import StarRating from '../../../components/Rating.tsx';
 import { useAuth } from '../../../zustand/auth.store';
+import { Button } from '../../../components/Button/Button';
+import { FaArrowRight } from 'react-icons/fa6';
+import Spinner from '../../../components/spinner/Spinner';
 
 const MerchantList = []
 
@@ -116,19 +119,20 @@ const AllMerchants = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
   const profile: any = useAuth((s) => s.profile)
+  const [filterParams, setFilterParams] = useState<any>({})
 
 
   console.log(profile)
 
-  const getStatusById = (arr:any, id:string) => {
-    const item = arr.find((element:any)  => element.platform == id);
+  const getStatusById = (arr: any, id: string) => {
+    const item = arr.find((element: any) => element.platform == id);
     return item && item.status;
   }
 
 
   const { data: allMerchants, isLoading } = useFetchWithParams(
     ["query-all-merchants", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, location: filterParams.location, sortBy: filterParams.sortBy
     }],
     MerchantService.getallMerchants,
     {
@@ -159,7 +163,10 @@ const AllMerchants = () => {
   // console.log(allMerchants)
   return (
     <div className='px-4 pt-8 h-full'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+      <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="All Merchants" brand='Landmark' />
         <div className='flex justify-between'>
@@ -181,7 +188,7 @@ const AllMerchants = () => {
 
 
         {
-       allMerchants &&  allMerchants.result.results.length > 0 ? (
+          allMerchants && allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
                 clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
@@ -224,7 +231,7 @@ const AllMerchants = () => {
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row  && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
+                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
                   }
                 ]}
                 loading={isLoading}
@@ -244,9 +251,18 @@ const AllMerchants = () => {
             </div>
           )
             : (
-              <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                <img src='/images/NoVendor.svg' alt='No Product Found' />
-                <p className='font-normal text-primary-text text-sm '>All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.</p>
+              <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+
+                {
+                  isLoading ? <Spinner color="" /> :
+                    <>
+                      <img src='/images/NoVendor.svg' alt='No Product Found' />
+                      <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.</p>
+
+                      <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
+                    </>
+                }
+
               </div>
             )
         }
