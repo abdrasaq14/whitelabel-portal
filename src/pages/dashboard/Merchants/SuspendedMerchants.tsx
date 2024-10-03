@@ -249,7 +249,7 @@ const SuspendedMerchants = () => {
             : (
               <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                 <img src='/images/NoVendor.svg' alt='No Product Found' />
-                <p className='font-normal text-primary-text text-sm sm:text-xl'>Hurray! You have not suspended any merchants/vendors yet.
+                <p className='font-normal text-primary-text text-sm'>Hurray! You have not suspended any merchants/vendors yet.
                 </p>
               </div>
             )

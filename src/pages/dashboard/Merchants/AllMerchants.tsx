@@ -246,7 +246,7 @@ const AllMerchants = () => {
             : (
               <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                 <img src='/images/NoVendor.svg' alt='No Product Found' />
-                <p className='font-normal text-primary-text text-sm sm:text-xl'>All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.</p>
+                <p className='font-normal text-primary-text text-sm '>All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.</p>
               </div>
             )
         }

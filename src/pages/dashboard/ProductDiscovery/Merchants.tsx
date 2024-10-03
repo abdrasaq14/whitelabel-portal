@@ -25,6 +25,8 @@ const Merchants = () => {
   const profile: any = useAuth((s) => s.profile)
   const [search, setSearch] = useState("")
   const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filterParams, setFilterParams] = useState<any>({})
+
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
     return (currentPage - 1) * pageSize + index + 1;
@@ -33,7 +35,7 @@ const Merchants = () => {
 
   const { data: allMerchants, isLoading, refetch } = useFetchWithParams(
     ["query-all-merchants-discovery", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, location: filterParams.location, sortBy: filterParams.sortBy
     }],
     MerchantService.getMerchantDiscovery,
     {
@@ -51,7 +53,7 @@ const Merchants = () => {
 
   useEffect(() => {
     refetch()
-  })
+  }, [])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -80,12 +82,15 @@ const Merchants = () => {
             }} className='w-[200px]' placeholder='Search for merchant' />
           </div>
           {
-          allMerchants && (
-            <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+            allMerchants && (
+              <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
-          )
-        }
-         <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+            )
+          }
+          <Filter type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+            setShowFilter(false)
+            setFilterParams({})
+          }} open={showFilter} />
         </div>
 
         {
@@ -125,7 +130,9 @@ const Merchants = () => {
               // },
               {
                 header: "Location",
-                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state}` : row.location?.address }</div>,
+
+                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+
               },
 
             ]}
@@ -145,7 +152,7 @@ const Merchants = () => {
           />
             : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
               <img src='/images/NoVendor.svg' alt='No Product Found' />
-              <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+              <p className='font-normal text-primary-text text-sm '>No merchants are currently available to sell on your platform.</p>
             </div>
         }
 

@@ -156,7 +156,7 @@ const AllProducts = () => {
 
             /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
               <img src='/images/NoProduct.svg' alt='No Product Found' />
-              <p className='font-normal text-primary-text text-center text-sm sm:text-xl'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
+              <p className='font-normal text-primary-text text-center text-sm'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
             </div>
           }
 
