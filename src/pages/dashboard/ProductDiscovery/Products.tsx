@@ -31,6 +31,7 @@ const Products = () => {
   const [search, setSearch] = useState("")
   const profile: any = useAuth((s) => s.profile)
   const [selectedProducts, setSelectedProducts] = useState<any>([])
+  const [filterParams, setFilterParams] = useState<any>({})
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
@@ -40,7 +41,7 @@ const Products = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products-discovery", {
-      page: currentPage, limit: pageSize, search
+      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy
     }],
     ProductService.getProductDiscovery,
     {
@@ -58,7 +59,7 @@ const Products = () => {
 
   useEffect(() => {
     refetch()
-  })
+  }, [])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -109,7 +110,10 @@ const Products = () => {
 
   return (
     <div className='h-full flex-grow'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+      <Filter type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} />
       <div className='flex justify-between items-center'>
         <div >
           <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
@@ -192,7 +196,7 @@ const Products = () => {
 
           /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
             <img src='/images/NoVendor.svg' alt='No Product Found' />
-            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+            <p className='font-normal text-primary-text text-sm'>No merchants are currently available to sell on your platform.</p>
           </div>
         }
 

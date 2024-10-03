@@ -151,7 +151,7 @@ const BlockedProducts = () => {
             </div>
           ) : <div className='h-full flex-grow flex flex-col justify-center items-center'>
             <img src='/images/NoProduct.svg' alt='No Product Found' />
-            <p className='font-normal text-primary-text text-center text-sm sm:text-xl'>You have not blocked any product from appearing on your marketplace. All blocked products will appear here.</p>
+            <p className='font-normal text-primary-text text-center text-sm '>You have not blocked any product from appearing on your marketplace. All blocked products will appear here.</p>
           </div>
         }
 
