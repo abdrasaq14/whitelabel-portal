@@ -11,7 +11,7 @@ export default function Setup({data, setColor, setService, setInfo, processStage
     return (
         <main className="bg-[#fffefe] grid grid-cols-5 gap-4 w-[95%] mx-2">
             <div className="col-start-1 col-end-3 p-3">
-                <SetupHeader stage={0} />
+                <SetupHeader stage={0} isBlogChosen={data?.services.includes("Blog")} />
                 <ColorPicker setColor={setColor} theme={data.theme} />
                 <OtherServices data={data.services} setService={setService} />
                 <OtherInformation setInfo={setInfo} setFormError={setError} contact={data.contact} />
