@@ -16,6 +16,7 @@ import SearchInput from '../../../components/FormInputs/SearchInput'
 import { useMutation } from 'react-query'
 import { useAuth } from '../../../zustand/auth.store'
 import toast from 'react-hot-toast'
+import Spinner from '../../../components/spinner/Spinner'
 
 interface PaginationInfo {
     currentPage: number;
@@ -274,7 +275,10 @@ const MerchantDetails = () => {
                                 }}
 
                             /> : <div className='h-full flex-grow flex justify-center items-center'>
-                                <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                {
+                                isLoading ? <Spinner color='#000' /> : <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                }
+
                             </div>
                     }
 

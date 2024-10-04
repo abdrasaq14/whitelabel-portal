@@ -23,7 +23,7 @@ interface PaginationInfo {
 }
 
 
-const Products = () => {
+const Products = ({ setLoading = () => { }, filterParams, onShowFilter }: { setLoading?: (e: any) => void, filterParams: any, onShowFilter: (e: any) => void }) => {
   const [product, setProduct] = useState<any>({})
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
   const [showFilter, setShowFilter] = useState<boolean>(false)
@@ -32,7 +32,6 @@ const Products = () => {
   const [search, setSearch] = useState("")
   const profile: any = useAuth((s) => s.profile)
   const [selectedProducts, setSelectedProducts] = useState<any>([])
-  const [filterParams, setFilterParams] = useState<any>({})
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
@@ -63,6 +62,10 @@ const Products = () => {
   useEffect(() => {
     refetch()
   }, [])
+
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -113,10 +116,7 @@ const Products = () => {
 
   return (
     <div className='h-full flex-grow'>
-      <Filter isLoading={isLoading} type='product' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
-        setShowFilter(false)
-        setFilterParams({})
-      }} open={showFilter} />
+     
       <div className='flex justify-between items-center'>
         <div >
           <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
@@ -127,7 +127,7 @@ const Products = () => {
 
         {
           allProducts && (
-            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <button onClick={() => onShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
           )
         }
