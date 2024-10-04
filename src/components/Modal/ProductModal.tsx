@@ -152,23 +152,23 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
           </div>
         </div>
         <div className="w-full flex flex-wrap justify-between gap-4">
-          <button
+          {/* <button
             type="button"
             onClick={() => navigate(`/merchant/profile/${product.merchantId}`)}
             disabled={false}
             className="border-primary hover:bg-primary border-[1px] rounded-lg text-primary hover:text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium "
           >
             View Merchant
-          </button>
+          </button> */}
           <div className="gap-4 flex w-full sm:w-auto justify-between">
-            <button
+            {/* <button
               type="button"
               onClick={() => closeViewModal()}
               disabled={false}
               className="border-gray-300 hover:bg-primary-text border-[1px] rounded-lg text-primary-text hover:text-white text-sm inline-flex gap-2  items-center justify-center text-center  px-8 py-2 font-medium "
             >
               Back
-            </button>
+            </button> */}
 
             {profile?.role !== "Staff" && (
               <button
