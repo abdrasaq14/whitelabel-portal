@@ -13,7 +13,7 @@ interface FilterITF {
     open?: boolean;
     onClose?: () => void;
     type?: "merchant" | "product";
-    isLoading? : boolean;
+    isLoading?: boolean;
 }
 
 interface FilterState {
@@ -123,7 +123,7 @@ const Filter: FunctionComponent<FilterITF> = ({
     return (
         <>
             {open && (
-                <div className="fixed top-0 left-0 right-0 bottom-0 items-center min-w-44 h-screen">
+                <div className="fixed top-0 border left-0 right-0 bottom-0 items-center max-w-44 min-w-44 h-screen">
                     <div
                         ref={filterRef}
                         className="items-center py-2 px-2 w-[300px] h-screen bg-white rounded"
@@ -167,7 +167,7 @@ const Filter: FunctionComponent<FilterITF> = ({
                                         }
                                         }
                                         options={categories?.data.result.map((category: any, id: number) => ({ id: id, label: category.title, value: category._id }))}
-                                        name='Categorys'
+                                        name='Categories'
                                     />)
                                 }
 
@@ -177,7 +177,11 @@ const Filter: FunctionComponent<FilterITF> = ({
                                     type === "merchant" && (
                                         <Select
                                             isMulti={false}
-                                            onSelect={(value: any) => handleSelectChange('location', value)}
+                                            onSelect={(value: any) => {
+                                                const val = value.map((val: any) => val.value)
+                                                handleSelectChange('location', val)
+
+                                            }}
                                             options={
                                                 allStates.map((state: any, id: number) => ({ id: id, label: state, value: state }))
                                             }

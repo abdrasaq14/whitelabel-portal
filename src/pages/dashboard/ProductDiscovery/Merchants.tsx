@@ -18,15 +18,14 @@ interface PaginationInfo {
   pageSize: number;
 }
 
-const Merchants = () => {
+const Merchants = ({ setLoading = () => { }, filterParams, onShowFilter }: { setLoading?: (e: any) => void, filterParams: any, onShowFilter: (e: any) => void }) => {
   const [merchant, setMerchant] = useState<any>({})
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
   const [search, setSearch] = useState("")
-  const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [filterParams, setFilterParams] = useState<any>({})
+
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
@@ -56,6 +55,10 @@ const Merchants = () => {
     refetch()
   }, [])
 
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
+
   const handlePageSize = (val: any) => {
     setPageSize(val);
     // setFilterParams({ ...filterParams, pageSize: val });
@@ -73,7 +76,10 @@ const Merchants = () => {
   }
   return (
     <div className='h-full flex-grow'>
-
+      {/* <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} /> */}
       <div className='h-full flex-grow '>
         <div className='flex justify-between items-center'>
           <div >
@@ -84,14 +90,11 @@ const Merchants = () => {
           </div>
           {
             allMerchants && (
-              <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+              <button onClick={() => onShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
             )
           }
-          <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
-            setShowFilter(false)
-            setFilterParams({})
-          }} open={showFilter} />
+
         </div>
 
         {
@@ -132,7 +135,7 @@ const Merchants = () => {
               {
                 header: "Location",
 
-                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
 
               },
 
