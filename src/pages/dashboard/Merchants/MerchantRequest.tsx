@@ -13,6 +13,7 @@ import { Button } from '../../../components/Blog/Button';
 import toast from 'react-hot-toast';
 import { handleError } from '../../../utils/Helpfunctions';
 import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
@@ -88,7 +89,7 @@ const MerchantRequest = () => {
               {
                 isLoading ? <Spinner color='#000' /> : <>
                   <img src='/images/NoVendor.svg' alt='No Product Found' />
-                  <h3 className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You have no active vendor requests. Browse through our merchant discovery to onboard and list a product on your marketplace now.
+                  <h3 className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'> { isEmpty(filterParams) ?"You have no active vendor requests. Browse through our merchant discovery to onboard and list a product on your marketplace now." : "No search result found"}
                   </h3>
                 </>
               }

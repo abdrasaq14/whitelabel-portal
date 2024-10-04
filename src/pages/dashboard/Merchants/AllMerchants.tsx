@@ -13,6 +13,7 @@ import { useAuth } from '../../../zustand/auth.store';
 import { Button } from '../../../components/Button/Button';
 import { FaArrowRight } from 'react-icons/fa6';
 import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 const MerchantList = []
 
@@ -257,7 +258,7 @@ const AllMerchants = () => {
                   isLoading ? <Spinner color="" /> :
                     <>
                       <img src='/images/NoVendor.svg' alt='No Product Found' />
-                      <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.</p>
+                      <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ? "All merchants you onboard will be displayed here. Add a vendor to your marketplace now to get started.": "No search result found"}</p>
 
                       <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
                     </>
