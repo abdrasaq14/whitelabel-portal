@@ -15,6 +15,7 @@ import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 import Filter from '../../../components/Filter/Filter';
 import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 
 interface PaginationInfo {
@@ -201,7 +202,7 @@ const Products = ({ setLoading = () => { }, filterParams, onShowFilter }: { setL
             {
               isLoading ? <Spinner color='#000' /> : <>
                <img src='/images/NoVendor.svg' className='max-w-[400px] h-auto' alt='No Product Found' />
-               <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>No merchants are currently available to sell on your platform.</p>
+               <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ? "Available Merchant on ProfitAll will appear here.": "No search result found"}</p>
               </>
             }
            

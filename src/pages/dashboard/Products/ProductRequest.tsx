@@ -9,7 +9,7 @@ import { MerchantService } from "../../../services/merchant.service";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../zustand/auth.store";
 import { Table } from "../../../components/Table/Table2";
-import { generateSerialNumber } from "../../../utils/functions";
+import { generateSerialNumber, isEmpty } from "../../../utils/functions";
 import { formatDate } from "../../../utils/Helpfunctions";
 import Spinner from "../../../components/spinner/Spinner";
 
@@ -20,7 +20,7 @@ const MerchantRequest = () => {
   const profile: any = useAuth((s) => s.profile);
   const [filterParams, setFilterParams] = useState<any>({})
 
-  
+
   const { data: allRequest, isLoading } = useFetchWithParams(
     [
       "query-all-products-request",
@@ -134,7 +134,7 @@ const MerchantRequest = () => {
               isLoading ? <Spinner color="#000" /> : <>
                 <img src="/images/NoVendor.svg" alt="No Product Found" />
                 <p className="font-normal text-primary-text text-sm sm:text-xl">
-                  No products request available.
+                 {isEmpty(filterParams) ?"No products request available." : "No search result found"}
                 </p>
               </>
             }

@@ -11,6 +11,7 @@ import { ProductService } from '../../../services/product.service'
 import { useAuth } from '../../../zustand/auth.store'
 import { fDateTime } from '../../../utils/formatTime'
 import Spinner from '../../../components/spinner/Spinner'
+import { isEmpty } from '../../../utils/functions'
 
 
 interface PaginationInfo {
@@ -158,7 +159,7 @@ const BlockedProducts = () => {
             {
               isLoading ? <Spinner color='#000' /> : <>
                 <img src='/images/NoProduct.svg' alt='No Product Found' />
-                <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You have not blocked any product from appearing on your marketplace. All blocked products will appear here.</p>
+                <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ?"You have not blocked any product from appearing on your marketplace. All blocked products will appear here" :"No search result found"}.</p>
               </>
             }
 

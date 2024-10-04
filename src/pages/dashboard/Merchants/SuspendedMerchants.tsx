@@ -225,7 +225,7 @@ const SuspendedMerchants = () => {
                   },
                   {
                     header: "Location",
-                    view: (row: any) => <div>{row?.state && row.state !== "State not found" ? `${row?.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+                    view: (row: any) =>  <div>{row?.location && row.location.state !== "State not found" ? `${row?.location.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
                   },
                   {
                     header: "STATUS",

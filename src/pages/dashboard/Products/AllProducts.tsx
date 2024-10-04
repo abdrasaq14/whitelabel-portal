@@ -15,6 +15,7 @@ import { FaArrowRight } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { formatAmount } from '../../../utils/Helpfunctions'
 import Spinner from '../../../components/spinner/Spinner'
+import { isEmpty } from '../../../utils/functions'
 
 
 interface PaginationInfo {
@@ -183,7 +184,7 @@ const AllProducts = () => {
               {
                 isLoading ? <Spinner color='#000' /> : <>
                   <img src='/images/NoProduct.svg' alt='No Product Found' />
-                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
+                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ?"You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!" : "No search result found"}</p>
 
                   <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
                 </>
