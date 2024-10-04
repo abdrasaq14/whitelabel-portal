@@ -162,7 +162,7 @@ const MerchantDetails = () => {
                     </div>
                     <div>
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
-                        <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
+                        <a target='_blank' href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.userName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.userName}`}</a>
                     </div>
                     <button className='border border-primary flex items-center rounded bg-white px-3 py-2 whitespace-nowrap' onClick={() => startConversation.mutate()}>Message Merchant {loading && <Spinner color="#6F7174" width={15} height={15} />}
                     </button>

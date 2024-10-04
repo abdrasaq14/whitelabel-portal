@@ -181,7 +181,7 @@ const MerchantDetails = () => {
                     </div>
                     <div>
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
-                        <a target='_blank' rel="noreferrer" href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
+                        <a target='_blank' rel="noreferrer" href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.userName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.userName}`}</a>
                     </div>
 
                 </div>
