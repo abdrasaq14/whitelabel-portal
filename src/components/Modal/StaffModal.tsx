@@ -490,9 +490,6 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
         console.log(res);
         toast.success("staff created successfully")
         closeModal();
-
-
-
       },
       onError: (err: any) => {
         toast.error(err.response.data.message);
