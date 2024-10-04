@@ -132,7 +132,7 @@ const Merchants = () => {
               {
                 header: "Location",
 
-                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
 
               },
 
