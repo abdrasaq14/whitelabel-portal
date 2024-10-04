@@ -21,7 +21,7 @@ const ProductDiscovery = () => {
       active: 'icons/sidebar/note.svg',
     },
   ]
-  const [tabIndex, setTabIndex] = useState<number>(1)
+  const [tabIndex, setTabIndex] = useState<number>(0)
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {
       case 0:
@@ -29,7 +29,7 @@ const ProductDiscovery = () => {
       case 1:
         return <Products />
       default:
-        return <Products />;
+        return <Merchants />
     }
   }
   useEffect(()=>{
