@@ -11,7 +11,8 @@ export const UserService = {
      return createApiClient(false).put(`/users/staff/${id}`, payload)
     },
     getAllUsers: (payload:any) => createApiClient(false).get(`/users/staff${paramsObjectToQueryString(payload)}`),
-    changePassword: (payload: any)=> createApiClient(false).put("users/change-password", payload)
-
+    changePassword: (payload: any)=> createApiClient(false).put("/users/change-password", payload),
+    blockStaff: (id: any) => createApiClient(false).put(`/users/block-staff/${id}`),
+    unblockStaff: (id: any) => createApiClient(false).put(`/users/unblock-staff/${id}`)
   };
   

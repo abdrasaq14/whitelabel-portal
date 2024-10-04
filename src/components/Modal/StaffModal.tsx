@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import FileUpload from '../FormInputs/FIleUpload2';
 import ProfilePicUpload from '../FormInputs/FileUpload';
 import { useAuth } from '../../zustand/auth.store';
+import Spinner from "../spinner/Spinner";
 import axios from 'axios';
 
 
@@ -49,6 +50,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
   
+  console.log("Staff info on edit", staffInfo)
 
   const modalRef = useRef<any>();
   useOnClickOutside(modalRef, () => {
@@ -124,57 +126,48 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
   const deleteStaff = () => {
     if (staffInfo) {
-      console.log('delete', staffInfo.name);
-      setIsEditing(false);
-      closeModal();
+      console.log('delete staff info', staffInfo);
+      deleteStaffRequest.mutate(staffInfo)
     } else {
       console.error('Staff info is undefined');
     }
   }
-    // const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
-    //   event
-    // ) => {
-    //   if (event.currentTarget.files) {
-    //     setIsUploading(true);
-    //     const file = event.currentTarget.files[0];
-    //     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
-    //     const minSize = 50 * 1024; // 50 KB
-    //     const maxSize = 5 * 1024 * 1024; // 5 MB
 
-    //     if (!validFormats.includes(file.type)) {
-    //       setUploadError(
-    //         "Invalid image format. Supported formats: JPEG, PNG, JPG."
-    //       );
-    //       setIsUploading(false);
-    //       return;
-    //     }
-
-    //     if (file.size < minSize || file.size > maxSize) {
-    //       setUploadError("Image size must be between 50 KB and 5 MB.");
-    //       setIsUploading(false);
-    //       return;
-    //     }
-
-    //     setUploadError("");
-
-    //     handleImageUpload.mutate(file);
-    //   }
-  // };
-    const handleStaffProfilePicUpload = useMutation(
-      async (file: File) => {
-       return await UserService.updateStaff({image: file}, staffInfo._id);
-        // return await UserService.editAdminDetails({ companyLogo: file });
-      },
-      {
-        onSuccess: (response) => {
-          closeModal();
-          toast.success("Staff profile pics changed successfully");
-        },
-        onError: (err: any) => {
-          toast.error("An error occurred. Please try again");
-        },
+  const deleteStaffRequest = useMutation(
+    async (staffInfo: any) => {
+      if(staffInfo?.blocked){
+        return await UserService.unblockStaff(staffInfo._id);
+      }else{
+        return await UserService.blockStaff(staffInfo._id);
       }
-    );
+    },
+    {
+      onSuccess: (response) => {
+        toast.success(`Staff ${staffInfo?.blocked ? 'unblocked' : 'blocked'} successfully`);
+        setIsEditing(false);
+        closeModal();
+      },
+      onError: (err: any) => {
+        toast.error("An error occurred. Please try again");
+      },
+    }
+  );
+    
+  const handleStaffProfilePicUpload = useMutation(
+    async (file: File) => {
+      return await UserService.updateStaff({image: file}, staffInfo._id);
+      // return await UserService.editAdminDetails({ companyLogo: file });
+    },
+    {
+      onSuccess: (response) => {
+        closeModal();
+        toast.success("Staff profile pics changed successfully");
+      },
+      onError: (err: any) => {
+        toast.error("An error occurred. Please try again");
+      },
+    }
+  );
 
   const roleOptions = [
     { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
@@ -205,7 +198,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
           <div>
             <p className='font-satoshiBold text-xl text-primary-text'>{staffInfo.name}</p>
-            <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.roleId}</p>
+            {/* <p className='font-satoshiRegular text-sm text-primary-text mt-1'>Staff Id: {staffInfo.roleId}</p> */}
             <p className='w-16 px-2 py-1 rounded-full bg-green-600 text-white mt-2 flex items-center justify-center text-sm '>{staffInfo.role}</p>
           </div>
         </div>
@@ -318,9 +311,9 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
                       type='button'
                       onClick={() => handleDelete()}
                       disabled={false}
-                      className='border-red-500 hover:bg-red-500 hover:text-white border-[1px] rounded-lg text-primary text-sm inline-flex gap-2 my-4 items-center justify-center text-center px-8 py-3 font-medium '
+                      className='border-red-500 hover:bg-red-500 hover:text-white border-[1px] rounded-lg text-red-500 text-sm inline-flex gap-2 my-4 items-center justify-center text-center px-8 py-3 font-medium '
                     >
-                      Delete Account
+                      {staffInfo.blocked ? 'Unblock Account' : 'Block Account'}
                     </button>
 
                     <button
@@ -343,14 +336,14 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
           }}
 
         </Formik>
-        <DeleteModal isOpen={isDeleteModalOpen} closeModal={() => setisDeleteModalOpen(false)} confirmDelete={deleteStaff} />
+        <DeleteModal isOpen={isDeleteModalOpen} closeModal={() => setisDeleteModalOpen(false)} confirmDelete={deleteStaff} isBlocked={staffInfo?.blocked} />
       </div>
     </Modal>
   )
 }
 
 
-export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
+export const DeleteModal = ({ isOpen, closeModal, confirmDelete, isBlocked }: any) => {
   const modalRef = useRef<any>();
   useOnClickOutside(modalRef, () => {
     closeModal();
@@ -367,7 +360,8 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
         <img src='/images/delete-staff.svg' alt='Delete Staff' className='max-h-[280px]' />
       </div>
       <div>
-        <p className='text-red-400 mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>Are you sure you want to delete this Account ?</p>
+        <p className='text-red-400 mt-4 text-center sm:text-base text-[30px] font-satoshiMedium'>{`Are you sure you want to ${isBlocked ? 'unblock' : 'block'} this account?`}</p>
+        <p className='text-center text-[12px] font-satoshiMedium'>{`${isBlocked ? 'Unblocking this account will give the user full access to their account' : 'Blocking this account will deny the user of accessing their account'}`}</p>
       </div>
       <div className='w-full flex mt-4 justify-between  '>
         <button
@@ -385,7 +379,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
           disabled={false}
           className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
         >
-          Yes  <span><MdOutlineArrowForward size={12} /></span>
+          Proceed  <span><MdOutlineArrowForward size={12} /></span>
         </button>
       </div>
     </Modal>
@@ -442,6 +436,7 @@ export const AddStaffModal = ({ isOpen, closeModal }: any) => {
 
 
 export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const profile: any = useAuth((s) => s.profile)
   interface StaffInfoProps {
     companyName: string;
@@ -482,16 +477,19 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
 
   const handleAddUser = useMutation(
     async (values: any) => {
+      setLoading(true)
       return await UserService.createUser(values)
     },
 
     {
       onSuccess: (res) => {
         console.log(res);
+        setLoading(false);
         toast.success("staff created successfully")
         closeModal();
       },
       onError: (err: any) => {
+        setLoading(false)
         toast.error(err.response.data.message);
       }
     }
@@ -606,12 +604,17 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
               >
                 Cancel
               </button>
+              {loading ? <button
+                className='bg-primary gap-2 rounded-lg text-white text-sm flex items-center text-center px-12 py-3 font-medium '
+              >
+                <span>Please wait</span> <Spinner width={14} height={14} />
+              </button> : 
               <button
                 type='submit'
                 className='bg-primary rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
               >
                 Update
-              </button>
+              </button>}
             </div>
 
 

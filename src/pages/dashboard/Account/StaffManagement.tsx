@@ -120,9 +120,10 @@ export const StaffManagement = () => {
                       header: "Role/Permission",
                       view: (row: any) => <div>{row.role}</div>,
                     },
-
-
-
+                    {
+                      header: "Status",
+                      view: (row: any) => row.blocked ? <div>Blocked</div> : <div>Active</div>,
+                    },
                   ]}
                   loading={false}
                   pagination={
