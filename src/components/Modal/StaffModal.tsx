@@ -14,6 +14,7 @@ import FileUpload from '../FormInputs/FIleUpload2';
 import ProfilePicUpload from '../FormInputs/FileUpload';
 import { useAuth } from '../../zustand/auth.store';
 import axios from 'axios';
+import Spinner from '../spinner/Spinner';
 
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
@@ -48,7 +49,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   const [isDeleteModalOpen, setisDeleteModalOpen] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
-  
+
 
   const modalRef = useRef<any>();
   useOnClickOutside(modalRef, () => {
@@ -97,7 +98,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
         (role) => role.value === values.roleId
       );
       if (selectedRole) {
-        values.role = selectedRole.label; 
+        values.role = selectedRole.label;
       }
       return await UserService.updateStaff(values, staffInfo._id);
     },
@@ -131,50 +132,50 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       console.error('Staff info is undefined');
     }
   }
-    // const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
-    //   event
-    // ) => {
-    //   if (event.currentTarget.files) {
-    //     setIsUploading(true);
-    //     const file = event.currentTarget.files[0];
-    //     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
-    //     const minSize = 50 * 1024; // 50 KB
-    //     const maxSize = 5 * 1024 * 1024; // 5 MB
+  // const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (
+  //   event
+  // ) => {
+  //   if (event.currentTarget.files) {
+  //     setIsUploading(true);
+  //     const file = event.currentTarget.files[0];
+  //     const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+  //     const minSize = 50 * 1024; // 50 KB
+  //     const maxSize = 5 * 1024 * 1024; // 5 MB
 
-    //     if (!validFormats.includes(file.type)) {
-    //       setUploadError(
-    //         "Invalid image format. Supported formats: JPEG, PNG, JPG."
-    //       );
-    //       setIsUploading(false);
-    //       return;
-    //     }
+  //     if (!validFormats.includes(file.type)) {
+  //       setUploadError(
+  //         "Invalid image format. Supported formats: JPEG, PNG, JPG."
+  //       );
+  //       setIsUploading(false);
+  //       return;
+  //     }
 
-    //     if (file.size < minSize || file.size > maxSize) {
-    //       setUploadError("Image size must be between 50 KB and 5 MB.");
-    //       setIsUploading(false);
-    //       return;
-    //     }
+  //     if (file.size < minSize || file.size > maxSize) {
+  //       setUploadError("Image size must be between 50 KB and 5 MB.");
+  //       setIsUploading(false);
+  //       return;
+  //     }
 
-    //     setUploadError("");
+  //     setUploadError("");
 
-    //     handleImageUpload.mutate(file);
-    //   }
+  //     handleImageUpload.mutate(file);
+  //   }
   // };
-    const handleStaffProfilePicUpload = useMutation(
-      async (file: File) => {
-       return await UserService.updateStaff({image: file}, staffInfo._id);
-        // return await UserService.editAdminDetails({ companyLogo: file });
+  const handleStaffProfilePicUpload = useMutation(
+    async (file: File) => {
+      return await UserService.updateStaff({ image: file }, staffInfo._id);
+      // return await UserService.editAdminDetails({ companyLogo: file });
+    },
+    {
+      onSuccess: (response) => {
+        closeModal();
+        toast.success("Staff profile pics changed successfully");
       },
-      {
-        onSuccess: (response) => {
-          closeModal();
-          toast.success("Staff profile pics changed successfully");
-        },
-        onError: (err: any) => {
-          toast.error("An error occurred. Please try again");
-        },
-      }
-    );
+      onError: (err: any) => {
+        toast.error("An error occurred. Please try again");
+      },
+    }
+  );
 
   const roleOptions = [
     { value: '663a5c8a8b1a1f64469b98e4', label: 'Staff' },
@@ -186,21 +187,21 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       <div className='full flex justify-between '>
         <div className='flex gap-4 items-center'>
           <div className='relative h-28 rounded object-contain w-28'>
-           {isUploading ? (
+            {isUploading ? (
               <div className="h-full w-full text-white rounded-full bg-slate-500 bg-opacity-50 flex items-center justify-center">
                 <span>Uploading</span>
-           </div>
-           ): (
-             <>
-             <button type="button" className='absolute  rounded-full bottom-0 right-0 p-1 bg-gray-300 cursor-pointer'>
-                <ProfilePicUpload name='' onFileChange={handleStaffProfilePicUpload.mutate}>
-                  <img src='/icons/edit.svg' alt='Edit profile' />
-                </ProfilePicUpload>
-                    {/* <input type="file" className='absolute top-0 left-0 h-full w-full opacity-0 cursor-pointer' onChange={handleFileChange} /> */}
-            </button>
-            <img alt='staff avatar' src={staffInfo?.image} className='h-28 max-28 max-w-28 rounded-full object-contain w-28' />
-             </>
-           )}
+              </div>
+            ) : (
+              <>
+                <button type="button" className='absolute  rounded-full bottom-0 right-0 p-1 bg-gray-300 cursor-pointer'>
+                  <ProfilePicUpload name='' onFileChange={handleStaffProfilePicUpload.mutate}>
+                    <img src='/icons/edit.svg' alt='Edit profile' />
+                  </ProfilePicUpload>
+                  {/* <input type="file" className='absolute top-0 left-0 h-full w-full opacity-0 cursor-pointer' onChange={handleFileChange} /> */}
+                </button>
+                <img alt='staff avatar' src={staffInfo?.image} className='h-28 max-28 max-w-28 rounded-full object-contain w-28' />
+              </>
+            )}
           </div>
 
           <div>
@@ -241,7 +242,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
               },
             });
           }}>
-          {({ values, setFieldValue, errors } : any) => {
+          {({ values, setFieldValue, errors, isSubmitting, setSubmitting }: any) => {
             return (
               <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
                 <div className='col-span-1'>
@@ -325,10 +326,10 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
                     <button
                       type='submit'
-                      disabled={false}
+                      disabled={isSubmitting}
                       className='bg-primary hover:bg-purple-700  rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center px-12 py-3 font-medium '
                     >
-                      Update
+                      {isSubmitting && <Spinner />} Update
                     </button>
 
                   </div>
@@ -352,12 +353,20 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
 export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
   const modalRef = useRef<any>();
+  const [isLoading, setIsLoading] = useState(false)
   useOnClickOutside(modalRef, () => {
     closeModal();
   });
 
-  const handleConfirmDelete = () => {
-    confirmDelete();
+  const handleConfirmDelete = async () => {
+    setIsLoading(true)
+    try {
+      await confirmDelete();
+      setIsLoading(false)
+    } catch (err) {
+      setIsLoading(false)
+    }
+
     closeModal();
   }
 
@@ -382,10 +391,10 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete }: any) => {
         <button
           type='button'
           onClick={handleConfirmDelete}
-          disabled={false}
+          disabled={isLoading}
           className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
         >
-          Yes  <span><MdOutlineArrowForward size={12} /></span>
+          {isLoading && <Spinner />}  Yes  <span><MdOutlineArrowForward size={12} /></span>
         </button>
       </div>
     </Modal>
@@ -490,12 +499,13 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
         console.log(res);
         toast.success("staff created successfully")
         closeModal();
-
+        form.setSubmitting(false)
 
 
       },
       onError: (err: any) => {
         toast.error(err.response.data.message);
+        form.setSubmitting(false)
       }
     }
   )
@@ -611,9 +621,13 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
               </button>
               <button
                 type='submit'
-                className='bg-primary rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
+                disabled={form.isSubmitting}
+                className='bg-primary min-w-[200px] rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
               >
-                Update
+
+                {
+                  form.isSubmitting ? <Spinner /> : "Update"
+                }
               </button>
             </div>
 
@@ -733,6 +747,7 @@ export const UploadStaffByCsvComponent = ({ closeModal }: any) => {
           className='bg-primary rounded-lg  text-white text-sm  text-center px-12 py-3 font-medium '
         // disabled={isSubmitting}
         >
+
           Add Staffs
         </button>
         <button
