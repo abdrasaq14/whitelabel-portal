@@ -25,13 +25,15 @@ const BioProfile = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const companyDetails: any = useAuth(state => state.profile);
 
+  console.log("Company details", companyDetails)
+
   const BioInfoInitialValues: BioInfoProps = {
-    companyName: companyDetails?.buinessName || '',
-    companyEmail: companyDetails?.email || '',
-    adminName: companyDetails?.representative?.fullName || '',
-    adminEmail: companyDetails?.representative?.email || '',
-    companyPhoneNumber: companyDetails?.phoneNumber ? '+234' + companyDetails.phoneNumber.substring(1) : '',
-    adminPhoneNumber: companyDetails?.representative?.phoneNumber ? '+234' + companyDetails.representative?.phoneNumber.substring(1) : '',
+    companyName: (companyDetails?.buinessName || companyDetails?.businessName),
+    companyEmail: (companyDetails?.email || companyDetails?.companyEmail),
+    adminName: companyDetails.representative ? companyDetails?.representative?.fullName : `${companyDetails?._doc.firstName} ${companyDetails?._doc.lastName}`,
+    adminEmail: companyDetails.representative ? companyDetails?.representative?.email : companyDetails?._doc.email,
+    companyPhoneNumber: (companyDetails?.phoneNumber || companyDetails?.companyPhoneNumber) ? '+234' + (companyDetails?.phoneNumber || companyDetails?.companyPhoneNumber).substring(1) : '',
+    adminPhoneNumber: '+234' + companyDetails?.representative ? companyDetails?.representative?.phoneNumber.substring(1) : companyDetails?._doc?.phoneNumber.substring(1),
     companyAddress: '',
   };
 
@@ -111,10 +113,10 @@ const BioProfile = () => {
   );
 
   const form = useFormik({
-    initialValues: companyDetails?.role === "Admin" ? BioInfoInitialValues : BioInfoInitialValuesStaff,
-    validationSchema: companyDetails?.role === "Admin" ? validationSchema : validationSchemaStaff,
+    initialValues: companyDetails?.role || companyDetails?._doc?.role === "Admin" ? BioInfoInitialValues : BioInfoInitialValuesStaff,
+    validationSchema: companyDetails?.role === "Admin" || companyDetails?._doc?.role ? validationSchema : validationSchemaStaff,
     onSubmit: (values: any) => {
-      companyDetails?.role === "Admin" ? handleSubmit.mutate(values) : handleSubmitStaff.mutate(values)
+      companyDetails?.role === "Admin" || companyDetails?._doc?.role ? handleSubmit.mutate(values) : handleSubmitStaff.mutate(values)
     },
   });
 
@@ -224,7 +226,7 @@ console.log("ErrorForm", form.errors)
 
         {/* Form Section */}
         {
-          companyDetails?.role === "Admin" ?
+          companyDetails?.role === "Admin" || companyDetails._doc?.role === "Admin" ?
 
             <div className='flex-grow'>
               <FormikProvider value={form}>
@@ -292,14 +294,14 @@ console.log("ErrorForm", form.errors)
                     name='firstName'
                     type='text'
                     placeholder='Fist Name'
-                    label='FirstName'
+                    label='First Name'
                     disabled={!isEditing}
                   />
                   <TextInput
                     name='lastName'
                     type='text'
                     placeholder='Fist Name'
-                    label='LastName'
+                    label='Last Name'
                     disabled={!isEditing}
                   />
                   <TextInput
