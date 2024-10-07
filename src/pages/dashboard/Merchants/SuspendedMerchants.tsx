@@ -10,6 +10,7 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import StarRating from '../../../components/Rating.tsx';
 import { useAuth } from '../../../zustand/auth.store';
+import Spinner from '../../../components/spinner/Spinner';
 
 const MerchantList = []
 
@@ -116,16 +117,17 @@ const SuspendedMerchants = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
   const profile: any = useAuth((s) => s.profile)
+  const [filterParams, setFilterParams] = useState<any>({})
 
 
   console.log(profile)
 
-  
+
 
 
   const { data: allMerchants, isLoading } = useFetchWithParams(
     ["query-all--suspended-merchants", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName,status:'suspended'
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, location: filterParams.location, sortBy: filterParams.sortBy, status: 'suspended'
     }],
     MerchantService.getallMerchants,
     {
@@ -138,8 +140,8 @@ const SuspendedMerchants = () => {
     }
   )
 
-  const getStatusById = (arr:any, id:string) => {
-    const item = arr.find((element:any)  => element.platform == id);
+  const getStatusById = (arr: any, id: string) => {
+    const item = arr.find((element: any) => element.platform == id);
     return item && item.status;
   }
 
@@ -180,7 +182,7 @@ const SuspendedMerchants = () => {
 
 
         {
-         allMerchants &&  allMerchants.result.results.length > 0 ? (
+          allMerchants && allMerchants.result.results.length > 0 ? (
             <div className='h-full flex-grow '>
               <Table data={allMerchants && allMerchants.result.results}
                 clickRowAction={(e: any) => navigate(`../merchant/profile/${e.id}`)}
@@ -223,11 +225,11 @@ const SuspendedMerchants = () => {
                   },
                   {
                     header: "Location",
-                    view: (row: any) => <div>{row.country}</div>,
+                    view: (row: any) =>  <div>{row?.location && row.location.state !== "State not found" ? `${row?.location.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
                   },
                   {
                     header: "STATUS",
-                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row  && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
+                    view: (row: any) => <Label variant={(getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase())) === "active" ? "success" : "danger"} >{row && (getStatusById(row?.platformAccess, profile.whiteLabelName.toUpperCase()))} </Label>,
                   }
                 ]}
                 loading={isLoading}
@@ -247,10 +249,15 @@ const SuspendedMerchants = () => {
             </div>
           )
             : (
-              <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                <img src='/images/NoVendor.svg' alt='No Product Found' />
-                <p className='font-normal text-primary-text text-sm sm:text-xl'>Hurray! You have not suspended any merchants/vendors yet.
-                </p>
+              <div className='h-auto py-20 flex-grow flex justify-center flex-col items-center'>
+                {
+                  isLoading ? <Spinner color='#000' /> : <>
+                    <img src='/images/NoVendor.svg' alt='No Product Found' />
+                    <p className='font-normal text-primary-text text-sm'>Hurray! You have not suspended any merchants yet.
+                    </p>
+                  </>
+                }
+
               </div>
             )
         }

@@ -14,6 +14,8 @@ import { useAuth } from '../../../zustand/auth.store';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 import Filter from '../../../components/Filter/Filter';
+import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 
 interface PaginationInfo {
@@ -22,7 +24,7 @@ interface PaginationInfo {
 }
 
 
-const Products = () => {
+const Products = ({ setLoading = () => { }, filterParams, onShowFilter }: { setLoading?: (e: any) => void, filterParams: any, onShowFilter: (e: any) => void }) => {
   const [product, setProduct] = useState<any>({})
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
   const [showFilter, setShowFilter] = useState<boolean>(false)
@@ -40,8 +42,9 @@ const Products = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products-discovery", {
-      page: currentPage, limit: pageSize, search,
-      whiteLabelName: profile?.whiteLabelName
+
+      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy,whiteLabelName: profile?.whiteLabelName
+
     }],
     ProductService.getProductDiscovery,
     {
@@ -59,7 +62,11 @@ const Products = () => {
 
   useEffect(() => {
     refetch()
-  })
+  }, [])
+
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -110,7 +117,7 @@ const Products = () => {
 
   return (
     <div className='h-full flex-grow'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+     
       <div className='flex justify-between items-center'>
         <div >
           <SearchInput onClear={() => setSearch("")} value={search} onChange={(e: any) => {
@@ -121,7 +128,7 @@ const Products = () => {
 
         {
           allProducts && (
-            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+            (selectedProducts.length > 0) ? <Button disabled={AddProducts.isLoading} isLoading={AddProducts.isLoading} onClick={() => AddProducts.mutate()} label="Add selected products" className='px-3 py-2 whitespace-nowrap font-semibold border-primary  border text-sm rounded bg-primary ' /> : <button onClick={() => onShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
           )
         }
@@ -191,9 +198,14 @@ const Products = () => {
 
             }
 
-          /> : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-            <img src='/images/NoVendor.svg' alt='No Product Found' />
-            <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+          /> : <div className='h-auto flex-grow flex py-20 justify-center flex-col items-center'>
+            {
+              isLoading ? <Spinner color='#000' /> : <>
+               <img src='/images/NoVendor.svg' className='max-w-[400px] h-auto' alt='No Product Found' />
+               <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ? "Available Merchant on ProfitAll will appear here.": "No search result found"}</p>
+              </>
+            }
+           
           </div>
         }
 

@@ -11,6 +11,10 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { OrderService } from '../../../services/order.service';
 import { fDateTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../zustand/auth.store';
+import { Button } from '../../../components/Button/Button';
+import { useNavigate } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa6';
+import Spinner from '../../../components/spinner/Spinner';
 
 interface PaginationInfo {
   currentPage: number;
@@ -24,6 +28,7 @@ const Orders = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("")
+  const navigate = useNavigate()
 
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
@@ -82,7 +87,7 @@ const Orders = () => {
           <InfoCard header="Completed Orders" value="0" iconName='ic_deals' className='flex flex-col justify-between' timeline={timeline} />
         </div>
         <div className='flex justify-between'>
-          <h1 className='text-primary-text text-sm font-normal'>All Orders <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{ }</span></h1>
+          <h1 className='text-primary-text text-sm font-normal'>All Orders <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allOrders ? allOrders.result.results.length : 0}</span></h1>
           <div>
           </div>
           <div>
@@ -151,10 +156,19 @@ const Orders = () => {
                 }
               }
 
-            /> : <div className='h-full flex-grow flex flex-col justify-center items-center'>
-              <img src='/images/no_transaction_history.svg' alt='No Order Completed yet' />
-              <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
-            </div>
+            /> :
+              <div className='h-full py-20 flex-grow flex flex-col justify-center items-center'>
+                {
+                  isLoading ? <Spinner color='#000' /> :
+                    <>
+                      <img src='/images/no_transaction_history.svg' className='max-w-[250px] h-auto' alt='No Order Completed yet' />
+                      <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>You currently have no transaction or order records to display. Onboard more product on your marketplace to start making sales</p>
+
+                      <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
+                    </>
+                }
+
+              </div>
           }
 
 

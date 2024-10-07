@@ -3,8 +3,8 @@ import { createApiClient } from "../utils/api";
 
 let profile:any = sessionStorage.getItem("profitall-client-auth")
 profile = JSON.parse(profile)
-const userId = profile.state.profile._id;
-console.log("Session UserID", userId)
+const userId = profile.state.profile._doc ? profile.state.profile._doc.clientId : profile.state.profile._id;
+console.log("Session UserID", profile.state.profile);
 
 export const MessageService = {
   createConversation: (payload: any) => createApiClient(false).post(`/messaging/conversations`, payload),

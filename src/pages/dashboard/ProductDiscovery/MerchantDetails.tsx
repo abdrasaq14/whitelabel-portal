@@ -16,6 +16,7 @@ import SearchInput from '../../../components/FormInputs/SearchInput'
 import { useMutation } from 'react-query'
 import { useAuth } from '../../../zustand/auth.store'
 import toast from 'react-hot-toast'
+import Spinner from '../../../components/spinner/Spinner'
 
 interface PaginationInfo {
     currentPage: number;
@@ -181,7 +182,7 @@ const MerchantDetails = () => {
                     </div>
                     <div>
                         <h3 className='text-xl font-bold'>{merchant?.result && merchant.result.businessName}</h3>
-                        <a target='_blank' rel="noreferrer" href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.businessName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.businessName}`}</a>
+                        <a target='_blank' rel="noreferrer" href={`https://www.mymarketsq.com//${merchant?.result && merchant.result.userName}`} className='text-xs text-[#6F7174]'>{`https://www.mymarketsq.com/${merchant?.result && merchant.result.userName}`}</a>
                     </div>
 
                 </div>
@@ -274,7 +275,10 @@ const MerchantDetails = () => {
                                 }}
 
                             /> : <div className='h-full flex-grow flex justify-center items-center'>
-                                <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                {
+                                isLoading ? <Spinner color='#000' /> : <img src='/images/NoProduct.svg' alt='No Product Found' />
+                                }
+
                             </div>
                     }
 

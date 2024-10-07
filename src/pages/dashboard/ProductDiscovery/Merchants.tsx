@@ -8,6 +8,8 @@ import SearchInput from '../../../components/FormInputs/SearchInput';
 import { useAuth } from '../../../zustand/auth.store';
 import Filter from '../../../components/Filter/Filter';
 import { MdFilterList } from 'react-icons/md';
+import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 
 
@@ -17,14 +19,15 @@ interface PaginationInfo {
   pageSize: number;
 }
 
-const Merchants = () => {
+const Merchants = ({ setLoading = () => { }, filterParams, onShowFilter }: { setLoading?: (e: any) => void, filterParams: any, onShowFilter: (e: any) => void }) => {
   const [merchant, setMerchant] = useState<any>({})
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
   const [search, setSearch] = useState("")
-  const [showFilter, setShowFilter] = useState<boolean>(false);
+
+
   const generateSerialNumber = (index: number, pageInfo: PaginationInfo): number => {
     const { currentPage, pageSize } = pageInfo;
     return (currentPage - 1) * pageSize + index + 1;
@@ -33,7 +36,7 @@ const Merchants = () => {
 
   const { data: allMerchants, isLoading, refetch } = useFetchWithParams(
     ["query-all-merchants-discovery", {
-      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName
+      page: currentPage, limit: pageSize, search, whiteLabelName: profile.whiteLabelName, location: filterParams.location, sortBy: filterParams.sortBy
     }],
     MerchantService.getMerchantDiscovery,
     {
@@ -51,7 +54,11 @@ const Merchants = () => {
 
   useEffect(() => {
     refetch()
-  })
+  }, [])
+
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
 
   const handlePageSize = (val: any) => {
     setPageSize(val);
@@ -70,7 +77,10 @@ const Merchants = () => {
   }
   return (
     <div className='h-full flex-grow'>
-
+      {/* <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} /> */}
       <div className='h-full flex-grow '>
         <div className='flex justify-between items-center'>
           <div >
@@ -80,12 +90,12 @@ const Merchants = () => {
             }} className='w-[200px]' placeholder='Search for merchant' />
           </div>
           {
-          allMerchants && (
-            <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
+            allMerchants && (
+              <button onClick={() => onShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
 
-          )
-        }
-         <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+            )
+          }
+
         </div>
 
         {
@@ -125,7 +135,9 @@ const Merchants = () => {
               // },
               {
                 header: "Location",
-                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state} state` : row.location?.address }</div>,
+
+                view: (row: any) => <div>{row?.location?.state && row?.location.state !== "State not found" ? `${row?.location?.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
+
               },
 
             ]}
@@ -143,9 +155,14 @@ const Merchants = () => {
             }
 
           />
-            : <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-              <img src='/images/NoVendor.svg' alt='No Product Found' />
-              <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
+            : <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+              {
+                isLoading ? <Spinner color='#000' /> : <>
+                  <img src='/images/NoVendor.svg' className='max-w-[400px] h-auto' alt='No Product Found' />
+                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ? "Available Merchant on ProfitAll will appear here.": "No search result found"}</p>
+                </>
+              }
+
             </div>
         }
 

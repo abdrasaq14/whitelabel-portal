@@ -96,8 +96,8 @@ export const ViewAddMerchantModal = ({ merchant, closeViewModal, isOpen }: any) 
                     <div className='mt-2'>
                         <p className='font-medum font-satoshiMedium text-sm text-primary-subtext'>Store Link</p>
                         <div className=' flex justify-between w-full'>
-                            <p className='text-primary-text text-base font-medum font-satoshiMedium'>{merchant?.storeLink}</p>
-                            <CopyToClipboard text={merchant?.storeLink} />
+                            <p className='text-primary-text text-base font-medum font-satoshiMedium'>{`https://www.mymarketsq.com/${merchant?.userName}`}</p>
+                            <CopyToClipboard text={`https://www.mymarketsq.com/${merchant?.userName}`} />
                         </div>
                     </div>
                     <div className='mt-2 w-full'>
@@ -161,7 +161,9 @@ const Categories: React.FC<Props> = ({ categories }) => {
 const UserProfile = ({ url, name, dateJoined }: any) => {
     return (
         <div className='flex gap-4 items-center '>
-            <img alt='' src={url} />
+           {
+            url && <img alt='' className='h-8 w-8 border-primary border rounded-full' src={url} />
+           } 
             <div className=''>
                 <p className='font-satoshiMedium text-base text-primary-text'>{name}</p>
                 <p className='text-sm font-satoshiMedium text-primary-subtext mt-1'>Joined on {fDate(dateJoined)}</p>

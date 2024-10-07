@@ -71,7 +71,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
         <div className="grid grid-cols-2 w-full gap-8">
           <div className="col-span-2 sm:col-span-1 flex flex-col gap-4">
             <ProductImageCarousel
-              images={[product?.image, ...(product?.gallery_image || [])]}
+              media={[product?.image, ...(product?.gallery_image || [])]}
             />
           </div>
           <div className="col-span-2 sm:col-span-1 flex flex-col gap-4 ">
@@ -152,23 +152,23 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
           </div>
         </div>
         <div className="w-full flex flex-wrap justify-between gap-4">
-          <button
+          {/* <button
             type="button"
             onClick={() => navigate(`/merchant/profile/${product.merchantId}`)}
             disabled={false}
             className="border-primary hover:bg-primary border-[1px] rounded-lg text-primary hover:text-white text-base inline-flex gap-2  items-center justify-center text-center px-8 py-2 font-medium "
           >
             View Merchant
-          </button>
+          </button> */}
           <div className="gap-4 flex w-full sm:w-auto justify-between">
-            <button
+            {/* <button
               type="button"
               onClick={() => closeViewModal()}
               disabled={false}
               className="border-gray-300 hover:bg-primary-text border-[1px] rounded-lg text-primary-text hover:text-white text-sm inline-flex gap-2  items-center justify-center text-center  px-8 py-2 font-medium "
             >
               Back
-            </button>
+            </button> */}
 
             {profile?.role !== "Staff" && (
               <button
@@ -250,7 +250,7 @@ export const ViewProductDiscoveryModal = ({ product, closeViewModal, isOpen }: a
             <div className='grid grid-cols-2 w-full gap-8 '>
                 <div className='col-span-2 sm:col-span-1 flex flex-col gap-4'>
                     <ProductImageCarousel
-                        images={[
+                        media={[
                             product?.image,
                             ...(product?.gallery_image || []),
                         ]}
@@ -374,7 +374,7 @@ export const ConfirmModal = ({ isOpen, closeModal, confirmAddition, caption }: a
             <div>
                 <p className='text-[#2B2C34] mt-4 text-sm text-center  sm:text-base font-satoshiMedium'>{caption}</p>
             </div>
-            <div className='w-full flex mt-4 justify-between  '>
+            <div className='w-full flex mt-4  justify-between  '>
                 <button
                     type='button'
                     onClick={() => closeModal()}

@@ -6,15 +6,17 @@ import { MdFilterList } from "react-icons/md";
 interface Option {
   id: number;
   label: string;
+  value: string;
 }
 
 interface SelectProps {
   options: Option[];
   name: string;
-  onSelect?: (option: Option[]) => void
+  onSelect?: (option: Option[]) => void,
+  isMulti?: boolean
 }
 
-const Select: React.FC<SelectProps> = ({ options, name, onSelect = (f) => f }) => {
+const Select: React.FC<SelectProps> = ({ options, name, onSelect = (f) => f, isMulti = true }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -26,20 +28,36 @@ const Select: React.FC<SelectProps> = ({ options, name, onSelect = (f) => f }) =
 
   const toggleOption = (option: Option) => {
     const index = selectedOptions.findIndex((opt) => opt.id === option.id);
+
     if (index === -1) {
-      setSelectedOptions([...selectedOptions, option]);
+      // Option not found: Add it
+      const newOptions = isMulti
+        ? [...selectedOptions, option] // Multi-select: Append the new option
+        : [option]; // Single-select: Replace with the new option
+
+      setSelectedOptions(newOptions);
+      onSelect(newOptions);
     } else {
-      const updatedOptions = [...selectedOptions];
-      updatedOptions.splice(index, 1);
-      setSelectedOptions(updatedOptions);
-      onSelect(updatedOptions)
+      // Option found: Remove it (only for multi-select)
+      if (isMulti) {
+        const updatedOptions = selectedOptions.filter((_, i) => i !== index);
+        setSelectedOptions(updatedOptions);
+        onSelect(updatedOptions);
+      } else {
+        // Single select: Deselect the option
+        setSelectedOptions([]);
+        onSelect([]);
+      }
     }
 
-    setIsOpen(false)
+    // Close the dropdown regardless of selection
+    setIsOpen(false);
   };
+
 
   const handleTagRemove = (option: Option) => {
     setSelectedOptions(selectedOptions.filter((opt) => opt.id !== option.id));
+    onSelect(selectedOptions.filter((opt) => opt.id !== option.id))
   };
 
   useOnClickOutside(inputRef, () => {
