@@ -14,9 +14,6 @@ import FileUpload from '../FormInputs/FIleUpload2';
 import ProfilePicUpload from '../FormInputs/FileUpload';
 import { useAuth } from '../../zustand/auth.store';
 import Spinner from "../spinner/Spinner";
-import axios from 'axios';
-import Spinner from '../spinner/Spinner';
-
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
   const modalRef = useRef<any>();
