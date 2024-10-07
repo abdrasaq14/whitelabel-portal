@@ -79,7 +79,7 @@ const form = useFormik({
       },
       {
         onSuccess: (response) => {
-          toast.success(response.data.message);
+          toast.success("Password set successfully");
           form.setSubmitting(false) 
           requestAnimationFrame(() => {
             router("/login");
