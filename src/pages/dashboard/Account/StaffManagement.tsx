@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Table } from '../../../components/Table/Table2'
 import { TeamMember } from '../../../utils/ProductList'
 import { EditStaffModal, AddStaffModal } from '../../../components/Modal/StaffModal'
@@ -6,7 +6,8 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { UserService } from '../../../services/user'
 import { useAuth } from '../../../zustand/auth.store'
 import { generateSerialNumber } from '../../../utils/functions'
-
+import Spinner from '../../../components/spinner/Spinner'
+import { useMutation } from 'react-query';
 
 
 export const StaffManagement = () => {
@@ -14,6 +15,8 @@ export const StaffManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>({});
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
 
@@ -21,21 +24,45 @@ export const StaffManagement = () => {
     setIsAddModalOpen(false);
   };
 
-  const { data, isLoading, refetch } = useFetchWithParams(
-    ["query-all-Staff-page", {
-      // page: currentPage, limit: pageSize,
-      whiteLabelName: profile.whiteLabelName
-    }],
-    UserService.getAllUsers,
+  useEffect(() => {handleGetStaffs.mutate()}, [])
+
+  const handleGetStaffs = useMutation(
+    async () => {
+      setLoading(true)
+      return await UserService.getAllUsers({whiteLabelName: profile.whiteLabelName})
+    },
+
     {
-      onSuccess: (data: any) => {
-        console.log("ResponseData", data);
+      onSuccess: (res) => {
+        console.log(res);
+        setLoading(false);
+        setData(res?.data)
       },
-      keepPreviousData: false,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
+      onError: (err: any) => {
+        setLoading(false)
+      }
     }
-  )
+  );
+
+  // const { data, isLoading, refetch } = useFetchWithParams(
+  //   ["query-all-Staff-page", {
+  //     // page: currentPage, limit: pageSize,
+  //     whiteLabelName: profile.whiteLabelName
+  //   }],
+  //   UserService.getAllUsers,
+  //   {
+  //     onSuccess: (data: any) => {
+  //       console.log("ResponseData", data);
+  //       setLoading(false)
+  //     },
+  //     onError: (data: any) => {
+  //       setLoading(false)
+  //     },
+  //     keepPreviousData: false,
+  //     refetchOnWindowFocus: false,
+  //     refetchOnMount: true,
+  //   }
+  // )
 
   // console.log(data)
 
@@ -47,6 +74,7 @@ export const StaffManagement = () => {
     setStaff(row)
     setIsEditModalOpen(true);
   }
+
   const handleAddStaffInfo = () => {
     setIsAddModalOpen(true);
 
@@ -66,7 +94,7 @@ export const StaffManagement = () => {
 
   return (
     <div>
-      <div className='flex flex-wrap gap-8 '>
+      <div className='flex flex-col gap-8 '>
         <div className='max-w-[350px] w-full'>
           <h2 className='text-base font-satoshiBold  font-semibold text-primary-text'>Team Members</h2>
           <p className='mt-2 text-sm font-satoshiRegular font-normal text-primary-subtext'>Invite your colleagues to work faster and collaborate together.</p>
@@ -90,20 +118,21 @@ export const StaffManagement = () => {
           </div>
         </div>
 
-        <div className=' flex-grow w-auto overflow-x-auto'>
+        {loading ? <div className='w-full flex justify-center items-center'><Spinner color={'#4B0082'} height={40} width={40}/></div> : <div className=' flex-grow w-auto overflow-x-auto'>
           {
-            data && data.result.results.length > 0 ? (
+            data && data?.result?.results.length > 0 ? (
               <>
                 <Table data={data?.result.results}
                   hideActionName={true}
-                  rowActions={(row) => [
-                    {
-                      name: "View Account Info",
-                      action: () => {
-                        handleViewAccountInfo(row)
-                      },
-                    },
-                  ]}
+                  // rowActions={(row) => [
+                  //   {
+                  //     name: "View Account Info",
+                  //     action: () => {
+                  //       handleViewAccountInfo(row)
+                  //     },
+                  //   },
+                  // ]}
+                  clickRowAction={(row) => handleViewAccountInfo(row)}
                   columns={[
                     {
                       header: "S/N",
@@ -122,7 +151,7 @@ export const StaffManagement = () => {
                     },
                     {
                       header: "Status",
-                      view: (row: any) => row.blocked ? <div>Blocked</div> : <div>Active</div>,
+                      view: (row: any) => row.blocked ? <span className='bg-[#cc0000] p-2 rounded-3xl text-[#fff]'>Blocked</span> : <span className='bg-[#00cc00] py-2 px-3 rounded-3xl text-[#fff]'>Active</span>,
                     },
                   ]}
                   loading={false}
@@ -139,30 +168,29 @@ export const StaffManagement = () => {
                 />
 
               </>
-
             ) : (
-              <div className='max-w-[500px] flex flex-col justify-center mt-8 sm:mt-0 items-center '>
+              <div className='w-full flex flex-col justify-center items-center mt-8 sm:mt-0'>
                 <img
                   src="/icons/no_team.svg"
                   className=""
                   alt="yep_logo"
                 />
-                <p className='mt-2 text-sm font-satoshiRegular font-normal text-center text-primary-subtext'>You haven't invited any staff members to the platform yet. You can invite coworkers to join and collaborate with you, and their information will be displayed here.</p>
+                <p className='mt-2 max-w-[500px] text-sm font-satoshiRegular font-normal text-center text-primary-subtext'>You haven't invited any staff members to the platform yet. You can invite coworkers to join and collaborate with you, and their information will be displayed here.</p>
               </div>
 
             )
           }
           <EditStaffModal staffInfo={staff} isOpen={isEditModalOpen} closeModal={async () => {
-            await refetch()
+            await handleGetStaffs.mutate()
             closeEditModal()
           }} />
           <AddStaffModal isOpen={isAddModalOpen} closeModal={async () => {
-            await refetch()
+            await handleGetStaffs.mutate()
             closeAddModal()
           }} />
 
 
-        </div>
+        </div>}
 
       </div>
     </div>

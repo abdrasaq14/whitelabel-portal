@@ -73,7 +73,7 @@ console.log(token)
     {
       onSuccess: (response:any) => {
        
-        toast.success(response.data.message)
+        toast.success("Password set successfully")
         requestAnimationFrame(() => {
           navigate("/login");
         });
