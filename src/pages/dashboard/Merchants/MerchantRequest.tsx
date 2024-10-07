@@ -8,16 +8,25 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams';
 import { MerchantService } from '../../../services/merchant.service';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../zustand/auth.store';
+import { useMutation } from 'react-query';
+import { Button } from '../../../components/Blog/Button';
+import toast from 'react-hot-toast';
+import { handleError } from '../../../utils/Helpfunctions';
+import Spinner from '../../../components/spinner/Spinner';
+import { isEmpty } from '../../../utils/functions';
 
 const MerchantRequest = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const profile: any = useAuth((s) => s.profile)
+  const [filterParams, setFilterParams] = useState<any>({})
+
   const { data: allRequest, isLoading } = useFetchWithParams(
     ["query-all-merchants-request", {
       page: currentPage,
       limit: pageSize,
+      status: "pending",
       whiteLabelId: profile._id
 
     }],
@@ -32,7 +41,7 @@ const MerchantRequest = () => {
     }
   )
   // console.log(allRequest)
-  
+
   const handlePageSize = (val: any) => {
     setPageSize(val);
     // setFilterParams({ ...filterParams, pageSize: val });
@@ -45,14 +54,17 @@ const MerchantRequest = () => {
 
   return (
     <div className='px-4 pt-8 h-full'>
-      <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+            <Filter isLoading={isLoading} type='merchant' onFilter={(e: any) => setFilterParams(e)} onClose={() => {
+        setShowFilter(false)
+        setFilterParams({})
+      }} open={showFilter} />
       <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>
         <BreadCrumbClient backText="Dashboard" currentPath="Merchant Request" brand='Landmark' />
         <div className='flex justify-between'>
           <h1 className='text-primary-text text-sm font-normal'>Merchants Request <span className='ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black'>{allRequest ? allRequest?.result.totalResults : 0}</span></h1>
           <div className='flex mt-6 justify-center gap-2 ml-auto items-center'>
             <div>
-              <SearchInput placeholder='Search' onChange={() => {}} />
+              <SearchInput placeholder='Search' onChange={() => { }} />
             </div>
             <button onClick={() => setShowFilter(true)} className='px-3 py-2 border border-primary rounded text-sm flex items-center gap-2'><MdFilterList /> Filter</button>
           </div>
@@ -62,7 +74,7 @@ const MerchantRequest = () => {
           allRequest ? <div className='py-4'>
 
             {
-              allRequest && allRequest.result.results.map((items: any, index: number) => <Request items={items} key={index}/>)
+              allRequest && allRequest.result.results.map((items: any, index: number) => <Request items={items} key={index} />)
             }
 
             {/* <Request />
@@ -73,11 +85,17 @@ const MerchantRequest = () => {
             </div>
 
           </div> :
-            <div className='w-full h-[60vh] flex  items-center justify-center'>
-              <div>
-                <h3>You have no active vendor requests. Browse through our merchant discovery to onboard and list a product on your marketplace now.
-                </h3>
-              </div>
+            <div className='w-full h-[60vh] flex flex-col   items-center justify-center'>
+              {
+                isLoading ? <Spinner color='#000' /> : <>
+                  <img src='/images/NoVendor.svg' alt='No Product Found' />
+                  <h3 className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'> { isEmpty(filterParams) ?"You have no active vendor requests. Browse through our merchant discovery to onboard and list a product on your marketplace now." : "No search result found"}
+                  </h3>
+                </>
+              }
+
+
+
 
             </div>
         }
@@ -92,9 +110,27 @@ const MerchantRequest = () => {
 }
 
 const Request = ({ items }: { items: any }) => {
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
-
+  const updateRequest = useMutation(
+    async (payload: { id: string, action: string }) => {
+      setIsLoading(true);
+      return await MerchantService.updateMerchantRequest(payload.id, { status: payload.action });
+    },
+    {
+      onSuccess: (response) => {
+        setIsLoading(false);
+        console.log("response", response);
+        toast.success("Request updated successfully");
+      },
+      onError: (error) => {
+        setIsLoading(false);
+        const e = handleError(error);
+        toast.error(e);
+        console.log("erro", error);
+      }
+    }
+  );
   return (
     <div className='w-full flex items-center justify-between'>
       <div className='flex items-center gap-2 '>
@@ -110,8 +146,20 @@ const Request = ({ items }: { items: any }) => {
 
       </div>
       <div className='flex gap-3'>
-        <button className='font-medium text-[#D42620]'>Decline</button>
-        <button className='px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] '>Accept</button>
+        <Button
+          isLoading={isLoading}
+          label="Decline"
+          onClick={() => updateRequest.mutate({ id: items._id, action: "reject" })}
+          className={`font-medium text-[#D42620]`}
+        />
+        <Button
+          isLoading={isLoading}
+          label="Accept"
+          onClick={() => updateRequest.mutate({ id: items._id, action: "accept" })}
+          className={`px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] `}
+        />
+        {/* <button className='font-medium text-[#D42620]'>Decline</button>
+        <button className='px-3 py-2 bg-[#0F973D] text-white rounded font-medium w-[140px] '>Accept</button> */}
         <button onClick={() => navigate(`/merchant/profile/${items.merchant.merchantId}`)} className='px-3 py-2 border border-primary rounded font-medium w-[140px] '>View Account</button>
 
       </div>

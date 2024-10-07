@@ -15,6 +15,7 @@ import ProfilePicUpload from '../FormInputs/FileUpload';
 import { useAuth } from '../../zustand/auth.store';
 import Spinner from "../spinner/Spinner";
 import axios from 'axios';
+import Spinner from '../spinner/Spinner';
 
 
 export const Modal = ({ closeModal, isOpen, children, containerStyle }: any) => {
@@ -51,7 +52,6 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
   const [uploadError, setUploadError] = useState<string>("");
   
   console.log("Staff info on edit", staffInfo)
-
   const modalRef = useRef<any>();
   useOnClickOutside(modalRef, () => {
     closeModal();
@@ -99,7 +99,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
         (role) => role.value === values.roleId
       );
       if (selectedRole) {
-        values.role = selectedRole.label; 
+        values.role = selectedRole.label;
       }
       return await UserService.updateStaff(values, staffInfo._id);
     },
@@ -179,21 +179,21 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
       <div className='full flex justify-between '>
         <div className='flex gap-4 items-center'>
           <div className='relative h-28 rounded object-contain w-28'>
-           {isUploading ? (
+            {isUploading ? (
               <div className="h-full w-full text-white rounded-full bg-slate-500 bg-opacity-50 flex items-center justify-center">
                 <span>Uploading</span>
-           </div>
-           ): (
-             <>
-             <button type="button" className='absolute  rounded-full bottom-0 right-0 p-1 bg-gray-300 cursor-pointer'>
-                <ProfilePicUpload name='' onFileChange={handleStaffProfilePicUpload.mutate}>
-                  <img src='/icons/edit.svg' alt='Edit profile' />
-                </ProfilePicUpload>
-                    {/* <input type="file" className='absolute top-0 left-0 h-full w-full opacity-0 cursor-pointer' onChange={handleFileChange} /> */}
-            </button>
-            <img alt='staff avatar' src={staffInfo?.image} className='h-28 max-28 max-w-28 rounded-full object-contain w-28' />
-             </>
-           )}
+              </div>
+            ) : (
+              <>
+                <button type="button" className='absolute  rounded-full bottom-0 right-0 p-1 bg-gray-300 cursor-pointer'>
+                  <ProfilePicUpload name='' onFileChange={handleStaffProfilePicUpload.mutate}>
+                    <img src='/icons/edit.svg' alt='Edit profile' />
+                  </ProfilePicUpload>
+                  {/* <input type="file" className='absolute top-0 left-0 h-full w-full opacity-0 cursor-pointer' onChange={handleFileChange} /> */}
+                </button>
+                <img alt='staff avatar' src={staffInfo?.image} className='h-28 max-28 max-w-28 rounded-full object-contain w-28' />
+              </>
+            )}
           </div>
 
           <div>
@@ -234,7 +234,7 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
               },
             });
           }}>
-          {({ values, setFieldValue, errors } : any) => {
+          {({ values, setFieldValue, errors, isSubmitting, setSubmitting }: any) => {
             return (
               <Form className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4'>
                 <div className='col-span-1'>
@@ -318,10 +318,10 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
                     <button
                       type='submit'
-                      disabled={false}
+                      disabled={isSubmitting}
                       className='bg-primary hover:bg-purple-700  rounded-lg text-white text-sm inline-flex gap-2 my-4 items-center justify-center text-center px-12 py-3 font-medium '
                     >
-                      Update
+                      {isSubmitting && <Spinner />} Update
                     </button>
 
                   </div>
@@ -345,12 +345,20 @@ export const EditStaffModal = ({ isOpen, closeModal, staffInfo }: any) => {
 
 export const DeleteModal = ({ isOpen, closeModal, confirmDelete, isBlocked }: any) => {
   const modalRef = useRef<any>();
+  const [isLoading, setIsLoading] = useState(false)
   useOnClickOutside(modalRef, () => {
     closeModal();
   });
 
-  const handleConfirmDelete = () => {
-    confirmDelete();
+  const handleConfirmDelete = async () => {
+    setIsLoading(true)
+    try {
+      await confirmDelete();
+      setIsLoading(false)
+    } catch (err) {
+      setIsLoading(false)
+    }
+
     closeModal();
   }
 
@@ -376,7 +384,7 @@ export const DeleteModal = ({ isOpen, closeModal, confirmDelete, isBlocked }: an
         <button
           type='button'
           onClick={handleConfirmDelete}
-          disabled={false}
+          disabled={isLoading}
           className='bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium '
         >
           Proceed  <span><MdOutlineArrowForward size={12} /></span>
@@ -487,10 +495,14 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
         setLoading(false);
         toast.success("staff created successfully")
         closeModal();
+        form.setSubmitting(false)
+
+
       },
       onError: (err: any) => {
         setLoading(false)
         toast.error(err.response.data.message);
+        form.setSubmitting(false)
       }
     }
   )
@@ -611,12 +623,12 @@ export const AddStaffComponent = ({ closeModal, setTabIndex }: any) => {
               </button> : 
               <button
                 type='submit'
-                className='bg-primary rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
+                disabled={form.isSubmitting}
+                className='bg-primary min-w-[200px] rounded-lg text-white text-sm  text-center px-12 py-3 font-medium '
               >
                 Update
               </button>}
             </div>
-
 
           </div>
 
@@ -733,6 +745,7 @@ export const UploadStaffByCsvComponent = ({ closeModal }: any) => {
           className='bg-primary rounded-lg  text-white text-sm  text-center px-12 py-3 font-medium '
         // disabled={isSubmitting}
         >
+
           Add Staffs
         </button>
         <button

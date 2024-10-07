@@ -9,6 +9,7 @@ import useFetchWithParams from '../../../hooks/useFetchWithParams'
 import { InventoryService } from '../../../services/inventory.service'
 import { AddInventory, InventoryRequestDetails } from '../../../components/Modal/InventoryModals'
 import { generateSerialNumber } from '../../../utils/functions'
+import Spinner from '../../../components/spinner/Spinner'
 
 
 const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModalOpen }: { isAddModalOpen?: boolean, closeViewModal?: any, isMakeModalOpen: any }) => {
@@ -235,9 +236,15 @@ const RequestedInvetory = ({ isAddModalOpen = false, closeViewModal, isMakeModal
                     </div>
                 )
                     : (
-                        <div className='h-auto flex-grow flex justify-center flex-col items-center'>
-                            <img src='/images/inventory-requst.svg' alt='No Product Found' />
-                            <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory request would appear here</p>
+                        <div className='h-auto flex-grow py-20 flex justify-center flex-col items-center'>
+                            {
+                                isLoading ? <Spinner color='#000' /> :
+                                    <>
+                                        <img src='/images/inventory-requst.svg' alt='No Product Found' />
+                                        <p className='font-normal text-primary-text text-sm sm:text-xl'>Your Inventory request would appear here</p>
+                                    </>
+                            }
+
                         </div>
                     )
             }
