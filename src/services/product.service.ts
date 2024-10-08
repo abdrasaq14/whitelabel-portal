@@ -13,6 +13,6 @@ export const ProductService = {
     return createApiClient(false).put(`/products/update-product-status/${id}`, params)
   },
   getProductsSold : (payload:any) => createApiClient(false).get(`external-api/product/get-products-sold-by-merchant${paramsObjectToQueryString(payload)}`),
-  getCategories: () => createApiClient(false).get(`/external-api/product/get-categories`)
-
+  getCategories: () => createApiClient(false).get(`/external-api/product/get-categories`),
+  checkIfProductAlreadyRequested: (payload: {productId:string, whiteLabelName: string}) => createApiClient(false).get(`/products/check-product-request`, {params: payload}),
 }
