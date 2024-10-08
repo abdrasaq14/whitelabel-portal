@@ -23,7 +23,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const profile: any = useAuth((s) => s.profile);
     const navigate = useNavigate()
-
+  console.log("ViewProductModal", product);
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
       closeViewModal();
@@ -128,7 +128,6 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
       };
  useEffect(() => {
    if (isOpen && product && profile?.whiteLabelName) {
-     console.log("checkingRPoduct", product._id, profile.whiteLabelName)
      checkIfProductAlreadyRequested.mutate({
        productId: product.id,
        whiteLabelName: profile.whiteLabelName
@@ -248,20 +247,21 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
             {profile?.role !== "Staff" && !isLoading && (
               <div className="flex gap-4 justify-between">
                 {isRequested ? (
-                  <button
-                    type="button"
-                    onClick={toggleProductBan}
-                    disabled={false}
-                    className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
-                      product.status == "ACTIVE"
-                        ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
-                        : "text-white bg-green-500 hover:bg-green-800"
-                    } `}
-                  >
-                    {product.status !== "ACTIVE"
-                      ? "Unban product"
-                      : "Ban product"}
-                  </button>
+                  <span className='text-white p-2 rounded-lg mt-4 bg-red-300'>Product already requested</span>
+                  // <button
+                  //   type="button"
+                  //   onClick={toggleProductBan}
+                  //   disabled={false}
+                  //   className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
+                  //     product.status == "ACTIVE"
+                  //       ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
+                  //       : "text-white bg-green-500 hover:bg-green-800"
+                  //   } `}
+                  // >
+                  //   {product.status !== "ACTIVE"
+                  //     ? "Unban product"
+                  //     : "Ban product"}
+                  // </button>
                 ) : (
                   <button
                     type="button"
