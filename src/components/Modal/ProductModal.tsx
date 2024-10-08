@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import useOnClickOutside from "../../hooks/useClickOutside";
 import { ProductImageCarousel } from '../Carousel/Carousel';
 import { Modal } from './StaffModal';
@@ -17,13 +17,17 @@ import { customHTMLParser } from '../../utils/Helpfunctions';
 
 
 export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: any) => {
-    const [isProductBan, setIsProductBan] = useState(false);
+  const [isProductBan, setIsProductBan] = useState(false);
+  const [isRequested, setIsRequested] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const profile: any = useAuth((s) => s.profile);
     const navigate = useNavigate()
 
     const modalRef = useRef<any>();
     useOnClickOutside(modalRef, () => {
-        closeViewModal();
+      closeViewModal();
+      setIsLoading(true);
     });
     const toggleProductBan = () => {
         if (product.status === "ACTIVE") {
@@ -61,7 +65,76 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
             }
         }
     )
+  const checkIfProductAlreadyRequested = useMutation(
+    async (values: {productId:string, whiteLabelName:string}) => {
+      return await ProductService.checkIfProductAlreadyRequested(values)
+    },
+    {
+      onSuccess: (res) => {
+        setIsLoading(false);
+        if (res.data.message === "Product already requested") {
+          console.log("checkingRPoductSuccessYes", res);
+          setIsRequested(true);
+        } else {
+          setIsRequested(false);
+        }
+      },
+      onError: (err: any) => {
+        console.log("checkingRPoductError", err)
+      }
+    }
+  )
+      const handleAddProduct = () => {
+        setIsConfirmModalOpen(true);
+      };
 
+      const handleProduct = useMutation(
+        async (values: any) => {
+          return await ProductService.sendProductRequest(values);
+        },
+
+        {
+          onSuccess: (res) => {
+            if (res.data.status === "Fail") {
+              toast.error(res.data.message);
+            } else {
+              setIsConfirmModalOpen(false);
+              toast.success("Request to add the this product has been sent.");
+              closeViewModal();
+            }
+          },
+          onError: (err: any) => {
+            toast.error(err.response.data.message);
+          }
+        }
+      );
+      const handleProductAddedSuccess = () => {
+        const body = [
+          {
+            product: {
+              productId: product.id,
+              productOwnerId: product.userId,
+              productName: product.name
+            },
+            whiteLabelClient: {
+              whiteLabelClientId: profile._id,
+              email: profile.email,
+              whiteLabelName: profile.whiteLabelName
+            }
+          }
+        ];
+
+        handleProduct.mutate(body);
+      };
+ useEffect(() => {
+   if (isOpen && product && profile?.whiteLabelName) {
+     console.log("checkingRPoduct", product._id, profile.whiteLabelName)
+     checkIfProductAlreadyRequested.mutate({
+       productId: product.id,
+       whiteLabelName: profile.whiteLabelName
+     });
+   }
+ }, [isOpen, product, profile?.whiteLabelName]);
     return (
       <Modal
         isOpen={isOpen}
@@ -106,7 +179,9 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
               Product Description
             </h2>
             <p className="text-primary-subtext font-normal text-sm">
-              {product?.description && product?.description.trim() && customHTMLParser(product?.description)}
+              {product?.description &&
+                product?.description.trim() &&
+                customHTMLParser(product?.description)}
             </p>
             <div>
               <h2 className="font-bold font-satoshiBold text-base text-primary-text">
@@ -170,22 +245,43 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
               Back
             </button> */}
 
-            {profile?.role !== "Staff" && (
-              <button
-                type="button"
-                onClick={toggleProductBan}
-                disabled={false}
-                className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
-                  product.status == "ACTIVE"
-                    ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
-                    : "text-white bg-green-500 hover:bg-green-800"
-                } `}
-              >
-                {product.status !== "ACTIVE" ? "Unban product" : "Ban product"}
-              </button>
+            {profile?.role !== "Staff" && !isLoading && (
+              <div className="flex gap-4 justify-between">
+                {isRequested ? (
+                  <button
+                    type="button"
+                    onClick={toggleProductBan}
+                    disabled={false}
+                    className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
+                      product.status == "ACTIVE"
+                        ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
+                        : "text-white bg-green-500 hover:bg-green-800"
+                    } `}
+                  >
+                    {product.status !== "ACTIVE"
+                      ? "Unban product"
+                      : "Ban product"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddProduct}
+                    disabled={false}
+                    className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium bg-primary text-white`}
+                  >
+                    Add Product
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
+        <ConfirmModal
+          isOpen={isConfirmModalOpen}
+          closeModal={() => setIsConfirmModalOpen(false)}
+          caption="Are you sure you want to add this Product ?"
+          confirmAddition={handleProductAddedSuccess}
+        />
       </Modal>
     );
 }
