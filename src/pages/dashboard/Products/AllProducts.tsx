@@ -47,7 +47,7 @@ const AllProducts = () => {
 
   const { data: allProducts, isLoading, refetch } = useFetchWithParams(
     ["query-all-products", {
-      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy,whiteLabelName: profile?.whiteLabelName
+      page: currentPage, limit: pageSize, search, categories: filterParams.category, sortBy: filterParams?.sortBy, whiteLabelName: profile?.whiteLabelName
     }],
     ProductService.getallProducts,
     {
@@ -109,6 +109,7 @@ const AllProducts = () => {
                 <img src='/images/NoProduct.svg' alt='No Product Found' />
                 <p className='text-center'>You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!</p>
               </div>}
+              clickRowAction={(row) => handleViewProductInfo(row)}
               rowActions={(row) => [
                 {
                   name: "View Product",
@@ -184,7 +185,7 @@ const AllProducts = () => {
               {
                 isLoading ? <Spinner color='#000' /> : <>
                   <img src='/images/NoProduct.svg' alt='No Product Found' />
-                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ?"You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!" : "No search result found"}</p>
+                  <p className='font-normal max-w-[539px] text-[#4D5154] text-center text-sm'>{isEmpty(filterParams) ? "You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!" : "No search result found"}</p>
 
                   <Button onClick={() => navigate("/discover-products")} iconPosition='afterText' icon={<FaArrowRight />} className='mt-6' label='Invite Merchant to List product on your marketplace' />
                 </>
