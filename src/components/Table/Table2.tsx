@@ -56,7 +56,7 @@ export interface ITableProps<TRow> {
 
 export function Table<TRow extends {}>({
   id = "",
-  showCheckbox = true,
+  showCheckbox = false,
   columns,
   hideActionName = false,
   noDivider = false,

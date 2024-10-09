@@ -222,10 +222,10 @@ const AllMerchants = () => {
                     header: "CUSTORMER RATING",
                     view: (row: any) => <StarRating totalRatings={4} />,
                   },
-                  {
-                    header: "CATEGORY",
-                    view: (row: any) => <div>{row?.category}</div>,
-                  },
+                  // {
+                  //   header: "CATEGORY",
+                  //   view: (row: any) => <div>{row?.category}</div>,
+                  // },
                   {
                     header: "Location",
                     view: (row: any) => <div>{row?.location && row.location.state !== "State not found" ? `${row?.location.state}` : <span className='text-gray-400 italic'>Not available</span>}</div>,
