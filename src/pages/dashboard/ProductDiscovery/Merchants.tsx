@@ -105,6 +105,7 @@ const Merchants = ({ setLoading = () => { }, filterParams, onShowFilter }: { set
               <p className='font-normal text-primary-text text-sm sm:text-xl'>No merchants are currently available to sell on your platform.</p>
             </div>}
             hideActionName={true}
+            showCheckbox={false}
             clickRowAction={(row) => handleMerchantInfoModal(row)}
             rowActions={(row) => [
 

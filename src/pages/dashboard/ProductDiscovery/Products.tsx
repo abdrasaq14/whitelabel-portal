@@ -135,7 +135,7 @@ const Products = ({ setLoading = () => { }, filterParams, onShowFilter }: { setL
       </div>
       <div className='h-full flex-grow '>
         {
-          allProducts ? <Table data={allProducts?.result?.results && allProducts.result.results}
+          allProducts ? <Table showCheckbox={true} data={allProducts?.result?.results && allProducts.result.results}
             emptyMessage={
               <div className='h-auto flex-grow flex justify-center flex-col items-center'>
                 <img src='/images/NoVendor.svg' alt='No Product Found' />
@@ -179,11 +179,7 @@ const Products = ({ setLoading = () => { }, filterParams, onShowFilter }: { setL
               {
                 header: "Listing Price",
                 view: (row: any) => <div>{row?.price && formatAmount(row.price)} </div>,
-              },
-              {
-                header: "Location",
-                view: (row: any) => <div>{row.location}</div>,
-              },
+              }
 
             ]}
             loading={isLoading}
