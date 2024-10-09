@@ -12,6 +12,7 @@ import { useAuth } from '../../zustand/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { HtmlToString } from '../common/HtmlToString';
 import { customHTMLParser } from '../../utils/Helpfunctions';
+import { Button } from '../Button/Button';
 
 
 
@@ -30,16 +31,17 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
       setIsLoading(true);
     });
     const toggleProductBan = () => {
+      console.log("toggleProductBan", product);
         if (product.status === "ACTIVE") {
             const body = {
-                "id": product._id,
+                "id": product._id || product.id,
                 "status": "block",
                 "platform": profile.whiteLabelName
             }
             handleToggleBan.mutate(body)
         } else {
             const body = {
-                "id": product._id,
+                "id": product._id || product.id,
                 "status": "unblock",
                 "platform": profile.whiteLabelName
             }
@@ -234,7 +236,7 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
           >
             View Merchant
           </button> */}
-          <div className="gap-4 flex w-full sm:w-auto justify-between">
+          <div className="gap-4 flex w-full justify-between">
             {/* <button
               type="button"
               onClick={() => closeViewModal()}
@@ -245,23 +247,29 @@ export const ViewProductModal = ({ product, closeViewModal, isOpen, refetch }: a
             </button> */}
 
             {profile?.role !== "Staff" && !isLoading && (
-              <div className="flex gap-4 justify-between">
+              <div className="flex gap-4 justify-between w-full">
                 {isRequested ? (
-                  <span className='text-white p-2 rounded-lg mt-4 bg-red-300'>Product already requested</span>
-                  // <button
-                  //   type="button"
-                  //   onClick={toggleProductBan}
-                  //   disabled={false}
-                  //   className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
-                  //     product.status == "ACTIVE"
-                  //       ? "border-[1px] border-red-500 hover:text-white hover:bg-red-500 text-red-500"
-                  //       : "text-white bg-green-500 hover:bg-green-800"
-                  //   } `}
-                  // >
-                  //   {product.status !== "ACTIVE"
-                  //     ? "Unban product"
-                  //     : "Ban product"}
-                  // </button>
+                  <div className="flex justify-between w-full items-center  mt-4">
+                    <span className="text-red-400 p-2 rounded-lg">
+                      Product already requested
+                    </span>
+                    <Button
+                      isLoading={handleToggleBan.isLoading}
+                      label={
+                        product.status !== "ACTIVE"
+                          ? "Unban product"
+                          : "Ban product"
+                      }
+                      type="button"
+                      onClick={toggleProductBan}
+                      disabled={false}
+                      className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium ${
+                        product.status == "ACTIVE"
+                          ? "border-[1px] border-red-500  bg-red-500 text-white"
+                          : "text-white bg-green-500 hover:bg-green-800"
+                      } `}
+                    />
+                  </div>
                 ) : (
                   <button
                     type="button"
