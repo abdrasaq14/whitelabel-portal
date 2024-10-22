@@ -21,24 +21,29 @@ apiClient.setHeaders({
 //   }
 // });
 
-// apiClient.axiosInstance.interceptors.response.use(
-//   (response) => {
-//     // Handle successful responses here (optional logging, transformations, etc.)
-//     console.log("Request successful", response);
-//     return response;
-//   },
-//   (error) => {
-//     // Handle error responses (like 401 Unauthorized)
-//     if (error.response && error.response.status === 401) {
-//       console.error("Unauthorized request - token might be invalid.");
-//       // Optionally, handle token refresh or redirect to login page
-//     } else if (error.response && error.response.status >= 500) {
-//       console.error("Server error", error.response);
-//       // Handle server errors here
-//     }
-//     // You can also retry requests here or add other error-handling logic
-//     return Promise.reject(error); // Always reject the error
-//   }
-// );
+apiClient.axiosInstance.interceptors.response.use(
+  (response) => {
+    console.log("Request successful", response);
+    return response;
+  },
+  (error) => {
+    // Handle 401 Unauthorized errors
+    if (error.response && error.response.status === 401) {
+      console.error("Unauthorized request - token might be invalid.");
+      // Redirect to login
+      window.location.href = '/';
+    }
+    
+    // Handle server errors (500 and above)
+    if (error.response && error.response.status >= 500) {
+      console.error("Server error detected");
+      // Redirect to custom error page (e.g., /500)
+      window.location.href = '/ServerError';
+    }
+    
+    // Reject the error so it can be handled in the calling code
+    return Promise.reject(error);
+  }
+);
 
 export default apiClient;

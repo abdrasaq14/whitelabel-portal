@@ -38,6 +38,7 @@ const config: Config = {
           main: "#4D5154",
           dark: "#4D5154",
           dark2: "#0E0C01",
+          dark3: "#292D32",
           light: "#C8CCD0",
           light2: "#D0D5DD",
           light3: "#98A2B3"

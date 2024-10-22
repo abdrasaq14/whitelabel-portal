@@ -1,0 +1,292 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./src/app/styles/components.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************/
+/* AppButton styles */
+.btn {
+    display: flex;
+    height: 3rem;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    font-family: SatoshiMedium, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem
+}
+
+.btn-primary {
+    --tw-bg-opacity: 1;
+    background-color: rgb(75 0 130 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-delay: 150ms;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+}
+
+.btn-primary:hover {
+    --tw-translate-y: -0.25rem;
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
+.btn-secondary {
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(75 0 130 / var(--tw-border-opacity));
+    background-image: none;
+    --tw-text-opacity: 1;
+    color: rgb(75 0 130 / var(--tw-text-opacity));
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-delay: 150ms;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+}
+
+.btn-secondary:hover {
+    --tw-translate-y: -0.25rem;
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    --tw-bg-opacity: 1;
+    background-color: rgb(237 230 243 / var(--tw-bg-opacity))
+}
+
+.btn-disabled {
+    --tw-bg-opacity: 1;
+    background-color: rgb(200 204 208 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(0 0 0 / var(--tw-text-opacity))
+}
+
+.btn-disabled:hover {
+    cursor: not-allowed
+}
+
+/* AppTextBox styles */
+.input-wrapper {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    display: flex;
+    height: 2.75rem;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(208 213 221 / var(--tw-border-opacity));
+    background-image: none;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem
+}
+
+.input-box {
+    margin: 0px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 100%;
+    border-style: none;
+    background-color: inherit;
+    font-family: SatoshiRegular, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(152 162 179 / var(--tw-text-opacity));
+    outline: 2px solid transparent;
+    outline-offset: 2px
+}
+
+.input-label {
+    font-family: SatoshiRegular, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(200 204 208 / var(--tw-text-opacity))
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+input[type="number"] {
+    -moz-appearance: textField
+}
+
+/* Modal Styles */
+.modal-backdrop {
+    position: fixed;
+    inset: 0px;
+    background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+    --tw-bg-opacity: 0.75;
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+.modal-backdrop[data-closed] {
+    opacity: 0
+}
+.modal-backdrop[data-enter] {
+    transition-duration: 300ms
+}
+.modal-backdrop[data-leave] {
+    transition-duration: 200ms
+}
+.modal-backdrop[data-enter] {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1)
+}
+.modal-backdrop[data-leave] {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1)
+} 
+
+.dialog-wrapper {
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center
+} 
+
+@media (min-width: 640px) {
+    .dialog-wrapper {
+        padding: 0px
+    }
+}
+
+.dialog-panel {
+    position: relative;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    overflow: hidden;
+    border-radius: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    text-align: left;
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+
+.dialog-panel[data-closed] {
+    --tw-translate-y: 1rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    opacity: 0
+}
+
+.dialog-panel[data-enter] {
+    transition-duration: 300ms
+}
+
+.dialog-panel[data-leave] {
+    transition-duration: 200ms
+}
+
+.dialog-panel[data-enter] {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1)
+}
+
+.dialog-panel[data-leave] {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1)
+}
+
+@media (min-width: 640px) {
+    .dialog-panel {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        width: 100%;
+        max-width: 32rem
+    }
+    .dialog-panel[data-closed] {
+        --tw-translate-y: 0px;
+        --tw-scale-x: .95;
+        --tw-scale-y: .95;
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    }
+}
+
+.dialog-title {
+    font-family: SatoshiBold, sans-serif;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    --tw-text-opacity: 1;
+    color: rgb(77 81 84 / var(--tw-text-opacity))
+}
+
+.dialog-header-start {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start
+}
+
+.dialog-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.dialog-header-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end
+}
+
+.dialog-footer-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start
+}
+
+.dialog-footer-center {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.dialog-footer-end {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end
+}
+
+.dialog-subtitle {
+    font-family: SatoshiMedium, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    --tw-text-opacity: 1;
+    color: rgb(152 162 179 / var(--tw-text-opacity))
+}
+
+/* Card styles */
+.card {
+    width: 100%;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    padding: 1.25rem;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+
+.card-bordered {
+    --tw-border-opacity: 1;
+    border-color: rgb(75 0 130 / var(--tw-border-opacity))
+}
+
+.card-shadowed {
+    --tw-shadow-color: #4D5154;
+    --tw-shadow: var(--tw-shadow-colored)
+}
