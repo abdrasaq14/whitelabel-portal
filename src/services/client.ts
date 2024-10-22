@@ -32,17 +32,14 @@ apiClient.axiosInstance.interceptors.response.use(
       console.error("Unauthorized request - token might be invalid.");
       // Redirect to login
       window.location.href = '/';
-    }
-    
-    // Handle server errors (500 and above)
-    if (error.response && error.response.status >= 500) {
+    } else if (error.response && error.response.status >= 500) {
       console.error("Server error detected");
       // Redirect to custom error page (e.g., /500)
       window.location.href = '/ServerError';
+    }else{
+      // Reject the error so it can be handled in the calling code
+      return Promise.reject(error);
     }
-    
-    // Reject the error so it can be handled in the calling code
-    return Promise.reject(error);
   }
 );
 
