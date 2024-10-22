@@ -1,9 +1,7 @@
-import { createApiClient } from "../utils/api";
+import { UserLogin } from "@/interfaces/AppInterfaces";
+import apiClient from "./client";
+const baseEndPoint = "/auth";
 
 export const AuthService = {
-  login: (payload: any) => createApiClient(false).post("/auth/login", payload),
-  forgotPassword: (payload: any) => createApiClient(false).post("/auth/forgot-password", payload),
-  changePassword: (payload: any) => createApiClient(false).post("/changepassword", payload),
-  resetPassword: (payload: any) => createApiClient(false).post("/auth/reset-password", payload),
-  verifyOtp: (payload: any) => createApiClient(false).post("/auth/verify-otp", payload)
-};
+    login: (data: UserLogin) => apiClient.post(`${baseEndPoint}/login`, data)
+}

@@ -1,0 +1,9 @@
+{
+    "out": "docs", 
+    "entryPoints": ["./src/**/*.ts", "./src/**/*.tsx"],
+    "exclude": ["**/*.spec.ts"],
+    "includeVersion": true,
+    "theme": "default",
+    "tsconfig": "./tsconfig.json"
+  }
+  

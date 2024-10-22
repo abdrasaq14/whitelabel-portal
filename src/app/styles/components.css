@@ -1,0 +1,97 @@
+/* AppButton styles */
+.btn {
+    @apply w-full h-12 rounded-lg text-base flex items-center justify-center gap-2 font-satoshiMedium
+}
+
+.btn-primary {
+    @apply text-white transition ease-in-out delay-150 bg-purple-main hover:-translate-y-1 hover:scale-110 duration-300
+}
+
+.btn-secondary {
+    @apply bg-none text-purple-main border border-purple-main hover:bg-purple-lighter transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300
+}
+
+.btn-disabled {
+    @apply bg-accent-light text-[#000000] hover:cursor-not-allowed
+}
+
+/* AppTextBox styles */
+.input-wrapper {
+    @apply w-full h-11 bg-none border border-accent-light2 rounded-lg py-2.5 px-3.5 flex justify-between items-center text-sm my-1
+}
+
+.input-box {
+    @apply w-full bg-inherit border-none outline-none m-0 text-base text-accent-light3 mx-2 font-satoshiRegular text-sm
+}
+
+.input-label {
+    @apply font-satoshiRegular text-sm text-accent-light
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+input[type="number"] {
+    -moz-appearance: textField
+}
+
+/* Modal Styles */
+.modal-backdrop {
+    @apply fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in
+} 
+
+.dialog-wrapper {
+    @apply flex min-h-full items-center justify-center p-4 text-center sm:p-0
+}
+
+.dialog-panel {
+    @apply relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95
+}
+
+.dialog-title {
+    @apply text-2xl font-satoshiBold leading-8 text-accent-main
+}
+
+.dialog-header-start {
+    @apply flex flex-col items-start
+}
+
+.dialog-header-center {
+    @apply flex flex-col items-center
+}
+
+.dialog-header-end {
+    @apply flex flex-col items-end
+}
+
+.dialog-footer-start {
+    @apply flex items-center justify-start
+}
+
+.dialog-footer-center {
+    @apply flex items-center justify-center
+}
+
+.dialog-footer-end {
+    @apply flex items-center justify-end
+}
+
+.dialog-subtitle {
+    @apply text-sm font-satoshiMedium leading-6 text-accent-light3
+}
+
+/* Card styles */
+.card {
+    @apply w-full bg-white shadow-sm border p-5 rounded-lg
+}
+
+.card-bordered {
+    @apply border-purple-main
+}
+
+.card-shadowed {
+    @apply shadow-accent-main
+}
