@@ -2,6 +2,7 @@ import { ButtonProps } from '@/interfaces/ComponentInterfaces'
 import '@/app/styles/components.css'
 import { ButtonType } from '@/enums/ComponentEnums'
 import { ReactElement } from 'react'
+import Spinner from '../feedbacks/Spinner'
 
 /**
  * Renders a customised button
@@ -62,9 +63,15 @@ import { ReactElement } from 'react'
  * @returns {ReactElement} AppButton - Customized JSX button.
  */
 
-const AppButton = ({type, icon: Icon=null, style=null, text, handleClick}: ButtonProps): ReactElement => {
+const AppButton = ({type, icon: Icon=null, style=null, text, loading=false, handleClick}: ButtonProps): ReactElement => {
   return (
-    <button type="submit" onClick={() => type !== ButtonType.DISABLED && handleClick()} className={`btn ${type} font-latoRegular ${style}`}>{Icon ? <>{text} <Icon size={14} /></> : text}</button>
+    <button 
+      type="submit" 
+      onClick={() => type !== ButtonType.DISABLED && !loading && handleClick()} 
+      className={`btn ${type} font-latoRegular ${style}`}
+    >
+      {Icon ? <>{text} {loading ? <Spinner /> : <Icon size={14} />}</> : loading ? `${text}  ${<Spinner />}` : text}
+    </button>
   )
 }
 

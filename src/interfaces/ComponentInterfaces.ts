@@ -1,4 +1,4 @@
-import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType } from "@/enums/ComponentEnums";
+import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType } from "@/enums/ComponentEnums";
 import { FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
@@ -8,6 +8,7 @@ export interface ButtonProps {
     icon?: IconType | null;
     style?: string | null;
     text: string;
+    loading?: boolean;
     handleClick: () => void;
 }
 
@@ -59,4 +60,10 @@ export interface AppCheckboxProps {
 export interface ValidationErrorProps {
     icon?: IconType | null;
     message: string;
+}
+
+export interface SpinnerProps {
+    type?: SpinnerType;
+    width?: number;
+    height?: number;
 }

@@ -31,3 +31,8 @@ export enum CardType {
     BORDERED = "card-bordered",
     SHADOWED = "card-shadowed"
 }
+
+export enum SpinnerType {
+    PRIMARY = "#4B0082",
+    SECONDARY = "#EDE6F3"
+}
