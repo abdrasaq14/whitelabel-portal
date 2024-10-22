@@ -74,7 +74,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className='w-full mt-5'>
-                    <AppButton loading={loading} type={ButtonType.PRIMARY} text='Proceed' icon={FaArrowRight} handleClick={() => {}} />
+                    <AppButton loader={{loading}} type={ButtonType.PRIMARY} text='Proceed' icon={FaArrowRight} handleClick={() => {}} />
                 </div>
 
                 <div className='w-100 my-10 flex justify-center'><Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority /></div>

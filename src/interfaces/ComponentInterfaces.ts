@@ -3,12 +3,18 @@ import { FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 
+interface LoaderProps {
+    loading?: boolean;
+    width?: number;
+    height?: number;
+    type?: SpinnerType;
+}
 export interface ButtonProps {
     type: ButtonType;
     icon?: IconType | null;
     style?: string | null;
     text: string;
-    loading?: boolean;
+    loader?: LoaderProps | null;
     handleClick: () => void;
 }
 

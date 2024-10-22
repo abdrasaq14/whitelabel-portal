@@ -3,7 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import AppButton from '../forms/AppButton'
 import { ButtonType } from '@/enums/ComponentEnums'
-import { FaArrowRight } from "react-icons/fa6";
+import { RxReload } from "react-icons/rx";
 import { useRouter } from 'next/navigation';
 
 const ServerError = () => {
@@ -22,7 +22,7 @@ const ServerError = () => {
             <Image src="/images/server.svg" width={456} height={456} alt="Server error image" />
             <h2 className='font-gooperSemibold text-3xl text-accent-dark3 mt-2'>Oops! Server is down 💔💔</h2>
             <p className='font-satoshiMedium text-lg text-center text-accent-dark mt-2'>Sorry for the disruption! Our server is down, but our tech team is on it. We'll be back online shortly.</p>
-            <div className='mt-2 w-[200px]'><AppButton text='Try Again' type={ButtonType.PRIMARY} icon={FaArrowRight} handleClick={goBack} /></div>
+            <div className='mt-2 w-[200px]'><AppButton text='Try Again' type={ButtonType.PRIMARY} icon={RxReload} handleClick={goBack} /></div>
         </div>
     )
 }

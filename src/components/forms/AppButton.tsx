@@ -63,14 +63,14 @@ import Spinner from '../feedbacks/Spinner'
  * @returns {ReactElement} AppButton - Customized JSX button.
  */
 
-const AppButton = ({type, icon: Icon=null, style=null, text, loading=false, handleClick}: ButtonProps): ReactElement => {
+const AppButton = ({type, icon: Icon=null, style=null, text, loader=null, handleClick}: ButtonProps): ReactElement => {
   return (
     <button 
       type="submit" 
-      onClick={() => type !== ButtonType.DISABLED && !loading && handleClick()} 
+      onClick={() => type !== ButtonType.DISABLED && !loader?.loading && handleClick()} 
       className={`btn ${type} font-latoRegular ${style}`}
     >
-      {Icon ? <>{text} {loading ? <Spinner /> : <Icon size={14} />}</> : loading ? `${text}  ${<Spinner />}` : text}
+      {Icon ? <>{text} {loader?.loading ? <Spinner type={loader?.type} /> : <Icon size={14} />}</> : loader?.loading ? `${text}  ${<Spinner type={loader?.type} />}` : text}
     </button>
   )
 }
