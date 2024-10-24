@@ -2,7 +2,7 @@ import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, Sp
 import { FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
-
+import { FieldAttributes } from "formik";
 interface LoaderProps {
     loading?: boolean;
     width?: number;
@@ -85,6 +85,50 @@ export interface SideItem {
     path?: any;
     iconName?: string;
     children?: SideItem[];
+}
+export interface IBlogPayload {
+  _id?: string;
+  authorId: string;
+  title: string;
+  content: string;
+  // date?: string;
+  image: string;
+  comments: IComments[];
+  likes: number;
+  shares: number;
+  allowComments: boolean;
+  allowLikes: boolean;
+  status: string;
+  whiteLabelName: string;
+  publishedDate?: string;
+}
+
+export interface IComments {
+  _id?: string;
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
+  comment: string;
+  isDeleted: boolean;
+  createdAt: Date;
+}
+
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
 }
 
 export interface SideNavItemChild {

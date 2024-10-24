@@ -1,3 +1,5 @@
+import { IBlogPayload } from "./ComponentInterfaces";
+
 export interface UserLogin {
     email: string;
     password: string;
@@ -105,4 +107,7 @@ export interface User {
 export interface Otp {
     otp: string;
     otpReceiver: string;
+}
+export interface HandlePreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
 }

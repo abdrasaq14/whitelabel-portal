@@ -63,14 +63,15 @@ import Spinner from '../feedbacks/Spinner'
  * @returns {ReactElement} AppButton - Customized JSX button.
  */
 
-const AppButton = ({type, icon: Icon=null, style=null, text, loader=null, handleClick}: ButtonProps): ReactElement => {
+const AppButton = ({type, icon: Icon=null, iconPosition = "left", style=null, text, loader=null, handleClick, ...rest}: ButtonProps): ReactElement => {
   return (
     <button 
       type="submit" 
+      {...rest}
       onClick={() => type !== ButtonType.DISABLED && !loader?.loading && handleClick()} 
-      className={`btn ${type} font-latoRegular ${style}`}
+      className={`flex focus:outline-none gap-2 justify-center rounded  items-center text-center my-auto h-10 btn ${type} font-latoRegular ${style}`}
     >
-      {Icon ? <>{text} {loader?.loading ? <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> : <Icon size={14} />}</> : loader?.loading ? `${text}  ${<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}` : text}
+      {Icon ? <>{iconPosition === "left" && <Icon size={14} /> }{text} {loader?.loading && <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> } {iconPosition === "right" && <Icon size={14} /> }</> : loader?.loading ? `${text}  ${<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}` : text}
     </button>
   )
 }
