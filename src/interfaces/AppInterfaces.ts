@@ -64,6 +64,7 @@ export interface CustomisationData {
 }
 
 export interface User {
+    _id?: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -102,6 +103,8 @@ export interface User {
     };
     customisationData?: CustomisationData;
     blocked: boolean;
+    whiteLabelName: string;
+    _doc?: User;
 }
 
 export interface Otp {
@@ -110,4 +113,13 @@ export interface Otp {
 }
 export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;
+}
+export interface IQueryParams {
+  whiteLabelName?: string;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+  totalResults?: number;
+  search?: string;
+  status?: string;
 }

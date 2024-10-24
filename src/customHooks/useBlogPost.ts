@@ -10,11 +10,15 @@ import { RootState } from "@/store/store";
 import { useAppSelector } from "@/store/hooks";
 import { addPost, updatePost, deletePost } from "@/store/slices/blogSlice";
 import { BlogValidationSchema } from "@/utilities/validations";
+<<<<<<< HEAD
 import {
   IBlogPayload,
   IComments,
   IUseBlogBostProps
 } from "@/interfaces/ComponentInterfaces";
+=======
+import { IBlogPayload, IComments, IUseBlogBostProps } from "@/interfaces/ComponentInterfaces";
+>>>>>>> a0b671c (blog module in progress)
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const profile = useAppSelector((state: RootState) => state.auth.userData);

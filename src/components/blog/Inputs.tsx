@@ -72,7 +72,7 @@ interface FileUploadProps {
   setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({
+const BlogFileUpload: React.FC<FileUploadProps> = ({
   name,
   wrapperClass,
   onFileChange,
@@ -255,4 +255,4 @@ const FileUpload: React.FC<FileUploadProps> = ({
   );
 };
 
-export default FileUpload;
+export default BlogFileUpload;

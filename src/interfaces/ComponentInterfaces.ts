@@ -3,6 +3,7 @@ import { FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { FieldAttributes } from "formik";
+
 interface LoaderProps {
     loading?: boolean;
     width?: number;
@@ -129,19 +130,4 @@ export interface IToggleInputProps {
   name: string;
   value: boolean;
   onChange: (value: boolean) => void;
-}
-
-export interface SideNavItemChild {
-    label: string; 
-    href: string
-}
-export interface SideNavItem {
-    children?: SideNavItemChild[] | undefined;
-    label: string;
-    href: string;
-    icon: any;
-}
-
-export interface SideNavProps {
-    items: SideNavItem[];
 }
