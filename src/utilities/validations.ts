@@ -11,7 +11,6 @@ export const loginValidation = Yup.object({
       .min(8, "*Password must be at least 8 characters").required("*Password is required"),
 });
 
-<<<<<<< HEAD
 
 export const BlogValidationSchema = Yup.object({
   title: Yup.string()
@@ -39,7 +38,6 @@ export const BlogValidationSchema = Yup.object({
   allowComments: Yup.boolean(),
   allowLikes: Yup.boolean()
 });
-=======
 export const AdminAccountInfoValidation = Yup.object().shape({
   companyName: Yup.string().required('Company name is required'),
   companyEmail: Yup.string().email('Invalid email').required('Company email is required'),
@@ -57,4 +55,3 @@ export const StaffInfoValidation = Yup.object().shape({
   phoneNumber: Yup.string().required("PhoneNumber is required"),
   role: Yup.string().required('role is required'),
 });
->>>>>>> 4f4649d (Account completed)
