@@ -17,7 +17,8 @@ export const store = configureStore({
     blog: blogReducer,
     dashboard: dashboardReducer,
     account: accountReducer,
-    upload: uploadReducer
+    upload: uploadReducer,
+    blog: blogReducer
   },
 });
 

@@ -5,6 +5,7 @@ import { IconType } from "react-icons";
 import { User } from "./AppInterfaces";
 
 import { FieldAttributes } from "formik";
+
 interface LoaderProps {
     loading?: boolean;
     width?: number;
@@ -307,3 +308,7 @@ interface TableColumn {
     data: any[] | undefined;
     additionalActions?: (row: TableRow) => { label: string; action: () => void }[];
   }
+<<<<<<< HEAD
+=======
+}
+>>>>>>> cb4d2a9 (blog module in progress)

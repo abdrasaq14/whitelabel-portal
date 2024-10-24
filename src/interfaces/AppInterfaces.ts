@@ -64,7 +64,10 @@ export interface CustomisationData {
 }
 
 export interface User {
+<<<<<<< HEAD
     authToken: string;
+=======
+>>>>>>> cb4d2a9 (blog module in progress)
     _id?: string;
     firstName: string;
     lastName: string;
@@ -137,4 +140,13 @@ export interface AdminAccountInfo {
 }
 export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;
+}
+export interface IQueryParams {
+  whiteLabelName?: string;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+  totalResults?: number;
+  search?: string;
+  status?: string;
 }

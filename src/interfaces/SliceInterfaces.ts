@@ -65,4 +65,20 @@ export interface UploadSlice {
     uploading: boolean;
     imageHolder: string | null
 }
+<<<<<<< HEAD
 >>>>>>> 4f4649d (Account completed)
+=======
+
+
+export interface BlogSlice{
+  posts: IBlogPayload[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface IUpdatePostPayload { 
+    id: string;
+    updatedPayload: Partial<IBlogPayload>;
+}
+
+>>>>>>> cb4d2a9 (blog module in progress)
