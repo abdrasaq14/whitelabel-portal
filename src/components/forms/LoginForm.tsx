@@ -1,7 +1,7 @@
 "use client"
 import React, {useState} from 'react'
 import AppCard from '../AppCard'
-import { ButtonType, CardType, TextboxType } from '@/enums/ComponentEnums'
+import { ButtonType, CardType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
 import { useCustomFormik } from '@/customHooks/useCustomFormik'
 import { loginValidation } from '@/utilities/validations'
 import AppTextBox from './AppTextBox'
@@ -74,7 +74,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className='w-full mt-5'>
-                    <AppButton loader={{loading}} type={ButtonType.PRIMARY} text='Proceed' icon={FaArrowRight} handleClick={() => {}} />
+                    <AppButton loader={{loading, type: SpinnerType.SECONDARY, height: 25, width: 25}} type={ButtonType.PRIMARY} text='Proceed' icon={FaArrowRight} handleClick={() => {}} />
                 </div>
 
                 <div className='w-100 my-10 flex justify-center'><Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority /></div>

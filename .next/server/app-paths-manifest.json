@@ -1,4 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/(Auth)/ServerError/page": "app/(Auth)/ServerError/page.js"
-}
