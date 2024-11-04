@@ -9,3 +9,11 @@ export interface UserSlice {
 export interface ModalSlice {
     showOtpModal: boolean;
 }
+
+export interface NavSlice {
+    messageCounter: number;
+    newNotification: boolean;
+    breadcrumb: string;
+    isOpen: boolean;
+    showLogoutModal: boolean;
+}

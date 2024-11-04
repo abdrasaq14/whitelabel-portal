@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import modalReducer from './slices/modalSlice';
+import navReducer from './slices/navSlice';
 
 // Define the store with your reducers
 export const store = configureStore({
   reducer: {
     // Add reducers here
     auth: authReducer, 
-    modal: modalReducer
+    modal: modalReducer,
+    nav: navReducer
   },
 });
 

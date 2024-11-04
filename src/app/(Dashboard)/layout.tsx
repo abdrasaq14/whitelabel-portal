@@ -41,7 +41,7 @@ const navItems = [
 export default function DashboardLayout({ children, username, onLogout }: DashboardLayoutProps) {
     return (
         <div className="flex bg-accent-light">
-            <DashboardSidenav items={navItems} onLogout={onLogout} />
+            <DashboardSidenav items={navItems} />
             <div className="flex flex-col flex-1 ml-20 lg:ml-80">
                 <DashboardNavbar username={username} />
                 <main className="p-4 bg-gray-100 min-h-screen">{children}</main>

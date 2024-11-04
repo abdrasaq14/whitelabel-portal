@@ -1,6 +1,7 @@
 import { isJsonString } from '@/utilities/checkers'
 
 const useStorage = () => {
+    
     const storeLocalData = (key: string, value: string) => {
         
         localStorage.setItem(key, value)
@@ -22,11 +23,15 @@ const useStorage = () => {
     }
 
     const removeLocalData = (key: string) => {
+        
         localStorage.removeItem(key);
+
     }
 
     const clearLocalData = () => {
+
         localStorage.clear();
+        
     }
 
     const storeSessionData = (key: string, value: string) => {

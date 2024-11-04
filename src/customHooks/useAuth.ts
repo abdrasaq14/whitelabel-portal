@@ -112,7 +112,7 @@ const useAuth = () => {
 
         console.log("After verified", result);
 
-        storeSessionData('UserData', result)
+        storeSessionData('UserData', JSON.stringify(result))
 
         push('/Dashboard')
 

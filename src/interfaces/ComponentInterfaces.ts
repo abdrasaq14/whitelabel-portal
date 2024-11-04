@@ -86,3 +86,13 @@ export interface SideItem {
     iconName?: string;
     children?: SideItem[];
 }
+
+interface SideNavItem {
+    label: string;
+    href: string;
+    icon: any;
+}
+
+export interface SideNavProps {
+    items: SideNavItem[];
+}
