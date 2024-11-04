@@ -3,6 +3,7 @@ import DashboardNavbar from "@/components/layouts/DashboardNavbar";
 import DashboardSidenav from "@/components/layouts/DashboardSidenav";
 import { ReactNode } from 'react';
 import { FiHome, FiSettings } from 'react-icons/fi';
+import { RxDashboard } from "react-icons/rx";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -11,7 +12,7 @@ interface DashboardLayoutProps {
   }
 
 const navItems = [
-    { label: 'Home', href: '/home', icon: FiHome },
+    { label: 'Dashboard', href: '/Dashboard', icon: RxDashboard },
     { label: 'Settings', href: '/settings', icon: FiSettings },
   ];
 
