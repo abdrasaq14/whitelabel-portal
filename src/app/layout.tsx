@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
-import Image from "next/image";
+import { Toaster } from 'react-hot-toast';
 
 import ReduxProvider from "@/store/ReduxProvider";
 
@@ -22,20 +22,11 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <div className='w-screen h-screen '>
-          <div className='overflow-y-auto h-full flex flex-col bg-white sm:bg-purple-lighter'>
-            <div className="w-full hidden sm:flex justify-center items-center bg-white p-2  shadow h-[64px] border-b-[1px] border-purple-main ">
-              <Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority/>
-            </div>
-            <div className="h-full w-full flex flex-col justify-center items-center  sm:bg-purple-lighter ">
-              <div className="logo-position w-full p-4 flex sm:hidden items-center justify-center">
-                <Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority />
-              </div>
-              <ReduxProvider>
-                {children}
-              </ReduxProvider>
-            </div> 
-          </div>
+        <div className='w-screen h-screen'>
+          <Toaster />
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
         </div>
       </body>
     </html>

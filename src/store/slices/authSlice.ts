@@ -1,5 +1,5 @@
 import { UserSlice } from '@/interfaces/SliceInterfaces';
-import { UserLogin } from '@/interfaces/AppInterfaces';
+import { Otp, UserLogin } from '@/interfaces/AppInterfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {AuthService} from '@/services/auth'; 
 import { RootState } from '../store';
@@ -7,39 +7,77 @@ import { RootState } from '../store';
 //initial state
 const initialState: UserSlice = {
     loading: false,
-    userData: null,
-    error: null
+    error: null,
+    otp: ''
 };
 
 //Actions
-export const userLogin = createAsyncThunk('login', async (data: UserLogin) => {
-    const response: any = await AuthService.login(data);
-    return response.data;
+export const userLogin = createAsyncThunk('login', async (data: UserLogin, { rejectWithValue }) => {
+    try{
+        const response: any = await AuthService.login(data);
+        console.log("After api call", response)
+        if(response.data.status === 'Failed'){
+            return rejectWithValue(response.data)
+        }
+        return response.data;
+    }catch(error: any) {
+        return rejectWithValue(error);
+    }
+});
+
+export const otpVerified = createAsyncThunk('verifyOtp', async (data: Otp, { rejectWithValue }) => {
+    try{
+        const response: any = await AuthService.verifyOtp(data);
+        console.log("After api call", response)
+        if(response.data.status === 'Failed'){
+            return rejectWithValue(response.data)
+        }
+        return response.data;
+    }catch(error: any){
+        return rejectWithValue(error)
+    }
 });
 
 //Slice
 const authSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        setOtpValue: (state, action) => {
+            state.otp = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
+
         .addCase(userLogin.pending, (state) => {
             state.loading = true;
             state.error = null
         })
-        .addCase(userLogin.fulfilled, (state, action) => {
+        .addCase(userLogin.fulfilled, (state) => {
             state.loading = false;
-            state.userData = action.payload
         })
-        .addCase(userLogin.rejected, (state, action) => {
+        .addCase(userLogin.rejected, (state, action: any) => {
             state.loading = false;
-            state.error = action.error.message || 'Something went wrong';
+            state.error = action.payload?.message || 'Something went wrong';
+        })
+
+        .addCase(otpVerified.pending, (state) => {
+            state.loading = true;
+            state.error = null
+        })
+        .addCase(otpVerified.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        .addCase(otpVerified.rejected, (state, action: any) => {
+            state.loading = false;
+            state.error = action.payload?.message || 'Something went wrong';
         })
     }
 })
 
-// export const {} = userSlice.actions;
+export const {setOtpValue} = authSlice.actions;
+
 export default authSlice.reducer;
 
 //selectors

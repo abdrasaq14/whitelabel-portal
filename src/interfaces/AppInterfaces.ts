@@ -4,6 +4,12 @@ export interface UserLogin {
     platform: string;
 }
 
+export interface ApiResponse {
+    status: string;
+    message?: string;
+    result?: any;
+}
+
 export interface CustomisationData {
     theme: {
         primaryColor: string;
@@ -94,4 +100,9 @@ export interface User {
     };
     customisationData?: CustomisationData;
     blocked: boolean;
+}
+
+export interface Otp {
+    otp: string;
+    otpReceiver: string;
 }

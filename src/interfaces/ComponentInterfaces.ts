@@ -50,6 +50,7 @@ export interface AppModalProps {
     footer?: AppModalFooter | null;
     hasClose?: boolean;
     isOpen?: boolean;
+    closeClicked: () => void;
 }
 
 export interface CardProps {
@@ -72,4 +73,16 @@ export interface SpinnerProps {
     type?: SpinnerType;
     width?: number;
     height?: number;
+}
+
+export interface OtpProps {
+    length: number;
+    prompt?: string;
+}
+
+export interface SideItem {
+    name: string;
+    path?: any;
+    iconName?: string;
+    children?: SideItem[];
 }

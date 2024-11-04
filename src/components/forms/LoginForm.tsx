@@ -1,7 +1,7 @@
 "use client"
 import React, {useState} from 'react'
 import AppCard from '../AppCard'
-import { ButtonType, CardType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
+import { ButtonType, CardType, ModalFooterType, ModalHeaderType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
 import { useCustomFormik } from '@/customHooks/useCustomFormik'
 import { loginValidation } from '@/utilities/validations'
 import AppTextBox from './AppTextBox'
@@ -15,6 +15,8 @@ import Image from 'next/image'
 import { BsExclamationCircle } from "react-icons/bs";
 import ValidationError  from './ValidationError'
 import useAuth from '@/customHooks/useAuth'
+import OtpModal from '../modals/OtpModal'
+import AppModal from '../AppModal'
 
 const LoginForm = () => {
     const {handleLogin, loading} = useAuth();
@@ -80,6 +82,7 @@ const LoginForm = () => {
                 <div className='w-100 my-10 flex justify-center'><Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority /></div>
             </form>
         </AppCard>
+        <OtpModal />
     </div>
   )
 }
