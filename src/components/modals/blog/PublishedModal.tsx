@@ -3,13 +3,16 @@ import AppModal from "../../AppModal";
 import { noContentImage } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
+import { IPreviewPayload } from "@/interfaces/ComponentInterfaces";
 
 interface BlogModalProps {
   isOpen: boolean;
-  handleClose: (isView:boolean) => void;
-  form: any;
+  handleClose: (isView: boolean) => void;
+  form?: any;
+  blogDetails?: IPreviewPayload;
 }
-const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form }) => {
+const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form, blogDetails }) => {
+  const status = form ? form.values.status : blogDetails?.status;
   return (
     <AppModal
       hasClose={true}
@@ -25,11 +28,11 @@ const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, for
           />
         </div>
         <p className="text-primary-text font-black text-xl text-center my-2">
-          {form.values.status === "draft"
+          {status === "draft"
             ? "Saved to Draft!!! "
             : "Published!!!"}
         </p>
-        {form.values.status === "published" && (
+        {status === "published" && (
           <p className="text-primary-text">
             Your post has been published and its now live!!
           </p>
@@ -39,15 +42,15 @@ const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, for
             text="Dismiss"
             handleClick={()=>handleClose(false)}
             type={
-              form.values.status === "draft"
+              status === "draft"
                 ? ButtonType.PRIMARY
                 : ButtonType.SECONDARY
             }
             style={`border border-primary font-semibold p-2 ${
-              form.values.status === "draft" ? "w-full" : "w-[50%]"
+              status === "draft" ? "w-full" : "w-[50%]"
             }`}
           />
-          {form.values.status === "published" && (
+          {status === "published" && (
             <AppButton
               text="View"
               handleClick={() => handleClose(true)}

@@ -10,8 +10,7 @@ export interface UserSlice {
 export interface ModalSlice {
     showOtpModal: boolean;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
 export interface NavSlice {
     messageCounter: number;
@@ -21,12 +20,6 @@ export interface NavSlice {
     showLogoutModal: boolean;
     activeLabel: string;
 }
-=======
-=======
-}
-=======
-
->>>>>>> 5052d24 (blog module in progress)
 
 export interface BlogSlice{
   posts: IBlogPayload[];
@@ -38,8 +31,3 @@ export interface IUpdatePostPayload {
     id: string;
     updatedPayload: Partial<IBlogPayload>;
 }
-<<<<<<< HEAD
->>>>>>> a0b671c (blog module in progress)
->>>>>>> 79bf557 (blog module in progress)
-=======
->>>>>>> 5052d24 (blog module in progress)

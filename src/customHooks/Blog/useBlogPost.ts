@@ -15,7 +15,7 @@ import {
   IUseBlogBostProps
 } from "@/interfaces/ComponentInterfaces";
 import { User } from "@/interfaces/AppInterfaces";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const { getSessionData } = useStorage();
@@ -28,7 +28,7 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const [blogId, setBlogId] = useState("");
   const navigateTo = navigate();
   const today = new Date().toISOString().split("T")[0];
-
+const dispatch = useAppDispatch();
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
@@ -53,19 +53,19 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const handleSubmit = useMutation(
     async (values: IBlogPayload) => {
       if (id) {
-        return await BlogService.updateBlog(id, values);
+        return await dispatch(updatePost({ id, updatedPayload: values }));
+        // return await BlogService.updateBlog(id, values);
       }
-      return await BlogService.create(values);
+      const postToAdd = await dispatch(addPost(values));
+      if (postToAdd.payload) {
+        setBlogId(postToAdd.payload.result._id);
+        return postToAdd;
+      }
+      // return await BlogService.create(values);
     },
     {
       onSuccess: (response: any) => {
         form.setSubmitting(false);
-        if (id) {
-          updatePost({ id, updatedPayload: response.data?.result });
-        } else {
-          addPost(response.data?.result);
-          setBlogId(response.data?.result._id);
-        }
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
         setOpenModal(true);

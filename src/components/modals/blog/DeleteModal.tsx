@@ -1,13 +1,20 @@
 import React from "react";
 import AppModal from "../../AppModal";
+import { AxiosResponse } from "axios";
 import { depressedEmoji } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
+import { UseMutationResult } from "react-query/types/react/types";
 
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: () => void;
-  handleDeleteApi: any;
+  handleDeleteApi: UseMutationResult<
+    AxiosResponse<any, any>,
+    unknown,
+    string,
+    unknown
+  >;
 }
 const DeleteBlogModal: React.FC<BlogModalProps> = ({
   isOpen,

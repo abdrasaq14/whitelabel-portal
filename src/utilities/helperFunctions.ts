@@ -31,3 +31,14 @@ export const decrypt = (data: string) => {
 
   return null;
 };
+
+export const formatDate = (date: string) => {
+  const dateObj = new Date(date);
+
+  // Format the date
+  return dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+};

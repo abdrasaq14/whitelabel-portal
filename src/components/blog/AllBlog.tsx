@@ -163,7 +163,7 @@ function AllBlog() {
           )}
         </div>
       </div>
-          <DeleteBlogModal isOpen={ openModal} handleClose={handleClickOutside} handleDeleteApi={handleDeleteApi}/>
+          <DeleteBlogModal isOpen={ openModal} handleClose={handleClickOutside} handleDeleteApi={handleDeleteApi as any}/>
       </div>
   );
 }
