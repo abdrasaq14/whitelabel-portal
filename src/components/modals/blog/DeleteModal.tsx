@@ -8,26 +8,37 @@ import { ButtonType } from "@/enums/ComponentEnums";
 import { UseMutationResult } from "react-query/types/react/types";
 =======
 import AppModal from "../../AppModal";
+import { AxiosResponse } from "axios";
 import { depressedEmoji } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
+<<<<<<< HEAD
 >>>>>>> 94f4fa5 (blog module completed)
+=======
+import { UseMutationResult } from "react-query/types/react/types";
+>>>>>>> 9a9d945 (blog module in progress)
 
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: () => void;
 <<<<<<< HEAD
+<<<<<<< HEAD
   modalTitle: string;
+=======
+>>>>>>> 9a9d945 (blog module in progress)
   handleDeleteApi: UseMutationResult<
     AxiosResponse<any, any>,
     unknown,
     string,
     unknown
   >;
+<<<<<<< HEAD
   idToDelete: string;
 =======
   handleDeleteApi: any;
 >>>>>>> 94f4fa5 (blog module completed)
+=======
+>>>>>>> 9a9d945 (blog module in progress)
 }
 const DeleteBlogModal: React.FC<BlogModalProps> = ({
   isOpen,

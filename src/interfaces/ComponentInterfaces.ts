@@ -324,6 +324,9 @@ export interface IBlogPayload {
   publishedDate?: string;
 }
 
+export interface IPreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
 export interface IComments {
   _id?: string;
   userId: string;

@@ -14,20 +14,10 @@ export const store = configureStore({
     auth: authReducer, 
     modal: modalReducer,
     nav: navReducer,
-<<<<<<< HEAD
     blog: blogReducer,
     dashboard: dashboardReducer,
     account: accountReducer,
     upload: uploadReducer,
-=======
-<<<<<<< HEAD
-    dashboard: dashboardReducer,
-    account: accountReducer,
-    upload: uploadReducer,
-=======
->>>>>>> 046ecec (blog module completed)
-    blog: blogReducer,
->>>>>>> 94f4fa5 (blog module completed)
   },
 });
 
