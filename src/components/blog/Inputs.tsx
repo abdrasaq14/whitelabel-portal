@@ -199,7 +199,6 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         <input
           onChange={handleFileChange}
           id={name}
-          type="file"
           disabled={disabled || isUploading}
           accept={
             fileType === "document" ? ".pdf,.doc,.docx" : ".png,.jpg,.jpeg,.svg"

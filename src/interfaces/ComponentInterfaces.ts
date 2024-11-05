@@ -193,6 +193,16 @@ export interface IComments {
   createdAt: Date;
 }
 
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
 export interface FileUploadProps {
   name: string;
   wrapperClass?: string;
