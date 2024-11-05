@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FieldAttributes, useField } from "formik";
 import axios from "axios";
 import { MdCancel } from "react-icons/md";
-import { ITextInputProps, IToggleInputProps } from "@/interfaces/ComponentInterfaces";
+import { FileUploadProps, ITextInputProps, IToggleInputProps } from "@/interfaces/ComponentInterfaces";
 
 export function TextInput({
   title,
@@ -61,16 +61,7 @@ export const Toggle: React.FC<IToggleInputProps> = ({ name, value, onChange }) =
   );
 };
 
-interface FileUploadProps {
-  name: string;
-  wrapperClass?: string;
-  extraClass?: string;
-  disabled?: boolean;
-  onFileChange?: (file: File) => void;
-  children?: React.ReactNode;
-  fileType?: "image" | "document";
-  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
-}
+
 
 const BlogFileUpload: React.FC<FileUploadProps> = ({
   name,
