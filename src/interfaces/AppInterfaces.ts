@@ -64,10 +64,7 @@ export interface CustomisationData {
 }
 
 export interface User {
-<<<<<<< HEAD
     authToken: string;
-=======
->>>>>>> cb4d2a9 (blog module in progress)
     _id?: string;
     firstName: string;
     lastName: string;

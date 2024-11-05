@@ -3,11 +3,8 @@ import { Config } from "./config";
 import { format, formatDistanceToNow } from "date-fns";
 
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> a0b671c (blog module in progress)
 const $key: string = Config.encodingKey ?? "$@A^&GHDQW$@!@#";
 export const truncateText = (text: string, maxLength = 150) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;

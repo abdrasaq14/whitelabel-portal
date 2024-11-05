@@ -70,6 +70,7 @@ export interface UploadSlice {
 =======
 
 
+
 export interface BlogSlice{
   posts: IBlogPayload[];
   loading: boolean;

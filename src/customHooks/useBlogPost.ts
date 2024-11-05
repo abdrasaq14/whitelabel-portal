@@ -6,22 +6,19 @@ import { useMutation } from "react-query";
 import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
 import toast from "react-hot-toast";
-import { RootState } from "@/store/store";
-import { useAppSelector } from "@/store/hooks";
+import useStorage from "./useStorage";
 import { addPost, updatePost, deletePost } from "@/store/slices/blogSlice";
 import { BlogValidationSchema } from "@/utilities/validations";
-<<<<<<< HEAD
 import {
   IBlogPayload,
   IComments,
   IUseBlogBostProps
 } from "@/interfaces/ComponentInterfaces";
-=======
-import { IBlogPayload, IComments, IUseBlogBostProps } from "@/interfaces/ComponentInterfaces";
->>>>>>> a0b671c (blog module in progress)
+import { User } from "@/interfaces/AppInterfaces";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
-  const profile = useAppSelector((state: RootState) => state.auth.userData);
+  const { getSessionData } = useStorage();
+  const profile = getSessionData("userData") as User;
   const router = useRouter();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);

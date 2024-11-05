@@ -8,9 +8,10 @@ export const Config = {
 =======
   profitAllUrl: process.env.REACT_APP_PROFITALL_URL,
   encodingKey: process.env.REACT_APP_ENCRYPT_KEY
-<<<<<<< HEAD
-=======
 
+<<<<<<< HEAD
 >>>>>>> a0b671c (blog module in progress)
 >>>>>>> cb4d2a9 (blog module in progress)
+=======
+>>>>>>> 897e251 (blog module in progress)
 };
