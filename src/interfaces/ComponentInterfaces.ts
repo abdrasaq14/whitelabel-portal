@@ -114,3 +114,34 @@ export interface FileUploadProps {
   fileType?: "image" | "document";
   setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface IUseBlogBostProps {
+  id?: string;
+}
+export interface IBlogPayload {
+  _id?: string;
+  authorId: string;
+  title: string;
+  content: string;
+  // date?: string;
+  image: string;
+  comments: IComments[];
+  likes: number;
+  shares: number;
+  allowComments: boolean;
+  allowLikes: boolean;
+  status: string;
+  whiteLabelName: string;
+  publishedDate?: string;
+}
+
+export interface IComments {
+  _id?: string;
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
+  comment: string;
+  isDeleted: boolean;
+  createdAt: Date;
+}

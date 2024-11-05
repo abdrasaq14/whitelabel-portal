@@ -74,7 +74,6 @@ const BlogPageComponent = () => {
 
           {id && isLoading ? (
             <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
-            <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
           ) : error.trim() ? (
             <div className="w-full flex  flex-col items-center justify-center mt-8">
               <img
