@@ -1,7 +1,7 @@
 import React from "react";
-import AppModal from "../AppModal";
-import { noContentImage } from "../../../public/images/blog";
-import AppButton from "../forms/AppButton";
+import AppModal from "../../AppModal";
+import { noContentImage } from "../../../../public/images/blog";
+import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
 
 interface BlogModalProps {
@@ -9,7 +9,7 @@ interface BlogModalProps {
   handleClose: (isView:boolean) => void;
   form: any;
 }
-const BlogModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form }) => {
+const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form }) => {
   return (
     <AppModal
       hasClose={true}
@@ -61,4 +61,4 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form }) => {
   );
 };
 
-export default BlogModal;
+export default BlogPubLishedModal;

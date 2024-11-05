@@ -9,21 +9,9 @@ export const store = configureStore({
   reducer: {
     // Add reducers here
     auth: authReducer, 
-<<<<<<< HEAD
-<<<<<<< HEAD
     modal: modalReducer,
-    nav: navReducer
-=======
-<<<<<<< HEAD
-    modal: modalReducer
-=======
-    blog: blogReducer
->>>>>>> a0b671c (blog module in progress)
->>>>>>> 79bf557 (blog module in progress)
-=======
-    modal: modalReducer,
-    blog: blogReducer
->>>>>>> 5052d24 (blog module in progress)
+    nav: navReducer,
+    blog: blogReducer,
   },
 });
 

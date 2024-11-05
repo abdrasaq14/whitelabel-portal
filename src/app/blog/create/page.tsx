@@ -1,9 +1,7 @@
-import BlogPageComponent from "@/components/blog/BlogPageComponent"
+import CreateBlog from "@/components/blog/CreateBlog";
 
 function BlogPage() {
-  return (
-    <BlogPageComponent />
-  )
+  return <CreateBlog />;
 }
 
 export default BlogPage

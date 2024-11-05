@@ -1,5 +1,4 @@
 "use client"
-"use client"
 import { TextInput, Toggle } from "@/components/blog/Inputs";
 import { IoCalendarOutline } from "react-icons/io5";
 import BlogFileUpload from "@/components/blog/Inputs";
@@ -8,16 +7,16 @@ import BlogDescription from "@/components/blog/CkEditor/CkEditor";
 import { postNotAvailableImage } from "../../../public/images/blog";
 import { GoTrash } from "react-icons/go";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
-import { useBlogPost } from "@/customHooks/useBlogPost";
+import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
 import { useRouter } from "next/router";
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
-import BlogModal from "../modals/BlogModal";
 import AppButton from "../forms/AppButton";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
+import BlogPubLishedModal from "../modals/blog/PublishedModal";
 
 
-const BlogPageComponent = () => {
+const CreateBlog = () => {
   const router = useRouter();
   const id = router.query.id?.toString();
   const {
@@ -249,7 +248,7 @@ const BlogPageComponent = () => {
           )}
         </div>
       </div>
-      <BlogModal
+      <BlogPubLishedModal
         isOpen={openModal}
         handleClose={(isView) => handleClickOutside(isView)}
         form={form}
@@ -258,4 +257,4 @@ const BlogPageComponent = () => {
   );
 };
 
-export default BlogPageComponent;
+export default CreateBlog;

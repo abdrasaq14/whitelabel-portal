@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FieldAttributes, useField } from "formik";
+import { useField } from "formik";
 import axios from "axios";
 import { MdCancel } from "react-icons/md";
 import { FileUploadProps, ITextInputProps, IToggleInputProps } from "@/interfaces/ComponentInterfaces";

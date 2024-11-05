@@ -1,5 +1,5 @@
 import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType } from "@/enums/ComponentEnums";
-import { FormikHandlers } from "formik";
+import { FieldAttributes, FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 
@@ -144,4 +144,21 @@ export interface IComments {
   comment: string;
   isDeleted: boolean;
   createdAt: Date;
+}
+
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
 }

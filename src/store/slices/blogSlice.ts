@@ -57,6 +57,12 @@ const blogSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    startLoading: (state) => {
+      state.loading = true;
+    },
+    stopLoading: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: (builder) => {
@@ -91,10 +97,15 @@ const blogSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { setError, clearError } = blogSlice.actions;
+export const { setError, clearError, startLoading, stopLoading } = blogSlice.actions;
 export default blogSlice.reducer;
 
 // Selectors
 export const selectAllPosts = (state: RootState) => state.blog.posts;
-export const selectPostLoading = (state: RootState) => state.blog.loading;
-export const selectPostError = (state: RootState) => state.blog.error;
+export const postLoadingState = (state: RootState) => state.blog.loading;
+export const postErrorState = (state: RootState) => state.blog.error;
+export const countDrafts = (state: RootState) => 
+  state.blog.posts.filter((post) => post.status === "draft").length;
+
+export const countPublished = (state: RootState) => 
+  state.blog.posts.filter((post) => post.status === "published").length;
