@@ -38,14 +38,14 @@ const useBlogPosts = () => {
     "all"
   );
   const [currentPage, setCurrentPage] = useState(1);
-    const limit = 9;
-    const initialPage = 1
+  const limit = 9;
+  const initialPage = 1;
   const [total, setTotal] = useState(0);
-const { page, totalPages, onPageChange, handleNext, handlePrevious } = usePagination({
-  total,
-  limit,
-    initialPage,
-});
+  const { handleNext, handlePrevious } = usePagination({
+    total,
+    limit,
+    initialPage
+  });
 
   const fetchPosts = async (status?: string) => {
     dispatch(startLoading());
@@ -98,7 +98,6 @@ const { page, totalPages, onPageChange, handleNext, handlePrevious } = usePagina
     setIdToDelete("");
   };
 
-  const handlePagination = (page: number) => setCurrentPage(page);
   const handleTabClick = (tab: "all" | "draft" | "published") => {
     setActiveTab(tab);
     setCurrentPage(1);
@@ -126,8 +125,7 @@ const { page, totalPages, onPageChange, handleNext, handlePrevious } = usePagina
     handleDeleteApi,
     handleDelete,
     handleClickOutside,
-      handlePagination,
-      handleNext,
+    handleNext,
     handlePrevious,
     handleTabClick
   };

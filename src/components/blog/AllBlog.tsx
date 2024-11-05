@@ -22,15 +22,13 @@ function AllBlog() {
     posts,
     loading,
     error,
-    openModal,
-    idToDelete,
-    activeTab,
+      activeTab,
+    openModal,  
     currentPage,
     limit,
     handleDeleteApi,
     handleDelete,
     handleClickOutside,
-    handlePagination,
     handleTabClick
   } = useFetchPost();
   return (
@@ -165,7 +163,7 @@ function AllBlog() {
           )}
         </div>
       </div>
-      <DeleteBlogModal/>
+          <DeleteBlogModal isOpen={ openModal} handleClose={handleClickOutside} handleDeleteApi={handleDeleteApi}/>
       </div>
   );
 }
