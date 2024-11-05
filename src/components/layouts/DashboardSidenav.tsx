@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { FiLogOut } from 'react-icons/fi';
 import Image from 'next/image';
 import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { SideNavProps } from '@/interfaces/ComponentInterfaces';
+import { SideNavItem, SideNavItemChild, SideNavProps } from '@/interfaces/ComponentInterfaces';
 import useNavs from '@/customHooks/useNavs';
 import LogoutIcon from '../icons/LogoutIcon';
+import DownArrowIcon from '../icons/DownArrowIcon';
 import LogoutModal from '../modals/LogoutModal';
 
 const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
-  const {isOpen, toggleNav, logout, handleOpenLogoutModal} = useNavs();
+  const {isOpen, toggleNav, handleOpenLogoutModal, activeLabel, handleSetActiveLabel} = useNavs();
 
   return (
     <div className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular text-sm h-full fixed transition-width duration-300`}>
@@ -22,15 +23,28 @@ const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
 
       <ul className="mt-10 space-y-5">
         {items.map((item) => (
-          <li
-            key={item.label}
-            className={`hover:bg-purple-main hover:text-white flex items-center p-2 space-x-2 rounded-md group hover:cursor-pointer`}
-          >
-            <Link href={item.href} className="flex items-center space-x-2 text-white">
-              <item.icon className="text-lg icon transition-all" />
-              {isOpen && <span className='text-accent-dark3 group-hover:text-white'>{item.label}</span>}
+          <>
+            <Link href={item.href}>
+              <li
+                key={item.label}
+                className={`${activeLabel === item.label ? 'bg-purple-main text-white' : 'hover:bg-purple-main hover:text-white'} flex items-center justify-between p-2 space-x-2 rounded-md group hover:cursor-pointer mt-3`}
+                onClick={() => handleSetActiveLabel(item.label)}
+              >
+                <div className="flex items-center space-x-2 text-white">
+                  <item.icon className="text-lg icon transition-all" />
+                  {isOpen && <span className={`text-accent-dark3 ${activeLabel === item.label ? 'text-white' : 'group-hover:text-white'}`}>{item.label}</span>}
+                </div>
+                {item.children && <DownArrowIcon />}
+              </li>
             </Link>
-          </li>
+            {item.children && activeLabel === item.label && <div className="pl-8 pt-2 flex flex-col gap-3 text-sm" style={{marginTop: 0}}>
+              {item?.children.map((child: SideNavItemChild) => (
+                <Link href={child.href}>
+                  <span className={`text-accent-dark3 hover:text-purple-main`}>{child.label}</span>
+                </Link>
+              ))}
+            </div>}
+          </>
         ))}
       </ul>
 

@@ -87,7 +87,12 @@ export interface SideItem {
     children?: SideItem[];
 }
 
-interface SideNavItem {
+export interface SideNavItemChild {
+    label: string; 
+    href: string
+}
+export interface SideNavItem {
+    children?: SideNavItemChild[] | undefined;
     label: string;
     href: string;
     icon: any;

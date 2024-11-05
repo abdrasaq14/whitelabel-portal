@@ -8,7 +8,8 @@ const initialState: NavSlice = {
     newNotification: false,
     breadcrumb: '',
     isOpen: true,
-    showLogoutModal: false
+    showLogoutModal: false,
+    activeLabel: 'Dashboard'
 };
 
 //Actions
@@ -38,6 +39,9 @@ const navSlice = createSlice({
         },
         openLogoutModal: (state) => {
             state.showLogoutModal = true;
+        },
+        setActiveLabel: (state, action) => {
+            state.activeLabel = action.payload;
         }
     },
     // extraReducers: (builder) => {
@@ -57,7 +61,7 @@ const navSlice = createSlice({
     // }
 })
 
-export const {toggleSideNav, closeLogoutModal, openLogoutModal} = navSlice.actions;
+export const {toggleSideNav, closeLogoutModal, openLogoutModal, setActiveLabel} = navSlice.actions;
 
 export default navSlice.reducer;
 

@@ -16,4 +16,5 @@ export interface NavSlice {
     breadcrumb: string;
     isOpen: boolean;
     showLogoutModal: boolean;
+    activeLabel: string;
 }
