@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { useRouter as navigate } from "next/navigation";
+<<<<<<< HEAD
+=======
+import { useRouter } from "next/router";
+>>>>>>> 94f4fa5 (blog module completed)
 import { useMutation } from "react-query";
 import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
 import toast from "react-hot-toast";
 import useStorage from "../useStorage";
+<<<<<<< HEAD
 import { addPost, updatePost } from "@/store/slices/blogSlice";
+=======
+import { addPost, updatePost, deletePost, fetchAllPosts, selectAllPosts } from "@/store/slices/blogSlice";
+>>>>>>> 94f4fa5 (blog module completed)
 import { BlogValidationSchema } from "@/utilities/validations";
 import {
   IBlogPayload,
@@ -14,11 +22,20 @@ import {
   IUseBlogBostProps
 } from "@/interfaces/ComponentInterfaces";
 import { User } from "@/interfaces/AppInterfaces";
+<<<<<<< HEAD
 import { useAppDispatch } from "@/store/hooks";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const { getSessionData } = useStorage();
   const profile = getSessionData("UserData")?.user as User;
+=======
+import { useAppSelector } from "@/store/hooks";
+
+export const useBlogPost = ({ id }: IUseBlogBostProps) => {
+  const { getSessionData } = useStorage();
+  const profile = getSessionData("userData") as User;
+  const router = useRouter();
+>>>>>>> 94f4fa5 (blog module completed)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isBlogEditing, setIsBlogEditing] = useState(true);
@@ -26,7 +43,11 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const [blogId, setBlogId] = useState("");
   const navigateTo = navigate();
   const today = new Date().toISOString().split("T")[0];
+<<<<<<< HEAD
 const dispatch = useAppDispatch();
+=======
+
+>>>>>>> 94f4fa5 (blog module completed)
   const form = useFormik({
     initialValues: {
       authorId: profile?._id,
@@ -51,6 +72,7 @@ const dispatch = useAppDispatch();
   const handleSubmit = useMutation(
     async (values: IBlogPayload) => {
       if (id) {
+<<<<<<< HEAD
         return await dispatch(updatePost({ id, updatedPayload: values }));
         // return await BlogService.updateBlog(id, values);
       }
@@ -60,10 +82,24 @@ const dispatch = useAppDispatch();
         return postToAdd;
       }
       // return await BlogService.create(values);
+=======
+        return await BlogService.updateBlog(id, values);
+      }
+      return await BlogService.create(values);
+>>>>>>> 94f4fa5 (blog module completed)
     },
     {
       onSuccess: (response: any) => {
         form.setSubmitting(false);
+<<<<<<< HEAD
+=======
+        if (id) {
+          updatePost({ id, updatedPayload: response.data?.result });
+        } else {
+          addPost(response.data?.result);
+          setBlogId(response.data?.result._id);
+        }
+>>>>>>> 94f4fa5 (blog module completed)
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
         setOpenModal(true);

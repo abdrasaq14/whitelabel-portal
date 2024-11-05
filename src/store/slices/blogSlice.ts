@@ -64,14 +64,20 @@ const blogSlice = createSlice({
     clearError: (state) => {
       state.error = null;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 94f4fa5 (blog module completed)
     },
     startLoading: (state) => {
       state.loading = true;
     },
     stopLoading: (state) => {
       state.loading = false;
+<<<<<<< HEAD
 =======
 >>>>>>> cb4d2a9 (blog module in progress)
+=======
+>>>>>>> 94f4fa5 (blog module completed)
     }
   },
   extraReducers: (builder) => {
@@ -111,14 +117,19 @@ const blogSlice = createSlice({
 
 // Export actions and reducer
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const { setError, clearError, startLoading, stopLoading } = blogSlice.actions;
 =======
 export const { setError, clearError } = blogSlice.actions;
 >>>>>>> cb4d2a9 (blog module in progress)
+=======
+export const { setError, clearError, startLoading, stopLoading } = blogSlice.actions;
+>>>>>>> 94f4fa5 (blog module completed)
 export default blogSlice.reducer;
 
 // Selectors
 export const selectAllPosts = (state: RootState) => state.blog.posts;
+<<<<<<< HEAD
 <<<<<<< HEAD
 export const postLoadingState = (state: RootState) => state.blog.loading;
 export const postErrorState = (state: RootState) => state.blog.error;
@@ -126,3 +137,12 @@ export const postErrorState = (state: RootState) => state.blog.error;
 export const selectPostLoading = (state: RootState) => state.blog.loading;
 export const selectPostError = (state: RootState) => state.blog.error;
 >>>>>>> cb4d2a9 (blog module in progress)
+=======
+export const postLoadingState = (state: RootState) => state.blog.loading;
+export const postErrorState = (state: RootState) => state.blog.error;
+export const countDrafts = (state: RootState) => 
+  state.blog.posts.filter((post) => post.status === "draft").length;
+
+export const countPublished = (state: RootState) => 
+  state.blog.posts.filter((post) => post.status === "published").length;
+>>>>>>> 94f4fa5 (blog module completed)

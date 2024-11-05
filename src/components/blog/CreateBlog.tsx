@@ -8,11 +8,16 @@ import { postNotAvailableImage } from "../../../public/images/blog";
 import { GoTrash } from "react-icons/go";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
 import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
+<<<<<<< HEAD
+=======
+import { useRouter } from "next/router";
+>>>>>>> 94f4fa5 (blog module completed)
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
 import AppButton from "../forms/AppButton";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
 import BlogPubLishedModal from "../modals/blog/PublishedModal";
+<<<<<<< HEAD
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +27,13 @@ const CreateBlog = () => {
   const id = searchParams.get("id");
   const router = useRouter();
   // const id = router.query.id?.toString();
+=======
+
+
+const CreateBlog = () => {
+  const router = useRouter();
+  const id = router.query.id?.toString();
+>>>>>>> 94f4fa5 (blog module completed)
   const {
     error,
     setError,
@@ -68,7 +80,11 @@ const CreateBlog = () => {
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
               }
+<<<<<<< HEAD
               className="border border-primary font-semibold hover:bg-purple-main disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
+=======
+              className="border border-primary font-semibold hover:bg-primary disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
+>>>>>>> 94f4fa5 (blog module completed)
             >
               Preview
             </button>
@@ -142,7 +158,11 @@ const CreateBlog = () => {
                     <div className="flex flex-col w-full mt-4 gap-2">
                       <span className="font-semibold">Uploaded Post Image</span>
                       <div
+<<<<<<< HEAD
                         className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-purple-main bg-opacity-5 `}
+=======
+                        className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-primary bg-opacity-5 `}
+>>>>>>> 94f4fa5 (blog module completed)
                       >
                         <span className="text-primary-text">Image 1.jpg</span>
                         <GoTrash

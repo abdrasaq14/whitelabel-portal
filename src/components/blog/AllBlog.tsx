@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 "use client"
+=======
+>>>>>>> 94f4fa5 (blog module completed)
 import React from "react";
 import { useRouter } from "next/navigation";
 import { BreadCrumbWithBackButton } from "../Breadcrumb";
@@ -17,22 +20,36 @@ function AllBlog() {
   const {
     allPosts,
     total,
+<<<<<<< HEAD
     idToDelete,
     setTotal,
     handleNext,
     handlePrevious, handlePagination,
+=======
+    setTotal,
+>>>>>>> 94f4fa5 (blog module completed)
     totalDrafts,
     totalPublished,
     posts,
     loading,
     error,
+<<<<<<< HEAD
       activeTab,
     openModal,  
+=======
+    openModal,
+    idToDelete,
+    activeTab,
+>>>>>>> 94f4fa5 (blog module completed)
     currentPage,
     limit,
     handleDeleteApi,
     handleDelete,
     handleClickOutside,
+<<<<<<< HEAD
+=======
+    handlePagination,
+>>>>>>> 94f4fa5 (blog module completed)
     handleTabClick
   } = useFetchPost();
   return (
@@ -58,7 +75,11 @@ function AllBlog() {
             </div>
             <Link
               href={"/blog/create"}
+<<<<<<< HEAD
               className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-primary-text p-2"
+=======
+              className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+>>>>>>> 94f4fa5 (blog module completed)
             >
               Post Blog
             </Link>
@@ -69,7 +90,11 @@ function AllBlog() {
               onClick={() => handleTabClick("all")}
               className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
                 activeTab === "all"
+<<<<<<< HEAD
                   ? "border border-primary bg-purple-main bg-opacity-15"
+=======
+                  ? "border border-primary bg-primary bg-opacity-15"
+>>>>>>> 94f4fa5 (blog module completed)
                   : ""
               }`}
             >
@@ -77,7 +102,11 @@ function AllBlog() {
               <span
                 className={`flex  py-1 px-3  rounded-xl text-xs ${
                   activeTab === "all"
+<<<<<<< HEAD
                     ? "bg-purple-main text-white"
+=======
+                    ? "bg-primary text-white"
+>>>>>>> 94f4fa5 (blog module completed)
                     : "bg-[#EEEFF0] text-[#464749] "
                 }`}
               >
@@ -88,14 +117,22 @@ function AllBlog() {
               onClick={() => handleTabClick("draft")}
               className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "draft"
+<<<<<<< HEAD
                   ? "border border-primary bg-purple-main bg-opacity-15"
+=======
+                  ? "border border-primary bg-primary bg-opacity-15"
+>>>>>>> 94f4fa5 (blog module completed)
                   : ""
               }`}
             >
               Draft
               <span
                 className={`flex bg-[#EEEFF0] text-[#464749] py-1 px-3  rounded-xl text-xs ${
+<<<<<<< HEAD
                   activeTab === "draft" ? "bg-purple-main text-white" : ""
+=======
+                  activeTab === "draft" ? "bg-primary text-white" : ""
+>>>>>>> 94f4fa5 (blog module completed)
                 }`}
               >
                 {totalDrafts}
@@ -105,14 +142,22 @@ function AllBlog() {
               onClick={() => handleTabClick("published")}
               className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "published"
+<<<<<<< HEAD
                   ? "border border-primary bg-purple-main bg-opacity-15"
+=======
+                  ? "border border-primary bg-primary bg-opacity-15"
+>>>>>>> 94f4fa5 (blog module completed)
                   : ""
               }`}
             >
               Published
               <span
                 className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+<<<<<<< HEAD
                   activeTab === "published" ? "bg-purple-main text-white" : ""
+=======
+                  activeTab === "published" ? "bg-primary text-white" : ""
+>>>>>>> 94f4fa5 (blog module completed)
                 }`}
               >
                 {totalPublished}
@@ -136,10 +181,13 @@ function AllBlog() {
               <Pagination
                 total={total}
                 limit={limit}
+<<<<<<< HEAD
                 page={currentPage}
                 onPageChange={handlePagination}
                 increase={handleNext}
                 decrease={handlePrevious}
+=======
+>>>>>>> 94f4fa5 (blog module completed)
               />
             </div>
           ) : !loading && posts && posts?.length === 0 ? (
@@ -171,6 +219,7 @@ function AllBlog() {
           )}
         </div>
       </div>
+<<<<<<< HEAD
       <DeleteBlogModal
         isOpen={openModal}
         handleClose={handleClickOutside}
@@ -179,6 +228,10 @@ function AllBlog() {
         modalTitle="Are you sure you want to delete this post from your blog?"
       />
     </div>
+=======
+      <DeleteBlogModal/>
+      </div>
+>>>>>>> 94f4fa5 (blog module completed)
   );
 }
 

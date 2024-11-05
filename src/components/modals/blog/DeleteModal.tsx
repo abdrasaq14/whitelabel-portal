@@ -1,14 +1,22 @@
 import React from "react";
+<<<<<<< HEAD
 import AppModal from "@/components/utilities/AppModal";
 import { AxiosResponse } from "axios";
 import { depressedEmoji } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
 import { UseMutationResult } from "react-query/types/react/types";
+=======
+import AppModal from "../../AppModal";
+import { depressedEmoji } from "../../../../public/images/blog";
+import AppButton from "../../forms/AppButton";
+import { ButtonType } from "@/enums/ComponentEnums";
+>>>>>>> 94f4fa5 (blog module completed)
 
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: () => void;
+<<<<<<< HEAD
   modalTitle: string;
   handleDeleteApi: UseMutationResult<
     AxiosResponse<any, any>,
@@ -17,13 +25,19 @@ interface BlogModalProps {
     unknown
   >;
   idToDelete: string;
+=======
+  handleDeleteApi: any;
+>>>>>>> 94f4fa5 (blog module completed)
 }
 const DeleteBlogModal: React.FC<BlogModalProps> = ({
   isOpen,
   handleClose,
   handleDeleteApi,
+<<<<<<< HEAD
   modalTitle,
   idToDelete
+=======
+>>>>>>> 94f4fa5 (blog module completed)
 }) => {
   return (
     <AppModal hasClose={true} isOpen={isOpen} closeClicked={handleClose}>
@@ -39,7 +53,11 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
           Oopss!!!
         </p>
         <span className="text-primary-text w-[80%] text-center mx-auto">
+<<<<<<< HEAD
           {modalTitle}
+=======
+          Are you sure you want to delete this post from your blog?
+>>>>>>> 94f4fa5 (blog module completed)
         </span>
 
         <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
@@ -48,7 +66,11 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
             text={`${
               handleDeleteApi.isLoading ? "Deleting..." : "Yes Proceed"
             }`}
+<<<<<<< HEAD
             handleClick={() => handleDeleteApi.mutate(idToDelete)}
+=======
+            handleClick={handleClose}
+>>>>>>> 94f4fa5 (blog module completed)
             type={
               handleDeleteApi.isLoading
                 ? ButtonType.DISABLED

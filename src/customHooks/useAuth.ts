@@ -60,8 +60,13 @@ const useAuth = () => {
         
         // console.log("Login result hook", logUserIn?.payload)
         
+<<<<<<< HEAD
         const {result} = logUserIn?.payload;
         
+=======
+        const {result} = logUserIn.payload;
+        console.log("ResultLoginLogin", result)
+>>>>>>> 046ecec (blog module completed)
         if (result.otpMessage) {
 
             //Store email to localstorage as otp receiver

@@ -334,3 +334,23 @@ export interface IComments {
   isDeleted: boolean;
   createdAt: Date;
 }
+<<<<<<< HEAD
+=======
+
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
+>>>>>>> 046ecec (blog module completed)
