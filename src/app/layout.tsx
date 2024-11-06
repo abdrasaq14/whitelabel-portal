@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
-import { Toaster } from 'react-hot-toast';
-
-import ReduxProvider from "@/store/ReduxProvider";
-
+import Providers from "./provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,14 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={inter.className}
-      >
-        <div className='w-screen h-screen'>
-          <Toaster />
-          <ReduxProvider>
-            {children}
-          </ReduxProvider>
+      <body className={inter.className}>
+        <div className="w-screen h-screen">
+          <Providers>{children}</Providers>
         </div>
       </body>
     </html>
