@@ -1,5 +1,5 @@
 import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType } from "@/enums/ComponentEnums";
-import { FieldAttributes, FormikHandlers } from "formik";
+import {  FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { User } from "./AppInterfaces";

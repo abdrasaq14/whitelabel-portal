@@ -45,7 +45,14 @@ export const formatDateBlog = (date: string) => {
   });
 };
 
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb1379f (blog module in progress)
+>>>>>>> cd223ef (blog module in progress)
 const formatReadingTime = (minutes: number) => {
   if (minutes < 1) {
     // If reading time is less than 1 minute, round up and show in seconds
@@ -75,6 +82,7 @@ export const calculateReadingTime = (htmlContent: string) => {
 
   return formatReadingTime(readingTimeInMinutes);
 };
+<<<<<<< HEAD
 
 export function formatAmount(amount: number): string {
   // Check if the amount is a valid number
@@ -116,3 +124,9 @@ export function formatDate(currentDate: string) {
   //  console.log(date, time+":00");
   return `${date} ${time}:00`;
 }
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb1379f (blog module in progress)
+>>>>>>> cd223ef (blog module in progress)

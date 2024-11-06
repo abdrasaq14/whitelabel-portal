@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 "use client"
+=======
+>>>>>>> cd223ef (blog module in progress)
 import React from "react";
 import useViewBlog from "@/customHooks/Blog/useViewBlog";
 import { BreadCrumbWithBackButton } from "../Breadcrumb";
@@ -90,7 +93,11 @@ function ViewBlog() {
                 </div>
                 <Link
                   href={`/blog/edit/${id}`}
+<<<<<<< HEAD
                   className="border border-primary font-semibold hover:bg-purple-main min-w-[7rem] flex items-center justify-center hover:text-white rounded-md text-primary-text p-2"
+=======
+                  className="border border-primary font-semibold hover:bg-primary min-w-[7rem] flex items-center justify-center hover:text-white rounded-md text-primary-text p-2"
+>>>>>>> cd223ef (blog module in progress)
                 >
                   Edit Blog
                 </Link>
@@ -122,14 +129,22 @@ function ViewBlog() {
                       onClick={() => handleTabClick("all")}
                       className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                         activeTab === "all"
+<<<<<<< HEAD
                           ? "border border-primary bg-purple-main bg-opacity-15"
+=======
+                          ? "border border-primary bg-primary bg-opacity-15"
+>>>>>>> cd223ef (blog module in progress)
                           : ""
                       }`}
                     >
                       All Comments
                       <span
                         className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+<<<<<<< HEAD
                           activeTab === "all" ? "bg-purple-main text-white" : ""
+=======
+                          activeTab === "all" ? "bg-primary text-white" : ""
+>>>>>>> cd223ef (blog module in progress)
                         }`}
                       >
                         {blogDetails?.comments?.length}
@@ -139,14 +154,22 @@ function ViewBlog() {
                       onClick={() => handleTabClick("deleted")}
                       className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                         activeTab === "deleted"
+<<<<<<< HEAD
                           ? "border border-primary bg-purple-main bg-opacity-15"
+=======
+                          ? "border border-primary bg-primary bg-opacity-15"
+>>>>>>> cd223ef (blog module in progress)
                           : ""
                       }`}
                     >
                       Deleted Comments
                       <span
                         className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
+<<<<<<< HEAD
                           activeTab === "deleted" ? "bg-purple-main text-white" : ""
+=======
+                          activeTab === "deleted" ? "bg-primary text-white" : ""
+>>>>>>> cd223ef (blog module in progress)
                         }`}
                       >
                         {deletedComments?.length}
@@ -156,10 +179,17 @@ function ViewBlog() {
                   {comments?.length > 0 && activeTab === "all" && (
                     <Link
                       href={`/blog/view/${id}/comments`}
+<<<<<<< HEAD
                       // onClick={() =>
                       //   saveCommentsToLocalStorage(blogDetails?.comments)
                       // }
                       className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-primary-text p-2"
+=======
+                      onClick={() =>
+                        saveCommentsToLocalStorage(blogDetails?.comments)
+                      }
+                      className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+>>>>>>> cd223ef (blog module in progress)
                     >
                       View all comments
                     </Link>

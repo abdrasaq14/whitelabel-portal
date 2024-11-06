@@ -171,7 +171,6 @@ function AllBlog() {
           )}
         </div>
       </div>
-
       <DeleteBlogModal
         isOpen={openModal}
         handleClose={handleClickOutside}
