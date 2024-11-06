@@ -337,8 +337,6 @@ export interface IComments {
   isDeleted: boolean;
   createdAt: Date;
 }
-<<<<<<< HEAD
-=======
 
 export interface ITextInputProps extends FieldAttributes<any> {
   title: string;
@@ -356,4 +354,3 @@ export interface IToggleInputProps {
   value: boolean;
   onChange: (value: boolean) => void;
 }
->>>>>>> 046ecec (blog module completed)
