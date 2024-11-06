@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { useRouter as navigate } from "next/navigation";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { useRouter } from "next/router";
 >>>>>>> 94f4fa5 (blog module completed)
+=======
+>>>>>>> a4bcbfd (blog module in progress)
 import { useMutation } from "react-query";
 import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
@@ -38,8 +41,11 @@ import { useAppDispatch } from "@/store/hooks";
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const { getSessionData } = useStorage();
   const profile = getSessionData("userData") as User;
+<<<<<<< HEAD
   const router = useRouter();
 >>>>>>> 94f4fa5 (blog module completed)
+=======
+>>>>>>> a4bcbfd (blog module in progress)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isBlogEditing, setIsBlogEditing] = useState(true);
