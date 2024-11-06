@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
 import { Toaster } from 'react-hot-toast';
+import Image from "next/image";
 
 import ReduxProvider from "@/store/ReduxProvider";
 
@@ -22,7 +23,7 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <div className='w-screen h-screen'>
+        <div className='w-screen h-screen bg-white sm:bg-purple-lighter overflow-hidden'>
           <Toaster />
           <ReduxProvider>
             {children}

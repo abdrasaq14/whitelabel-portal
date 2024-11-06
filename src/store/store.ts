@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import modalReducer from './slices/modalSlice';
 import navReducer from './slices/navSlice';
+import dashboardReducer from './slices/dashboardSlice';
 
 // Define the store with your reducers
 export const store = configureStore({
@@ -9,7 +10,8 @@ export const store = configureStore({
     // Add reducers here
     auth: authReducer, 
     modal: modalReducer,
-    nav: navReducer
+    nav: navReducer,
+    dashboard: dashboardReducer
   },
 });
 

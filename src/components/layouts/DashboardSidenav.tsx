@@ -39,7 +39,7 @@ const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
             </Link>
             {item.children && activeLabel === item.label && <div className="pl-8 pt-2 flex flex-col gap-3 text-sm" style={{marginTop: 0}}>
               {item?.children.map((child: SideNavItemChild) => (
-                <Link href={child.href}>
+                <Link key={child.label} href={child.href}>
                   <span className={`text-accent-dark3 hover:text-purple-main`}>{child.label}</span>
                 </Link>
               ))}

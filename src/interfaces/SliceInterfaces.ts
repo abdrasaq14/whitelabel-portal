@@ -1,5 +1,11 @@
 import { User } from "./AppInterfaces";
 
+export interface DashboardSlice {
+    loading: boolean;
+    error: string | null;
+    stats: any;
+}
+
 export interface UserSlice {
     loading: boolean;
     error: string | null;
