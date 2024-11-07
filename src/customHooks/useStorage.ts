@@ -65,13 +65,7 @@ const useStorage = () => {
     
     }
 
-    const currentUser = () => {
-
-        const userData = getSessionData('UserData');
-
-        return userData;
-
-    }
+    const currentUser = getSessionData('UserData');
 
     return {
         storeLocalData,
