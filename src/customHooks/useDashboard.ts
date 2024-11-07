@@ -16,7 +16,12 @@ const useDashboard = () => {
 
     const getStats = async () => {
         const dbData = await dispatch(statsData(currentUser?.whiteLabelName))
+        console.log("Dashboard stats", dbData.payload)
     }
+
+    useEffect(() => {
+        getStats();
+    }, []);
 
     return {
         

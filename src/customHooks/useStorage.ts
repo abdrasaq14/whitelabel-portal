@@ -1,3 +1,4 @@
+"use client"
 import { isJsonString } from '@/utilities/checkers'
 
 const useStorage = () => {
