@@ -15,7 +15,8 @@ export const useComments = () => {
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const deletedComments = comments.filter((comment) => comment.isDeleted);
+  
   const handleTabClick = async (tab: "all" | "deleted") => {
     setIsLoading(true);
     setActiveTab(tab);
@@ -24,7 +25,10 @@ export const useComments = () => {
     );
     setIsLoading(false);
   };
-
+  const handleClickOutside = () => {
+    setOpenModal(false);
+    setIdToDelete("");
+  };
   const handleDeleteComment = (id: string) => {
     setOpenModal(true);
     setIdToDelete(id);
@@ -69,7 +73,9 @@ export const useComments = () => {
   }, [id]);
 
   return {
+    idToDelete,
     activeTab,
+    deletedComments,
     comments,
     AllComments: allComments,
     openModal,
@@ -78,6 +84,7 @@ export const useComments = () => {
     handleTabClick,
     handleDeleteComment,
     handleDeleteCommentApi,
+    handleClickOutside,
     setOpenModal,
   };
 };
