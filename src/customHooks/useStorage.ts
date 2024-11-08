@@ -1,3 +1,4 @@
+"use client"
 import { isJsonString } from '@/utilities/checkers'
 
 const useStorage = () => {
@@ -65,6 +66,8 @@ const useStorage = () => {
     
     }
 
+    const currentUser = getSessionData('UserData');
+
     return {
         storeLocalData,
 
@@ -80,7 +83,9 @@ const useStorage = () => {
 
         removeSessionData,
 
-        clearSessionData
+        clearSessionData,
+
+        currentUser
     }
 
 }

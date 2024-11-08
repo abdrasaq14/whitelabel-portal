@@ -1,6 +1,12 @@
 import { User } from "./AppInterfaces";
 import { IBlogPayload } from "./ComponentInterfaces";
 
+export interface DashboardSlice {
+    loading: boolean;
+    error: string | null;
+    stats: any;
+}
+
 export interface UserSlice {
     loading: boolean;
     error: string | null;

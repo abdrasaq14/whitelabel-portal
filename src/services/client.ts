@@ -11,6 +11,7 @@ apiClient.setHeaders({
   "X-Content-Type-Options": "nosniff",
   "Cache-Control": "no-store",
   "Referrer-Policy": "no-referrer",
+  'CLIENT-PARTNER-KEY': 'A&5FeeGhuiQkh3TYqrI3aabTye'
   // "User-Agent": "WhitelabelPortal/1.0.0",
   // "X-CSRF-Token": "csrfToken",
 });
