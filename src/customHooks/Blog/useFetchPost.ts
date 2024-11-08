@@ -60,27 +60,16 @@ const useBlogPosts = () => {
   const handlePrevious = () => {
     setCurrentPage(currentPage - 1);
   };
-  const fetchPosts = async (status?: string) => {
+  const fetchPosts = async () => {
     dispatch(startLoading());
     dispatch(setError(""));
     try {
-      const dispatchPost = await dispatch(
+      await dispatch(
         fetchAllPosts({
           whiteLabelName: profile?.whiteLabelName,
-          page: currentPage,
-          limit,
-          status
+          limit:10000,
         })
       );
-      const result = dispatchPost.payload;
-     console.log("fetchAllBlog", result);
-
-      if (result?.results) {
-        console.log("fetchAllBlogYes");
-
-        setPosts(result?.results);
-        setTotal(result?.totalResults);
-      }
       dispatch(stopLoading());
     } catch (err) {
       dispatch(stopLoading());
@@ -90,6 +79,27 @@ const useBlogPosts = () => {
     }
   };
 
+  const fetchPostsOnTabChange = async (status: "draft" | "published"| undefined) => { 
+     dispatch(startLoading());
+     BlogService.fetchAll({
+       whiteLabelName: profile?.whiteLabelName,
+       page: currentPage,
+       limit,
+       status: activeTab === "all" ? undefined : activeTab,
+     })
+       .then((res: any) => {
+         if (res.data?.result?.results) {
+           setTotal(res.data?.result?.totalResults);
+           setPosts(res.data?.result?.results);
+         }
+         dispatch(stopLoading());
+       })
+       .catch((err) => {
+         dispatch(stopLoading());
+         dispatch(setError(err));
+       })
+       .finally(() => dispatch(stopLoading()));
+  }
   const handleDeleteApi = useMutation(
     async (id: string) => await BlogService.deleteBlog(id),
     {
@@ -118,12 +128,16 @@ const useBlogPosts = () => {
   const handleTabClick = (tab: "all" | "draft" | "published") => {
     setActiveTab(tab);
     setCurrentPage(1);
-    fetchPosts(tab === "all" ? undefined : tab);
+    
   };
 
   useEffect(() => {
-    fetchPosts(activeTab === "all" ? undefined : activeTab);
+    fetchPosts();
    
+  }, []);
+
+  useEffect(() => {
+   fetchPostsOnTabChange(activeTab === "all" ? undefined : activeTab);
   }, [currentPage, activeTab]);
 
   return {
