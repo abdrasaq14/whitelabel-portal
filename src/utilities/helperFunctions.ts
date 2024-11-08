@@ -43,6 +43,7 @@ export const formatDate = (date: string) => {
   });
 };
 
+
 const formatReadingTime = (minutes: number) => {
   if (minutes < 1) {
     // If reading time is less than 1 minute, round up and show in seconds
@@ -72,3 +73,4 @@ export const calculateReadingTime = (htmlContent: string) => {
 
   return formatReadingTime(readingTimeInMinutes);
 };
+

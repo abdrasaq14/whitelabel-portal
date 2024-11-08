@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { useRouter } from "next/navigation";
 import { BreadCrumbWithBackButton } from "../Breadcrumb";
@@ -16,6 +17,7 @@ function AllBlog() {
   const {
     allPosts,
     total,
+    idToDelete,
     setTotal,
     totalDrafts,
     totalPublished,
@@ -129,10 +131,7 @@ function AllBlog() {
                 ))}
               </div>
 
-              <Pagination
-                total={total}
-                limit={limit}
-              />
+              <Pagination total={total} limit={limit} />
             </div>
           ) : !loading && posts && posts?.length === 0 ? (
             <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">
@@ -163,8 +162,14 @@ function AllBlog() {
           )}
         </div>
       </div>
-          <DeleteBlogModal isOpen={ openModal} handleClose={handleClickOutside} handleDeleteApi={handleDeleteApi as any}/>
-      </div>
+      <DeleteBlogModal
+        isOpen={openModal}
+        handleClose={handleClickOutside}
+        handleDeleteApi={handleDeleteApi as any}
+        idToDelete={idToDelete}
+        modalTitle="Are you sure you want to delete this post from your blog?"
+      />
+    </div>
   );
 }
 

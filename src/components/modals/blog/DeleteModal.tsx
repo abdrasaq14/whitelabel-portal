@@ -9,17 +9,21 @@ import { UseMutationResult } from "react-query/types/react/types";
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  modalTitle: string;
   handleDeleteApi: UseMutationResult<
     AxiosResponse<any, any>,
     unknown,
     string,
     unknown
   >;
+  idToDelete: string;
 }
 const DeleteBlogModal: React.FC<BlogModalProps> = ({
   isOpen,
   handleClose,
   handleDeleteApi,
+  modalTitle,
+  idToDelete
 }) => {
   return (
     <AppModal hasClose={true} isOpen={isOpen} closeClicked={handleClose}>
@@ -35,7 +39,7 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
           Oopss!!!
         </p>
         <span className="text-primary-text w-[80%] text-center mx-auto">
-          Are you sure you want to delete this post from your blog?
+          {modalTitle}
         </span>
 
         <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
@@ -44,7 +48,7 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
             text={`${
               handleDeleteApi.isLoading ? "Deleting..." : "Yes Proceed"
             }`}
-            handleClick={handleClose}
+            handleClick={() => handleDeleteApi.mutate(idToDelete)}
             type={
               handleDeleteApi.isLoading
                 ? ButtonType.DISABLED
