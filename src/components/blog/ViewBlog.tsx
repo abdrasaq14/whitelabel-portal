@@ -155,9 +155,9 @@ function ViewBlog() {
                   {comments?.length > 0 && activeTab === "all" && (
                     <Link
                       href={`/blog/view/${id}/comments`}
-                      onClick={() =>
-                        saveCommentsToLocalStorage(blogDetails?.comments)
-                      }
+                      // onClick={() =>
+                      //   saveCommentsToLocalStorage(blogDetails?.comments)
+                      // }
                       className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
                     >
                       View all comments

@@ -37,21 +37,22 @@ const useStorage = () => {
 
     const storeSessionData = (key: string, value: string) => {
         
-        sessionStorage.setItem(key, value)
-    
+        if (typeof window !== "undefined" && sessionStorage) {
+            sessionStorage.setItem(key, value)
+        }
     }
 
     const getSessionData = (key: string) => {
+        if (typeof window !== "undefined" && sessionStorage) {
+            const item = sessionStorage.getItem(key);
         
-        const item = sessionStorage.getItem(key);
-
         if(!item){
 
             return null;
 
         }
-
         return isJsonString(item) ? JSON.parse(item) : item;
+    }
     }
 
     const removeSessionData = (key: string) => {
