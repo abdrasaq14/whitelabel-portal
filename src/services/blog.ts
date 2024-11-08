@@ -12,9 +12,11 @@ export const BlogService = {
   viewBlog: (id: string) => apiClient.get(`${baseEndPoint}/view/${id}`),
   updateBlog: (id: string, payload: IBlogPayload) =>
     apiClient.put(`${baseEndPoint}/update/${id}`, payload),
+  fetchAllComments: (id: string) =>
+    apiClient.get(`${baseEndPoint}/view/${id}/comment`),
   deleteBlog: (id: string) => apiClient.delete(`${baseEndPoint}/delete/${id}`),
   deleteComment: (postId: string, commentId: string) =>
     apiClient.delete(
       `${baseEndPoint}/comment/delete/?postId=${postId}&commentId=${commentId}`
-    )
+    ),
 };
