@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import useViewBlog from "@/customHooks/Blog/useViewBlog";
 import { BreadCrumbWithBackButton } from "../Breadcrumb";

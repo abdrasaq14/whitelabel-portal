@@ -8,7 +8,7 @@ export const BlogService = {
   create: (payload: IBlogPayload) =>
     apiClient.post(`${baseEndPoint}/create`, payload),
   fetchAll: (IQueryParams: IQueryParams) =>
-    apiClient.get(`${baseEndPoint}/query`, { params: IQueryParams }),
+    apiClient.get(`${baseEndPoint}/query`, { ...IQueryParams }),
   viewBlog: (id: string) => apiClient.get(`${baseEndPoint}/view/${id}`),
   updateBlog: (id: string, payload: IBlogPayload) =>
     apiClient.put(`${baseEndPoint}/update/${id}`, payload),

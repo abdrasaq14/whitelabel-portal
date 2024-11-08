@@ -1,5 +1,5 @@
 import React from "react";
-import AppModal from "../../AppModal";
+import AppModal from "@/components/utilities/AppModal";
 import { AxiosResponse } from "axios";
 import { depressedEmoji } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";

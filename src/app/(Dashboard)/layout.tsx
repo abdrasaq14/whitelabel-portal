@@ -28,7 +28,7 @@ const navItems: SideNavItem[] = [
     { label: 'Merchant', href: '/Merchant', icon: MerchantIcon, children: [{label: 'Merchant Request', href: '/MerchantRequest'}] },
     { label: 'Product', href: '/Product', icon: ProductIcon },
     { label: 'Order & Transaction', href: '/Order', icon: OrderIcon },
-    { label: 'Blog', href: '/Blog', icon: BlogIcon },
+    { label: 'Blog', href: '/blog', icon: BlogIcon },
     { label: 'Message', href: '/Message', icon: MessageIcon },
     { label: 'Account', href: '/Account', icon: AccountIcon },
     { label: 'Settings', href: '/Settings', icon: SettingsIcon },

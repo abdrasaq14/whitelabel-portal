@@ -11,27 +11,34 @@ import {
   startLoading,
   stopLoading,
   fetchAllPosts,
-  countDrafts,
-  countPublished
 } from "@/store/slices/blogSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import useStorage from "../useStorage";
 import { User } from "@/interfaces/AppInterfaces";
 import { IBlogPayload } from "@/interfaces/ComponentInterfaces";
 import usePagination from "../usePagination";
+import { RootState } from "@/store/store";
 
 const useBlogPosts = () => {
   const dispatch = useAppDispatch();
-  const { getSessionData } = useStorage();
-  const profile = getSessionData("userData") as User;
-
+  const { currentUser } = useStorage();
+  const profile = currentUser.user as User;
   const allPosts = useAppSelector(selectAllPosts).length;
+  const countDrafts = (state: RootState) =>
+    state.blog.posts?.filter((post) => post.status === "draft").length;
+
+  const countPublished = (state: RootState) => {
+    return state.blog.posts?.filter((post) => post.status === "published")
+      .length;
+  };
+
   const totalDrafts = useAppSelector(countDrafts);
   const totalPublished = useAppSelector(countPublished);
   const loading = useAppSelector(postLoadingState);
   const error = useAppSelector(postErrorState);
 
   const [posts, setPosts] = useState<IBlogPayload[]>([]);
+
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "draft" | "published">(
@@ -44,7 +51,7 @@ const useBlogPosts = () => {
   const { handleNext, handlePrevious } = usePagination({
     total,
     limit,
-    initialPage
+    initialPage,
   });
 
   const fetchPosts = async (status?: string) => {
@@ -56,11 +63,14 @@ const useBlogPosts = () => {
           whiteLabelName: profile?.whiteLabelName,
           page: currentPage,
           limit,
-          status
+          status,
         })
       );
-      const result = dispatchPost.payload?.result;
+      const result = dispatchPost.payload;
+
       if (result?.results) {
+        console.log("fetchAllBlogYes");
+
         setPosts(result?.results);
         setTotal(result?.totalResults);
       }
@@ -84,7 +94,7 @@ const useBlogPosts = () => {
       onError: (err) => {
         toast.error(err as string);
         setOpenModal(false);
-      }
+      },
     }
   );
 
@@ -127,7 +137,7 @@ const useBlogPosts = () => {
     handleClickOutside,
     handleNext,
     handlePrevious,
-    handleTabClick
+    handleTabClick,
   };
 };
 

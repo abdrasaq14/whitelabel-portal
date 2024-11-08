@@ -18,7 +18,9 @@ export const fetchAllPosts = createAsyncThunk<any, IQueryParams>(
   "blog/fetchAllPosts",
   async (payload: IQueryParams) => {
     const response = await BlogService.fetchAll(payload);
-    return response.data; 
+    console.log("fetchAllBlog", response.data);
+    // @ts-ignore
+    return response.data?.result; 
   }
 );
 
@@ -73,7 +75,7 @@ const blogSlice = createSlice({
       })
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = action.payload;
+        state.posts = action.payload.results;
       })
       .addCase(fetchAllPosts.rejected, (state, action) => {
         state.loading = false;
@@ -104,8 +106,3 @@ export default blogSlice.reducer;
 export const selectAllPosts = (state: RootState) => state.blog.posts;
 export const postLoadingState = (state: RootState) => state.blog.loading;
 export const postErrorState = (state: RootState) => state.blog.error;
-export const countDrafts = (state: RootState) => 
-  state.blog.posts.filter((post) => post.status === "draft").length;
-
-export const countPublished = (state: RootState) => 
-  state.blog.posts.filter((post) => post.status === "published").length;

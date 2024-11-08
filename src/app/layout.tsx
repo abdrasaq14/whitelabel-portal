@@ -16,20 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< HEAD
       <body className={inter.className}>
         <div className="w-screen h-screen">
           <Providers>{children}</Providers>
-=======
-      <body
-        className={inter.className}
-      >
-        <div className='w-screen h-screen bg-white sm:bg-purple-lighter'>
-          <Toaster />
-          <ReduxProvider>
-            {children}
-          </ReduxProvider>
->>>>>>> 33e9815e366f35fb7add03644558546d1e8034c2
         </div>
       </body>
     </html>
