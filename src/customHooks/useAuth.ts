@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react'
 import { UserLogin} from '@/interfaces/AppInterfaces'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -57,10 +58,10 @@ const useAuth = () => {
         
         const logUserIn = await dispatch(userLogin({...values, platform: "portal"}));
         
-        console.log("Login result hook", logUserIn.payload)
+        console.log("Login result hook", logUserIn?.payload)
         
-        const {result} = logUserIn.payload;
-        console.log("ResultLoginLogin", result)
+        const {result} = logUserIn?.payload;
+        
         if (result.otpMessage) {
 
             //Store email to localstorage as otp receiver
@@ -104,7 +105,7 @@ const useAuth = () => {
 
         const verified = await dispatch(otpVerified({otp, otpReceiver}))
 
-        if(verified.payload.status === "Failed"){
+        if(verified?.payload?.status === "Failed"){
             return;
         }
 

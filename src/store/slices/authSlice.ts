@@ -16,10 +16,10 @@ export const userLogin = createAsyncThunk('login', async (data: UserLogin, { rej
     try{
         const response: any = await AuthService.login(data);
         console.log("After api call", response)
-        if(response.data.status === 'Failed'){
+        if(response?.data?.status === 'Failed'){
             return rejectWithValue(response.data)
         }
-        return response.data;
+        return response?.data;
     }catch(error: any) {
         return rejectWithValue(error);
     }
@@ -29,10 +29,10 @@ export const otpVerified = createAsyncThunk('verifyOtp', async (data: Otp, { rej
     try{
         const response: any = await AuthService.verifyOtp(data);
         console.log("After api call", response)
-        if(response.data.status === 'Failed'){
-            return rejectWithValue(response.data)
+        if(response?.data?.status === 'Failed'){
+            return rejectWithValue(response?.data)
         }
-        return response.data;
+        return response?.data;
     }catch(error: any){
         return rejectWithValue(error)
     }

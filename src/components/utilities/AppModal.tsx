@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { AppModalProps } from '@/interfaces/ComponentInterfaces'
 import '@/app/styles/components.css'
-import AppButton from './forms/AppButton'
+import AppButton from '../forms/AppButton'
 import { MdCancel } from "react-icons/md";
 
 const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked}: AppModalProps) => {

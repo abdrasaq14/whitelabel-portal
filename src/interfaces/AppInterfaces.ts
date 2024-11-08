@@ -115,11 +115,20 @@ export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;
 }
 export interface IQueryParams {
-  whiteLabelName?: string;
-  page?: number;
-  limit?: number;
-  totalPages?: number;
-  totalResults?: number;
-  search?: string;
-  status?: string;
+    whiteLabelName?: string;
+    page?: number;
+    limit?: number;
+    totalPages?: number;
+    totalResults?: number;
+    search?: string;
+    status?: string;
+}
+export interface AdminAccountInfo {
+    companyName: string;
+    companyEmail: string;
+    adminName: string;
+    adminEmail: string;
+    companyPhoneNumber: string;
+    adminPhoneNumber: string;
+    companyAddress: string;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import AppModal from '../AppModal'
+import AppModal from '../utilities/AppModal'
 import useModal from '@/customHooks/useModal'
 import OtpForm from '../forms/OtpForm';
 

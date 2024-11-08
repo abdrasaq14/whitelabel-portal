@@ -42,6 +42,7 @@ const dashboardSlice = createSlice({
         })
         .addCase(statsData.fulfilled, (state, action) => {
             state.loading = false;
+            state.stats = action?.payload?.result;
             console.log("Stat data action payload", action.payload)
         })
         .addCase(statsData.rejected, (state, action: any) => {

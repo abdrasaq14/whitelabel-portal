@@ -85,13 +85,17 @@ input[type="number"] {
 
 /* Card styles */
 .card {
-    @apply w-full bg-white shadow-sm border p-5 rounded-lg
+    @apply w-full bg-white p-5 rounded-lg
 }
 
 .card-bordered {
-    @apply border-purple-main
+    @apply border border-purple-main
 }
 
 .card-shadowed {
-    @apply shadow-accent-main
+    @apply shadow-sm shadow-accent-main
+}
+
+.card-noshadow {
+    @apply shadow-none
 }

@@ -16,12 +16,13 @@ apiClient.setHeaders({
   // "X-CSRF-Token": "csrfToken",
 });
 
-// apiClient.addAsyncRequestTransform((request) => async () => {
-//   const token = await frontStorage.getUserData("token");
-//   if (token) {
-//     request.headers["Authorization"] = "Bearer " + token;
-//   }
-// });
+apiClient.addAsyncRequestTransform((request) => async () => {
+  const getData = sessionStorage.getItem("UserData");
+  const data = getData && JSON.parse(getData);
+   if (data && request.headers) {
+    request.headers["Authorization"] = "Bearer " + data?.authToken;
+  }
+});
 
 apiClient.axiosInstance.interceptors.response.use(
   (response: any) => {

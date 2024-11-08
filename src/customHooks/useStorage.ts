@@ -1,94 +1,71 @@
-"use client"
-import { isJsonString } from '@/utilities/checkers'
+"use client";
+import { isJsonString } from '@/utilities/checkers';
 
 const useStorage = () => {
-    
-    const storeLocalData = (key: string, value: string) => {
-        
-        localStorage.setItem(key, value)
+    const isClient = typeof window !== 'undefined';
 
-    }
+    const storeLocalData = (key: string, value: string) => {
+        if (isClient) {
+            localStorage.setItem(key, value);
+        }
+    };
 
     const getLocalData = (key: string) => {
-        
+        if (!isClient) return null;
         const item = localStorage.getItem(key);
-
-        if(!item){
-
-            return null;
-
-        }
-
-        return isJsonString(item) ? JSON.parse(item) : item;
-
-    }
+        return item ? (isJsonString(item) ? JSON.parse(item) : item) : null;
+    };
 
     const removeLocalData = (key: string) => {
-        
-        localStorage.removeItem(key);
-
-    }
+        if (isClient) {
+            localStorage.removeItem(key);
+        }
+    };
 
     const clearLocalData = () => {
-
-        localStorage.clear();
-        
-    }
+        if (isClient) {
+            localStorage.clear();
+        }
+    };
 
     const storeSessionData = (key: string, value: string) => {
-        
-        if (typeof window !== "undefined" && sessionStorage) {
-            sessionStorage.setItem(key, value)
+        if (isClient) {
+            sessionStorage.setItem(key, value);
         }
-    }
+    };
 
     const getSessionData = (key: string) => {
-        if (typeof window !== "undefined" && sessionStorage) {
-            const item = sessionStorage.getItem(key);
-        
-        if(!item){
-
-            return null;
-
-        }
-        return isJsonString(item) ? JSON.parse(item) : item;
-    }
-    }
+        if (!isClient) return null;
+        const item = sessionStorage.getItem(key);
+        return item ? (isJsonString(item) ? JSON.parse(item) : item) : null;
+    };
 
     const removeSessionData = (key: string) => {
-        
-        sessionStorage.removeItem(key);
-    
-    }
+        if (isClient) {
+            sessionStorage.removeItem(key);
+        }
+    };
 
     const clearSessionData = () => {
-        
-        sessionStorage.clear();
-    
-    }
+        if (isClient) {
+            sessionStorage.clear();
+        }
+    };
 
+    // Directly access session data when you need it
     const currentUser = getSessionData('UserData');
 
     return {
         storeLocalData,
-
         getLocalData,
-
         removeLocalData,
-
         clearLocalData,
-
         storeSessionData,
-
         getSessionData,
-
         removeSessionData,
-
         clearSessionData,
+        currentUser,
+    };
+};
 
-        currentUser
-    }
-
-}
-
-export default useStorage
+export default useStorage;

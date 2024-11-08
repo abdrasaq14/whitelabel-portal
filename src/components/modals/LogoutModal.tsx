@@ -1,5 +1,5 @@
 import React from 'react'
-import AppModal from '../AppModal'
+import AppModal from '../utilities/AppModal'
 import useNavs from '@/customHooks/useNavs';
 import { ButtonType, ModalFooterType } from '@/enums/ComponentEnums';
 

@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from 'react'
 import useStorage from './useStorage'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -10,7 +11,7 @@ const useDashboard = () => {
   
     const {currentUser} = useStorage();
 
-    // console.log("Current user outside", currentUser)
+    console.log("Current user outside", currentUser)
 
     const dashboardSlice = useAppSelector(getDashboardSlice);
 
@@ -27,7 +28,7 @@ const useDashboard = () => {
         
         stats: dashboardSlice.stats,
 
-        // loading: dashboartSlice.loading
+        loading: dashboardSlice.loading,
     }
 }
 

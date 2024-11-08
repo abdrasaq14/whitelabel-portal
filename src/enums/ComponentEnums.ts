@@ -29,7 +29,8 @@ export enum ModalFooterType {
 
 export enum CardType {
     BORDERED = "card-bordered",
-    SHADOWED = "card-shadowed"
+    SHADOWED = "card-shadowed",
+    NOSHADOW = "card-noshadow"
 }
 
 export enum SpinnerType {
