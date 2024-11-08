@@ -23,7 +23,7 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <div className='w-screen h-screen bg-white sm:bg-purple-lighter overflow-hidden'>
+        <div className='w-screen h-screen bg-white sm:bg-purple-lighter'>
           <Toaster />
           <ReduxProvider>
             {children}

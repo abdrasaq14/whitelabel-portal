@@ -101,3 +101,46 @@ export interface SideNavItem {
 export interface SideNavProps {
     items: SideNavItem[];
 }
+
+export interface StatsCardActionButton {
+    text: string;
+    action: () => void;
+}
+
+export interface StatsCardProps {
+    title: string;
+    icon: ReactElement;
+    value: string;
+    actionButtons?: StatsCardActionButton[] | null;
+    loading: boolean;
+}
+
+export interface SummaryCardProps {
+    title: string;
+    actionButtons?: StatsCardActionButton[] | null;
+    loading: boolean;
+    children: any
+}
+
+interface BarGraphData {
+    colors: string[];
+    xAxisLabel: string[];
+    stacked: boolean;
+    seriesData: {
+        name: string;
+        data: number[];
+    }[]
+}
+
+export interface BarGraphProps {
+    data: BarGraphData
+}
+
+interface Tab {
+    label: string;
+    content: React.ReactNode;
+}
+  
+export interface TabsProps {
+    tabs: Tab[];
+}

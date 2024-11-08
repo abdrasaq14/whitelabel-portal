@@ -16,7 +16,7 @@ const navItems = [
 
 export default function DashboardLayout({ children, username, onLogout }: DashboardLayoutProps) {
     return (
-        <div className="h-screen w-full sm:bg-purple-lighter ">
+        <div className="h-screen w-full sm:bg-purple-lighter overflow-hidden">
             <div className="w-full hidden sm:flex justify-center items-center bg-white p-2  shadow h-[64px] border-b-[1px] border-purple-main ">
                 <Image alt='profitAll Logo' src='/images/logo-purple.svg' width={100} height={18} priority/>
             </div>

@@ -1,3 +1,4 @@
+"use client"
 import { useRouter } from 'next/navigation';
 import {jwtDecode} from "jwt-decode";
 import useStorage from './useStorage';
@@ -8,7 +9,9 @@ const protectedRoutes: string[] = [
 
 const useNavigation = () => {
 
-    const {getSessionData} = useStorage();
+    const isClient = typeof window !== 'undefined';
+
+    const {getSessionData, clearSessionData} = useStorage();
 
     const router = useRouter();
     
@@ -34,6 +37,8 @@ const useNavigation = () => {
         // console.log("Session user data", userData);
         
         if(userData === null){
+
+            console.log("User data is null")
             
             windowRedirect("/Login"); 
             
@@ -42,13 +47,17 @@ const useNavigation = () => {
 
         const {authToken} = userData;
 
-        // console.log("Auth token", authToken)
+        console.log("Auth token", authToken)
 
         const tokenValid = isTokenValid(authToken);
 
-        // console.log("Token valid", tokenValid)
+        console.log("Token valid", tokenValid)
 
         if(!tokenValid){
+
+            console.log("Not a valid token")
+
+            clearSessionData();
             
             windowRedirect("/Login"); 
             
@@ -60,34 +69,12 @@ const useNavigation = () => {
 
         if(protectedRoutes.includes(destination)){
             
-            const userData = getSessionData('UserData');
-        
-            // console.log("Session user data", userData);
-            
-            if(userData === null){
-                
-                windowRedirect("/Login"); 
-                
-                return;  
-            }
-
-            const {authToken} = userData;
-
-            // console.log("Auth token", authToken)
-
-            const tokenValid = isTokenValid(authToken);
-
-            // console.log("Token valid", tokenValid)
-
-            if(!tokenValid){
-                
-                windowRedirect("/Login"); 
-                
-                return;
-            }
+            checkUserAuthenticity()
         }
 
-        window.location.href = destination;
+        if(isClient) {
+            window.location.href = destination;
+        }
 
     }
 

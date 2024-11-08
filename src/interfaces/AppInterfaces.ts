@@ -106,3 +106,13 @@ export interface Otp {
     otp: string;
     otpReceiver: string;
 }
+
+export interface AdminAccountInfo {
+    companyName: string;
+    companyEmail: string;
+    adminName: string;
+    adminEmail: string;
+    companyPhoneNumber: string;
+    adminPhoneNumber: string;
+    companyAddress: string;
+}
