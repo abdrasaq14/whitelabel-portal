@@ -12,11 +12,8 @@ export const store = configureStore({
     auth: authReducer, 
     modal: modalReducer,
     nav: navReducer,
-<<<<<<< HEAD
     blog: blogReducer,
-=======
     dashboard: dashboardReducer
->>>>>>> 5bfbf159391caa63dd32639d6163d439b376f1c9
   },
 });
 

@@ -71,6 +71,7 @@ export const useComments = () => {
   return {
     activeTab,
     comments,
+    AllComments: allComments,
     openModal,
     isLoading,
     setActiveTab,
