@@ -27,7 +27,7 @@ const useStorage = () => {
 
     const updateLocalData = (key: string, prop: string, value: any) => {
         
-        if(!isClient) return null;
+        if (!isClient) return null;
 
         const data = getLocalData(key);
 
@@ -81,7 +81,7 @@ const useStorage = () => {
 
     const updateSessionData = (key: string, prop: string, value: any) => {
         
-        if(!isClient) return null;
+        if (!isClient) return null;
 
         const data = getSessionData(key);
 
@@ -94,6 +94,7 @@ const useStorage = () => {
         return data;
 
     }
+    
 
     const removeSessionData = (key: string) => {
     
@@ -143,6 +144,5 @@ console.log("SessionData", currentUser, storeSessionData);
         updateSessionData
     
     };
-};
-
+}
 export default useStorage;
