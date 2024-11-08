@@ -48,7 +48,7 @@ export default function PostCard({
       </div>
       <Link
         href={`/blog/${blog._id}`}
-        className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-primary bg-opacity-60 overflow-hidden"
+        className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-purple-main bg-opacity-60 overflow-hidden"
       >
         <img
           src={blog?.image as string || noPostImage.src}

@@ -19,6 +19,8 @@ function AllBlog() {
     total,
     idToDelete,
     setTotal,
+    handleNext,
+    handlePrevious, handlePagination,
     totalDrafts,
     totalPublished,
     posts,
@@ -56,7 +58,7 @@ function AllBlog() {
             </div>
             <Link
               href={"/blog/create"}
-              className="border border-primary font-semibold hover:bg-primary hover:text-white rounded-md text-primary-text p-2"
+              className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-primary-text p-2"
             >
               Post Blog
             </Link>
@@ -67,7 +69,7 @@ function AllBlog() {
               onClick={() => handleTabClick("all")}
               className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
                 activeTab === "all"
-                  ? "border border-primary bg-primary bg-opacity-15"
+                  ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
               }`}
             >
@@ -75,7 +77,7 @@ function AllBlog() {
               <span
                 className={`flex  py-1 px-3  rounded-xl text-xs ${
                   activeTab === "all"
-                    ? "bg-primary text-white"
+                    ? "bg-purple-main text-white"
                     : "bg-[#EEEFF0] text-[#464749] "
                 }`}
               >
@@ -86,14 +88,14 @@ function AllBlog() {
               onClick={() => handleTabClick("draft")}
               className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "draft"
-                  ? "border border-primary bg-primary bg-opacity-15"
+                  ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
               }`}
             >
               Draft
               <span
                 className={`flex bg-[#EEEFF0] text-[#464749] py-1 px-3  rounded-xl text-xs ${
-                  activeTab === "draft" ? "bg-primary text-white" : ""
+                  activeTab === "draft" ? "bg-purple-main text-white" : ""
                 }`}
               >
                 {totalDrafts}
@@ -103,14 +105,14 @@ function AllBlog() {
               onClick={() => handleTabClick("published")}
               className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "published"
-                  ? "border border-primary bg-primary bg-opacity-15"
+                  ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
               }`}
             >
               Published
               <span
                 className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                  activeTab === "published" ? "bg-primary text-white" : ""
+                  activeTab === "published" ? "bg-purple-main text-white" : ""
                 }`}
               >
                 {totalPublished}
@@ -131,7 +133,14 @@ function AllBlog() {
                 ))}
               </div>
 
-              <Pagination total={total} limit={limit} />
+              <Pagination
+                total={total}
+                limit={limit}
+                page={currentPage}
+                onPageChange={handlePagination}
+                increase={handleNext}
+                decrease={handlePrevious}
+              />
             </div>
           ) : !loading && posts && posts?.length === 0 ? (
             <div className="w-full flex gap-8 flex-col items-center justify-center mt-8">

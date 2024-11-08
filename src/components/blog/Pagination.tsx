@@ -1,22 +1,37 @@
 import React from "react";
-import usePagination from "@/customHooks/usePagination";
 
 interface PaginationProps {
-  total: number;
+  page: number;
   limit: number;
-  initialPage?: number;
+  total: number;
+  increase: () => void;
+  decrease: () => void;
+  onPageChange?: (page: number) => void; // Optional callback when the page changes
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-  total,
+  page,
   limit,
-  initialPage
+  total,
+  increase,
+  decrease,
+  onPageChange,
 }) => {
-  const { page, totalPages, handleNext, handlePrevious } = usePagination({
-    total,
-    limit,
-    initialPage
-  });
+  const totalPages = Math.ceil(total / limit);
+
+  const handleNext = () => {
+    if (page < totalPages) {
+      increase();
+      onPageChange && onPageChange(page + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (page > 1) {
+      decrease();
+      onPageChange && onPageChange(page - 1);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center space-x-4">

@@ -10,7 +10,7 @@ import {
   postErrorState,
   startLoading,
   stopLoading,
-  fetchAllPosts,
+  fetchAllPosts
 } from "@/store/slices/blogSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import useStorage from "../useStorage";
@@ -21,16 +21,18 @@ import { RootState } from "@/store/store";
 
 const useBlogPosts = () => {
   const dispatch = useAppDispatch();
-  const { currentUser } = useStorage();
-  const profile = currentUser.user as User;
+  const { getSessionData } = useStorage();
+  const profile = getSessionData("userData") as User;
+
   const allPosts = useAppSelector(selectAllPosts).length;
   const countDrafts = (state: RootState) =>
     state.blog.posts?.filter((post) => post.status === "draft").length;
 
-  const countPublished = (state: RootState) => {
-    return state.blog.posts?.filter((post) => post.status === "published")
-      .length;
-  };
+  const countPublished = (state: RootState) =>{
+    console.log("state.blog.posts", state.blog.posts);
+   return state.blog.posts?.filter((post) => post.status === "published")
+     .length;
+    };
 
   const totalDrafts = useAppSelector(countDrafts);
   const totalPublished = useAppSelector(countPublished);
@@ -38,6 +40,7 @@ const useBlogPosts = () => {
   const error = useAppSelector(postErrorState);
 
   const [posts, setPosts] = useState<IBlogPayload[]>([]);
+  console.log("fetchAllBlog", posts);
 
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
@@ -46,14 +49,17 @@ const useBlogPosts = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 9;
-  const initialPage = 1;
   const [total, setTotal] = useState(0);
-  const { handleNext, handlePrevious } = usePagination({
-    total,
-    limit,
-    initialPage,
-  });
 
+  const handlePagination = (page: number) => {
+    setCurrentPage(page);
+  };
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const handlePrevious = () => {
+    setCurrentPage(currentPage - 1);
+  };
   const fetchPosts = async (status?: string) => {
     dispatch(startLoading());
     dispatch(setError(""));
@@ -63,10 +69,11 @@ const useBlogPosts = () => {
           whiteLabelName: profile?.whiteLabelName,
           page: currentPage,
           limit,
-          status,
+          status
         })
       );
       const result = dispatchPost.payload;
+     console.log("fetchAllBlog", result);
 
       if (result?.results) {
         console.log("fetchAllBlogYes");
@@ -94,7 +101,7 @@ const useBlogPosts = () => {
       onError: (err) => {
         toast.error(err as string);
         setOpenModal(false);
-      },
+      }
     }
   );
 
@@ -116,6 +123,7 @@ const useBlogPosts = () => {
 
   useEffect(() => {
     fetchPosts(activeTab === "all" ? undefined : activeTab);
+   
   }, [currentPage, activeTab]);
 
   return {
@@ -138,6 +146,7 @@ const useBlogPosts = () => {
     handleNext,
     handlePrevious,
     handleTabClick,
+    handlePagination
   };
 };
 

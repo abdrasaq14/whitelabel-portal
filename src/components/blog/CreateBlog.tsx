@@ -65,7 +65,7 @@ const CreateBlog = () => {
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
               }
-              className="border border-primary font-semibold hover:bg-primary disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
+              className="border border-primary font-semibold hover:bg-purple-main disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
             >
               Preview
             </button>
@@ -139,7 +139,7 @@ const CreateBlog = () => {
                     <div className="flex flex-col w-full mt-4 gap-2">
                       <span className="font-semibold">Uploaded Post Image</span>
                       <div
-                        className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-primary bg-opacity-5 `}
+                        className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-purple-main bg-opacity-5 `}
                       >
                         <span className="text-primary-text">Image 1.jpg</span>
                         <GoTrash

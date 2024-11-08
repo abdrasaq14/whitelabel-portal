@@ -42,14 +42,14 @@ const ViewAllComments = () => {
               onClick={() => handleTabClick("all")}
               className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "all"
-                  ? "border border-primary bg-primary bg-opacity-15"
+                  ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
               }`}
             >
               All Comments
               <span
                 className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                  activeTab === "all" ? "bg-primary text-white" : ""
+                  activeTab === "all" ? "bg-purple-main text-white" : ""
                 }`}
               >
                 {AllComments?.length}
@@ -59,14 +59,14 @@ const ViewAllComments = () => {
               onClick={() => handleTabClick("deleted")}
               className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "deleted"
-                  ? "border border-primary bg-primary bg-opacity-15"
+                  ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
               }`}
             >
               Deleted Comments
               <span
                 className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                  activeTab === "deleted" ? "bg-primary text-white" : ""
+                  activeTab === "deleted" ? "bg-purple-main text-white" : ""
                 }`}
               >
                 {deletedComments?.length}

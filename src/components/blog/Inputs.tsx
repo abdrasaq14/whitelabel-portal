@@ -49,7 +49,7 @@ export const Toggle: React.FC<IToggleInputProps> = ({ name, value, onChange }) =
       type="button"
       onClick={handleClick}
       className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-        value ? "bg-primary" : "bg-gray-300"
+        value ? "bg-purple-main" : "bg-gray-300"
       }`}
     >
       <div
@@ -167,7 +167,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className={`flex flex-col ${wrapperClass}`}>
       <div
-        className={`relative bg-primary bg-opacity-10 py-4  !h-full mt-1 border border-[#470e812b] rounded flex flex-col items-center justify-center ${extraClass} ${
+        className={`relative bg-purple-main bg-opacity-10 py-4  !h-full mt-1 border border-[#470e812b] rounded flex flex-col items-center justify-center ${extraClass} ${
           dragOver ? "bg-blue-100" : ""
         }`}
         onDrop={handleDrop}
@@ -216,7 +216,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
       {fileName && (
         <div className="flex flex-col w-full mt-4">
           <div
-            className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-primary bg-opacity-5 ${
+            className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-purple-main bg-opacity-5 ${
               uploadError
                 ? "border-b-[5px] border-b-red-500"
                 : isUploading && !uploadError
