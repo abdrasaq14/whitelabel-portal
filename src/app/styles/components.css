@@ -25,7 +25,7 @@
 }
 
 .input-label {
-    @apply font-satoshiRegular text-sm text-accent-light
+    @apply font-satoshiRegular text-sm text-accent-main
 }
 
 input[type="number"]::-webkit-outer-spin-button,

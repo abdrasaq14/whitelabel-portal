@@ -1,5 +1,11 @@
 import { User } from "./AppInterfaces";
 
+export interface AccountSlice {
+    loading: boolean;
+    error: string | null;
+    disableMode: boolean;
+}
+
 export interface DashboardSlice {
     loading: boolean;
     error: string | null;
