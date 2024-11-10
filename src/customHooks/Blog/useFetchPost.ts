@@ -22,8 +22,8 @@ import { RootState } from "@/store/store";
 const useBlogPosts = () => {
   const dispatch = useAppDispatch();
   const { getSessionData } = useStorage();
-  const profile = getSessionData("userData") as User;
-
+  const profile = getSessionData("UserData")?.user as User;
+  console.log("Profile", profile);
   const allPosts = useAppSelector(selectAllPosts).length;
   const countDrafts = (state: RootState) =>
     state.blog.posts?.filter((post) => post.status === "draft").length;

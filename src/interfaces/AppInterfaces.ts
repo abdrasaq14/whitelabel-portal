@@ -64,6 +64,7 @@ export interface CustomisationData {
 }
 
 export interface User {
+    authToken: string;
     _id?: string;
     firstName: string;
     lastName: string;
