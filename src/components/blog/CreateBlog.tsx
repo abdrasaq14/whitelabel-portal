@@ -8,17 +8,20 @@ import { postNotAvailableImage } from "../../../public/images/blog";
 import { GoTrash } from "react-icons/go";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
 import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
-import { useRouter } from "next/router";
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
 import AppButton from "../forms/AppButton";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
 import BlogPubLishedModal from "../modals/blog/PublishedModal";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 const CreateBlog = () => {
+   const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const router = useRouter();
-  const id = router.query.id?.toString();
+  // const id = router.query.id?.toString();
   const {
     error,
     setError,

@@ -1,3 +1,4 @@
+"use client"
 import CreateBlog from "@/components/blog/CreateBlog";
 
 function EditBlogPage() {
