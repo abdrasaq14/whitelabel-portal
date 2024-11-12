@@ -11,13 +11,13 @@ const useDashboard = () => {
   
     const {currentUser} = useStorage();
 
-    console.log("Current user outside", currentUser)
+    // console.log("Current user outside", currentUser)
 
     const dashboardSlice = useAppSelector(getDashboardSlice);
 
     const getStats = async () => {
         const dbData = await dispatch(statsData(currentUser?.whiteLabelName))
-        console.log("Dashboard stats", dbData.payload)
+        // console.log("Dashboard stats", dbData.payload)
     }
 
     useEffect(() => {

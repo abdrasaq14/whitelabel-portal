@@ -1,5 +1,6 @@
 "use client"
 import AccountTab from '@/components/Account/AccountTab'
+import MembersTab from '@/components/Account/MembersTab'
 import AppCard from '@/components/utilities/AppCard'
 import Tabs from '@/components/utilities/Tabs'
 import useNavigation from '@/customHooks/useNavigation'
@@ -16,7 +17,7 @@ const page = () => {
 
         { label: 'Account', content: <AccountTab /> },
         
-        { label: 'Team Management', content: <p>Content for Tab 2</p> },
+        { label: 'Team Members', content: <MembersTab /> },
         
         { label: 'Invite Merchants', content: <p>Content for Tab 3</p> },
     

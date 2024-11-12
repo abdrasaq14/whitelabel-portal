@@ -70,7 +70,7 @@ const AppButton = ({type, icon: Icon=null, style=null, text, loader=null, handle
       onClick={() => type !== ButtonType.DISABLED && !loader?.loading && handleClick()} 
       className={`btn ${type} font-latoRegular ${style}`}
     >
-      {Icon ? <>{text} {loader?.loading ? <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> : <Icon size={14} />}</> : loader?.loading ? `${text}  ${<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}` : text}
+      {Icon ? <>{text} {loader?.loading ? <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> : <Icon size={14} />}</> : loader?.loading ? <>{text} {<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}</> : text}
     </button>
   )
 }

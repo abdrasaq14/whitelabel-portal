@@ -1,9 +1,18 @@
 import { User } from "./AppInterfaces";
 
+interface StaffListResult {
+    limit: number;
+    page: number;
+    results: any[];
+    totalPages: number;
+    totalResults: number;
+}
+
 export interface AccountSlice {
     loading: boolean;
     error: string | null;
     disableMode: boolean;
+    staffsResult: StaffListResult | null
 }
 
 export interface DashboardSlice {
@@ -29,4 +38,14 @@ export interface NavSlice {
     isOpen: boolean;
     showLogoutModal: boolean;
     activeLabel: string;
+    showStaffInfoModal: boolean;
+    activeStaff: User | null;
+    showCreateStaffModal: boolean;
+}
+
+export interface UploadSlice {
+    loading: boolean;
+    error: string | null;
+    uploading: boolean;
+    imageHolder: string | null
 }

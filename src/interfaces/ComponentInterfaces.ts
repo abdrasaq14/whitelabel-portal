@@ -33,6 +33,17 @@ export interface AppTextBoxProps {
     onBlur: FormikHandlers['handleBlur']
 }
 
+export interface AppSelectBoxProps {
+    topLabel?: string | null | ReactElement;
+    bottomLabel?: string | null | ReactElement;
+    disabled?: boolean;
+    name: string;
+    value: string;
+    onChange: FormikHandlers['handleChange'];
+    onBlur: FormikHandlers['handleBlur'];
+    children: any;
+}
+
 interface AppModalHeader {
     title: string;
     subtitle?: string;
@@ -149,3 +160,36 @@ export interface TabsProps {
 export interface AccountForm {
     currentUser: User
 }
+
+export interface DocumentUploadProps {
+    uploadInterface: ReactElement;
+    validFormats: string;
+    callback: (arg0: string, arg1?: any) => void;
+    otherData?: any | null
+}
+
+export interface ChangeLogoButtonProps {
+    loader: LoaderProps | null
+}
+
+export interface ChangeStaffImageProps {
+    loader: LoaderProps | null,
+    image: string | null | undefined
+}
+
+interface TableColumn {
+    key: string;
+    label: string;
+    render?: (data: any) => React.ReactNode;
+  }
+  
+  interface TableRow {
+    id: string | number;
+    [key: string]: any;
+  }
+  
+  export interface TableProps {
+    columns: TableColumn[];
+    data: any[] | undefined;
+    additionalActions?: (row: TableRow) => { label: string; action: () => void }[];
+  }

@@ -25,16 +25,16 @@ apiClient.addAsyncRequestTransform((request) => async () => {
 
 apiClient.axiosInstance.interceptors.response.use(
   (response: any) => {
-    console.log("Request success", response.data);
+    // console.log("Request success", response.data);
     if(response.data.status === "Failed"){
-      console.log("Entered failed")
+      // console.log("Entered failed")
       throw new Error(response?.data);
     }
 
     return response;
   },
   (error) => {
-    console.log("Request error", error);
+    // console.log("Request error", error);
     // Handle 401 Unauthorized errors
     if (error.response && error.response.status === 401) {
       console.error("Unauthorized request - token might be invalid.");
@@ -46,7 +46,7 @@ apiClient.axiosInstance.interceptors.response.use(
       window.location.href = '/ServerError';
     }else{
       // Reject the error so it can be handled in the calling code
-      console.log("Rejection mode", error.response.data)
+      // console.log("Rejection mode", error.response.data)
       return Promise.reject(error.response);
     }
   }

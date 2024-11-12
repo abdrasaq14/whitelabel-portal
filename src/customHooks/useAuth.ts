@@ -54,11 +54,11 @@ const useAuth = () => {
 
     const handleLogin = async (values: UserLogin) => {
         
-        console.log("Login details", values)
+        // console.log("Login details", values)
         
         const logUserIn = await dispatch(userLogin({...values, platform: "portal"}));
         
-        console.log("Login result hook", logUserIn?.payload)
+        // console.log("Login result hook", logUserIn?.payload)
         
         const {result} = logUserIn?.payload;
         
@@ -89,7 +89,7 @@ const useAuth = () => {
 
     const verifyOtp = async (length: number, otpReceiver: string) => {
 
-        console.log("Otp", authSlice.otp)
+        // console.log("Otp", authSlice.otp)
 
         const otp = authSlice.otp;
 
@@ -111,7 +111,7 @@ const useAuth = () => {
 
         const {result} = verified.payload;
 
-        console.log("After verified", result);
+        // console.log("After verified", result);
 
         storeSessionData('UserData', JSON.stringify(result))
 

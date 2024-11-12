@@ -1,6 +1,6 @@
 import { DashboardSlice } from '@/interfaces/SliceInterfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {DashboardService} from '@/services/dashboard'; 
+import {DashboardService} from '@/services/DashboardService'; 
 import { RootState } from '../store';
   
 //initial state
@@ -14,7 +14,7 @@ const initialState: DashboardSlice = {
 export const statsData = createAsyncThunk('dashboardStats', async (data: string, { rejectWithValue }) => {
     try{
         const response: any = await DashboardService.dashboardStats(data);
-        console.log("After api call", response)
+        // console.log("After api call", response)
         if(response.data.status === 'Failed'){
             return rejectWithValue(response.data)
         }
@@ -26,13 +26,17 @@ export const statsData = createAsyncThunk('dashboardStats', async (data: string,
 
 //Slice
 const dashboardSlice = createSlice({
+
     name: 'dashboard',
+    
     initialState,
+    
     reducers: {
         // setOtpValue: (state, action) => {
         //     state.otp = action.payload
         // }
     },
+    
     extraReducers: (builder) => {
         builder
 
@@ -43,7 +47,7 @@ const dashboardSlice = createSlice({
         .addCase(statsData.fulfilled, (state, action) => {
             state.loading = false;
             state.stats = action?.payload?.result;
-            console.log("Stat data action payload", action.payload)
+            // console.log("Stat data action payload", action.payload)
         })
         .addCase(statsData.rejected, (state, action: any) => {
             state.loading = false;

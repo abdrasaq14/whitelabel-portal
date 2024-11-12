@@ -25,6 +25,20 @@ const useStorage = () => {
     
     };
 
+    const updateLocalData = (key: string, prop: string, value: any) => {
+        
+        if(!isClient) return null;
+
+        const data = getLocalData(key);
+
+        data[prop] = value;
+
+        storeLocalData(key, data)
+
+        return data;
+
+    }
+
     const removeLocalData = (key: string) => {
         
         if (isClient) {
@@ -64,6 +78,22 @@ const useStorage = () => {
         return item ? (isJsonString(item) ? JSON.parse(item) : item) : null;
     
     };
+
+    const updateSessionData = (key: string, prop: string, value: any) => {
+        
+        if(!isClient) return null;
+
+        const data = getSessionData(key);
+
+        // console.log(key, prop, value, data)
+
+        data[prop] = value;
+
+        storeSessionData(key, JSON.stringify(data))
+
+        return data;
+
+    }
 
     const removeSessionData = (key: string) => {
     
@@ -107,6 +137,10 @@ const useStorage = () => {
         clearSessionData,
         
         currentUser,
+
+        updateLocalData,
+
+        updateSessionData
     
     };
 };

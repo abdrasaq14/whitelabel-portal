@@ -38,7 +38,7 @@ const useNavigation = () => {
         
         if(userData === null){
 
-            console.log("User data is null")
+            // console.log("User data is null")
             
             windowRedirect("/Login"); 
             
@@ -47,15 +47,15 @@ const useNavigation = () => {
 
         const {authToken} = userData;
 
-        console.log("Auth token", authToken)
+        // console.log("Auth token", authToken)
 
         const tokenValid = isTokenValid(authToken);
 
-        console.log("Token valid", tokenValid)
+        // console.log("Token valid", tokenValid)
 
         if(!tokenValid){
 
-            console.log("Not a valid token")
+            // console.log("Not a valid token")
 
             clearSessionData();
             

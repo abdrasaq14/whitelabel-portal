@@ -4,6 +4,7 @@ import modalReducer from './slices/modalSlice';
 import navReducer from './slices/navSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import accountReducer from './slices/accountSlice';
+import uploadReducer from './slices/uploadSlice';
 
 // Define the store with your reducers
 export const store = configureStore({
@@ -13,7 +14,8 @@ export const store = configureStore({
     modal: modalReducer,
     nav: navReducer,
     dashboard: dashboardReducer,
-    account: accountReducer
+    account: accountReducer,
+    upload: uploadReducer
   },
 });
 
