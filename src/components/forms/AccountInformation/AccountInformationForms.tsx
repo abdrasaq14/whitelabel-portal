@@ -1,24 +1,30 @@
-import React from 'react'
-import AdminForm from './AdminForm'
-import useStorage from '@/customHooks/useStorage'
+import React, { useState, useEffect } from 'react';
+import AdminForm from './AdminForm';
+import useStorage from '@/customHooks/useStorage';
 import StaffForm from './StaffForm';
 
 const AccountInformationForms = () => {
+  const { currentUser } = useStorage();
+  const [isClient, setIsClient] = useState(false);
 
-  const {currentUser} = useStorage();
+  // Ensure component only renders on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  console.log("Current user", currentUser);
+  if (!isClient) {
+    return null; // Avoid rendering anything on the server side
+  }
 
   return (
-
     <>
-
-      {currentUser?.user?.role === 'Admin' ? <AdminForm currentUser={currentUser?.user} /> : <StaffForm />}
-
+      {currentUser?.user?.role === 'Admin' ? (
+        <AdminForm currentUser={currentUser?.user} />
+      ) : (
+        <StaffForm />
+      )}
     </>
-  
-  )
+  );
+};
 
-}
-
-export default AccountInformationForms
+export default AccountInformationForms;

@@ -39,9 +39,12 @@ const config: Config = {
           dark: "#4D5154",
           dark2: "#0E0C01",
           dark3: "#292D32",
+          dark4: "#344054",
           light: "#C8CCD0",
           light2: "#D0D5DD",
-          light3: "#98A2B3"
+          light3: "#98A2B3",
+          light4: "#C8CCD0",
+          light5: "#F0F2F5"
         },
         gold: {
           main: "#FDB600"

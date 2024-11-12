@@ -64,8 +64,12 @@ export interface CustomisationData {
 }
 
 export interface User {
+<<<<<<< HEAD
     authToken: string;
     _id?: string;
+=======
+    _id: string;
+>>>>>>> 4f4649d (Account completed)
     firstName: string;
     lastName: string;
     email: string;

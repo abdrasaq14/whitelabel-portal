@@ -1,7 +1,7 @@
 import { UserSlice } from '@/interfaces/SliceInterfaces';
 import { Otp, UserLogin } from '@/interfaces/AppInterfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {AuthService} from '@/services/auth'; 
+import {AuthService} from '@/services/AuthService'; 
 import { RootState } from '../store';
   
 //initial state
@@ -15,7 +15,7 @@ const initialState: UserSlice = {
 export const userLogin = createAsyncThunk('login', async (data: UserLogin, { rejectWithValue }) => {
     try{
         const response: any = await AuthService.login(data);
-        console.log("After api call", response)
+        // console.log("After api call", response)
         if(response?.data?.status === 'Failed'){
             return rejectWithValue(response.data)
         }
@@ -28,7 +28,7 @@ export const userLogin = createAsyncThunk('login', async (data: UserLogin, { rej
 export const otpVerified = createAsyncThunk('verifyOtp', async (data: Otp, { rejectWithValue }) => {
     try{
         const response: any = await AuthService.verifyOtp(data);
-        console.log("After api call", response)
+        // console.log("After api call", response)
         if(response?.data?.status === 'Failed'){
             return rejectWithValue(response?.data)
         }
@@ -66,13 +66,14 @@ const authSlice = createSlice({
             state.loading = true;
             state.error = null
         })
-        .addCase(otpVerified.fulfilled, (state, action) => {
+        .addCase(otpVerified.fulfilled, (state) => {
             state.loading = false;
         })
         .addCase(otpVerified.rejected, (state, action: any) => {
             state.loading = false;
             state.error = action.payload?.message || 'Something went wrong';
         })
+
     }
 })
 

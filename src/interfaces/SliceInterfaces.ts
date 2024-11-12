@@ -1,10 +1,19 @@
 import { User } from "./AppInterfaces";
 import { IBlogPayload } from "./ComponentInterfaces";
 
+interface StaffListResult {
+    limit: number;
+    page: number;
+    results: any[];
+    totalPages: number;
+    totalResults: number;
+}
+
 export interface AccountSlice {
     loading: boolean;
     error: string | null;
     disableMode: boolean;
+    staffsResult: StaffListResult | null
 }
 
 export interface DashboardSlice {
@@ -31,6 +40,7 @@ export interface NavSlice {
     isOpen: boolean;
     showLogoutModal: boolean;
     activeLabel: string;
+<<<<<<< HEAD
 }
 
 export interface BlogSlice{
@@ -43,3 +53,16 @@ export interface IUpdatePostPayload {
     id: string;
     updatedPayload: Partial<IBlogPayload>;
 }
+=======
+    showStaffInfoModal: boolean;
+    activeStaff: User | null;
+    showCreateStaffModal: boolean;
+}
+
+export interface UploadSlice {
+    loading: boolean;
+    error: string | null;
+    uploading: boolean;
+    imageHolder: string | null
+}
+>>>>>>> 4f4649d (Account completed)

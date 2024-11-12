@@ -25,7 +25,7 @@ const StatsCard = ({title, icon, value, actionButtons=null, loading}: StatsCardP
                     {loading ? <Spinner type={SpinnerType.PRIMARY} /> : <span className="text-[#000000] text-[#2b2c34] text-xl font-gooperSemibold transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300">{value}</span>}
 
                     <div className='flex justify-between items-center'>
-                        {actionButtons?.map((button: StatsCardActionButton) => <span onClick={() => actionButtonPressed(button.action, button.text)} className={`font-satoshiMedium text-xs cursor-pointer hover:bg-purple-lighter py-2 px-2 rounded text-accent-light hover:text-purple-main ${activeButton === button.text && `text-purple-main bg-purple-lighter`}`}>{button.text}</span>)}
+                        {actionButtons?.map((button: StatsCardActionButton, index: number) => <span key={index} onClick={() => actionButtonPressed(button.action, button.text)} className={`font-satoshiMedium text-xs cursor-pointer hover:bg-purple-lighter py-2 px-2 rounded text-accent-light hover:text-purple-main ${activeButton === button.text && `text-purple-main bg-purple-lighter`}`}>{button.text}</span>)}
                     </div>
                 </div>
             </AppCard>

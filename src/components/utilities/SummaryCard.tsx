@@ -20,7 +20,7 @@ const SummaryCard = ({title, actionButtons=null, loading, children}: SummaryCard
                     <div className='flex justify-between items-center'>
                         <span className="text-sm font-satoshiBold text-accent-main">{title}</span>   
                         <div className='flex justify-between items-center gap-2'>
-                            {actionButtons?.map((button: StatsCardActionButton) => <span onClick={() => actionButtonPressed(button.action, button.text)} className={`font-satoshiMedium text-xs cursor-pointer hover:bg-purple-lighter py-2 px-2 rounded text-accent-light hover:text-purple-main ${activeButton === button.text && `text-purple-main bg-purple-lighter`}`}>{button.text}</span>)}
+                            {actionButtons?.map((button: StatsCardActionButton, index: number) => <span key={index} onClick={() => actionButtonPressed(button.action, button.text)} className={`font-satoshiMedium text-xs cursor-pointer hover:bg-purple-lighter py-2 px-2 rounded text-accent-light hover:text-purple-main ${activeButton === button.text && `text-purple-main bg-purple-lighter`}`}>{button.text}</span>)}
                         </div>  
                     </div>
 

@@ -1,6 +1,6 @@
 import { ModalSlice } from '@/interfaces/SliceInterfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {AuthService} from '@/services/auth'; 
+import {AuthService} from '@/services/AuthService'; 
 import { RootState } from '../store';
   
 //initial state

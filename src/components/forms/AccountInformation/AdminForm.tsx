@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import AppTextBox from '../AppTextBox'
 import AppButton from '../AppButton';
@@ -5,16 +6,16 @@ import { ButtonType, SpinnerType, TextboxType } from '@/enums/ComponentEnums';
 import ValidationError from '../ValidationError';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { useCustomFormik } from '@/customHooks/useCustomFormik';
-import { loginValidation } from '@/utilities/validations';
+import { AdminAccountInfoValidation, loginValidation } from '@/utilities/validations';
 import { AccountForm } from '@/interfaces/ComponentInterfaces';
 import { AdminAccountInfo } from '@/interfaces/AppInterfaces';
 import useAccount from '@/customHooks/useAccount';
 
 const AdminForm = ({currentUser}: AccountForm) => {
 
-    const {editMode, loading, toggleEditMode} = useAccount()
+    const {editMode, loading, toggleEditMode, handleEditUserInfo} = useAccount()
 
-    console.log("Representative data", currentUser?.representative?.phoneNumber)
+    // console.log("Representative data", currentUser?.address)
      
     const initialValues: AdminAccountInfo = { 
         companyName: currentUser?.buinessName, 
@@ -26,11 +27,12 @@ const AdminForm = ({currentUser}: AccountForm) => {
         companyAddress: currentUser?.address 
     };
 
-    const onSubmit = (values: any) => {
-        console.log("Account info", values);
+    const onSubmit = (values: AdminAccountInfo) => {
+        // console.log("Account info", values);
+        handleEditUserInfo(values);
     };
 
-    const {handleBlur, handleChange, errors, values, handleSubmit, touched} = useCustomFormik(initialValues, onSubmit, loginValidation);
+    const {handleBlur, handleChange, errors, values, handleSubmit, touched} = useCustomFormik(initialValues, onSubmit, AdminAccountInfoValidation);
 
     return (
         <form onSubmit={handleSubmit} className='w-full'>
@@ -126,7 +128,7 @@ const AdminForm = ({currentUser}: AccountForm) => {
                         onBlur={handleBlur} 
                         value={values.companyAddress}  
                         topLabel="Company Address" 
-                        type={TextboxType.NUMBER}
+                        type={TextboxType.TEXT}
                         disabled={true} 
                         placeholder='Enter Company Address' 
                         bottomLabel={touched.companyAddress && errors.companyAddress ? <ValidationError icon={BsExclamationCircle} message={String(errors.companyAddress)} /> : ""}
