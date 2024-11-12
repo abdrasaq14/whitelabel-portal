@@ -116,4 +116,3 @@ export function formatDate(currentDate: string) {
   //  console.log(date, time+":00");
   return `${date} ${time}:00`;
 }
-

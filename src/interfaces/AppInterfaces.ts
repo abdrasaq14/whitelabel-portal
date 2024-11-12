@@ -126,6 +126,20 @@ export interface IQueryParams {
     sortBy?: string;
     category?: string;
 }
+export interface HandlePreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IQueryParams {
+    whiteLabelName?: string;
+    page?: number;
+    limit?: number;
+    totalPages?: number;
+    totalResults?: number;
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    category?: string;
+}
 export interface AdminAccountInfo {
     companyName: string;
     companyEmail: string;
