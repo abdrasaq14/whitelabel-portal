@@ -1,6 +1,6 @@
 import { AES, enc } from "crypto-js";
 import { Config } from "./config";
-
+import { format, formatDistanceToNow } from "date-fns";
 
 
 const $key: string = Config.encodingKey ?? "$@A^&GHDQW$@!@#";
@@ -32,7 +32,7 @@ export const decrypt = (data: string) => {
   return null;
 };
 
-export const formatDate = (date: string) => {
+export const formatDateBlog = (date: string) => {
   const dateObj = new Date(date);
 
   // Format the date
@@ -74,3 +74,43 @@ export const calculateReadingTime = (htmlContent: string) => {
   return formatReadingTime(readingTimeInMinutes);
 };
 
+export function formatAmount(amount: number): string {
+  // Check if the amount is a valid number
+  if (isNaN(amount) || !isFinite(amount)) {
+    return "Invalid amount";
+  }
+
+  // Format the amount as NGN with two decimal places
+  const formattedAmount = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 2
+  }).format(amount);
+
+  return formattedAmount;
+}
+
+
+export function fDate(date: string) {
+  return format(new Date(date), "dd MMMM yyyy");
+}
+
+export function fDateTime(date: string) {
+  return format(new Date(date), "dd MMM yyyy HH:mm");
+}
+
+export function fDateTimeSuffix(date: string) {
+  return format(new Date(date), "dd/MM/yyyy hh:mm p");
+}
+
+export function fToNow(date: string) {
+  return formatDistanceToNow(new Date(date), {
+    addSuffix: true
+  });
+}
+
+export function formatDate(currentDate: string) {
+  const [date, time] = currentDate.replace("T", " ").split(" ");
+  //  console.log(date, time+":00");
+  return `${date} ${time}:00`;
+}

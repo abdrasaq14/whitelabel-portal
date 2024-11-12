@@ -123,6 +123,8 @@ export interface IQueryParams {
     totalResults?: number;
     search?: string;
     status?: string;
+    sortBy?: string;
+    category?: string;
 }
 export interface AdminAccountInfo {
     companyName: string;
