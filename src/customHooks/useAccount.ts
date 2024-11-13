@@ -98,7 +98,7 @@ const useAccount = () => {
 
     const handleCreateStaff = async (payload: User) => {
         
-        console.log("About to process", payload);
+        // console.log("About to process", payload);
 
         const payloadCopy = {...payload};
 
@@ -106,7 +106,7 @@ const useAccount = () => {
 
         const createStaff = await dispatch(staffCreated(payloadCopy));
 
-        console.log("Staff created", createStaff.payload)
+        // console.log("Staff created", createStaff.payload)
 
         if(createStaff?.payload?.status === 'Failed'){
             
