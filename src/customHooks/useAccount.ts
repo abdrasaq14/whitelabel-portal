@@ -21,6 +21,8 @@ const useAccount = () => {
 
     const {handleCloseCreateStaffModal} = useNavs();
 
+    useEffect(() => {if (!accountSlice.staffsResult) handleFetchUsers()}, []);
+
     useEffect(() => {
 
         if(accountSlice.error){
@@ -133,8 +135,6 @@ const useAccount = () => {
         toggleEditMode,
 
         handleEditUserInfo,
-
-        handleFetchUsers,
 
         handleUpdateStaff,
 

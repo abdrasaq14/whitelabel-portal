@@ -240,6 +240,12 @@ export interface ChangeStaffImageProps {
     image: string | null | undefined
 }
 
+export interface PaginationProps {
+    page: number;
+    totalPages: number;
+    onPageChange: (newPage: number) => void;
+};
+
 interface TableColumn {
     key: string;
     label: string;
