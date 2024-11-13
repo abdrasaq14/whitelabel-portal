@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useField } from "formik";
 import axios from "axios";
 import { MdCancel } from "react-icons/md";
-import { FileUploadProps, ITextInputProps, IToggleInputProps } from "@/interfaces/ComponentInterfaces";
+import {
+  FileUploadProps,
+  ITextInputProps,
+  IToggleInputProps
+} from "@/interfaces/ComponentInterfaces";
 
 export function TextInput({
   title,
@@ -39,7 +43,11 @@ export function TextInput({
   );
 }
 
-export const Toggle: React.FC<IToggleInputProps> = ({ name, value, onChange }) => {
+export const Toggle: React.FC<IToggleInputProps> = ({
+  name,
+  value,
+  onChange
+}) => {
   const handleClick = () => {
     onChange(!value);
   };
@@ -60,8 +68,6 @@ export const Toggle: React.FC<IToggleInputProps> = ({ name, value, onChange }) =
     </button>
   );
 };
-
-
 
 const BlogFileUpload: React.FC<FileUploadProps> = ({
   name,
@@ -199,6 +205,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         <input
           onChange={handleFileChange}
           id={name}
+          type="file"
           disabled={disabled || isUploading}
           accept={
             fileType === "document" ? ".pdf,.doc,.docx" : ".png,.jpg,.jpeg,.svg"
