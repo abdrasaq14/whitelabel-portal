@@ -11,14 +11,15 @@ import NoMemberFound from '../feedbacks/NoMemberFound'
 import useNavs from '@/customHooks/useNavs'
 import StaffInfoModal from '../modals/StaffInfoModal'
 import CreateStaffModal from '../modals/CreateStaffModal'
+import Pagination from '../feedbacks/Pagination'
 
 const MembersTab = () => {
 
-    const {handleFetchUsers, staffsResult, loading} = useAccount();
+    const {staffsResult, loading} = useAccount();
+
+    // console.log(staffsResult);
 
     const {handleOpenStaffInfoModal, handleOpenCreateStaffModal} = useNavs();
-
-    useEffect(() => {if (!staffsResult) handleFetchUsers()}, []);
 
     const columns = [
         { key: 'sn', label: 'S/N' },
@@ -56,11 +57,18 @@ const MembersTab = () => {
                 {loading ? <div className='flex justify-center items-center h-full w-full'>
                         <Spinner type={SpinnerType.PRIMARY} height={40} width={40} />
                     </div> : !staffsResult ? <NoMemberFound /> : 
-                    <Table
-                        columns={columns}
-                        data={staffsResult?.results}
-                        additionalActions={additionalActions}
-                    />
+                    <>
+                        <Table
+                            columns={columns}
+                            data={staffsResult?.results}
+                            additionalActions={additionalActions}
+                        />
+                        <Pagination
+                            page={staffsResult.page}
+                            totalPages={staffsResult.totalPages}
+                            onPageChange={() => {}}
+                        />
+                    </>
                 }
             </div>
 
