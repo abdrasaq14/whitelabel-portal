@@ -135,9 +135,9 @@ const useBlogPosts = () => {
    
   }, []);
 
-  // useEffect(() => {
-  //  fetchPostsOnTabChange(activeTab === "all" ? undefined : activeTab);
-  // }, [currentPage, activeTab]);
+  useEffect(() => {
+   fetchPostsOnTabChange(activeTab === "all" ? undefined : activeTab);
+  }, [currentPage, activeTab]);
 
   return {
     allPosts,
