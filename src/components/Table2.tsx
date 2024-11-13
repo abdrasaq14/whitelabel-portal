@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 import { useSingleState } from "../../hooks/useSingleState";
 import { ErrorBoundary } from "../../shared_components/ErrorBoundary";
 import Action, { ActionOptionProps } from "../Action/Action";
-import Filter from "../Filter/Filter";
+import Filter from "./Filter/Filter";
 import Spinner from "../spinner/Spinner";
 import { Paginator } from "./Paginator";
 // import { useTable, Column } from "react-table";
