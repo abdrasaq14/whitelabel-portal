@@ -48,17 +48,17 @@ function AllBlog() {
             }}
           />
 
-          <div className="flex justify-between items-center text-primary-text">
+          <div className="flex justify-between items-center text-accent-darker">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg md:text-2xl font-bold">Blog Post</h2>
-              <span className="text-primary-text w-[90%]">
+              <span className="text-accent-darker w-[90%]">
                 Enhance your online presence by managing your blog posts on our
                 marketplace. Create, edit, and delete content with ease.
               </span>
             </div>
             <Link
               href={"/blog/create"}
-              className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-primary-text p-2"
+              className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-accent-darker p-2"
             >
               Post Blog
             </Link>
@@ -67,7 +67,7 @@ function AllBlog() {
           <div className="flex justify-start my-5 gap-4">
             <button
               onClick={() => handleTabClick("all")}
-              className={`flex gap-2 items-center  text-primary-text  font-semibold  text-sm rounded-md p-2 ${
+              className={`flex gap-2 items-center  text-accent-darker  font-semibold  text-sm rounded-md p-2 ${
                 activeTab === "all"
                   ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
@@ -86,7 +86,7 @@ function AllBlog() {
             </button>
             <button
               onClick={() => handleTabClick("draft")}
-              className={`flex gap-2 items-center text-primary-text  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+              className={`flex gap-2 items-center text-accent-darker  font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "draft"
                   ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
@@ -103,7 +103,7 @@ function AllBlog() {
             </button>
             <button
               onClick={() => handleTabClick("published")}
-              className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+              className={`flex gap-2 items-center text-accent-darker font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                 activeTab === "published"
                   ? "border border-primary bg-purple-main bg-opacity-15"
                   : ""
@@ -149,7 +149,7 @@ function AllBlog() {
                 alt=""
                 className="object-contain max-h-[300px]"
               />
-              <span className="text-primary-text text-lg font-semibold mx-auto text-center w-[80%]">
+              <span className="text-accent-darker text-lg font-semibold mx-auto text-center w-[80%]">
                 {activeTab === "all"
                   ? "No blog post available"
                   : activeTab === "draft"
@@ -164,7 +164,7 @@ function AllBlog() {
                 alt=""
                 className="object-contain max-h-[300px]"
               />
-              <span className="text-primary-text text-lg font-semibold mx-auto text-center w-[80%]">
+              <span className="text-accent-darker text-lg font-semibold mx-auto text-center w-[80%]">
                 {error ?? "Unable to fetch blog post"}
               </span>
             </div>

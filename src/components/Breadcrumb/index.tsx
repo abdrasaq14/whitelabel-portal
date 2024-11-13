@@ -1,8 +1,10 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
+import useStorage from "@/customHooks/useStorage";
+import { User } from "@/interfaces/AppInterfaces";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
@@ -36,7 +38,9 @@ export const BreadCrumbClient = ({
   backText,
   currentPath
 }: BreadcrumbPropClient) => {
-  const profile = useAppSelector((state: RootState) => state.auth.userData);
+  const { getSessionData } = useStorage();
+  const profile = getSessionData("UserData")?.user as User;
+  
   return (
     <div className="flex mb-6">
       <div className="flex  font-medium  text-sm text-primary-text">

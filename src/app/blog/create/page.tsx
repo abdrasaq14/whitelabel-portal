@@ -1,10 +1,8 @@
-
 "use client";
 import CreateBlog from "@/components/blog/CreateBlog";
 
-function BlogPage() {
+function EditBlogPage() {
   return <CreateBlog />;
 }
 
-export default BlogPage;
-
+export default EditBlogPage;
