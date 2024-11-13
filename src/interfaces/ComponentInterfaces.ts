@@ -122,9 +122,10 @@ export interface FileUploadProps {
   wrapperClass?: string;
   extraClass?: string;
   disabled?: boolean;
-  type: "text" | "date";
-  icon?: React.ReactNode;
-  inputClass?: string;
+  onFileChange?: (file: File) => void;
+  children?: React.ReactNode;
+  fileType?: "image" | "document";
+  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IToggleInputProps {
