@@ -74,7 +74,7 @@ export interface User {
     role: string;
     resetToken?: string | null;
     resetTokenExpiration?: Date | null;
-    businessName: string;
+    buinessName: string;
     phoneNumber: string;
     apiKey: string;
     currency: string;

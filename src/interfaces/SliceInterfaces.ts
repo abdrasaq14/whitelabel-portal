@@ -1,6 +1,12 @@
 import { User } from "./AppInterfaces";
 import { IBlogPayload } from "./ComponentInterfaces";
 
+export interface AccountSlice {
+    loading: boolean;
+    error: string | null;
+    disableMode: boolean;
+}
+
 export interface DashboardSlice {
     loading: boolean;
     error: string | null;

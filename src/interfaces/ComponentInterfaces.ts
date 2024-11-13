@@ -2,6 +2,7 @@ import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, Sp
 import { FieldAttributes, FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
+import { User } from "./AppInterfaces";
 
 interface LoaderProps {
     loading?: boolean;
@@ -206,4 +207,8 @@ interface Tab {
   
 export interface TabsProps {
     tabs: Tab[];
+}
+
+export interface AccountForm {
+    currentUser: User
 }

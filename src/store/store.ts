@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import modalReducer from './slices/modalSlice';
 import navReducer from './slices/navSlice';
 import dashboardReducer from './slices/dashboardSlice';
+import accountReducer from './slices/accountSlice';
 
 import blogReducer from './slices/blogSlice';
 // Define the store with your reducers
@@ -13,7 +14,8 @@ export const store = configureStore({
     modal: modalReducer,
     nav: navReducer,
     blog: blogReducer,
-    dashboard: dashboardReducer
+    dashboard: dashboardReducer,
+    account: accountReducer
   },
 });
 
