@@ -1,6 +1,7 @@
 import { AdminAccountInfo } from "@/interfaces/AppInterfaces";
 import apiClient from "./client";
 const baseEndPoint = "/users";
+import { paramsObjectToQueryString } from "@/utilities/checkers";
 
 export const UserService = {
     editUserInfo: (data: AdminAccountInfo) => apiClient.put(`${baseEndPoint}`, data),
