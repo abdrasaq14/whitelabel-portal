@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+<<<<<<< HEAD
     "dev": "next dev -p 3003",
+=======
+    "dev": "PORT=3003 next dev",
+>>>>>>> 87089dc (Update)
     "build": "next build",
-    "start": "next start",
+    "start": "PORT=3003 next start",
     "lint": "next lint",
     "docs": "typedoc"
   },
