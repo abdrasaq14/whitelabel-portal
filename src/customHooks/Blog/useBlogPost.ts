@@ -6,7 +6,7 @@ import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
 import toast from "react-hot-toast";
 import useStorage from "../useStorage";
-import { addPost, updatePost, deletePost, fetchAllPosts, selectAllPosts } from "@/store/slices/blogSlice";
+import { addPost, updatePost } from "@/store/slices/blogSlice";
 import { BlogValidationSchema } from "@/utilities/validations";
 import {
   IBlogPayload,
@@ -18,7 +18,7 @@ import { useAppDispatch } from "@/store/hooks";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const { getSessionData } = useStorage();
-  const profile = getSessionData("userData") as User;
+  const profile = getSessionData("UserData")?.user as User;
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isBlogEditing, setIsBlogEditing] = useState(true);
