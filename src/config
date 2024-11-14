@@ -1,0 +1,9 @@
+#Account 1
+Host github.com
+HostName github.com
+IdentityFile ~/.ssh/id_rsa
+
+#Account 2
+Host github.com-profitall
+HostName github.com
+IdentityFile ~/.ssh/profitall_id_rsa
