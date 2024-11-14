@@ -54,12 +54,12 @@ function ViewBlog() {
             <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
           ) : blogDetails?.title.trim() ? (
             <>
-              <div className="flex justify-between items-center text-primary-text">
+              <div className="flex justify-between items-center text-accent-darker">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg md:text-2xl font-bold font-gooperSemiBold lg:w-[80%]">
                     {blogDetails?.title}
                   </h2>
-                  <div className="flex gap-4 text-primary-text">
+                  <div className="flex gap-4 text-accent-darker">
                     <span className="flex items-center gap-1">
                       {blogDetails?.likes >= 1 ? (
                         <TiHeartFullOutline
@@ -90,7 +90,7 @@ function ViewBlog() {
                 </div>
                 <Link
                   href={`/blog/edit/${id}`}
-                  className="border border-primary font-semibold hover:bg-purple-main min-w-[7rem] flex items-center justify-center hover:text-white rounded-md text-primary-text p-2"
+                  className="border border-primary font-semibold hover:bg-purple-main min-w-[7rem] flex items-center justify-center hover:text-white rounded-md text-accent-darker p-2"
                 >
                   Edit Blog
                 </Link>
@@ -108,7 +108,7 @@ function ViewBlog() {
                   {/* blog content */}
                   <div className="w-full">
                     <p
-                      className="text-primary-text style-image"
+                      className="text-accent-darker style-image"
                       dangerouslySetInnerHTML={{
                         __html: blogDetails?.content || ""
                       }}
@@ -120,7 +120,7 @@ function ViewBlog() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleTabClick("all")}
-                      className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                      className={`flex text-accent-darker gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                         activeTab === "all"
                           ? "border border-primary bg-purple-main bg-opacity-15"
                           : ""
@@ -137,7 +137,7 @@ function ViewBlog() {
                     </button>
                     <button
                       onClick={() => handleTabClick("deleted")}
-                      className={`flex gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
+                      className={`flex text-accent-darker gap-2 items-center font-semibold text-sm rounded-md p-2 transition-all duration-300 ${
                         activeTab === "deleted"
                           ? "border border-primary bg-purple-main bg-opacity-15"
                           : ""
@@ -146,7 +146,9 @@ function ViewBlog() {
                       Deleted Comments
                       <span
                         className={`flex bg-[#EEEFF0] py-1 px-3 text-[#464749] rounded-xl text-xs ${
-                          activeTab === "deleted" ? "bg-purple-main text-white" : ""
+                          activeTab === "deleted"
+                            ? "bg-purple-main text-white"
+                            : ""
                         }`}
                       >
                         {deletedComments?.length}
@@ -159,7 +161,7 @@ function ViewBlog() {
                       // onClick={() =>
                       //   saveCommentsToLocalStorage(blogDetails?.comments)
                       // }
-                      className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-primary-text p-2"
+                      className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-accent-darker p-2"
                     >
                       View all comments
                     </Link>
@@ -187,7 +189,7 @@ function ViewBlog() {
                         className="object-cover w-full max-h-[150px]"
                       />
                     </div>
-                    <p className="text-primary-text text-base">
+                    <p className="text-accent-darker text-base">
                       {activeTab === "all"
                         ? "No Comment on this post yet.!!!"
                         : "No deleted comments"}
@@ -203,10 +205,10 @@ function ViewBlog() {
                 alt=""
                 className="object-cover  max-h-[450px] mb-6"
               />
-              <p className="text-primary-text font-black text-xl text-center">
+              <p className="text-accent-darker font-black text-xl text-center">
                 Oopss!!!
               </p>
-              <p className="text-primary-text text-center">
+              <p className="text-accent-darker text-center">
                 {error || "Post deleted from Blog page"}
               </p>
             </div>

@@ -8,19 +8,49 @@ import { IQueryParams } from "@/interfaces/AppInterfaces";
 
 
 const initialState: BlogSlice = {
-  posts: [] as IBlogPayload[],
+  posts: {
+    all: [] as IBlogPayload[],
+    draft: [] as IBlogPayload[],
+    published: [] as IBlogPayload[],
+  },
+  counts: {
+    total: 0,
+    draft: 0,
+    published: 0
+  },
   loading: false,
   error: null
 };
 
 
-export const fetchAllPosts = createAsyncThunk<any, IQueryParams>(
-  "blog/fetchAllPosts",
-  async (payload: IQueryParams) => {
-    const response = await BlogService.fetchAll(payload);
-    console.log("fetchAllBlog", response.data);
+export const fetchPosts = createAsyncThunk<any, IQueryParams>(
+  "blog/fetchPostsByTab",
+  async ({ whiteLabelName, tab, page, limit }: any) => {
+    const status = tab === "all" ? undefined : tab; 
+    const response = await BlogService.fetchAll({
+      whiteLabelName,
+      page,
+      limit,
+      status
+    });
+    console.log("response", response);
+    return {
+      // @ts-ignore
+      posts: response.data?.result?.results,
+      // @ts-ignore
+      total: response.data?.result?.totalResults,
+      tab
+    };
+  }
+);
+
+export const fetchPostCounts = createAsyncThunk<any, IQueryParams>(
+  "blog/fetchPostCounts",
+  async (payload:IQueryParams) => {
     // @ts-ignore
-    return response.data?.result; 
+    const response = await BlogService.fetchPostCounts(payload);
+    // @ts-ignore
+    return response.data?.result;
   }
 );
 
@@ -70,34 +100,56 @@ const blogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllPosts.pending, (state) => {
+      .addCase(fetchPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllPosts.fulfilled, (state, action) => {
+      .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = action.payload.results;
+        const { posts, total, tab } = action.payload;
+        console.log("fetchAllPayload", action.payload);
+        // Update state based on tab type
+        if (tab === "all" || undefined) {
+          state.posts.all = posts;
+        } else if (tab === "draft") {
+          state.posts.draft = posts;
+        } else if (tab === "published") {
+          state.posts.published = posts;
+        }
       })
-      .addCase(fetchAllPosts.rejected, (state, action) => {
+      .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Something went wrong";
       })
+      .addCase(fetchPostCounts.fulfilled, (state, action) => {
+        state.loading = false;
+        const { total, draft, published } = action.payload;
+        console.log("countPayload", action.payload);
+        state.counts = { total, draft, published };
+      })
+      .addCase(fetchPostCounts.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(addPost.fulfilled, (state, action) => {
-        state.posts.push(action.payload);
+        state.posts.all.push(action.payload); // Update as needed
       })
       .addCase(updatePost.fulfilled, (state, action) => {
-        const index = state.posts.findIndex(
+        const index = state.posts.all.findIndex(
           (post) => post._id === action.payload._id
         );
         if (index !== -1) {
-          state.posts[index] = action.payload;
+          state.posts.all[index] = action.payload;
         }
       })
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter((post) => post._id !== action.payload);
+        state.posts.all = state.posts.all.filter(
+          (post) => post._id !== action.payload
+        );
       });
   }
 });
+
 
 // Export actions and reducer
 export const { setError, clearError, startLoading, stopLoading } = blogSlice.actions;
@@ -107,8 +159,4 @@ export default blogSlice.reducer;
 export const selectAllPosts = (state: RootState) => state.blog.posts;
 export const postLoadingState = (state: RootState) => state.blog.loading;
 export const postErrorState = (state: RootState) => state.blog.error;
-export const countDrafts = (state: RootState) => 
-  state.blog.posts.filter((post) => post.status === "draft").length;
-
-export const countPublished = (state: RootState) => 
-  state.blog.posts.filter((post) => post.status === "published").length;
+export const selectCounts = (state: RootState) => state.blog.counts;

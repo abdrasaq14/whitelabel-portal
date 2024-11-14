@@ -268,7 +268,7 @@ export default function BlogDescription({ name }: { name: string }) {
           className="editor-container editor-container_classic-editor !w-full"
           ref={editorContainerRef}
         >
-          <div className="editor-container__editor">
+          <div className="editor-container__editor text-accent-light3">
             <div ref={editorRef}>
               {isLayoutReady && (
                 <CKEditor
@@ -297,8 +297,7 @@ export default function BlogDescription({ name }: { name: string }) {
                     if (editor.getData().trim() === "") {
                       setError("This field is required");
                     }
-                  }
-                  }
+                  }}
                 />
               )}
             </div>
@@ -306,7 +305,10 @@ export default function BlogDescription({ name }: { name: string }) {
         </div>
       </div>
       {error?.trim() ? (
-        <small className="text-xs text-red-600"> &#x26A0; Post Description is required</small>
+        <small className="text-xs text-red-600">
+          {" "}
+          &#x26A0; Post Description is required
+        </small>
       ) : null}
     </div>
   );

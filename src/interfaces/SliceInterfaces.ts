@@ -40,11 +40,22 @@ export interface NavSlice {
     isOpen: boolean;
     showLogoutModal: boolean;
     activeLabel: string;
-<<<<<<< HEAD
-}
+    showStaffInfoModal: boolean;
+    activeStaff: User | null;
+    showCreateStaffModal: boolean;
+    }
 
-export interface BlogSlice{
-  posts: IBlogPayload[];
+export interface BlogSlice {
+  posts: {
+    all: IBlogPayload[];
+    draft: IBlogPayload[];
+    published: IBlogPayload[];
+  };
+  counts: {
+    total: number;
+    draft: number;
+    published: number;
+  };
   loading: boolean;
   error: string | null;
 }
@@ -52,11 +63,6 @@ export interface BlogSlice{
 export interface IUpdatePostPayload { 
     id: string;
     updatedPayload: Partial<IBlogPayload>;
-}
-=======
-    showStaffInfoModal: boolean;
-    activeStaff: User | null;
-    showCreateStaffModal: boolean;
 }
 
 export interface UploadSlice {
@@ -65,21 +71,10 @@ export interface UploadSlice {
     uploading: boolean;
     imageHolder: string | null
 }
-<<<<<<< HEAD
->>>>>>> 4f4649d (Account completed)
-=======
 
-
-
-export interface BlogSlice{
-  posts: IBlogPayload[];
-  loading: boolean;
-  error: string | null;
-}
 
 export interface IUpdatePostPayload { 
     id: string;
     updatedPayload: Partial<IBlogPayload>;
 }
 
->>>>>>> cb4d2a9 (blog module in progress)

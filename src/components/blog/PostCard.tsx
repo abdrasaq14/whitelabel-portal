@@ -25,10 +25,7 @@ export default function PostCard({
       className="w-[290px] xl:w-[330px] h-[22rem] max-h-[22rem] text-accent-darker border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
-        <Link
-          href={`/blog/${blog._id}`}
-          className="font-bold hidden xl:block"
-        >
+        <Link href={`/blog/${blog._id}`} className="font-bold hidden xl:block">
           {truncateText(blog?.title, 65)}
         </Link>
         <Link href={`/blog/${blog._id}`} className="font-bold xl:hidden">
@@ -51,7 +48,7 @@ export default function PostCard({
         className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-purple-main bg-opacity-60 overflow-hidden"
       >
         <img
-          src={blog?.image as string || noPostImage.src}
+          src={(blog?.image as string) || noPostImage.src}
           alt=""
           className="object-cover w-full max-h-[6rem]"
         />
@@ -60,7 +57,9 @@ export default function PostCard({
         href={`/blog/${blog._id}`}
         className="w-full h-[12rem] max-h-[12rem] flex-1"
       >
-        <p className="text-justify">{truncateText(stripHtml(blog?.content))}</p>
+        <p className="text-justify text-accent-light3">
+          {truncateText(stripHtml(blog?.content))}
+        </p>
       </Link>
       <div className="flex items-center gap-4">
         <span className="flex items-center gap-2">

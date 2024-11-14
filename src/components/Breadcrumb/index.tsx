@@ -71,11 +71,11 @@ export const BreadCrumbWithBackButton = ({
 }: BreadCrumbWithBackButtonProps) => {
   // const profile: any = useAuth((s) => s.profile);
   return (
-    <div className="flex mb-6 items-center">
+    <div className="flex mb-6 items-center text-accent-light3">
       <div className="flex cursor-pointer items-center">
         {showBackButton && (
           <span onClick={handleBackAction}>
-            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-primary text-[18px]" />
+            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-[18px]" />
           </span>
         )}
         {backText && (

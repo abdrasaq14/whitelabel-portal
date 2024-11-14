@@ -35,6 +35,7 @@ function AllBlog() {
     handleClickOutside,
     handleTabClick
   } = useFetchPost();
+  console.log("loadingState", loading);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
@@ -51,7 +52,7 @@ function AllBlog() {
           <div className="flex justify-between items-center text-accent-darker">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg md:text-2xl font-bold">Blog Post</h2>
-              <span className="text-accent-darker w-[90%]">
+              <span className="text-accent-light3 w-[90%]">
                 Enhance your online presence by managing your blog posts on our
                 marketplace. Create, edit, and delete content with ease.
               </span>

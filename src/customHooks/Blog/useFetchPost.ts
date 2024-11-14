@@ -1,104 +1,83 @@
 import { useEffect, useState } from "react";
-import { BlogService } from "@/services/blog";
 import { useMutation } from "react-query";
 import toast from "react-hot-toast";
 import {
   setError,
   deletePost,
-  selectAllPosts,
   postLoadingState,
   postErrorState,
-  startLoading,
-  stopLoading,
-  fetchAllPosts
+  fetchPosts,
+  selectCounts,
+  fetchPostCounts
 } from "@/store/slices/blogSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import useStorage from "../useStorage";
 import { User } from "@/interfaces/AppInterfaces";
 import { IBlogPayload } from "@/interfaces/ComponentInterfaces";
-import usePagination from "../usePagination";
 import { RootState } from "@/store/store";
+import { BlogService } from "@/services/blog";
 
 const useBlogPosts = () => {
   const dispatch = useAppDispatch();
   const { getSessionData } = useStorage();
   const profile = getSessionData("UserData")?.user as User;
-  const allPosts = useAppSelector(selectAllPosts).length;
-  const countDrafts = (state: RootState) =>
-    state.blog.posts?.filter((post) => post.status === "draft").length;
 
-  const countPublished = (state: RootState) =>{
-    console.log("state.blog.posts", state.blog.posts);
-   return state.blog.posts?.filter((post) => post.status === "published")
-     .length;
-    };
-
-  const totalDrafts = useAppSelector(countDrafts);
-  const totalPublished = useAppSelector(countPublished);
+  // Selectors
+  const allPosts = useAppSelector(
+    (state: RootState) => selectCounts(state).total
+  );
+  const totalDrafts = useAppSelector(
+    (state: RootState) => state.blog.counts.draft
+  );
+  const totalPublished = useAppSelector(
+    (state: RootState) => state.blog.counts.published
+  );
   const loading = useAppSelector(postLoadingState);
   const error = useAppSelector(postErrorState);
 
+  // Local State
   const [posts, setPosts] = useState<IBlogPayload[]>([]);
-  console.log("fetchAllBlog", posts);
-
   const [openModal, setOpenModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "draft" | "published">(
     "all"
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 9;
   const [total, setTotal] = useState(0);
+  const limit = 9;
 
-  const handlePagination = (page: number) => {
-    setCurrentPage(page);
-  };
-  const handleNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
-  const handlePrevious = () => {
-    setCurrentPage(currentPage - 1);
-  };
-  const fetchPosts = async () => {
-    dispatch(startLoading());
-    dispatch(setError(""));
+  // Pagination Handlers
+  const handlePagination = (page: number) => setCurrentPage(page);
+  const handleNext = () => setCurrentPage((prev) => prev + 1);
+  const handlePrevious = () => setCurrentPage((prev) => prev - 1);
+
+  // Fetch posts using the fetchPosts action
+  const fetchPostsOnTabChange = async () => {
     try {
-      await dispatch(
-        fetchAllPosts({
+      const resultAction = await dispatch(
+        fetchPosts({
           whiteLabelName: profile?.whiteLabelName,
-          limit:10000,
+          page: currentPage,
+          limit,
+          status: activeTab === "all" ? undefined : activeTab
         })
       );
-      dispatch(stopLoading());
+      // dispatch(stopLoading());
+      // Update local state with fetched posts and total count if successful
+      if (fetchPosts.fulfilled.match(resultAction)) {
+        setPosts(resultAction.payload.posts);
+        setTotal(resultAction.payload.totalResults);
+      } else {
+        dispatch(setError("Failed to fetch posts"));
+      }
     } catch (err) {
-      dispatch(stopLoading());
+      console.log("Error fetching posts", err);
       dispatch(setError(err));
     } finally {
-      dispatch(stopLoading());
     }
   };
 
-  const fetchPostsOnTabChange = async (status: "draft" | "published"| undefined) => { 
-     dispatch(startLoading());
-     BlogService.fetchAll({
-       whiteLabelName: profile?.whiteLabelName,
-       page: currentPage,
-       limit,
-       status: activeTab === "all" ? undefined : activeTab,
-     })
-       .then((res: any) => {
-         if (res.data?.result?.results) {
-           setTotal(res.data?.result?.totalResults);
-           setPosts(res.data?.result?.results);
-         }
-         dispatch(stopLoading());
-       })
-       .catch((err) => {
-         dispatch(stopLoading());
-         dispatch(setError(err));
-       })
-       .finally(() => dispatch(stopLoading()));
-  }
+  // Delete post
   const handleDeleteApi = useMutation(
     async (id: string) => await BlogService.deleteBlog(id),
     {
@@ -110,7 +89,7 @@ const useBlogPosts = () => {
       onError: (err) => {
         toast.error(err as string);
         setOpenModal(false);
-      },
+      }
     }
   );
 
@@ -127,16 +106,19 @@ const useBlogPosts = () => {
   const handleTabClick = (tab: "all" | "draft" | "published") => {
     setActiveTab(tab);
     setCurrentPage(1);
-    
   };
 
-  useEffect(() => {
-    fetchPosts();
-   
-  }, []);
+  // Fetch counts on mount
+useEffect(() => {
+  if (profile?.whiteLabelName) {
+    dispatch(fetchPostCounts({ whiteLabelName: profile.whiteLabelName }));
+  }
+}, [dispatch, profile?.whiteLabelName]);
 
+
+  // Fetch posts on tab change or page change
   useEffect(() => {
-   fetchPostsOnTabChange(activeTab === "all" ? undefined : activeTab);
+    fetchPostsOnTabChange();
   }, [currentPage, activeTab]);
 
   return {

@@ -47,10 +47,10 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
             currentPath={id ? "Edit Post" : "Create Post"}
             handleBackAction={() => router.back()}
           />
-          <div className="flex justify-between items-center text-primary-text">
+          <div className="flex justify-between items-center text-accent-darker">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg md:text-2xl font-bold">Post Blog</h2>
-              <span className="text-primary-text w-[90%]">
+              <span className="text-accent-light3 w-[90%]">
                 Provide all the information you want to post below, you can
                 preview it before you post.
               </span>
@@ -67,7 +67,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
               disabled={
                 form.isSubmitting || !form.values.title || !form.values.content
               }
-              className="border border-primary font-semibold hover:bg-purple-main disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-primary-text p-2"
+              className="border border-primary font-semibold hover:bg-purple-main disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-accent-darker p-2"
             >
               Preview
             </button>
@@ -82,10 +82,10 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 alt=""
                 className="object-cover  max-h-[450px] mb-6"
               />
-              <p className="text-primary-text font-black text-xl text-center">
+              <p className="text-accent-darker font-black text-xl text-center">
                 Oopss!!!
               </p>
-              <p className="text-primary-text text-center">
+              <p className="text-accent-darker text-center">
                 {error || "Post not found"}
               </p>
             </div>
@@ -113,7 +113,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 />
                 {/* content */}
                 <div className="flex flex-col gap-2 col-span-1">
-                  <span className="text-primary-text font-semibold">
+                  <span className="text-accent-darker font-semibold">
                     Content (Blog Description)
                   </span>
                   <BlogDescription
@@ -125,7 +125,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
 
                 {/* blog image  */}
                 <div className="flex flex-col gap-2 col-span-1 h-fit">
-                  <span className="text-primary-text font-semibold">
+                  <span className="text-accent-darker font-semibold">
                     Blog Image
                   </span>
                   <BlogFileUpload
@@ -143,7 +143,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                       <div
                         className={`relative flex items-center justify-between border border-[#470e812b] rounded-md p-2 h-[50px] w-full bg-purple-main bg-opacity-5 `}
                       >
-                        <span className="text-primary-text">Image 1.jpg</span>
+                        <span className="text-accent-darker">Image 1.jpg</span>
                         <GoTrash
                           size={20}
                           color="#D42620"
@@ -156,12 +156,12 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                       </div>
                     </div>
                   )}
-                  <span className=" font-semibold mt-8 mb-2">
+                  <span className=" font-semibold mt-8 mb-2 text-accent-darker">
                     Comment & Like Management
                   </span>
                   <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                     <div className="flex gap-2 items-center">
-                      <span className="">Add comments</span>
+                      <span className="text-accent-light3">Add comments</span>
                       <Toggle
                         name="allowComment"
                         value={form.values.allowComments}
@@ -171,7 +171,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                       />
                     </div>
                     <div className="flex gap-2 items-center">
-                      <span className="">Add Likes</span>
+                      <span className="text-accent-light3">Add Likes</span>
                       <Toggle
                         name="allowLikes"
                         value={form.values.allowLikes}
@@ -184,7 +184,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 </div>
 
                 {/* save as draft and publish */}
-                <div className="flex flex-col  col-span-1 sm:flex-row sm:justify-between gap-2 sm:gap-6 text-primary-text mt-4">
+                <div className="flex flex-col  col-span-1 sm:flex-row sm:justify-between gap-2 sm:gap-6 text-accent-darker mt-4">
                   <AppButton
                     text={`${
                       form.isSubmitting && form.values.status === "draft"
