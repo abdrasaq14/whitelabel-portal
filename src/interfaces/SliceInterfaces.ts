@@ -31,6 +31,11 @@ export interface ModalSlice {
     showOtpModal: boolean;
 }
 
+export interface SettingSlice {
+    loading: boolean;
+    error: string | null;
+}
+
 export interface NavSlice {
     messageCounter: number;
     newNotification: boolean;

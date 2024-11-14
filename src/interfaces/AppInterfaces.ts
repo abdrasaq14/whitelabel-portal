@@ -117,3 +117,10 @@ export interface AdminAccountInfo {
     adminPhoneNumber: string;
     companyAddress: string;
 }
+
+
+export interface ChangePasswordData {
+    password: string,
+    oldPassword: string,
+    confirmPassword: string,
+}

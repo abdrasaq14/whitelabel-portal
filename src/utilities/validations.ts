@@ -1,13 +1,17 @@
 import * as Yup from "yup";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/;
+const PASSWORD_ERROR_MESSAGE = "Password must contain at least one uppercase, lowercase and number";
+
+
 export const loginValidation = Yup.object({
-    email: Yup.string()
-      .trim()
-      .email("*Email must be a valid address")
-      .required("Email is required"),
-    password: Yup.string()
-      .trim()
-      .min(8, "*Password must be at least 8 characters").required("*Password is required"),
+  email: Yup.string()
+    .trim()
+    .email("*Email must be a valid address")
+    .required("Email is required"),
+  password: Yup.string()
+    .trim()
+    .min(8, "*Password must be at least 8 characters").required("*Password is required"),
 });
 
 export const AdminAccountInfoValidation = Yup.object().shape({
@@ -26,4 +30,22 @@ export const StaffInfoValidation = Yup.object().shape({
   lastName: Yup.string().required('lastName is required'),
   phoneNumber: Yup.string().required("PhoneNumber is required"),
   role: Yup.string().required('role is required'),
+});
+
+export const ChangePasswordValidation = Yup.object({
+  password: Yup.string()
+    .trim()
+    .required("*Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  oldPassword: Yup.string()
+    .trim()
+    .required("*Current Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  confirmPassword: Yup.string()
+    .trim()
+    .required("*Confirm Password is required")
+    .oneOf([Yup.ref("password"),], "Both passwords must be the same")
+    .nullable(),
 });
