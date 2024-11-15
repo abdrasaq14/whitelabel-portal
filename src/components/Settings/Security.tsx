@@ -1,3 +1,5 @@
+"use client";
+
 import { BsShield, BsShieldLockFill } from "react-icons/bs";
 import * as Yup from "yup";
 // import { FaCreditCard } from "react-icons/fa";

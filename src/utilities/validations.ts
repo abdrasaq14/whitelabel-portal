@@ -49,3 +49,16 @@ export const ChangePasswordValidation = Yup.object({
     .oneOf([Yup.ref("password"),], "Both passwords must be the same")
     .nullable(),
 });
+
+
+export const LanguageValidation = Yup.object().shape({
+  language: Yup.string().required('Language is required'),
+});
+
+export const CurrencyValidation = Yup.object().shape({
+  currency: Yup.string().required('Currency is required'),
+});
+
+export const PricingValidation = Yup.object().shape({
+  commisionPercentage: Yup.string().required('Price is required'),
+});

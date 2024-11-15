@@ -1,8 +1,9 @@
-
+"use client"
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import useStorage from "@/customHooks/useStorage";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
@@ -36,8 +37,17 @@ export const BreadCrumbClient = ({
   backText,
   currentPath
 }: BreadcrumbPropClient) => {
-
+  const [isClient, setIsClient] = useState(false);
   const { currentUser } = useStorage()
+
+  useEffect(() => {
+    setIsClient(true); // Sets to true only on client side
+  }, []);
+
+  if (!isClient) {
+    // Avoids rendering until client-side mounting
+    return null;
+  }
 
   return (
     <div className="flex mb-6">

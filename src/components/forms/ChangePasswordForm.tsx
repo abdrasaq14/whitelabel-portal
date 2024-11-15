@@ -1,3 +1,4 @@
+"use client"
 import { useCustomFormik } from '@/customHooks/useCustomFormik'
 import { ButtonType, CardType, ModalFooterType, ModalHeaderType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
 import useSettings from '@/customHooks/useSettings';

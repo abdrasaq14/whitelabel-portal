@@ -1,13 +1,15 @@
 import { ChangePasswordData } from '@/interfaces/AppInterfaces';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { getAccountSlice, passwordChanged } from '@/store/slices/accountSlice';
+import { getAccountSlice, passwordChanged, editUserInfo } from '@/store/slices/accountSlice';
 import React from 'react'
 import useNavs from './useNavs';
 import toast from 'react-hot-toast';
+import useStorage from './useStorage';
 
 const useSettings = () => {
     const dispatch = useAppDispatch();
     const settingSlice = useAppSelector(getAccountSlice);
+    const { updateSessionData } = useStorage()
 
     const { logout } = useNavs();
 
@@ -23,10 +25,25 @@ const useSettings = () => {
         }
     }
 
+    const handleChangeInfo = async (payload: any) => {
+        const userInfoEdited = await dispatch(editUserInfo(payload));
+
+        // console.log("User info edited", userInfoEdited.payload);
+
+        if (settingSlice.error) {
+            return;
+        }
+
+        updateSessionData('UserData', 'user', userInfoEdited?.payload?.result?.user)
+
+        toast.success("updated successfully")
+    }
+
     return (
         {
             loading: settingSlice.loading,
-            handleChangePassword
+            handleChangePassword,
+            handleChangeInfo
 
         }
     )

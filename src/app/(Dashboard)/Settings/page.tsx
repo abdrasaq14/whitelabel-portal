@@ -1,19 +1,31 @@
 "use client"
+
 import { BreadCrumbClient } from '@/components/Breadcrumb';
+import dynamic from 'next/dynamic';
+import OtherSettings from '@/components/Settings/OtherSettings';
 import Security from '@/components/Settings/Security';
 import Tabs from '@/components/utilities/SettingsTabs';
 import useNavigation from '@/customHooks/useNavigation';
+import useStorage from '@/customHooks/useStorage';
 import React, { useEffect } from 'react'
 
 const page = () => {
 
     const { checkUserAuthenticity } = useNavigation();
+    const { currentUser } = useStorage()
 
-    const tabsData = [
+    const tabsData = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
 
         { label: 'security', content: <Security /> },
 
-        { label: 'settings', content: "<MembersTab />" },
+        { label: 'settings', content: <OtherSettings /> },
+
+
+    ] : [
+
+        { label: 'security', content: <Security /> },
+
+        { label: 'settings', content: <OtherSettings /> },
 
 
     ];
