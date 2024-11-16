@@ -55,3 +55,4 @@ export const StaffInfoValidation = Yup.object().shape({
   phoneNumber: Yup.string().required("PhoneNumber is required"),
   role: Yup.string().required('role is required'),
 });
+

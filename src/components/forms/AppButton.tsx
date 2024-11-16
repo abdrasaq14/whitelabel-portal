@@ -71,7 +71,11 @@ const AppButton = ({type, icon: Icon=null, iconPosition = "left", style=null, te
       onClick={() => type !== ButtonType.DISABLED && !loader?.loading && handleClick()} 
       className={`flex focus:outline-none gap-2 justify-center rounded  items-center text-center my-auto h-10 btn ${type} font-latoRegular ${style}`}
     >
+<<<<<<< HEAD
       {Icon ? <>{iconPosition === "left" && <Icon size={14} /> }{text} {loader?.loading && <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> } {iconPosition === "right" && <Icon size={14} /> }</> : loader?.loading ? `${text}  ${<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}` : text}
+=======
+      {Icon ? <>{text} {loader?.loading ? <Spinner type={loader?.type} height={loader?.height} width={loader?.width} /> : <Icon size={14} />}</> : loader?.loading ? <>{text} {<Spinner type={loader?.type} height={loader?.height} width={loader?.width} />}</> : text}
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
     </button>
   )
 }

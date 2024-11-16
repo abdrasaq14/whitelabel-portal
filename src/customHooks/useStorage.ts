@@ -27,7 +27,11 @@ const useStorage = () => {
 
     const updateLocalData = (key: string, prop: string, value: any) => {
         
+<<<<<<< HEAD
         if (!isClient) return null;
+=======
+        if(!isClient) return null;
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 
         const data = getLocalData(key);
 
@@ -81,7 +85,11 @@ const useStorage = () => {
 
     const updateSessionData = (key: string, prop: string, value: any) => {
         
+<<<<<<< HEAD
         if (!isClient) return null;
+=======
+        if(!isClient) return null;
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 
         const data = getSessionData(key);
 
@@ -94,7 +102,10 @@ const useStorage = () => {
         return data;
 
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 
     const removeSessionData = (key: string) => {
     
@@ -122,6 +133,32 @@ console.log("SessionData", currentUser, storeSessionData);
     return {
     
         storeLocalData,
+<<<<<<< HEAD
+=======
+
+        getLocalData,
+        
+        removeLocalData,
+        
+        clearLocalData,
+        
+        storeSessionData,
+        
+        getSessionData,
+        
+        removeSessionData,
+        
+        clearSessionData,
+        
+        currentUser,
+
+        updateLocalData,
+
+        updateSessionData
+    
+    };
+};
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 
         getLocalData,
         

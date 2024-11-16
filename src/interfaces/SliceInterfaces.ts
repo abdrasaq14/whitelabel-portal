@@ -16,6 +16,21 @@ export interface AccountSlice {
     staffsResult: StaffListResult | null
 }
 
+interface StaffListResult {
+    limit: number;
+    page: number;
+    results: any[];
+    totalPages: number;
+    totalResults: number;
+}
+
+export interface AccountSlice {
+    loading: boolean;
+    error: string | null;
+    disableMode: boolean;
+    staffsResult: StaffListResult | null
+}
+
 export interface DashboardSlice {
     loading: boolean;
     error: string | null;
@@ -43,6 +58,7 @@ export interface NavSlice {
     showStaffInfoModal: boolean;
     activeStaff: User | null;
     showCreateStaffModal: boolean;
+<<<<<<< HEAD
     }
 
 export interface BlogSlice {
@@ -63,6 +79,8 @@ export interface BlogSlice {
 export interface IUpdatePostPayload { 
     id: string;
     updatedPayload: Partial<IBlogPayload>;
+=======
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 }
 
 export interface UploadSlice {
@@ -70,6 +88,7 @@ export interface UploadSlice {
     error: string | null;
     uploading: boolean;
     imageHolder: string | null
+<<<<<<< HEAD
 }
 
 
@@ -78,3 +97,6 @@ export interface IUpdatePostPayload {
     updatedPayload: Partial<IBlogPayload>;
 }
 
+=======
+}
+>>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
