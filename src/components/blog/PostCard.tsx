@@ -22,10 +22,10 @@ export default function PostCard({
   return (
     <div
       key={index}
-      className="w-[290px] xl:w-[330px] h-[22rem] max-h-[22rem] text-accent-darker border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
+      className="w-[250px] xl:w-[270px] h-[22rem] max-h-[22rem] text-accent-darker border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
-        <Link href={`/blog/${blog._id}`} className="font-bold hidden xl:block">
+        <Link href={`/blog/${blog._id}`} className="font-bold hidden xl:block max-h-[1.5rem] mb-3">
           {truncateText(blog?.title, 65)}
         </Link>
         <Link href={`/blog/${blog._id}`} className="font-bold xl:hidden">
@@ -55,13 +55,13 @@ export default function PostCard({
       </Link>
       <Link
         href={`/blog/${blog._id}`}
-        className="w-full h-[12rem] max-h-[12rem] flex-1"
+        className="w-full h-[10rem] max-h-[10rem] flex-1 overflow-y-hidden"
       >
         <p className="text-justify text-accent-light3">
           {truncateText(stripHtml(blog?.content))}
         </p>
       </Link>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 min-h-[1.5rem]">
         <span className="flex items-center gap-2">
           {blog?.likes >= 1 ? (
             <TiHeartFullOutline size={20} className="text-[#D42620]" />
