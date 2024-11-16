@@ -64,12 +64,8 @@ export interface CustomisationData {
 }
 
 export interface User {
-<<<<<<< HEAD
     authToken: string;
     _id?: string;
-=======
-    _id: string;
->>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
     firstName: string;
     lastName: string;
     email: string;

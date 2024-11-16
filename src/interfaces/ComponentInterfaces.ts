@@ -306,7 +306,6 @@ interface TableColumn {
     columns: TableColumn[];
     data: any[] | undefined;
     additionalActions?: (row: TableRow) => { label: string; action: () => void }[];
-<<<<<<< HEAD
   }
 
 export interface IUseBlogBostProps {
@@ -359,6 +358,3 @@ export interface IToggleInputProps {
   value: boolean;
   onChange: (value: boolean) => void;
 }
-=======
-  }
->>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
