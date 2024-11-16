@@ -8,7 +8,7 @@ import Spinner from "../feedbacks/Spinner";
 import { SpinnerType } from "@/enums/ComponentEnums";
 import { IBlogPayload } from "@/interfaces/ComponentInterfaces";
 import PostCard from "./PostCard";
-import Pagination from "./Pagination";
+import Pagination from "../feedbacks/Pagination";
 import { noContentImage } from "../../../public/images/blog";
 import DeleteBlogModal from "../modals/blog/DeleteModal";
 
@@ -133,14 +133,14 @@ function AllBlog() {
                   />
                 ))}
               </div>
-
+             
               <Pagination
-                total={total}
-                limit={limit}
+                totalPages={total}
+                // limit={limit}
                 page={currentPage}
                 onPageChange={handlePagination}
-                increase={handleNext}
-                decrease={handlePrevious}
+                // increase={handleNext}
+                // decrease={handlePrevious}
               />
             </div>
           ) : !loading && posts && posts?.length === 0 ? (

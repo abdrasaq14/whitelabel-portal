@@ -38,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({ page, totalPages, onPageChange 
 
             <div className='flex w-[100px]'>
                 
-                <AppButton text="Next" handleClick={() => onPageChange(page + 1)} type={page === totalPages ? ButtonType.DISABLED : ButtonType.SECONDARY} />
+                <AppButton disabled={page === totalPages} text="Next" handleClick={() => onPageChange(page + 1)} type={page === totalPages ? ButtonType.DISABLED : ButtonType.SECONDARY} />
 
             </div>
         

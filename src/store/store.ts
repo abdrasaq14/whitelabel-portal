@@ -14,16 +14,10 @@ export const store = configureStore({
     auth: authReducer, 
     modal: modalReducer,
     nav: navReducer,
-<<<<<<< HEAD
     blog: blogReducer,
     dashboard: dashboardReducer,
     account: accountReducer,
     upload: uploadReducer,
-=======
-    dashboard: dashboardReducer,
-    account: accountReducer,
-    upload: uploadReducer
->>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
   },
 });
 

@@ -3,10 +3,7 @@ import {  FieldAttributes, FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { User } from "./AppInterfaces";
-<<<<<<< HEAD
 
-=======
->>>>>>> 87089dc9a18ab8bb5d0112b54e40956d7faaa472
 
 interface LoaderProps {
     loading?: boolean;
