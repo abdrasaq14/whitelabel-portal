@@ -17,6 +17,7 @@ function AllBlog() {
   const {
     allPosts,
     total,
+    totalPages,
     idToDelete,
     handlePagination,
     totalDrafts,
@@ -132,7 +133,7 @@ function AllBlog() {
               </div>
              
               <Pagination
-                totalPages={total}
+                totalPages={totalPages}
                 // limit={limit}
                 page={currentPage}
                 onPageChange={handlePagination}

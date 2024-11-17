@@ -28,12 +28,12 @@ function PreviewBlog() {
               handleBackAction={() => router.back()}
             />
 
-            <div className="flex justify-between items-center text-primary-text">
+            <div className="flex justify-between items-center text-accent-darker">
               <div className="flex flex-col gap-2">
                 <h2 className="text-lg md:text-2xl font-bold font-gooperSemiBold">
                   {blogDetails?.title}
                 </h2>
-                <div className="flex gap-4 text-primary-text text-sm">
+                <div className="flex gap-4 text-accent-darker text-sm">
                   <span className="flex items-center gap-1">
                     {formatDateBlog(blogDetails?.publishedDate as string)}
                     <GoDotFill />3 mins read
@@ -91,7 +91,7 @@ function PreviewBlog() {
               )}
               <div className="">
                 <p
-                  className="text-primary-text style-image"
+                  className="text-accent-darker style-image"
                   dangerouslySetInnerHTML={{
                     __html: blogDetails?.content || ""
                   }}

@@ -31,10 +31,10 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
             className="max-h-[15rem] w-full h-full object-cover"
           />
         </div>
-        <p className="text-primary-text font-black text-xl text-center my-2">
+        <p className="text-accent-darker font-black text-xl text-center my-2">
           Oopss!!!
         </p>
-        <span className="text-primary-text w-[80%] text-center mx-auto">
+        <span className="text-accent-darker w-[80%] text-center mx-auto">
 
           {modalTitle}
         </span>

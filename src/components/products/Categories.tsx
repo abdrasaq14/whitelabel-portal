@@ -1,3 +1,4 @@
+import React from "react";
 interface Props {
   categories: string[];
 }
@@ -7,7 +8,7 @@ const Categories: React.FC<Props> = ({ categories }) => {
       {categories &&
         categories.map((category: any, index) => (
           <React.Fragment key={index}>
-            <p className="text-primary-text text-base font-medum font-satoshiMedium">
+            <p className="text-accent-darker text-base font-medum font-satoshiMedium">
               {category.title}
             </p>
             {index !== categories.length - 1 && (
@@ -18,3 +19,4 @@ const Categories: React.FC<Props> = ({ categories }) => {
     </div>
   );
 };
+export default Categories;

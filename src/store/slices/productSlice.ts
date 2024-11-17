@@ -8,6 +8,7 @@ const initialState = {
     all: [],
     blocked: []
   },
+  total: 0,
   loading: false,
   error: null
 };
@@ -16,10 +17,13 @@ export const fetchProducts = createAsyncThunk<any, IQueryParams>(
   "product/fetchAllProducts",
   async (payload: IQueryParams) => {
     const response = await ProductService.fetchAll(payload);
+
     return {
       //   @ts-ignore
       product: response.data?.result?.results,
-      stattus: payload.status
+      status: payload.status,
+      //   @ts-ignore
+      total: response.data?.result?.totalPages
     };
   }
 );
@@ -46,13 +50,13 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-          const { product, status } = action.payload;
+          const { product, status, total } = action.payload;
             if (status === "blocked") {
                 state.products.blocked = product;
             } else {
                 state.products.all = product;
             }
-          
+            state.total = total;
         // state.products.all = action.payload.result;
       })
       .addCase(fetchProducts.rejected, (state, action) => {

@@ -1,6 +1,6 @@
+"use client"
 import { User } from "@/interfaces/AppInterfaces";
 import { ProductService } from "@/services/product";
-import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import useOnClickOutside from "../useClickOutside";
@@ -17,7 +17,6 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { getSessionData } = useStorage();
   const profile = getSessionData("UserData")?.user as User;
-  const router = useRouter();
   //   const navigate = useNavigate();
   console.log("ViewProductModal", product);
   const modalRef = useRef<any>();
@@ -125,7 +124,7 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
         isConfirmModalOpen,
         setIsConfirmModalOpen,
         profile,
-        router,
+        // router,
         modalRef,
         toggleProductBan,
         handleToggleBan,

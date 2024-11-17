@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import { stripHtml } from "@/utilities/helperFunctions";
 import useViewProduct from "@/customHooks/Products/useViewProduct";
+import Categories from "../products/Categories";
 
 interface ViewProductModalProps {
   product: any;
@@ -38,7 +39,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
           />
         </div>
         <div className="col-span-2 sm:col-span-1 flex flex-col gap-4 ">
-          <div className="w-full flex justify-between font-satoshiBold text-primary-text items-center">
+          <div className="w-full flex justify-between font-satoshiBold text-accent-darker items-center">
             <h1 className=" text-2xl">{product.name}</h1>
             <p className="text-sm ">N{product.price}</p>
           </div>
@@ -65,7 +66,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
           </div>
         </div>
         <div className=" col-span-2 w-full  flex flex-col mt-8 gap-4">
-          <h2 className="font-bold font-satoshiBold text-base text-primary-text">
+          <h2 className="font-bold font-satoshiBold text-base text-accent-darker">
             Product Description
           </h2>
           <p className="text-primary-subtext font-normal text-sm">
@@ -74,14 +75,14 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               stripHtml(product?.description)}
           </p>
           <div>
-            <h2 className="font-bold font-satoshiBold text-base text-primary-text">
+            <h2 className="font-bold font-satoshiBold text-base text-accent-darker">
               Merchant Description
             </h2>
             <div className="mt-4">
               <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
                 Store Name
               </p>
-              <p className="mt-1 text-primary-text text-base font-medum font-satoshiMedium ">
+              <p className="mt-1 text-accent-darker text-base font-medum font-satoshiMedium ">
                 {product.businessName ?? product.merchantName}
               </p>
             </div>
@@ -90,7 +91,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
                 Rating
               </p>
               <div className="flex gap-2 items-center mt-1">
-                <p className=" text-primary-text text-base font-medum font-satoshiMedium">
+                <p className=" text-accent-darker text-base font-medum font-satoshiMedium">
                   {product.rating}/5
                 </p>
                 <StarRating totalRatings={product.rating} />
@@ -101,7 +102,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
                 Store Link
               </p>
               <div className=" flex justify-between w-full">
-                <p className="text-primary-text text-base font-medum font-satoshiMedium">
+                <p className="text-accent-darker text-base font-medum font-satoshiMedium">
                   {product.storeLink}
                 </p>
                 <CopyToClipboard text={product.storeLink} />

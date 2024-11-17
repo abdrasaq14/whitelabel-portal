@@ -8,14 +8,18 @@ import SearchInput from "../forms/SearchInput";
 import { SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
 import AppButton from "../forms/AppButton";
+import { FaArrowRight } from "react-icons/fa6";
 import { ViewProductModal } from "../modals/ViewProductModal";
 import Table from "../layouts/Table";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchProducts } from "@/store/slices/productSlice";
 import { useRouter } from "next/navigation";
+import useStorage from "@/customHooks/useStorage";
+import { IQueryParams, User } from "@/interfaces/AppInterfaces";
 import Pagination from "../feedbacks/Pagination";
 import useFetchAllProducts from "@/customHooks/Products/useAllProducts";
-import { ButtonType } from "@/enums/ComponentEnums";
-function AllProducts() {
+
+function BlockedProducts() {
   const {
     product,
     allProducts,
@@ -36,8 +40,7 @@ function AllProducts() {
     handleCurrentPage,
     handleViewProductInfo,
     closeViewModal
-  } = useFetchAllProducts({ status: undefined });
-  console.log("isLoadingAllProducts", isLoading);
+  } = useFetchAllProducts({ status: "BLOCKED" });
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -59,24 +62,6 @@ function AllProducts() {
           {row?.name}{" "}
         </div>
       )
-    },
-    {
-      key: "Listing Price",
-      label: "Listing Price",
-      render: (row: any) => <div>{row?.price && formatAmount(row.price)} </div>
-    },
-    {
-      key: "Selling Price",
-      label: "Selling Price",
-      render: (row: any) => {
-        const sellingPrice =
-          row?.price && profile?.commisionPecentage
-            ? (row.price * parseFloat(profile?.commisionPecentage)) / 100 +
-              row.price
-            : row?.price; // Fallback to 0 if price or commission is missing
-
-        return <div>{formatAmount(sellingPrice)}</div>;
-      }
     },
     {
       key: "Date Listed",
@@ -104,14 +89,7 @@ function AllProducts() {
           currentPath="All Products"
           brand="Landmark"
         />
-        <div className="flex justify-between">
-          <h1 className="text-accent-darker text-sm font-normal">
-            All Products{" "}
-            <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
-              {allProducts ? allProducts.length : 0}
-            </span>
-          </h1>
-        </div>
+
         <div className="flex mt-6 justify-center gap-2 ml-auto items-center">
           <div>
             <SearchInput
@@ -156,18 +134,9 @@ function AllProducts() {
                   <img src="/images/NoProduct.svg" alt="No Product Found" />
                   <p className="font-normal max-w-[539px] text-[#4D5154] text-center text-sm">
                     {isEmpty(filterParams)
-                      ? "You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!"
+                      ? "You have not blocked any product from appearing on your marketplace. All blocked products will appear here"
                       : "No search result found"}
                   </p>
-
-                  <AppButton
-                    handleClick={() => router.push("/discover-products")}
-                    iconPosition="right"
-                    type={ButtonType.PRIMARY}
-                    // icon={<FaArrowRight />}
-                    style="mt-6"
-                    text="Invite Merchant to List product on your marketplace"
-                  />
                 </>
               )}
             </div>
@@ -184,4 +153,4 @@ function AllProducts() {
   );
 }
 
-export default AllProducts;
+export default BlockedProducts;

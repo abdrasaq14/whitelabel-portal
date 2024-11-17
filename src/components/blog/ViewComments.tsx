@@ -97,7 +97,7 @@ const ViewAllComments = () => {
                   className="object-cover w-full max-h-[150px]"
                 />
               </div>
-              <p className="text-primary-text text-base">
+              <p className="text-accent-darker text-base">
                 {activeTab === "all"
                   ? "No Comment on this post yet.!!!"
                   : "No deleted comments"}

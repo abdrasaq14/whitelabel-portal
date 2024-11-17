@@ -31,6 +31,8 @@ const useBlogPosts = () => {
   const totalPublished = useAppSelector(
     (state: RootState) => state.blog.counts.published
   );
+
+  const totalPages = useAppSelector((state: RootState) => state.blog.totalPages);
   const loading = useAppSelector(postLoadingState);
   const error = useAppSelector(postErrorState);
 
@@ -122,6 +124,7 @@ useEffect(() => {
     allPosts,
     posts,
     total,
+    totalPages,
     setTotal,
     currentPage,
     totalDrafts,

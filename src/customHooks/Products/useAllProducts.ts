@@ -1,18 +1,28 @@
+"use client";
 import { useState, useEffect } from "react";
 import useStorage from "../useStorage";
 import { IQueryParams, User } from "@/interfaces/AppInterfaces";
 import { useAppDispatch } from "@/store/hooks";
-import { fetchProducts } from "@/store/slices/productSlice";
+import { fetchProducts, startProductLoading } from "@/store/slices/productSlice";
 import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
-interface PaginationInfo {
-  currentPage: number;
-  pageSize: number;
-}
 
-export const useAllProducts = () => {
+// interface PaginationInfo {
+//   currentPage: number;
+//   pageSize: number;
+// }
+
+interface IUseFetchAllProducts { 
+  status?: string;
+}
+function useFetchAllProducts({ status }: IUseFetchAllProducts) {
   const [product, setProduct] = useState({});
-  const allProducts = useAppSelector((state) => state.product.products.all);
+  const allProducts = useAppSelector((state) =>
+    status === "BLOCKED"
+      ? state.product.products.blocked
+      : state.product.products.all
+  );
+  const totalResults = useAppSelector((state) => state.product.total);
   const isLoading = useAppSelector((state) => state.product.loading);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -24,12 +34,20 @@ export const useAllProducts = () => {
   const profile = getSessionData("UserData")?.user as User;
   const router = useRouter();
   const dispatch = useAppDispatch();
-  
+
   useEffect(() => {
     if (profile?.whiteLabelName) {
-      dispatch(fetchProducts({ whiteLabelName: profile?.whiteLabelName }));
+      dispatch(startProductLoading());
+      dispatch(
+        fetchProducts({
+          whiteLabelName: profile?.whiteLabelName,
+          limit: pageSize,
+          page: currentPage,
+          status: status,
+        })
+      );
     }
-  }, [dispatch, profile?.whiteLabelName]);
+  }, [dispatch, profile?.whiteLabelName, currentPage]);
 
   const handleViewProductInfo = (row: any) => {
     setProduct(row);
@@ -42,19 +60,20 @@ export const useAllProducts = () => {
 
   const handleCurrentPage = (val: number) => setCurrentPage(val);
 
-  const generateSerialNumber = (
-    index: number,
-    pageInfo: PaginationInfo
-  ): number => {
-    const { currentPage, pageSize } = pageInfo;
-    return (currentPage - 1) * pageSize + index + 1;
-  };
+  // const generateSerialNumber = (
+  //   index: number,
+  //   pageInfo: PaginationInfo
+  // ): number => {
+  //   const { currentPage, pageSize } = pageInfo;
+  //   return (currentPage - 1) * pageSize + index + 1;
+  // };
 
   return {
-    router,
     product,
+    setProduct,
     isViewModalOpen,
     search,
+    totalResults,
     showFilter,
     pageSize,
     currentPage,
@@ -70,6 +89,8 @@ export const useAllProducts = () => {
     handlePageSize,
     handleCurrentPage,
     setFilterParams,
-    generateSerialNumber,
+    // generateSerialNumber
   };
-};
+}
+
+export default useFetchAllProducts;

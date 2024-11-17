@@ -1,9 +1,7 @@
+"use client"
 import React, { FunctionComponent, useRef, useState } from "react";
-// import { Button } from "../Button/Button";
 import { MdFilterList } from "react-icons/md";
 import Select from "./CustomSelect";
-// import { categories } from '../../utils/categories';
-import { useQuery } from "react-query";
 import { ProductService } from "@/services/product";
 import { allStates } from "@/utilities/states";
 import AppButton from "../forms/AppButton";
@@ -41,7 +39,7 @@ const Filter: FunctionComponent<FilterITF> = ({
     location: [],
     sortBy: []
   });
-
+  const [categories, setCategories] = useState<any>();
   console.log("filters", filters);
 
   const sortByOptions =
@@ -81,19 +79,12 @@ const Filter: FunctionComponent<FilterITF> = ({
           }
         ];
 
-  const { data: categories } = useQuery<any>(
-    "query-categories",
-    async () => {
-      return await ProductService.getCategories();
-    },
-    {
-      enabled: true,
-      onSuccess: (res) => {},
-      onError: (err: any) => {
-        console.log("Error Occured:", err.response);
-      }
+  const handleSubmit = async () => {
+    const res:any = await ProductService.getCategories();
+    if (res.data.result) {
+      setCategories(res.data.result);
     }
-  );
+    }
 
   // Handlers to update state for each filter
   const handleSelectChange = (name: keyof FilterState, value: string) => {
@@ -125,7 +116,7 @@ const Filter: FunctionComponent<FilterITF> = ({
           >
             <div className="modal-head flex justify-between items-center px-3 pt-6">
               <div className="">
-                <span className="flex items-center gap-2">
+                <span className="text-accent-darker flex items-center gap-2">
                   <MdFilterList />
                   Filter
                 </span>
@@ -154,26 +145,23 @@ const Filter: FunctionComponent<FilterITF> = ({
             </div>
             <div className="modal-body w-full">
               <div className="w-full h-[95vh] overflow-y-auto my-5 gap-3">
-                
                 {/* Category Select */}
-                {type === "product" &&
-                  categories?.data &&
-                  categories.data.result.length > 0 && (
-                    <Select
-                      onSelect={(value: any) => {
-                        const val = value.map((val: any) => val.value);
-                        handleSelectChange("category", val);
-                      }}
-                      options={categories?.data.result.map(
-                        (category: any, id: number) => ({
-                          id: id,
-                          label: category.title,
-                          value: category._id
-                        })
-                      )}
-                      name="Categories"
-                    />
-                  )}
+                {type === "product" && categories && categories.length > 0 && (
+                  <Select
+                    onSelect={(value: any) => {
+                      const val = value.map((val: any) => val.value);
+                      handleSelectChange("category", val);
+                    }}
+                    options={categories?.data.result.map(
+                      (category: any, id: number) => ({
+                        id: id,
+                        label: category.title,
+                        value: category._id
+                      })
+                    )}
+                    name="Categories"
+                  />
+                )}
 
                 {/* Location Select */}
 

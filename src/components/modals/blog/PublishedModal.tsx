@@ -26,14 +26,14 @@ const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, for
             className="max-h-[15rem] w-full h-full object-cover"
           />
         </div>
-        <p className="text-primary-text font-black text-xl text-center my-2">
+        <p className="text-accent-darker font-black text-xl text-center my-2">
 
           {status === "draft"
             ? "Saved to Draft!!! "
             : "Published!!!"}
         </p>
         {status === "published" && (
-          <p className="text-primary-text">
+          <p className="text-accent-darker">
             Your post has been published and its now live!!
           </p>
         )}

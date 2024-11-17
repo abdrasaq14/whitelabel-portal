@@ -11,7 +11,7 @@ const  CommentCard:React.FC<CommentCardProps> = ({comment, showDeleteIcon, handl
   return (
     <div className="flex p-4 flex-col w-[250px] h-[10rem] max-h-[15rem] bg-[#F2F2F2] rounded-md overflow-y-scroll scrollbar-hide">
       <div className="min-h-[60%] flex-1">
-        <span className="text-primary-text text-sm">{comment.comment}</span>
+        <span className="text-accent-darker text-sm">{comment.comment}</span>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
@@ -23,14 +23,14 @@ const  CommentCard:React.FC<CommentCardProps> = ({comment, showDeleteIcon, handl
                 className="object-cover w-full h-full rounded-full"
               />
             ) : (
-              <span className="bg-[#EDE6F3] flex items-center justify-center text-primary-text text-xl w-full h-full">
+              <span className="bg-[#EDE6F3] flex items-center justify-center text-accent-darker text-xl w-full h-full">
                 {comment?.firstName
                   ? comment?.firstName?.charAt(0).toUpperCase()
                   : "A"}
               </span>
             )}
           </span>
-          <span className="text-primary-text text-sm">
+          <span className="text-accent-darker text-sm">
             {comment?.firstName ? comment.firstName : "Anonymous"}
           </span>
         </div>

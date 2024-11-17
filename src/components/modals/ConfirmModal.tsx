@@ -1,3 +1,4 @@
+"use client"
 import AppModal from "@/components/utilities/AppModal";
 import useOnClickOutside from "@/customHooks/useClickOutside";
 import React, { useRef } from "react";

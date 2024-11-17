@@ -71,6 +71,7 @@ export interface BlogSlice {
     draft: number;
     published: number;
   };
+    totalPages: number;
   loading: boolean;
   error: string | null;
 }

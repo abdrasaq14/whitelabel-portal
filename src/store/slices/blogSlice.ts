@@ -18,6 +18,7 @@ const initialState: BlogSlice = {
     draft: 0,
     published: 0
   },
+  totalPages: 0,
   loading: false,
   error: null
 };
@@ -39,6 +40,8 @@ export const fetchPosts = createAsyncThunk<any, IQueryParams>(
       posts: response.data?.result?.results,
       // @ts-ignore
       total: response.data?.result?.totalResults,
+      // @ts-ignore
+      totalPages: response.data?.result?.totalPages,
       tab: status
     };
   }
@@ -106,7 +109,7 @@ const blogSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
-        const { posts, total, tab } = action.payload;
+        const { posts, totalPages, tab } = action.payload;
         console.log("fetchAllPayload", action.payload);
         // Update state based on tab type
         if (tab === "all" || undefined) {
@@ -116,6 +119,7 @@ const blogSlice = createSlice({
         } else if (tab === "published") {
           state.posts.published = posts;
         }
+        state.totalPages = totalPages
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;
