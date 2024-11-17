@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
 import toast from "react-hot-toast";
 import {
   setError,
@@ -54,6 +53,7 @@ const useBlogPosts = () => {
   // Fetch posts using the fetchPosts action
   const fetchPostsOnTabChange = async () => {
     try {
+      console.log("fetching posts", activeTab);
       const resultAction = await dispatch(
         fetchPosts({
           whiteLabelName: profile?.whiteLabelName,
@@ -64,6 +64,7 @@ const useBlogPosts = () => {
       );
       // dispatch(stopLoading());
       // Update local state with fetched posts and total count if successful
+      console.log("fetching posts", resultAction.payload);
       if (fetchPosts.fulfilled.match(resultAction)) {
         setPosts(resultAction.payload.posts);
         setTotal(resultAction.payload.totalResults);
@@ -78,20 +79,16 @@ const useBlogPosts = () => {
   };
 
   // Delete post
-  const handleDeleteApi = useMutation(
-    async (id: string) => await BlogService.deleteBlog(id),
-    {
-      onSuccess: () => {
-        dispatch(deletePost(idToDelete));
-        setOpenModal(false);
-        toast.success("Blog post deleted successfully");
-      },
-      onError: (err) => {
-        toast.error(err as string);
-        setOpenModal(false);
-      }
-    }
-  );
+  const handleDeleteApi = (idToDelete: string) => {
+   try {
+     dispatch(deletePost(idToDelete));
+     dispatch(fetchPostCounts({ whiteLabelName: profile.whiteLabelName }));
+     setOpenModal(false);
+     toast.success("Blog post deleted successfully");
+   } catch (error) {
+      toast.error("Failed to delete blog post");
+   }
+  }
 
   const handleDelete = (id: string) => {
     setOpenModal(true);

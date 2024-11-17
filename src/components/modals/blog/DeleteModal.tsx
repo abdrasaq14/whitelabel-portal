@@ -4,18 +4,13 @@ import { AxiosResponse } from "axios";
 import { depressedEmoji } from "../../../../public/images/blog";
 import AppButton from "../../forms/AppButton";
 import { ButtonType } from "@/enums/ComponentEnums";
-import { UseMutationResult } from "react-query/types/react/types";
+import { useAppSelector } from "@/store/hooks";
 
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: () => void;
   modalTitle: string;
-  handleDeleteApi: UseMutationResult<
-    AxiosResponse<any, any>,
-    unknown,
-    string,
-    unknown
-  >;
+  handleDeleteApi: (idToDelete: string) => void;
   idToDelete: string;
   }
 const DeleteBlogModal: React.FC<BlogModalProps> = ({
@@ -25,6 +20,7 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
   modalTitle,
   idToDelete
 }) => {
+  const isLoading = useAppSelector((state) => state.blog.loading);
   return (
     <AppModal hasClose={true} isOpen={isOpen} closeClicked={handleClose}>
       <div className="flex flex-col items-center justify-between w-full lg:min-w-[450px] h-full px-8 rounded-md">
@@ -45,25 +41,25 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
 
         <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
           <AppButton
-            disabled={handleDeleteApi.isLoading}
+            disabled={isLoading}
             text={`${
-              handleDeleteApi.isLoading ? "Deleting..." : "Yes Proceed"
+              isLoading ? "Deleting..." : "Yes Proceed"
             }`}
 
-            handleClick={() => handleDeleteApi.mutate(idToDelete)}
+            handleClick={() => handleDeleteApi(idToDelete)}
             type={
-              handleDeleteApi.isLoading
+              isLoading
                 ? ButtonType.DISABLED
                 : ButtonType.SECONDARY
             }
             style="border w-[50%] border-primary font-semibold rounded-md !text-primary p-2"
           />
           <AppButton
-            disabled={handleDeleteApi.isLoading}
+            disabled={isLoading}
             text="No"
             handleClick={handleClose}
             type={
-              handleDeleteApi.isLoading
+              isLoading
                 ? ButtonType.DISABLED
                 : ButtonType.PRIMARY
             }

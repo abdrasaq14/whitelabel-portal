@@ -1,14 +1,15 @@
+"use client"
 import React from 'react'
 import { useRouter } from 'next/navigation';
 import { BreadCrumbWithBackButton } from '../Breadcrumb';
-import { formatDate } from '@/utilities/helperFunctions';
+import { formatDateBlog } from '@/utilities/helperFunctions';
 import { GoDotFill } from 'react-icons/go';
 import AppButton from '../forms/AppButton';
 import { ButtonType } from '@/enums/ComponentEnums';
 import usePreviewPost from '@/customHooks/Blog/usePreviewPost';
 import BlogPubLishedModal from '../modals/blog/PublishedModal';
 function PreviewBlog() {
-    const { push, back } = useRouter();
+    const router = useRouter();
     const {
       blogDetails,
       isSubmitting,
@@ -24,9 +25,7 @@ function PreviewBlog() {
               backText="Blog"
               showBackButton={true}
               currentPath="Preview"
-              handleBackAction={() => {
-                back();
-              }}
+              handleBackAction={() => router.back()}
             />
 
             <div className="flex justify-between items-center text-primary-text">
@@ -36,7 +35,7 @@ function PreviewBlog() {
                 </h2>
                 <div className="flex gap-4 text-primary-text text-sm">
                   <span className="flex items-center gap-1">
-                    {formatDate(blogDetails?.publishedDate as string)}
+                    {formatDateBlog(blogDetails?.publishedDate as string)}
                     <GoDotFill />3 mins read
                   </span>
                 </div>

@@ -116,3 +116,10 @@ export function formatDate(currentDate: string) {
   //  console.log(date, time+":00");
   return `${date} ${time}:00`;
 }
+
+export const isEmpty = (value: any) =>
+  value === undefined ||
+  value === null ||
+  (typeof value === "object" && Object.keys(value).length === 0) ||
+  (typeof value === "string" && value.trim().length === 0) ||
+  (typeof value === "object" && value.toString().length === 0);

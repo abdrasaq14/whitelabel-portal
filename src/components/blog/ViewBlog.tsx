@@ -5,7 +5,7 @@ import { BreadCrumbWithBackButton } from "../Breadcrumb";
 import { useRouter } from "next/navigation";
 import Spinner from "../feedbacks/Spinner";
 import { SpinnerType } from "@/enums/ComponentEnums";
-import { formatDate } from "@/utilities/helperFunctions";
+import { formatDateBlog } from "@/utilities/helperFunctions";
 import Link from "next/link";
 import CommentCard from "./CommentCard";
 import {
@@ -81,7 +81,7 @@ function ViewBlog() {
                     </span>
                     <span className="flex items-center">
                       {blogDetails?.publishedDate
-                        ? formatDate(blogDetails?.publishedDate as string)
+                        ? formatDateBlog(blogDetails?.publishedDate as string)
                         : "Not Published"}
                       <GoDotFill />
                       {readingTime} read

@@ -1,31 +1,39 @@
-import React from 'react'
-import Filter from '../Filter/Filter';
-import { useAllProducts } from '@/customHooks/Products/useFetchAllProducts';
-import { BreadCrumbClient } from '../Breadcrumb';
-import { MdFilterList } from 'react-icons/md';
-import { fDateTime, formatAmount } from '@/utilities/helperFunctions';
+import React from "react";
+import Filter from "../Filter/Filter";
+import { useAllProducts } from "@/customHooks/Products/useFetchAllProducts";
+import { BreadCrumbClient } from "../Breadcrumb";
+import { MdFilterList } from "react-icons/md";
+import { fDateTime, formatAmount, isEmpty } from "@/utilities/helperFunctions";
+import SearchInput from "../forms/SearchInput";
+import { SpinnerType } from "@/enums/ComponentEnums";
+import Spinner from "../feedbacks/Spinner";
+import AppButton from "../forms/AppButton";
+import { FaArrowRight } from "react-icons/fa6";
+import { ViewProductModal } from "../modals/blog/ViewProductModal";
+
 function AllProducts() {
-    const {
-        allProducts,
-        isLoading,
-        handleViewProductInfo,
-        isViewModalOpen,
-        product,
-        closeViewModal,
-        setSearch,
-        setFilterParams,
-        setShowFilter,
-        showFilter,
-        generateSerialNumber,
-        handlePageSize,
-        handleCurrentPage,
-        profile,
-        search,
-        currentPage,
-        pageSize,
-        filterParams,
-        refetch
-    } = useAllProducts();
+  const {
+    router,
+    allProducts,
+    isLoading,
+    handleViewProductInfo,
+    isViewModalOpen,
+    product,
+    closeViewModal,
+    setSearch,
+    setFilterParams,
+    setShowFilter,
+    showFilter,
+    generateSerialNumber,
+    handlePageSize,
+    handleCurrentPage,
+    profile,
+    search,
+    currentPage,
+    setCurrentPage,
+    pageSize,
+    filterParams
+  } = useAllProducts();
   return (
     <div className="px-4 pt-8 h-full">
       <Filter
@@ -48,7 +56,7 @@ function AllProducts() {
           <h1 className="text-primary-text text-sm font-normal">
             All Products{" "}
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
-              {allProducts ? allProducts.result.totalResults : 0}
+              {allProducts ? allProducts : 0}
             </span>
           </h1>
         </div>
@@ -172,7 +180,7 @@ function AllProducts() {
           ) : (
             <div className="h-auto flex-grow py-20 flex justify-center flex-col items-center">
               {isLoading ? (
-                <Spinner color="#000" />
+                <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
               ) : (
                 <>
                   <img src="/images/NoProduct.svg" alt="No Product Found" />
@@ -182,22 +190,21 @@ function AllProducts() {
                       : "No search result found"}
                   </p>
 
-                  <Button
-                    onClick={() => navigate("/discover-products")}
-                    iconPosition="afterText"
+                  <AppButton
+                    onClick={() => router.push("/discover-products")}
+                    iconPosition="right"
                     icon={<FaArrowRight />}
-                    className="mt-6"
+                    style="mt-6"
                     label="Invite Merchant to List product on your marketplace"
                   />
                 </>
               )}
             </div>
           )}
-
+        
           <ViewProductModal
             isOpen={isViewModalOpen}
             product={product}
-            refetch={refetch}
             closeViewModal={closeViewModal}
           />
         </div>
@@ -206,4 +213,4 @@ function AllProducts() {
   );
 }
 
-export default AllProducts
+export default AllProducts;

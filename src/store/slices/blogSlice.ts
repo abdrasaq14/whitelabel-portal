@@ -4,7 +4,7 @@ import { RootState } from "../store";
 import { BlogService } from "@/services/blog";
 import { BlogSlice, IUpdatePostPayload } from "@/interfaces/SliceInterfaces";
 import { IQueryParams } from "@/interfaces/AppInterfaces";
-
+import toast from "react-hot-toast";
 
 
 const initialState: BlogSlice = {
@@ -25,8 +25,8 @@ const initialState: BlogSlice = {
 
 export const fetchPosts = createAsyncThunk<any, IQueryParams>(
   "blog/fetchPostsByTab",
-  async ({ whiteLabelName, tab, page, limit }: any) => {
-    const status = tab === "all" ? undefined : tab; 
+  async ({ whiteLabelName, status, page, limit }: IQueryParams) => {
+    // const status = tab === "all" ? undefined : tab; 
     const response = await BlogService.fetchAll({
       whiteLabelName,
       page,
@@ -39,7 +39,7 @@ export const fetchPosts = createAsyncThunk<any, IQueryParams>(
       posts: response.data?.result?.results,
       // @ts-ignore
       total: response.data?.result?.totalResults,
-      tab
+      tab: status
     };
   }
 );
@@ -132,7 +132,16 @@ const blogSlice = createSlice({
         state.error = null;
       })
       .addCase(addPost.fulfilled, (state, action) => {
-        state.posts.all.push(action.payload); // Update as needed
+        state.posts.all.push(action.payload); 
+      })
+      .addCase(addPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addPost.rejected, (state, action) => { 
+        state.loading = false;
+        state.error = action.error.message || "Something went wrong";
+        toast.error(state.error);
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         const index = state.posts.all.findIndex(
@@ -142,11 +151,30 @@ const blogSlice = createSlice({
           state.posts.all[index] = action.payload;
         }
       })
+      .addCase(updatePost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Something went wrong";
+        toast.error(state.error);
+      })
+      .addCase(deletePost.pending, (state) => { 
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Something went wrong";
+        toast.error(state.error);
+      })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.posts.all = state.posts.all.filter(
           (post) => post._id !== action.payload
         );
       });
+    
   }
 });
 

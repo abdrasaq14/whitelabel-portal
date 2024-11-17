@@ -355,3 +355,11 @@ export interface IToggleInputProps {
   value: boolean;
   onChange: (value: boolean) => void;
 }
+export interface ISearch {
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  value?: string;
+  onSubmit?: () => void;
+  onClear?: () => void;
+  className?: string;
+}

@@ -18,9 +18,7 @@ function AllBlog() {
     allPosts,
     total,
     idToDelete,
-    setTotal,
-    handleNext,
-    handlePrevious, handlePagination,
+    handlePagination,
     totalDrafts,
     totalPublished,
     posts,
@@ -29,7 +27,6 @@ function AllBlog() {
       activeTab,
     openModal,  
     currentPage,
-    limit,
     handleDeleteApi,
     handleDelete,
     handleClickOutside,
@@ -59,7 +56,7 @@ function AllBlog() {
             </div>
             <Link
               href={"/blog/create"}
-              className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-accent-darker p-2"
+              className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-accent-darker px-2"
             >
               Post Blog
             </Link>
@@ -175,7 +172,7 @@ function AllBlog() {
       <DeleteBlogModal
         isOpen={openModal}
         handleClose={handleClickOutside}
-        handleDeleteApi={handleDeleteApi as any}
+        handleDeleteApi={()=>handleDeleteApi(idToDelete)}
         idToDelete={idToDelete}
         modalTitle="Are you sure you want to delete this post from your blog?"
       />

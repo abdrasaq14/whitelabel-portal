@@ -3,14 +3,14 @@ import { useRouter } from "next/navigation";
 import { decrypt } from "@/utilities/helperFunctions";
 import { useAppDispatch } from "@/store/hooks";
 import { IPreviewPayload } from "@/interfaces/ComponentInterfaces";
-import { useMutation } from "react-query";
 import {
   addPost,
   updatePost,
 } from "@/store/slices/blogSlice";
 import toast from "react-hot-toast";
-
+import { useAppSelector } from "@/store/hooks";
 const usePreviewPost = () => {
+  const isLoaded = useAppSelector((state) => state.blog.loading);
   useEffect(() => {
     // fetch blog post details
     const localBlogDetails = localStorage.getItem("_Blog");
@@ -38,7 +38,7 @@ const usePreviewPost = () => {
         status: newStatus,
         publishedDate: newStatus === "published" ? publishedDate : ""
       };
-      handleSubmit.mutate(updatedDetails);
+      handleSubmit(updatedDetails);
       return updatedDetails;
     });
   };
@@ -59,43 +59,33 @@ const usePreviewPost = () => {
   //   localStorage.removeItem("_Blog");
   //   navigate(`/blog/view/${blogId}`);
   // };
-  const handleSubmit = useMutation(
-    async (values: IPreviewPayload) => {
-      setIsSubmitting(true);
-
+  const handleSubmit = async (values: IPreviewPayload) => {
+    try {
       if (values.isFromEdit) {
         // return await BlogService.updateBlog(values._id as string, values);
-        const postToUpdate= await dispatch(
+        const postToUpdate = await dispatch(
           updatePost({ id: values._id as string, updatedPayload: values })
         );
         if (postToUpdate.payload) {
           setBlogId(postToUpdate.payload.result._id);
-          return postToUpdate;
+          // return postToUpdate;
         }
       } else {
         // return await BlogService.create(values);
         const postToAdd = await dispatch(addPost(values));
         if (postToAdd.payload) {
           setBlogId(postToAdd.payload.result._id);
-          return postToAdd;
         }
       }
-    },
-    {
-      onSuccess: (response) => {
-        setIsSubmitting(false);
-        setOpenModal(true);
-        toast.success(
-          blogDetails?.isFromEdit ? "Blog post updated" : "Blog post created"
-        );
-        // navigate("/blog");
-      },
-      onError: (error) => {
-        setIsSubmitting(false);
-        toast.error(error as string);
-      }
+      setOpenModal(true);
+      toast.success(
+        blogDetails?.isFromEdit ? "Blog post updated" : "Blog post created"
+      );
+    } catch (error) {
+      toast.error("Failed to create blog post");
     }
-  );
+    
+  }
 
 
   return {

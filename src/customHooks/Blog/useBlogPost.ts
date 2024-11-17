@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { useRouter as navigate } from "next/navigation";
-import { useMutation } from "react-query";
 import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
 import toast from "react-hot-toast";
@@ -47,38 +46,33 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
     },
     validationSchema: BlogValidationSchema,
     onSubmit: (values) => {
-      handleSubmit.mutate(values as IBlogPayload);
+      handleSubmit(values as IBlogPayload);
     }
   });
 
-  const handleSubmit = useMutation(
-    async (values: IBlogPayload) => {
-      if (id) {
-        return await dispatch(updatePost({ id, updatedPayload: values }));
-        // return await BlogService.updateBlog(id, values);
-      }
-      const postToAdd = await dispatch(addPost(values));
-      if (postToAdd.payload) {
-        setBlogId(postToAdd.payload.result._id);
-        return postToAdd;
-      }
-      // return await BlogService.create(values);
-    },
-    {
-      onSuccess: (response: any) => {
+  const handleSubmit = async (values: IBlogPayload) => {
+      try {
+        if (id) {
+          await dispatch(updatePost({ id, updatedPayload: values }));
+          // return await BlogService.updateBlog(id, values);
+        } else {
+          const postToAdd = await dispatch(addPost(values));
+          if (postToAdd.payload) {
+            setBlogId(postToAdd.payload.result._id);
+            return postToAdd;
+          }
+        }
         form.setSubmitting(false);
         localStorage.removeItem("_Blog");
         toast.success(id ? "Blog post updated" : "Blog post created");
         setOpenModal(true);
-      },
-      onError: (error) => {
+      } catch (error:any) {
         form.setSubmitting(false);
-        // const e = handleError(error);
-        toast.error(error as string);
+        setError(error);
       }
+      // return await BlogService.create(values);
     }
-  );
-
+    
   const handlePreview = (value: IBlogPayload & { isFromEdit: boolean }) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
     navigateTo.push("/blog/preview");

@@ -116,6 +116,7 @@ export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;
 }
 export interface IQueryParams {
+    id?: string;
     whiteLabelName?: string;
     page?: number;
     limit?: number;
