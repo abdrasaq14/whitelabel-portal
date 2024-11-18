@@ -104,7 +104,7 @@ function AllProducts() {
           currentPath="All Products"
           brand="Landmark"
         />
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-5">
           <h1 className="text-accent-darker text-sm font-normal">
             All Products{" "}
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
@@ -132,7 +132,9 @@ function AllProducts() {
           </button>
         </div>
         <div className="h-full flex-grow ">
-          {allProducts && allProducts.length ? (
+          {isLoading ? (
+            <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+          ) : allProducts && allProducts.length ? (
             <>
               <Table
                 columns={columns}
@@ -149,27 +151,25 @@ function AllProducts() {
             </>
           ) : (
             <div className="h-auto flex-grow py-20 flex justify-center flex-col items-center">
-              {isLoading ? (
-                <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
-              ) : (
-                <>
-                  <img src="/images/NoProduct.svg" alt="No Product Found" />
-                  <p className="font-normal max-w-[539px] text-[#4D5154] text-center text-sm">
-                    {isEmpty(filterParams)
-                      ? "You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!"
-                      : "No search result found"}
-                  </p>
+              (
+              <>
+                <img src="/images/NoProduct.svg" alt="No Product Found" />
+                <p className="font-normal max-w-[539px] text-[#4D5154] text-center text-sm">
+                  {isEmpty(filterParams)
+                    ? "You have no products listed on your marketplace yet. Browse through our product directory to start listing products now!"
+                    : "No search result found"}
+                </p>
 
-                  <AppButton
-                    handleClick={() => router.push("/discover-products")}
-                    iconPosition="right"
-                    type={ButtonType.PRIMARY}
-                    // icon={<FaArrowRight />}
-                    style="mt-6"
-                    text="Invite Merchant to List product on your marketplace"
-                  />
-                </>
-              )}
+                <AppButton
+                  handleClick={() => router.push("/discover-products")}
+                  iconPosition="right"
+                  type={ButtonType.PRIMARY}
+                  // icon={<FaArrowRight />}
+                  style="mt-6"
+                  text="Invite Merchant to List product on your marketplace"
+                />
+              </>
+              )
             </div>
           )}
 
