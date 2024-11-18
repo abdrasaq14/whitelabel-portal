@@ -1,17 +1,15 @@
 import React from 'react'
 import AppModal from '../utilities/AppModal'
-import useNavs from '@/customHooks/useNavs';
 import { ButtonType, ModalFooterType } from '@/enums/ComponentEnums';
 
-const LogoutModal = () => {
-    const {showLogoutModal, handleCloseLogoutModal, logout} = useNavs();
+const LogoutModal = ({showLogoutModal, handleCloseModal, logout}: any) => {
 
     return (
         <AppModal hasClose={true} footer={{type: ModalFooterType.CENTER, cancelButton: {
             type: ButtonType.SECONDARY,
             text: 'Cancel',
-            handleClick: () => handleCloseLogoutModal()
-        }, submitButton: {type: ButtonType.PRIMARY, text: 'Logout', handleClick: () => logout()}}} isOpen={showLogoutModal} closeClicked={handleCloseLogoutModal}>
+            handleClick: () => handleCloseModal()
+        }, submitButton: {type: ButtonType.PRIMARY, text: 'Logout', handleClick: () => logout()}}} isOpen={showLogoutModal} closeClicked={handleCloseModal}>
             
             <div className='h-auto w-full sm:w-[464px] py-8 px-9 sm:shadow-custom max-h-[624px] flex flex-col justify-center items-center'>
                 <h2 className='text-2xl font-satoshiBold text-accent-main'>Logout?</h2>

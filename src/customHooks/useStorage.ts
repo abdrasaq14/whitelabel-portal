@@ -1,5 +1,5 @@
 "use client";
-import { isJsonString } from '@/utilities/checkers';
+import { isJsonString } from '@/utilities/helpers';
 
 const useStorage = () => {
     

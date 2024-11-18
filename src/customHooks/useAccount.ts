@@ -7,7 +7,8 @@ import toast from 'react-hot-toast'
 import useStorage from './useStorage'
 import { staffUpdated } from '@/store/slices/uploadSlice'
 import { Constants } from '@/utilities/constants'
-import useNavs from './useNavs'
+import useModal from './useModal'
+import { closeCreateStaffModal } from '@/store/slices/modalSlice'
 
 const useAccount = () => {
 
@@ -17,9 +18,9 @@ const useAccount = () => {
 
     const toggleEditMode = () => dispatch(setEditMode());
 
-    const {updateSessionData, currentUser} = useStorage();
+    const {updateSessionData} = useStorage();
 
-    const {handleCloseCreateStaffModal} = useNavs();
+    const {handleCloseModal} = useModal();
 
     useEffect(() => {if (!accountSlice.staffsResult) handleFetchUsers()}, []);
 
@@ -120,7 +121,7 @@ const useAccount = () => {
 
         toast.success("Succefully added")
 
-        handleCloseCreateStaffModal();
+        handleCloseModal(closeCreateStaffModal);
 
     }
 

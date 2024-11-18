@@ -18,7 +18,8 @@ const config: Config = {
           main: "#D42620",
           main2: "#F03738",
           main3: "#DC1E35",
-          light: "#9E0A05"
+          light: "#9E0A05",
+          light2: "#FBEAE9"
         },
         success: {
           main: "#0F973D",
@@ -40,6 +41,7 @@ const config: Config = {
           dark2: "#0E0C01",
           dark3: "#292D32",
           dark4: "#344054",
+          dark5: "#2B2C34",
           light: "#C8CCD0",
           light2: "#D0D5DD",
           light3: "#98A2B3",

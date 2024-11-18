@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import OtpInput from 'react-otp-input'
-import AppButton from './AppButton';
+import AppButton from '../AppButton';
 import { ButtonType, SpinnerType } from '@/enums/ComponentEnums';
 import { FaArrowRight } from 'react-icons/fa6';
 import useAuth from '@/customHooks/useAuth';

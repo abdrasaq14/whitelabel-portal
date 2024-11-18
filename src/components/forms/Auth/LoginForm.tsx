@@ -1,21 +1,21 @@
 "use client"
 import React, {useState} from 'react'
-import AppCard from '../utilities/AppCard'
+import AppCard from '../../utilities/AppCard'
 import { ButtonType, CardType, ModalFooterType, ModalHeaderType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
 import { useCustomFormik } from '@/customHooks/useCustomFormik'
 import { loginValidation } from '@/utilities/validations'
-import AppTextBox from './AppTextBox'
+import AppTextBox from '../AppTextBox'
 import {FaRegEnvelope} from "react-icons/fa6";
 import { CiLock } from "react-icons/ci";
-import AppCheckbox from './AppCheckbox'
+import AppCheckbox from '../AppCheckbox'
 import Link from 'next/link'
-import AppButton from './AppButton'
+import AppButton from '../AppButton'
 import { FaArrowRight } from "react-icons/fa6";
 import Image from 'next/image'
 import { BsExclamationCircle } from "react-icons/bs";
-import ValidationError  from './ValidationError'
+import ValidationError  from '../ValidationError'
 import useAuth from '@/customHooks/useAuth'
-import OtpModal from '../modals/OtpModal'
+import OtpModal from '../../modals/OtpModal'
 
 const LoginForm = () => {
     const {handleLogin, loading} = useAuth();

@@ -4,13 +4,12 @@ import useNavs from '@/customHooks/useNavs';
 import { ModalHeaderType } from '@/enums/ComponentEnums';
 import CreateStaffForm from '../forms/AccountInformation/CreateStaffForm';
 
-const CreateStaffModal = () => {
-    const {showCreateStaffModal, handleCloseCreateStaffModal} = useNavs();
-
+const CreateStaffModal = ({handleCloseModal, showCreateStaffModal}: any) => {
+    
     return (
-        <AppModal isOpen={showCreateStaffModal} header={{title: 'Add Staff', subtitle: 'Fill and submit the form to add a new staff to the team', type: ModalHeaderType.START}} hasClose={true} closeClicked={handleCloseCreateStaffModal} >
+        <AppModal isOpen={showCreateStaffModal} header={{title: 'Add Staff', subtitle: 'Fill and submit the form to add a new staff to the team', type: ModalHeaderType.START}} hasClose={true} closeClicked={handleCloseModal} >
             
-            <CreateStaffForm closeModal={handleCloseCreateStaffModal} />
+            <CreateStaffForm closeModal={handleCloseModal} />
         
         </AppModal>
     )

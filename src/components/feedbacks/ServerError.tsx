@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import AppButton from '../forms/AppButton'
 import { ButtonType } from '@/enums/ComponentEnums'
@@ -9,13 +9,21 @@ import { useRouter } from 'next/navigation';
 const ServerError = () => {
     const router = useRouter();
 
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(typeof window !== 'undefined');
+    }, []);
+
     const goBack = () => {
-        if (window.history.length > 1) {
+        if (isClient && window.history.length > 1) {
             router.back();
         } else {
             router.push('/');
         }
     };
+
+    if (!isClient) return null;
 
     return (
         <div className='flex flex-col justify-center items-center w-[659px]'>

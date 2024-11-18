@@ -8,11 +8,7 @@ const initialState: NavSlice = {
     newNotification: false,
     breadcrumb: '',
     isOpen: true,
-    showLogoutModal: false,
-    activeLabel: 'Dashboard',
-    showStaffInfoModal: false,
-    activeStaff: null,
-    showCreateStaffModal: false
+    activeLabel: 'Dashboard'
 };
 
 //Actions
@@ -37,28 +33,10 @@ const navSlice = createSlice({
         toggleSideNav: (state) => {
             state.isOpen = !state.isOpen;
         },
-        closeLogoutModal: (state) => {
-            state.showLogoutModal = false;
-        },
-        openLogoutModal: (state) => {
-            state.showLogoutModal = true;
-        },
+        
         setActiveLabel: (state, action) => {
             state.activeLabel = action.payload;
         },
-        openStaffInfoModal: (state, action) => {
-            state.activeStaff = action.payload;
-            state.showStaffInfoModal = true;
-        },
-        closeStaffInfoModal: (state) => {
-            state.showStaffInfoModal = false;
-        },
-        openCreateStaffModal: (state) => {
-            state.showCreateStaffModal = true;
-        },
-        closeCreateStaffModal: (state) => {
-            state.showCreateStaffModal = false;
-        }
     },
     // extraReducers: (builder) => {
     //     builder
@@ -77,7 +55,7 @@ const navSlice = createSlice({
     // }
 })
 
-export const {toggleSideNav, closeLogoutModal, openLogoutModal, setActiveLabel, openStaffInfoModal, closeStaffInfoModal, openCreateStaffModal, closeCreateStaffModal} = navSlice.actions;
+export const {toggleSideNav, setActiveLabel} = navSlice.actions;
 
 export default navSlice.reducer;
 

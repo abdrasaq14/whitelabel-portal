@@ -1,13 +1,12 @@
 import React from 'react'
 import AppModal from '../utilities/AppModal'
-import useModal from '@/customHooks/useModal'
-import OtpForm from '../forms/OtpForm';
+import OtpForm from '../forms/Auth/OtpForm';
+import { closeOtpModal } from '@/store/slices/modalSlice';
 
-const OtpModal = () => {
-  const {showOtpModal, closeOtpModal} = useModal();
+const OtpModal = ({showOtpModal, handleCloseModal}: any) => {
 
   return (
-    <AppModal hasClose={true} isOpen={showOtpModal} closeClicked={closeOtpModal}>
+    <AppModal hasClose={true} isOpen={showOtpModal} closeClicked={() => {handleCloseModal(closeOtpModal)}}>
         
         <div className='my-8 sm:border-[0.4px] sm:border-purple-main rounded-lg h-auto w-full sm:w-[464px] py-8 px-9 sm:shadow-custom max-h-[624px]'>
           <h2 className='text-2xl sm:text-center font-gooperSemibold text-black mb-2'>Account Authentication</h2>

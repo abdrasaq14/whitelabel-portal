@@ -1,25 +1,21 @@
 "use client"
 import React, { useEffect } from 'react'
-import AppButton from '../forms/AppButton'
+import AppButton from '../../forms/AppButton'
 import { ButtonType, SpinnerType } from '@/enums/ComponentEnums'
 import useAccount from '@/customHooks/useAccount'
-import DownloadIcon from '../icons/DownloadIcon'
-import Table from '../layouts/Table'
+import DownloadIcon from '../../icons/DownloadIcon'
+import Table from '../../layouts/Table'
 import Image from 'next/image'
-import Spinner from '../feedbacks/Spinner'
-import NoMemberFound from '../feedbacks/NoMemberFound'
-import useNavs from '@/customHooks/useNavs'
-import StaffInfoModal from '../modals/StaffInfoModal'
-import CreateStaffModal from '../modals/CreateStaffModal'
-import Pagination from '../feedbacks/Pagination'
+import Spinner from '../../feedbacks/Spinner'
+import StaffInfoModal from '../../modals/StaffInfoModal'
+import CreateStaffModal from '../../modals/CreateStaffModal'
+import Pagination from '../../feedbacks/Pagination'
+import NoDataFound from '../../feedbacks/NoDataFound'
+import { openCreateStaffModal, closeCreateStaffModal, closeStaffInfoModal, openStaffInfoModal } from '@/store/slices/modalSlice'
 
-const MembersTab = () => {
-
-    const {staffsResult, loading} = useAccount();
+const MembersTab = ({handleOpenModal, handleCloseModal, showCreateStaffModal, showStaffInfoModal, loading, staffsResult}: any) => {
 
     // console.log(staffsResult);
-
-    const {handleOpenStaffInfoModal, handleOpenCreateStaffModal} = useNavs();
 
     const columns = [
         { key: 'sn', label: 'S/N' },
@@ -38,7 +34,7 @@ const MembersTab = () => {
     ];
 
     const additionalActions = (row: any) => [
-        { label: 'View Staff', action: () => handleOpenStaffInfoModal(row) }
+        { label: 'View Staff', action: () => handleOpenModal(openStaffInfoModal, row) }
     ];
 
 
@@ -50,13 +46,13 @@ const MembersTab = () => {
                 <p className='font-satoshiRegular text-sm text-accent-dark mt-2'>Invite your colleagues to work faster and collaborate together.</p>
                 <div className='mt-5 flex w-100 gap-2'>
                     <AppButton text="Export CSV" handleClick={() => {}} type={ButtonType.SECONDARY} icon={DownloadIcon} />
-                    <AppButton text="Invite new member" handleClick={() => handleOpenCreateStaffModal()} type={ButtonType.PRIMARY} />
+                    <AppButton text="Invite new member" handleClick={() => handleOpenModal(openCreateStaffModal)} type={ButtonType.PRIMARY} />
                 </div>
             </div>
             <div className='col-span-2'>
                 {loading ? <div className='flex justify-center items-center h-full w-full'>
                         <Spinner type={SpinnerType.PRIMARY} height={40} width={40} />
-                    </div> : !staffsResult ? <NoMemberFound /> : 
+                    </div> : !staffsResult ? <NoDataFound image={<Image src="/icons/people.svg" alt="People icon" height={439} width={275} />} text="You haven't invited any staff members to the platform yet. You can invite coworkers to join and collaborate with you, and their information will be displayed here." /> : 
                     <>
                         <Table
                             columns={columns}
@@ -72,8 +68,10 @@ const MembersTab = () => {
                 }
             </div>
 
-            <StaffInfoModal />
-            <CreateStaffModal />
+            <StaffInfoModal handleCloseModal={() => handleCloseModal(closeStaffInfoModal)} showStaffInfoModal={showStaffInfoModal} />
+
+            <CreateStaffModal handleCloseModal={() => handleCloseModal(closeCreateStaffModal)} showCreateStaffModal={showCreateStaffModal} />
+            
         </div>
     )
 }

@@ -1,5 +1,5 @@
 "use client"
-import OtpForm from '@/components/forms/OtpForm'
+import OtpForm from '@/components/forms/Auth/OtpForm'
 import React from 'react'
 
 const page = () => {

@@ -5,7 +5,7 @@ import '@/app/styles/components.css'
 import AppButton from '../forms/AppButton'
 import { MdCancel } from "react-icons/md";
 
-const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked}: AppModalProps) => {
+const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked, style=``}: AppModalProps) => {
     
   return (
     <Dialog open={isOpen} onClose={(isOpen) => {}} className="relative z-10">
@@ -18,7 +18,7 @@ const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=fa
             transition
             className="dialog-panel"
           >
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className={`bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 ${style}`}>
               {hasClose && <div className="flex justify-end items-center"><MdCancel className="text-accent-main cursor-pointer" size={20} onClick={closeClicked}/></div>}
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">

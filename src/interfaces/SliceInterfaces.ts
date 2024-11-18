@@ -1,6 +1,6 @@
-import { User } from "./AppInterfaces";
+import { Inventory, User } from "./AppInterfaces";
 
-interface StaffListResult {
+interface ApiListResponse {
     limit: number;
     page: number;
     results: any[];
@@ -12,13 +12,21 @@ export interface AccountSlice {
     loading: boolean;
     error: string | null;
     disableMode: boolean;
-    staffsResult: StaffListResult | null
+    staffsResult: ApiListResponse | null
 }
 
 export interface DashboardSlice {
     loading: boolean;
     error: string | null;
     stats: any;
+}
+
+export interface InventorySlice {
+    loading: boolean;
+    error: string | null;
+    inventoriesResult: ApiListResponse | null;
+    inventoryRequestResult: ApiListResponse | null;
+    requestHistoryResult: ApiListResponse | null;
 }
 
 export interface UserSlice {
@@ -29,6 +37,19 @@ export interface UserSlice {
 
 export interface ModalSlice {
     showOtpModal: boolean;
+    showAddInventoryModal: boolean;
+    showViewInventoryModal: boolean;
+    showInventoryHistoryModal: boolean;
+    showInventoryRequestModal: boolean;
+    showDialogModal: boolean;
+    showEditInventoryModal: boolean;
+    showLogoutModal: boolean;
+    showStaffInfoModal: boolean;
+    showCreateStaffModal: boolean;
+    activeStaff: User | null;
+    activeInventoryHistory: any;
+    activeInventoryRequest: any;
+    activeInventory: any;
 }
 
 export interface NavSlice {
@@ -36,11 +57,7 @@ export interface NavSlice {
     newNotification: boolean;
     breadcrumb: string;
     isOpen: boolean;
-    showLogoutModal: boolean;
     activeLabel: string;
-    showStaffInfoModal: boolean;
-    activeStaff: User | null;
-    showCreateStaffModal: boolean;
 }
 
 export interface UploadSlice {

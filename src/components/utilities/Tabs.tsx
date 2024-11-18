@@ -12,13 +12,18 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
           <button
             key={index}
             onClick={() => setActiveTab(index)}
-            className={`py-2 px-4 transition-all ease-in-out hover:scale-110 delay-350 duration-700 text-base ${
+            className={`gap-5 py-2 px-4 transition-all ease-in-out hover:scale-110 delay-350 duration-700 text-base ${
               activeTab === index
                 ? 'text-purple-main border-b-2 border-purple-main font-satoshiBold'
                 : 'text-accent-light hover:text-purple-main font-satoshiMedium'
             }`}
           >
             {tab.label}
+            {
+              tab.counter !== undefined && <span className={`w-[24px] h-[20px] py-1 px-2 rounded-lg text-xs font-satoshiMedium ml-2 text-white ${activeTab === index ? `bg-purple-main` : `bg-accent-light`}`}>
+                {tab.counter}
+              </span>
+            }
           </button>
         ))}
       </div>

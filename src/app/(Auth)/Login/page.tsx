@@ -7,7 +7,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import {FaRegEnvelope} from "react-icons/fa6";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import AppModal from "@/components/utilities/AppModal";
-import LoginForm from "@/components/forms/LoginForm";
+import LoginForm from "@/components/forms/Auth/LoginForm";
 
 const page = () => {
   return (

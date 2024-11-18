@@ -63,6 +63,7 @@ export interface AppModalProps {
     hasClose?: boolean;
     isOpen?: boolean;
     closeClicked: () => void;
+    style?: string;
 }
 
 export interface CardProps {
@@ -127,6 +128,11 @@ export interface StatsCardProps {
     loading: boolean;
 }
 
+export interface NoDataFoundProps {
+    image: any;
+    text: string;
+}
+
 export interface SummaryCardProps {
     title: string;
     actionButtons?: StatsCardActionButton[] | null;
@@ -151,6 +157,7 @@ export interface BarGraphProps {
 interface Tab {
     label: string;
     content: React.ReactNode;
+    counter?: number;
 }
   
 export interface TabsProps {

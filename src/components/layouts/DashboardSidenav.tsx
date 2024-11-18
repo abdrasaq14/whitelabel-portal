@@ -1,17 +1,19 @@
 "use client";
-import { useState } from 'react';
 import Link from 'next/link';
-import { FiLogOut } from 'react-icons/fi';
 import Image from 'next/image';
 import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { SideNavItem, SideNavItemChild, SideNavProps } from '@/interfaces/ComponentInterfaces';
+import { SideNavItemChild, SideNavProps } from '@/interfaces/ComponentInterfaces';
 import useNavs from '@/customHooks/useNavs';
 import LogoutIcon from '../icons/LogoutIcon';
 import DownArrowIcon from '../icons/DownArrowIcon';
 import LogoutModal from '../modals/LogoutModal';
+import useModal from '@/customHooks/useModal';
+import { openLogoutModal, closeLogoutModal } from '@/store/slices/modalSlice';
 
 const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
-  const { isOpen, toggleNav, handleOpenLogoutModal, activeLabel, handleSetActiveLabel } = useNavs();
+  const { isOpen, toggleNav, activeLabel, handleSetActiveLabel, logout } = useNavs();
+
+  const {handleOpenModal, handleCloseModal, showLogoutModal} = useModal();
 
   return (
     <div className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular text-sm h-full fixed transition-width duration-300`}>
@@ -51,7 +53,7 @@ const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
         ))}
       </ul>
 
-      <div onClick={handleOpenLogoutModal} className='rounded flex justify-between items-center p-3 w-full border border-purple-main my-10 hover:bg-purple-lighter hover:cursor-pointer'>
+      <div onClick={() => handleOpenModal(openLogoutModal)} className='rounded flex justify-between items-center p-3 w-full border border-purple-main my-10 hover:bg-purple-lighter hover:cursor-pointer'>
         <div>
           <Image src="/images/landmark_logo.svg" alt="Landmark logo" width={164} height={64} />
           <p className="text-accent-dark3 text-sm font-satoshiRegular">landmarkuniversity@gmail.com</p>
@@ -59,7 +61,7 @@ const DashboardSidenav: React.FC<SideNavProps> = ({ items }) => {
         <LogoutIcon />
       </div>
 
-      <LogoutModal />
+      <LogoutModal logout={logout} handleCloseModal={() => handleCloseModal(closeLogoutModal)} showLogoutModal={showLogoutModal} />
     
     </div>
   );

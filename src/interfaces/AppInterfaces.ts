@@ -117,3 +117,36 @@ export interface AdminAccountInfo {
     adminPhoneNumber: string;
     companyAddress: string;
 }
+
+export interface Inventory {
+    name: string;
+    image: string;
+    categoryName: string,
+    quantityIn: number;
+    quantityOut: number;
+    unitPrice: number;
+    whiteLabelName: string;
+    createdBy: string;
+    stockHistory: Array<{
+        quantityIn: number;
+        quantityOut: number;
+        quantityAdded: number;
+        updatedBy: string
+    }>;
+    priceHistory: Array<{
+        oldPrice: number;
+        newPrice: number;
+        updatedBy: string;
+    }>;
+    nameHistory: Array<{
+        oldName: string;
+        newName: string;
+        updatedBy: string;
+    }>
+}
+
+export interface InventoryCategory {
+    name: string;
+    whiteLabelName: string;
+    createdBy: string;
+}

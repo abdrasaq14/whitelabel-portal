@@ -3,7 +3,6 @@ import AppTextBox from '../AppTextBox'
 import { ButtonType, SpinnerType, TextboxType } from '@/enums/ComponentEnums'
 import ValidationError from '../ValidationError'
 import { BsExclamationCircle } from 'react-icons/bs'
-import useNavs from '@/customHooks/useNavs'
 import { useCustomFormik } from '@/customHooks/useCustomFormik'
 import { StaffInfoValidation } from '@/utilities/validations'
 import DocumentUpload from '../DocumentUpload/DocumentUpload'
@@ -12,10 +11,11 @@ import ChangeStaffImage from '../DocumentUpload/ChangeStaffImage'
 import AppSelectBox from '../AppSelectBox'
 import AppButton from '../AppButton'
 import useAccount from '@/customHooks/useAccount'
+import useModal from '@/customHooks/useModal'
 
 const StaffInfoForm = () => {
 
-    const {activeStaff} = useNavs();
+    const {activeStaff} = useModal();
 
     const {uploading, handleSaveStaffImage} = useUpload();
 

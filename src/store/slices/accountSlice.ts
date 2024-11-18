@@ -58,10 +58,7 @@ const accountSlice = createSlice({
     reducers: {
         setEditMode: (state) => {
             state.disableMode = !state.disableMode
-        },
-        // updateStaffList: (state, action) => {
-        //     state.staffsResult?.results?.unshift(action.payload)
-        // }
+        }
     },
     extraReducers: (builder) => {
         builder

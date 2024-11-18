@@ -56,7 +56,7 @@ const useUpload = () => {
     
             const data = await response.json();
 
-            console.log("Upload completed", data);
+            // console.log("Upload completed", data);
 
             //handle any function here
             otherData !== null ? callback(data.secure_url, otherData) : callback(data.secure_url)
@@ -106,7 +106,7 @@ const useUpload = () => {
         toast.success("Updated successfully")
     }
 
-    const handleHoldImage = async (image: string) => await dispatch(holdImage(image))
+    const handleHoldImage = async (image: string) => dispatch(holdImage(image))
 
 
     return {
