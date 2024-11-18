@@ -123,3 +123,7 @@ export const isEmpty = (value: any) =>
   (typeof value === "object" && Object.keys(value).length === 0) ||
   (typeof value === "string" && value.trim().length === 0) ||
   (typeof value === "object" && value.toString().length === 0);
+
+  export function fDate(date: string) {
+    return format(new Date(date), "dd MMMM yyyy");
+  }

@@ -1,34 +1,51 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { MerchantService } from "@/services/merchant";
+import { IQueryParams, User } from "@/interfaces/AppInterfaces";
+import { fDateTime } from "@/utilities/helperFunctions";
+import { ViewProductModal } from "../modals/ViewProductModal";
+import Table from "../layouts/Table";
+import useStorage from "@/customHooks/useStorage";
+import Pagination from "../feedbacks/Pagination";
+import { SpinnerType } from "@/enums/ComponentEnums";
+import Spinner from "../feedbacks/Spinner";
 
 const ProductsSold = ({}) => {
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [product, setProduct] = useState({});
+  const [allProducts, setAllProduc] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalResults, setTotalResults] = useState(0);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const { getSessionData } = useStorage();
+  const profile = getSessionData("UserData")?.user as User;
 
-  const { id } = useParams();
+  const { id }: any = useParams();
 
-  const { data: allProducts, isLoading } = useFetchWithParams(
-    [
-      "query-all-products-sold",
-      {
-        merchantId: id,
-        page: currentPage
-      }
-    ],
-    ProductService.getProductsSold,
-    {
-      onSuccess: (data: any) => {
-        // console.log(data.data);
-      },
-      keepPreviousData: false,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true
+  const fetchMerchantProducts = async (query: IQueryParams) => {
+    const res = await MerchantService.getMerchantProducts(query);
+    // @ts-ignore
+    if (res.data.result.results) {
+      // @ts-ignore
+      setAllProduct(res.data.result.results);
+      // @ts-ignore
+      setTotalResults(res.data.result.totalPages);
     }
-  );
-
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    if (profile?.whiteLabelName) {
+      //   setIsLoading(true);
+      fetchMerchantProducts({
+        merchantId: id,
+        limit: pageSize,
+        page: currentPage
+      });
+    }
+  }, [id, pageSize, currentPage]);
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -42,80 +59,68 @@ const ProductsSold = ({}) => {
     setCurrentPage(val);
     // setFilterParams({ ...filterParams, pageNum: val - 1 });
   };
-
+  const columns = [
+    { key: "sn", label: "S/N" },
+    {
+      key: "Product Name",
+      label: "Product Name",
+      render: (row: any) => (
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+          {row?.name}{" "}
+        </div>
+      )
+    },
+    {
+      key: "Merchant",
+      label: "Merchant",
+      render: (row: any) => (
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+          {row?.productOwner}{" "}
+        </div>
+      )
+    },
+    {
+      key: "Category",
+      label: "Category",
+      render: (row: any) => (
+        <div>{row?.categories.map((item: any) => item.title).join(" | ")} </div>
+      )
+    },
+    {
+      key: "Date Listed",
+      label: "Date Listed",
+      render: (row: any) => (
+        <div>{row.createdAt && fDateTime(row.createdAt)}</div>
+      )
+    }
+  ];
   return (
     <div className="h-full flex-grow ">
-      <Table
-        data={allProducts && allProducts.result.results}
-        hideActionName={true}
-        // rowActions={(row) => [
-        //   {
-        //     name: "View Product",
-        //     action: () => {
-        //       handleViewProductInfo(row)
-        //     },
-        //   },
-        //   {
-        //     name: "Ban product",
-        //     action: () => {
-        //       handleViewProductInfo(row)
-        //     },
-        //   },
-        //   {
-        //     name: "View Seller",
-        //     action: () => {
-        //       handleViewProductInfo(row)
-        //     },
-        //   },
-        // ]}
-        columns={[
-          {
-            header: "S/N",
-            view: (row: any, id) => (
-              <div className="pc-text-blue">
-                {generateSerialNumber(id, {
-                  currentPage,
-                  pageSize
-                })}
-              </div>
-            )
-          },
-          // {
-          //     header: "Product Id",
-          //     view: (row: any) => <div>{row._id}</div>,
-          // },
-          {
-            header: "Product Name",
-            view: (row: any) => <div>{row.name}</div>
-          },
-          {
-            header: "Merchant",
-            view: (row: any) => <div>{row.productOwner}</div>
-          },
-          {
-            header: "Category",
-            view: (row: any) => (
-              <div>
-                {row?.categories.map((item: any) => item.title).join(" | ")}{" "}
-              </div>
-            )
-          },
-          {
-            header: "Date Listed",
-            view: (row: any) => (
-              <div>{row.createdAt && fDateTime(row.createdAt)}</div>
-            )
-          }
-        ]}
-        loading={isLoading}
-        pagination={{
-          page: currentPage,
-          pageSize: pageSize,
-          totalRows: allProducts?.result.totalPages,
-          setPageSize: handlePageSize,
-          setPage: handleCurrentPage
-        }}
-      />
+      {isLoading ? (
+        <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+      ) : allProducts && allProducts.length ? (
+        <>
+          <Table
+            columns={columns}
+            data={allProducts && allProducts}
+            // additionalActions={additionalActions}
+          />
+          <Pagination
+            page={currentPage}
+            totalPages={totalResults}
+            onPageChange={() => {
+              setCurrentPage(currentPage + 1);
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <img src="/images/NoProduct.svg" alt="No Product Found" />
+          <p className="font-normal max-w-[539px] text-[#4D5154] text-center text-sm">
+            This merchant has not sold any product yet
+          </p>
+        </>
+      )}
       <ViewProductModal
         isOpen={isViewModalOpen}
         product={product}

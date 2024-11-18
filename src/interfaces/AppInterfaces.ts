@@ -117,6 +117,7 @@ export interface HandlePreviewPayload extends IBlogPayload {
 }
 export interface IQueryParams {
     id?: string;
+    merchantId?: string;
     whiteLabelName?: string;
     whiteLabelClientId?: string;
     page?: number;
