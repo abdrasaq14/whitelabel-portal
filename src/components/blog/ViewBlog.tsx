@@ -219,7 +219,7 @@ function ViewBlog() {
         idToDelete={idToDelete}
         isOpen={openModal}
         handleClose={handleClickOutside}
-        handleDeleteApi={handleDeleteCommentApi as any}
+        handleDeleteApi={handleDeleteCommentApi}
         modalTitle="Are you sure you want to delete this comment from your blog??"
       />
     </div>

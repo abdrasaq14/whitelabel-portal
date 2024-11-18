@@ -3,7 +3,7 @@ import { BlogService } from "@/services/blog";
 import { IBlogPayload, IComments } from "@/interfaces/ComponentInterfaces";
 import { useState, useEffect } from "react";
 import { calculateReadingTime, encrypt } from "@/utilities/helperFunctions";
-import { useMutation } from "react-query";
+
 import toast from "react-hot-toast";
 
 const useViewBlog = () => {
@@ -44,28 +44,27 @@ const useViewBlog = () => {
     setOpenModal(false);
     setIdToDelete("");
   };
-  const handleDeleteCommentApi = useMutation(
-    async (id: string) => {
-      return await BlogService.deleteComment(blogDetails?._id as string, id);
-    },
-    {
-      onSuccess: (response: any) => {
+  const handleDeleteCommentApi = async (id: string) => {
+    try {
+      const res:any = await BlogService.deleteComment(blogDetails?._id as string, id);
+      if (res.data.result) {
         toast.success("Comment deleted successfully");
-        setBlogDetails(response.data.result);
-        setComments(response.data.result.comments);
+        setBlogDetails(res.data.result);
+        setComments(res.data.result.comments);
         setDeletedComments(
-          response.data.result.comments.filter(
+          res.data.result.comments.filter(
             (comment: IComments) => comment.isDeleted
           )
         );
         setOpenModal(false);
-      },
-      onError: (error) => {
-        toast.error(error as string);
-        setOpenModal(false);
       }
     }
-  );
+      
+    catch (error) {
+      toast.error(error as string);
+      setOpenModal(false);
+    }
+  }
 
   const saveCommentsToLocalStorage = (comments: IComments[]) => {
     localStorage.setItem("comments", encrypt(JSON.stringify(comments)));
