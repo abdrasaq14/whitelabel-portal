@@ -12,6 +12,7 @@ import React, { useEffect } from 'react'
 const page = () => {
 
     const { checkUserAuthenticity } = useNavigation();
+    
     const { currentUser } = useStorage()
 
     const tabsData = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
@@ -31,6 +32,7 @@ const page = () => {
     ];
 
     useEffect(() => checkUserAuthenticity(), []);
+    
     return (
         <div className='px-4 pt-8 h-full'>
             <div className='bg-white rounded-md h-auto w-full p-8 flex flex-col'>

@@ -36,7 +36,7 @@ const useSettings = () => {
 
         updateSessionData('UserData', 'user', userInfoEdited?.payload?.result?.user)
 
-        toast.success("updated successfully")
+        toast.success("Updated successfully")
     }
 
     return (
