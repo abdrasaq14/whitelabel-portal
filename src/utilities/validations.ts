@@ -34,3 +34,7 @@ export const InventoryValidation = Yup.object({
     quantityIn: Yup.number().required('Quantity In is required').integer('Quantity In must be an integer').min(1, 'Quantity In cannot be less than 1'),
     unitPrice: Yup.number().required('Unit Price is required').positive('Unit Price must be greater than zero').min(1, 'Unit Price cannot be less than 1')
 });
+
+export const messageValidation = Yup.object({
+  messageText: Yup.string().required('')
+});

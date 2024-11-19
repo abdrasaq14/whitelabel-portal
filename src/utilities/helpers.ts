@@ -111,3 +111,18 @@ export function mergeQuantity(itemDetails: any[], items: any[]) {
 export function intlFormat(amount: number, locale: string = 'en-US', currency:string = 'NGN')  {
   return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount);
 };
+
+export function formatTime(isoDate: string) {
+  // Convert to a Date object
+  const date = new Date(isoDate);
+
+  // Format the time
+  const hours = date.getUTCHours(); // Use getUTCHours for UTC conversion
+  const minutes = date.getUTCMinutes();
+  const amPm = hours >= 12 ? "pm" : "am";
+  const formattedHours = hours % 12 || 12; // Convert 24-hour format to 12-hour
+  const formattedMinutes = minutes === 0 ? "" : `:${minutes.toString().padStart(2, '0')}`;
+  const formattedTime = `${formattedHours}${formattedMinutes}${amPm}`;
+
+  return formattedTime;
+}

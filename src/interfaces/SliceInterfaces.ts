@@ -29,6 +29,17 @@ export interface InventorySlice {
     requestHistoryResult: ApiListResponse | null;
 }
 
+export interface MessageSlice {
+    loading: boolean;
+    error: string | null;
+    conversationsResult: ApiListResponse | null;
+    activeConversation: any;
+    activePartner: any;
+    messageLoading: boolean;
+    messagesResult: any;
+    sendLoading: boolean;
+}
+
 export interface UserSlice {
     loading: boolean;
     error: string | null;
