@@ -9,7 +9,16 @@ import React from 'react'
 
 const page = () => {
 
-    const {conversations, currentUser, loading, setActiveConversation, activePartner, messages, messageLoading, handleSendMessage, sendLoading} = useMessage();
+    const {conversations, 
+        currentUser, 
+        loading, 
+        setActiveConversation, 
+        activePartner, 
+        messages, 
+        messageLoading, 
+        handleSendMessage, 
+        sendLoading
+    } = useMessage();
 
     // console.log(conversations, currentUser?.user, messages);
 
