@@ -32,11 +32,7 @@ const navSlice = createSlice({
     reducers: {
         toggleSideNav: (state) => {
             state.isOpen = !state.isOpen;
-        },
-        
-        setActiveLabel: (state, action) => {
-            state.activeLabel = action.payload;
-        },
+        }
     },
     // extraReducers: (builder) => {
     //     builder
@@ -55,7 +51,7 @@ const navSlice = createSlice({
     // }
 })
 
-export const {toggleSideNav, setActiveLabel} = navSlice.actions;
+export const {toggleSideNav} = navSlice.actions;
 
 export default navSlice.reducer;
 

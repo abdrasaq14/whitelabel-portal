@@ -17,7 +17,7 @@ const Conversation = ({partner, unseenMessages, setActiveConversation, activePar
             
             </div>
             
-            <span className='bg-success-dark text-white h-6 w-6 rounded-lg text-xs font-satoshiMedium flex justify-center items-center'>{unseenMessages}</span>
+            {unseenMessages > 0 && <span className='bg-success-dark text-white h-6 w-6 rounded-lg text-xs font-satoshiMedium flex justify-center items-center'>{unseenMessages}</span>}
         
         </div>
 

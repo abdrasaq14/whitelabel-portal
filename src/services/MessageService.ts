@@ -8,6 +8,8 @@ export const MessageService = {
 
     getAllMessages: (conversationId: string) => apiClient.get(`${baseEndPoint}/message/${conversationId}`),
 
-    sendMessage: (conversationId: string, data: any) => apiClient.post(`${baseEndPoint}/message/${conversationId}/send`, data)
+    sendMessage: (conversationId: string, data: any) => apiClient.post(`${baseEndPoint}/message/${conversationId}/send`, data),
+
+    setMessageSeen: (data: any) => apiClient.post(`${baseEndPoint}/message/seen`, data)
 
 }

@@ -1,7 +1,6 @@
-import React from 'react'
 import useNavigation from './useNavigation'
 import useStorage from './useStorage'
-import { getNavSlice, setActiveLabel, toggleSideNav } from '@/store/slices/navSlice'
+import { getNavSlice, toggleSideNav } from '@/store/slices/navSlice'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 
 const useNavs = () => {
@@ -26,8 +25,6 @@ const useNavs = () => {
     
     }
 
-    const handleSetActiveLabel = (label: string) => dispatch(setActiveLabel(label))
-
     return {
         
         logout,
@@ -35,10 +32,6 @@ const useNavs = () => {
         isOpen: navSlice.isOpen,
         
         toggleNav,
-
-        activeLabel: navSlice.activeLabel,
-
-        handleSetActiveLabel,
 
         currentUser
     }

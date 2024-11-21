@@ -109,6 +109,7 @@ export interface SideNavItem {
     label: string;
     href: string;
     icon: any;
+    counter?: number;
 }
 
 export interface SideNavProps {

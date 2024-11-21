@@ -28,7 +28,7 @@ const page = () => {
             
             <AppCard type={CardType.NOSHADOW}>
 
-                <div className="max-h-96 overflow-auto">
+                <div className={`max-h-96 overflow-auto ${loading && `flex justify-center items-center`}`}>
 
                     {loading ? <Spinner type={SpinnerType.PRIMARY} /> : <ConversationList activePartner={activePartner} conversations={conversations} currentUser={currentUser?.user} setActiveConversation={setActiveConversation}/>}
 

@@ -22,17 +22,17 @@ interface DashboardLayoutProps {
 
 const navItems: SideNavItem[] = [
     { label: 'Dashboard', href: '/Dashboard', icon: DashboardIcon },
-    { label: 'Products Discovery', href: '/DiscoverProducts', icon: CompassIcon, children: [{label: 'Discover Products', href: '/DiscoverProducts'}, {label: 'Discover Merchant', href: '/DiscoverMerchant'}] },
+    { label: 'Products Discovery', href: '#', icon: CompassIcon, children: [{label: 'Discover Products', href: '/DiscoverProducts'}, {label: 'Discover Merchant', href: '/DiscoverMerchant'}] },
     { label: 'Category', href: '/Category', icon: CategoryIcon },
     { label: 'Inventory', href: '/Inventory', icon: InventoryIcon },
-    { label: 'Merchant', href: '/Merchant', icon: MerchantIcon, children: [{label: 'Merchant Request', href: '/MerchantRequest'}] },
+    { label: 'Merchant', href: '#', icon: MerchantIcon, children: [{label: 'All Merchant', href: '/AllMerchant'}] },
     { label: 'Product', href: '/Product', icon: ProductIcon },
     { label: 'Order & Transaction', href: '/Order', icon: OrderIcon },
     { label: 'Blog', href: '/Blog', icon: BlogIcon },
-    { label: 'Message', href: '/Message', icon: MessageIcon },
+    { label: 'Message', href: '/Message', icon: MessageIcon, counter: 0 },
     { label: 'Account', href: '/Account', icon: AccountIcon },
     { label: 'Settings', href: '/Settings', icon: SettingsIcon },
-  ];
+];
 
 export default function DashboardLayout({ children, username}: DashboardLayoutProps) {
     return (

@@ -29,6 +29,19 @@ export const conversationsFetched = createAsyncThunk('conversationsFetched', asy
     }
 });
 
+export const conversationsFetchedAgain = createAsyncThunk('conversationsFetchedAgain', async (data: any, { rejectWithValue }) => {
+    try{
+        const response: any = await MessageService.getAllConversations(data.userId);
+        // console.log("After api call", response)
+        if(response?.data?.status === 'Failed'){
+            return rejectWithValue(response.data)
+        }
+        return response?.data;
+    }catch(error: any) {
+        return rejectWithValue(error);
+    }
+});
+
 export const messagesFetched = createAsyncThunk('messagesFetched', async (data: any, { rejectWithValue }) => {
     try{
         const response: any = await MessageService.getAllMessages(data.conversationId);
@@ -57,6 +70,21 @@ export const messageSent = createAsyncThunk('messageSent', async (data: any, { r
     }
 });
 
+export const setMessageToSeen = createAsyncThunk('setMessageToSeen', async (data: any, { rejectWithValue }) => {
+    
+    try{
+        // console.log("Set message seen", data);
+        const response: any = await MessageService.setMessageSeen(data);
+        // console.log("After api call", response)
+        if(response?.data?.status === 'Failed'){
+            return rejectWithValue(response.data)
+        }
+        return response?.data;
+    }catch(error: any) {
+        return rejectWithValue(error);
+    }
+});
+
 //Slice
 const messageSlice = createSlice({
     name: 'message',
@@ -74,7 +102,7 @@ const messageSlice = createSlice({
 
         realtimeMessageAdded: (state, action) => {
             state.messagesResult?.push(action.payload)
-        }
+        },
     },
 
     extraReducers: (builder) => {
@@ -91,6 +119,10 @@ const messageSlice = createSlice({
         .addCase(conversationsFetched.rejected, (state, action: any) => {
             state.loading = false;
             state.error = action.payload?.message || 'Something went wrong';
+        })
+
+        .addCase(conversationsFetchedAgain.fulfilled, (state, action) => {
+            state.conversationsResult = action?.payload?.result;
         })
 
         .addCase(messagesFetched.pending, (state) => {
@@ -115,6 +147,18 @@ const messageSlice = createSlice({
             state.sendLoading = false;
         })
         .addCase(messageSent.rejected, (state, action: any) => {
+            state.sendLoading = false;
+            state.error = action.payload?.message || 'Something went wrong';
+        })
+
+        .addCase(setMessageToSeen.pending, (state) => {
+            state.sendLoading = true;
+            state.error = null
+        })
+        .addCase(setMessageToSeen.fulfilled, (state, action) => {
+            state.sendLoading = false;
+        })
+        .addCase(setMessageToSeen.rejected, (state, action: any) => {
             state.sendLoading = false;
             state.error = action.payload?.message || 'Something went wrong';
         })
