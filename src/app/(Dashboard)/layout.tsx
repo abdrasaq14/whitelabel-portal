@@ -13,12 +13,8 @@ import MessageIcon from "@/components/icons/MessageIcon";
 import OrderIcon from "@/components/icons/OrderIcon";
 import ProductIcon from "@/components/icons/ProductIcon";
 import SettingsIcon from "@/components/icons/SettingsIcon";
-import { SideNavItem } from "@/interfaces/ComponentInterfaces";
-
-interface DashboardLayoutProps {
-    children: ReactNode;
-    username: string;
-  }
+import { DashboardLayoutProps, SideNavItem } from "@/interfaces/ComponentInterfaces";
+import useStorage from "@/customHooks/useStorage";
 
 const navItems: SideNavItem[] = [
     { label: 'Dashboard', href: '/Dashboard', icon: DashboardIcon },
@@ -34,14 +30,26 @@ const navItems: SideNavItem[] = [
     { label: 'Settings', href: '/Settings', icon: SettingsIcon },
 ];
 
-export default function DashboardLayout({ children, username}: DashboardLayoutProps) {
+export default function DashboardLayout({ children}: DashboardLayoutProps) {
+
+    const {currentUser} = useStorage();
+
     return (
+    
         <div className="flex bg-accent-light">
+        
             <DashboardSidenav items={navItems} />
+        
             <div className="flex flex-col flex-1 ml-20 lg:ml-80">
-                <DashboardNavbar username={username} />
+        
+                <DashboardNavbar businessName={currentUser?.user?.buinessName} />
+        
                 <main className="p-4 bg-gray-100 min-h-screen overflow-y-auto">{children}</main>
+        
             </div>
+        
         </div>
+    
     )
+
 };

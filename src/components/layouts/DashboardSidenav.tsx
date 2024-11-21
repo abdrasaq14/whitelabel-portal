@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
-import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
+// import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { SideNavItemChild, SideNavProps } from '@/interfaces/ComponentInterfaces';
 import useNavs from '@/customHooks/useNavs';
 import LogoutIcon from '../icons/LogoutIcon';
@@ -14,7 +14,7 @@ import { useState } from 'react';
 
 const DashboardSidenav = ({ items }: SideNavProps) => {
   
-  const { isOpen, toggleNav, logout } = useNavs();
+  const { isOpen, logout, currentUser } = useNavs();
 
   const {handleOpenModal, handleCloseModal, showLogoutModal} = useModal();
 
@@ -23,7 +23,9 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
   const handleExpand = (label: string) => {
+    
     setExpandedItem(expandedItem === label ? null : label); // Toggle the expanded state
+  
   };
 
   // console.log(pathname)
@@ -33,11 +35,11 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
   // console.log("Sidenav conversations", conversations)
 
   return (
-    <aside className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular  "h-full md:flex hidden transition-[width,padding]  flex-col overflow-y-hidden overflow-x-hidden b relative" text-sm h-full fixed transition-width duration-300`}>
+    <div className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular text-sm h-full fixed transition-width duration-300`}>
       
       <div className='flex justify-between items-center w-full mt-5'>
         
-        <Image src="/images/landmark_logo.svg" alt="Landmark logo" width={164} height={64} />
+        <Image src={currentUser?.user?.companyLogo} alt={`${currentUser?.user?.buinessName} logo`} width={0} height={0} className="max-h-14 w-auto" sizes="100vw" />
         
         {/* <button onClick={toggleNav}>
         
@@ -63,7 +65,7 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
                 
                   <item.icon className="text-lg icon transition-all" />
                 
-                  {isOpen && <span className={`text-accent-dark3 ${pathname === `/${item.label}` ? 'text-white' : 'group-hover:text-white'}`}>{item.label}</span>}
+                  {isOpen && <span className={`text-accent-dark3 ${pathname === `/${item.label}` ? 'text-white' : 'group-hover:text-purple-main'}`}>{item.label}</span>}
                 
                   {/* {item?.counter !== undefined && item?.counter > 0 && <span className={`w-[20px] h-[20px] flex justify-center items-center rounded-lg text-xs font-satoshiBold ml-2 ${activeLabel === item.label ? `bg-white text-accent-dark3` : `bg-accent-light`}`}>
                     {item?.counter}
@@ -105,9 +107,9 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
       
         <div>
       
-          <Image src="/images/landmark_logo.svg" alt="Landmark logo" width={164} height={64} />
+        <Image src={currentUser?.user?.companyLogo} alt={`${currentUser?.user?.buinessName} logo`} width={0} height={0} className="max-h-14 w-auto" sizes="100vw" />
       
-          <p className="text-accent-dark3 text-sm font-satoshiRegular">landmarkuniversity@gmail.com</p>
+          <p className="text-accent-dark3 text-sm font-satoshiRegular">{currentUser?.user?.email}</p>
       
         </div>
       
@@ -117,7 +119,8 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
 
       <LogoutModal logout={logout} handleCloseModal={() => handleCloseModal(closeLogoutModal)} showLogoutModal={showLogoutModal} />
     
-    </aside>
+    </div>
+  
   );
 
 };

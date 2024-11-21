@@ -32,7 +32,6 @@ export const StaffInfoValidation = Yup.object().shape({
   role: Yup.string().required('role is required'),
 });
 
-<<<<<<< HEAD
 export const InventoryValidation = Yup.object({
     name: Yup.string().required('Name is required').min(2, 'Name must be at least 2 characters long'),
     categoryName: Yup.string().required('Category name is required').min(2, 'Category name must be at least 2 characters long'),
@@ -42,7 +41,8 @@ export const InventoryValidation = Yup.object({
 
 export const messageValidation = Yup.object({
   messageText: Yup.string().required('')
-=======
+});
+
 export const ChangePasswordValidation = Yup.object({
   password: Yup.string()
     .trim()
@@ -72,5 +72,4 @@ export const CurrencyValidation = Yup.object().shape({
 
 export const PricingValidation = Yup.object().shape({
   commisionPercentage: Yup.string().required('Price is required'),
->>>>>>> new-code/Settings-Module
 });

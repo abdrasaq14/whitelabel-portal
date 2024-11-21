@@ -195,15 +195,24 @@ interface TableColumn {
     key: string;
     label: string;
     render?: (data: any) => React.ReactNode;
-  }
+}
   
-  interface TableRow {
+interface TableRow {
     id: string | number;
     [key: string]: any;
-  }
+}
   
-  export interface TableProps {
+export interface TableProps {
     columns: TableColumn[];
     data: any[] | undefined;
     additionalActions?: (row: TableRow) => { label: string; action: () => void }[];
-  }
+}
+
+export interface NavBarProps {
+    businessName: string; 
+}
+
+export interface DashboardLayoutProps {
+    children: ReactNode;
+    businessName: string;
+}

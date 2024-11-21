@@ -15,7 +15,7 @@ const page = () => {
     
     const { currentUser } = useStorage()
 
-    const tabsData = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
+    const tabsData = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc?.roleId === "663a5c848b1a1f64469b98bf") ? [
 
         { label: 'security', content: <Security /> },
 

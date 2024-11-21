@@ -1,16 +1,12 @@
 "use client";
-
 import { BsShield, BsShieldLockFill } from "react-icons/bs";
-import * as Yup from "yup";
-// import { FaCreditCard } from "react-icons/fa";
 import { useState } from "react";
-import { Form, Formik } from "formik";
 import useStorage from "@/customHooks/useStorage";
 import ChangePasswordForm from "../forms/ChangePasswordForm";
 
 const Security = () => {
   const { currentUser } = useStorage()
-  const securityTabList = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc.roleId === "663a5c848b1a1f64469b98bf") ? [
+  const securityTabList = (currentUser?.user?.roleId === "663a5c848b1a1f64469b98bf" || currentUser?.user?._doc?.roleId === "663a5c848b1a1f64469b98bf") ? [
     {
       Icon: BsShieldLockFill,
       name: "Password",
