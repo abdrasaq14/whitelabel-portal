@@ -82,7 +82,6 @@ const OrderTransaction = () => {
               <>
                 <img src="/images/no_transaction_history.svg" alt="No Product Found" />
                 <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
-
               </>
               )
             </div>
