@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react'
-import { UserLogin} from '@/interfaces/AppInterfaces'
+import { UserLogin } from '@/interfaces/AppInterfaces'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { userLogin, otpVerified } from '@/store/slices/authSlice'
 import { getAuthSlice } from '@/store/slices/authSlice'
@@ -10,19 +10,19 @@ import useStorage from './useStorage'
 import toast from 'react-hot-toast'
 
 const useAuth = () => {
-    const {storeLocalData, storeSessionData} = useStorage();
+    const { storeLocalData, storeSessionData } = useStorage();
 
-    const {push} = useNavigation();
-    
+    const { push } = useNavigation();
+
     const authSlice = useAppSelector(getAuthSlice);
-    
+
     const dispatch = useAppDispatch();
 
     const [time, setTime] = useState(29);
 
     useEffect(() => {
 
-        if(authSlice.error){
+        if (authSlice.error) {
 
             toast.error(authSlice.error);
 
@@ -53,15 +53,15 @@ const useAuth = () => {
     }
 
     const handleLogin = async (values: UserLogin) => {
-        
+
         // console.log("Login details", values)
-        
-        const logUserIn = await dispatch(userLogin({...values, platform: "portal"}));
-        
+
+        const logUserIn = await dispatch(userLogin({ ...values, platform: "portal" }));
+
         // console.log("Login result hook", logUserIn?.payload)
-        
-        const {result} = logUserIn?.payload;
-        
+
+        const { result } = logUserIn?.payload;
+
         if (result.otpMessage) {
 
             //Store email to localstorage as otp receiver
@@ -70,15 +70,16 @@ const useAuth = () => {
             push("/Authenticate")
 
         } else {
-
-            handleUserData()
+            console.log(result)
+            handleUserData(result)
 
         }
-    
+
     }
 
-    const handleUserData = () => {
-
+    const handleUserData = (result: any) => {
+        storeSessionData('UserData', JSON.stringify(result))
+        push('/Dashboard')
     }
 
     const setOtp = (otp: any) => {
@@ -95,7 +96,7 @@ const useAuth = () => {
 
         const otpLength = otp.length;
 
-        if(otpLength !== length){
+        if (otpLength !== length) {
 
             toast.error(`Otp must be atleast ${length} digits`)
 
@@ -103,13 +104,13 @@ const useAuth = () => {
 
         }
 
-        const verified = await dispatch(otpVerified({otp, otpReceiver}))
+        const verified = await dispatch(otpVerified({ otp, otpReceiver }))
 
-        if(verified?.payload?.status === "Failed"){
+        if (verified?.payload?.status === "Failed") {
             return;
         }
 
-        const {result} = verified.payload;
+        const { result } = verified.payload;
 
         // console.log("After verified", result);
 
@@ -121,11 +122,11 @@ const useAuth = () => {
 
     return {
         handleLogin,
-        
+
         loading: authSlice.loading,
 
         setOtp,
-        
+
         otp: authSlice.otp,
 
         verifyOtp,

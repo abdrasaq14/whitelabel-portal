@@ -33,7 +33,7 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
   // console.log("Sidenav conversations", conversations)
 
   return (
-    <div className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular text-sm h-full fixed transition-width duration-300`}>
+    <aside className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular  "h-full md:flex hidden transition-[width,padding]  flex-col overflow-y-hidden overflow-x-hidden b relative" text-sm h-full fixed transition-width duration-300`}>
       
       <div className='flex justify-between items-center w-full mt-5'>
         
@@ -117,8 +117,7 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
 
       <LogoutModal logout={logout} handleCloseModal={() => handleCloseModal(closeLogoutModal)} showLogoutModal={showLogoutModal} />
     
-    </div>
-  
+    </aside>
   );
 
 };

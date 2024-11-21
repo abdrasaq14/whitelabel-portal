@@ -1,13 +1,17 @@
 import * as Yup from "yup";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/;
+const PASSWORD_ERROR_MESSAGE = "Password must contain at least one uppercase, lowercase and number";
+
+
 export const loginValidation = Yup.object({
-    email: Yup.string()
-      .trim()
-      .email("*Email must be a valid address")
-      .required("Email is required"),
-    password: Yup.string()
-      .trim()
-      .min(8, "*Password must be at least 8 characters").required("*Password is required"),
+  email: Yup.string()
+    .trim()
+    .email("*Email must be a valid address")
+    .required("Email is required"),
+  password: Yup.string()
+    .trim()
+    .min(8, "*Password must be at least 8 characters").required("*Password is required"),
 });
 
 export const AdminAccountInfoValidation = Yup.object().shape({
@@ -28,6 +32,7 @@ export const StaffInfoValidation = Yup.object().shape({
   role: Yup.string().required('role is required'),
 });
 
+<<<<<<< HEAD
 export const InventoryValidation = Yup.object({
     name: Yup.string().required('Name is required').min(2, 'Name must be at least 2 characters long'),
     categoryName: Yup.string().required('Category name is required').min(2, 'Category name must be at least 2 characters long'),
@@ -37,4 +42,35 @@ export const InventoryValidation = Yup.object({
 
 export const messageValidation = Yup.object({
   messageText: Yup.string().required('')
+=======
+export const ChangePasswordValidation = Yup.object({
+  password: Yup.string()
+    .trim()
+    .required("*Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  oldPassword: Yup.string()
+    .trim()
+    .required("*Current Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  confirmPassword: Yup.string()
+    .trim()
+    .required("*Confirm Password is required")
+    .oneOf([Yup.ref("password"),], "Both passwords must be the same")
+    .nullable(),
+});
+
+
+export const LanguageValidation = Yup.object().shape({
+  language: Yup.string().required('Language is required'),
+});
+
+export const CurrencyValidation = Yup.object().shape({
+  currency: Yup.string().required('Currency is required'),
+});
+
+export const PricingValidation = Yup.object().shape({
+  commisionPercentage: Yup.string().required('Price is required'),
+>>>>>>> new-code/Settings-Module
 });

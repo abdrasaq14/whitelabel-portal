@@ -150,3 +150,8 @@ export interface InventoryCategory {
     whiteLabelName: string;
     createdBy: string;
 }
+export interface ChangePasswordData {
+    password: string,
+    oldPassword: string,
+    confirmPassword: string,
+}

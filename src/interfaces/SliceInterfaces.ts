@@ -63,6 +63,11 @@ export interface ModalSlice {
     activeInventory: any;
 }
 
+export interface SettingSlice {
+    loading: boolean;
+    error: string | null;
+}
+
 export interface NavSlice {
     messageCounter: number;
     newNotification: boolean;

@@ -16,7 +16,7 @@ const useDashboard = () => {
     const dashboardSlice = useAppSelector(getDashboardSlice);
 
     const getStats = async () => {
-        const dbData = await dispatch(statsData(currentUser?.whiteLabelName))
+        const dbData = await dispatch(statsData(currentUser?.user?.whiteLabelName))
         // console.log("Dashboard stats", dbData.payload)
     }
 

@@ -7,6 +7,7 @@ import accountReducer from './slices/accountSlice';
 import uploadReducer from './slices/uploadSlice';
 import inventoryReducer from './slices/inventorySlice';
 import messageReducer from './slices/messageSlice';
+import orderReducer from "./slices/orderSlice"
 
 // Define the store with your reducers
 export const store = configureStore({
@@ -19,7 +20,8 @@ export const store = configureStore({
     account: accountReducer,
     upload: uploadReducer,
     inventory: inventoryReducer,
-    message: messageReducer
+    message: messageReducer,
+    order: orderReducer,
   },
 });
 

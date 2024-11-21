@@ -51,6 +51,19 @@ export const staffCreated = createAsyncThunk('staffCreated', async (data: any, {
     }
 });
 
+export const passwordChanged = createAsyncThunk('passwordChanged', async (data: any, { rejectWithValue }) => {
+    try{
+        const response: any = await UserService.changePassword(data);
+        // console.log("After api call", response)
+        if(response.data.status === 'Failed'){
+            return rejectWithValue(response.data)
+        }
+        return response.data;
+    }catch(error: any) {
+        return rejectWithValue(error);
+    }
+});
+
 //Slice
 const accountSlice = createSlice({
     name: 'account',
@@ -102,6 +115,18 @@ const accountSlice = createSlice({
             state.staffsResult?.results?.unshift(action.payload?.result?.user)
         })
         .addCase(staffCreated.rejected, (state, action: any) => {
+            state.loading = false;
+            state.error = action.payload?.message || 'Something went wrong';
+        })
+        .addCase(passwordChanged.pending, (state) => {
+            state.loading = true;
+            state.error = null
+        })
+        .addCase(passwordChanged.fulfilled, (state, action) => {
+            state.loading = false;
+            // console.log("From redux", action.payload)
+        })
+        .addCase(passwordChanged.rejected, (state, action: any) => {
             state.loading = false;
             state.error = action.payload?.message || 'Something went wrong';
         })
