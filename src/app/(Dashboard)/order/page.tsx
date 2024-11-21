@@ -5,6 +5,7 @@ const page = () => {
   return (
     <OrderTransaction />
   )
+
 }
 
 export default page

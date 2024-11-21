@@ -25,7 +25,7 @@ const page = () => {
 
         { label: 'security', content: <Security /> },
 
-        { label: 'settings', content: <OtherSettings /> },
+        // { label: 'settings', content: <OtherSettings /> },
 
 
     ];
