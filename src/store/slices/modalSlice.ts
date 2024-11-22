@@ -17,6 +17,8 @@ const initialState: ModalSlice = {
     
     showStaffInfoModal: false,
     showCreateStaffModal: false,
+
+    showNotificationModal: false,
     
     activeStaff: null,
     
@@ -103,6 +105,15 @@ const modalSlice = createSlice({
         },
         closeEditInventoryModal: (state) => {
             state.showEditInventoryModal = false;
+        },
+
+        openNotificationModal: (state) => {
+            // console.log('Redux open')
+            state.showNotificationModal = true;
+        },
+        closeNotificationModal: (state) => {
+            // console.log('redux close')
+            state.showNotificationModal = false;
         }
     }
 })
@@ -127,7 +138,9 @@ export const {
     openDialogModal,
     closeDialogModal,
     openEditInventoryModal,
-    closeEditInventoryModal
+    closeEditInventoryModal,
+    openNotificationModal,
+    closeNotificationModal
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

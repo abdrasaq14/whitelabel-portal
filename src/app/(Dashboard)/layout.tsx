@@ -14,7 +14,10 @@ import OrderIcon from "@/components/icons/OrderIcon";
 import ProductIcon from "@/components/icons/ProductIcon";
 import SettingsIcon from "@/components/icons/SettingsIcon";
 import { DashboardLayoutProps, SideNavItem } from "@/interfaces/ComponentInterfaces";
+import { closeNotificationModal, openNotificationModal, openLogoutModal, closeLogoutModal } from '@/store/slices/modalSlice';
 import useStorage from "@/customHooks/useStorage";
+import useNavs from "@/customHooks/useNavs";
+import useModal from "@/customHooks/useModal";
 
 const navItems: SideNavItem[] = [
     { label: 'Dashboard', href: '/Dashboard', icon: DashboardIcon },
@@ -34,15 +37,21 @@ export default function DashboardLayout({ children}: DashboardLayoutProps) {
 
     const {currentUser} = useStorage();
 
+    const { isOpen, logout, newNotifications, viewNotification } = useNavs();
+
+    // console.log("New notifications", newNotifications);
+
+    const {handleOpenModal, handleCloseModal, showLogoutModal, showNotificationModal} = useModal();
+
     return (
     
         <div className="flex bg-accent-light">
         
-            <DashboardSidenav items={navItems} />
+            <DashboardSidenav items={navItems} isOpen={isOpen} logout={logout} showLogoutModal={showLogoutModal} currentUser={currentUser} handleOpenModal={() => handleOpenModal(openLogoutModal)} handleCloseModal={() => handleCloseModal(closeLogoutModal)} />
         
             <div className="flex flex-col flex-1 ml-20 lg:ml-80">
         
-                <DashboardNavbar businessName={currentUser?.user?.buinessName} />
+                <DashboardNavbar viewNotification={(notificationId: string) => viewNotification(notificationId)} businessName={currentUser?.user?.buinessName} handleOpenModal={() => handleOpenModal(openNotificationModal)} handleCloseModal={() => handleCloseModal(closeNotificationModal)} showNotificationModal={showNotificationModal} newNotifications={newNotifications} />
         
                 <main className="p-4 bg-gray-100 min-h-screen overflow-y-auto">{children}</main>
         

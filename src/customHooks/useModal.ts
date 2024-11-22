@@ -54,6 +54,8 @@ const useModal = () => {
         showDialogModal: modalSlice.showDialogModal,
 
         showEditInventoryModal: modalSlice.showEditInventoryModal,
+
+        showNotificationModal: modalSlice.showNotificationModal,
     }
 }
 

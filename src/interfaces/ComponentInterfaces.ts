@@ -1,4 +1,4 @@
-import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType } from "@/enums/ComponentEnums";
+import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType, ModalType } from "@/enums/ComponentEnums";
 import { FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
@@ -62,8 +62,9 @@ export interface AppModalProps {
     footer?: AppModalFooter | null;
     hasClose?: boolean;
     isOpen?: boolean;
-    closeClicked: () => void;
+    closeClicked?: () => void;
     style?: string;
+    type?: ModalType;
 }
 
 export interface CardProps {
@@ -114,6 +115,12 @@ export interface SideNavItem {
 
 export interface SideNavProps {
     items: SideNavItem[];
+    isOpen: boolean;
+    currentUser: any;
+    handleOpenModal: () => void;
+    handleCloseModal: () => void;
+    showLogoutModal: boolean;
+    logout: () => void;
 }
 
 export interface StatsCardActionButton {
@@ -210,6 +217,11 @@ export interface TableProps {
 
 export interface NavBarProps {
     businessName: string; 
+    handleOpenModal: () => void;
+    handleCloseModal: () => void;
+    showNotificationModal: boolean;
+    newNotifications: any;
+    viewNotification: (notificationId: string) => void;
 }
 
 export interface DashboardLayoutProps {

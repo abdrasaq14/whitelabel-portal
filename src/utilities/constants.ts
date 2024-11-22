@@ -30,5 +30,5 @@ export const Constants = {
         "Gifts",
         "Services",
         "Agriculture"
-    ]    
+    ]
 }

@@ -57,6 +57,7 @@ export interface ModalSlice {
     showLogoutModal: boolean;
     showStaffInfoModal: boolean;
     showCreateStaffModal: boolean;
+    showNotificationModal: boolean;
     activeStaff: User | null;
     activeInventoryHistory: any;
     activeInventoryRequest: any;
@@ -70,10 +71,12 @@ export interface SettingSlice {
 
 export interface NavSlice {
     messageCounter: number;
-    newNotification: boolean;
+    newNotifications: null | any[];
     breadcrumb: string;
     isOpen: boolean;
-    activeLabel: string;
+    error: string | null;
+    notifications: null | any[];
+    activeNotification: any;
 }
 
 export interface UploadSlice {

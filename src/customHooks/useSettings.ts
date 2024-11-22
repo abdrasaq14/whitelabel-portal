@@ -11,8 +11,6 @@ const useSettings = () => {
     const settingSlice = useAppSelector(getAccountSlice);
     const { updateSessionData } = useStorage()
 
-    const { logout } = useNavs();
-
     const handleChangePassword = async (payload: ChangePasswordData) => {
 
         const changed = await dispatch(passwordChanged(payload));

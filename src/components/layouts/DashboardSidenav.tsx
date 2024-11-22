@@ -3,20 +3,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 // import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { SideNavItemChild, SideNavProps } from '@/interfaces/ComponentInterfaces';
-import useNavs from '@/customHooks/useNavs';
 import LogoutIcon from '../icons/LogoutIcon';
 import DownArrowIcon from '../icons/DownArrowIcon';
 import LogoutModal from '../modals/LogoutModal';
-import useModal from '@/customHooks/useModal';
-import { openLogoutModal, closeLogoutModal } from '@/store/slices/modalSlice';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const DashboardSidenav = ({ items }: SideNavProps) => {
-  
-  const { isOpen, logout, currentUser } = useNavs();
-
-  const {handleOpenModal, handleCloseModal, showLogoutModal} = useModal();
+const DashboardSidenav = ({ items, isOpen, currentUser, handleOpenModal, handleCloseModal, logout, showLogoutModal}: SideNavProps) => {
 
   const pathname = usePathname();
 
@@ -27,6 +20,14 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
     setExpandedItem(expandedItem === label ? null : label); // Toggle the expanded state
   
   };
+
+  const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(typeof window !== 'undefined');
+    }, []);
+
+    if (!isClient) return null;
 
   // console.log(pathname)
 
@@ -103,11 +104,11 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
       
       </ul>
 
-      <div onClick={() => handleOpenModal(openLogoutModal)} className='rounded flex justify-between items-center p-3 w-full border border-purple-main my-10 hover:bg-purple-lighter hover:cursor-pointer'>
+      <div onClick={handleOpenModal} className='rounded flex justify-between items-center p-3 w-full border border-purple-main my-10 hover:bg-purple-lighter hover:cursor-pointer'>
       
         <div>
       
-        <Image src={currentUser?.user?.companyLogo} alt={`${currentUser?.user?.buinessName} logo`} width={0} height={0} className="max-h-14 w-auto" sizes="100vw" />
+        <Image src={currentUser?.user?.companyLogo} alt="Company logo" width={0} height={0} className="max-h-14 w-auto" sizes="100vw" />
       
           <p className="text-accent-dark3 text-sm font-satoshiRegular">{currentUser?.user?.email}</p>
       
@@ -117,7 +118,7 @@ const DashboardSidenav = ({ items }: SideNavProps) => {
       
       </div>
 
-      <LogoutModal logout={logout} handleCloseModal={() => handleCloseModal(closeLogoutModal)} showLogoutModal={showLogoutModal} />
+      <LogoutModal logout={logout} handleCloseModal={handleCloseModal} showLogoutModal={showLogoutModal} />
     
     </div>
   

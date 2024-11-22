@@ -1,19 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {} from 'react'
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { AppModalProps } from '@/interfaces/ComponentInterfaces'
 import '@/app/styles/components.css'
 import AppButton from '../forms/AppButton'
 import { MdCancel } from "react-icons/md";
+import { ModalType } from '@/enums/ComponentEnums'
 
-const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked, style=``}: AppModalProps) => {
+const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked, style=``, type=ModalType.DEFAULT}: AppModalProps) => {
     
   return (
     <Dialog open={isOpen} onClose={(isOpen) => {}} className="relative z-10">
       
       <DialogBackdrop transition className="modal-backdrop"/>
 
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="dialog-wrapper">
+      <div className="fixed inset-0 z-10 w-screen overflow-none">
+        <div className={type}>
           <DialogPanel
             transition
             className="dialog-panel"

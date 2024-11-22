@@ -66,13 +66,17 @@ export function paramsObjectToQueryString(payload: any) {
 }
 
 export function formatDate(date: string) {
+
   if (!date || isNaN(new Date(date).getTime())) {
+
     throw new Error("Invalid date provided.");
+
   }
 
   const d = new Date(date);
 
   const day = d.getDate();
+
   const suffix =
     day % 10 === 1 && day !== 11
       ? 'st'
@@ -83,7 +87,9 @@ export function formatDate(date: string) {
       : 'th';
 
   const options: any = { month: 'long', day: 'numeric', year: 'numeric' };
+
   const formatter = new Intl.DateTimeFormat('en-US', options);
+
   const formattedDate = formatter.format(d);
 
   // Manually add the suffix to the day
@@ -93,23 +99,33 @@ export function formatDate(date: string) {
     .filter(Boolean);                    // Remove empty strings
 
   return `${month} ${dayWithSuffix}, ${year}`;
+
 }
 
 //This function is used to merge quantity to itemDetails array for Inventory history
 export function mergeQuantity(itemDetails: any[], items: any[]) {
+
   const updatedItemDetails = itemDetails.map((detail) => {
+
     const matchingItem = items.find((item) => item.itemId === detail._id);
+
     return {
+
       ...detail,
+
       quantity: matchingItem ? matchingItem.quantity : 0, // Default to 0 if no match
+
     };
+
   });
 
   return updatedItemDetails;
 }
 
 export function intlFormat(amount: number, locale: string = 'en-US', currency:string = 'NGN')  {
+  
   return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount);
+
 };
 
 export function formatTime(isoDate: string) {
@@ -118,10 +134,15 @@ export function formatTime(isoDate: string) {
 
   // Format the time
   const hours = date.getUTCHours(); // Use getUTCHours for UTC conversion
+  
   const minutes = date.getUTCMinutes();
+  
   const amPm = hours >= 12 ? "pm" : "am";
+  
   const formattedHours = hours % 12 || 12; // Convert 24-hour format to 12-hour
+  
   const formattedMinutes = minutes === 0 ? "" : `:${minutes.toString().padStart(2, '0')}`;
+  
   const formattedTime = `${formattedHours}${formattedMinutes}${amPm}`;
 
   return formattedTime;
