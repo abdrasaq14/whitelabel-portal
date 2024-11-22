@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IQueryParams } from "@/interfaces/AppInterfaces";
 import { RootState } from "../store";
 import { ProductService } from "@/services/product";
+import { IProductSlice } from "@/interfaces/SliceInterfaces";
 
-const initialState = {
+const initialState:IProductSlice = {
 
   products: {
     all: [],
@@ -86,7 +87,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message || "Something went wrong";
       });
   }
 });

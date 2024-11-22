@@ -76,6 +76,16 @@ export interface BlogSlice {
   error: string | null;
 }
 
+export interface IProductSlice{
+    products: {
+        all: any[];
+        blocked: any[];
+    };
+    total: number;
+    loading: boolean;
+    error: null | string;
+} 
+
 export interface IUpdatePostPayload { 
     id: string;
     updatedPayload: Partial<IBlogPayload>;
