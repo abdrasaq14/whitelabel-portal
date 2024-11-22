@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { UserLogin } from '@/interfaces/AppInterfaces'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { userLogin, otpVerified } from '@/store/slices/authSlice'
+import { userLogin, otpVerified, passwordReset, passwordForgotten } from '@/store/slices/authSlice'
 import { getAuthSlice } from '@/store/slices/authSlice'
 import useNavigation from './useNavigation'
 import { setOtpValue } from '@/store/slices/authSlice'
@@ -120,6 +120,38 @@ const useAuth = () => {
 
     }
 
+    const handleResetPassword = async (data: any) => {
+
+        delete data.confirmPassword;
+
+        // console.log("Handle reset password", data)
+
+        const handlePasswordReset = await dispatch(passwordReset(data))
+
+        if (handlePasswordReset?.payload?.status === "Failed") {
+            return;
+        }
+
+        toast.success("Password setup successfully");
+
+        push('/Login')
+
+    }
+
+    const handleForgotPassword = async (data: any) => {
+
+        console.log("Handle reset password", data)
+
+        const handlePasswordForgotten = await dispatch(passwordForgotten(data))
+
+        if (handlePasswordForgotten?.payload?.status === "Failed") {
+            return;
+        }
+
+        toast.success("Reset link sent to your email");
+
+    }
+
     return {
         handleLogin,
 
@@ -133,7 +165,11 @@ const useAuth = () => {
 
         resendOtp,
 
-        time
+        time,
+
+        handleResetPassword,
+
+        handleForgotPassword
     }
 }
 

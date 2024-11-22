@@ -73,3 +73,24 @@ export const CurrencyValidation = Yup.object().shape({
 export const PricingValidation = Yup.object().shape({
   commisionPercentage: Yup.string().required('Price is required'),
 });
+
+export const SetPasswordValidation = Yup.object({
+  password: Yup.string()
+    .trim()
+    .required("*Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .matches(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
+  confirmPassword: Yup.string()
+    .trim()
+    .required("*Confirm Password is required")
+    .oneOf([Yup.ref("password"),], "Both passwords must be the same")
+    .nullable(),
+});
+
+export const emailValidation = Yup.object({
+  email: Yup.string()
+    .trim()
+    .email("*Email must be a valid address")
+    .required("Email is required"),
+});
+

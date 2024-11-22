@@ -1,7 +1,6 @@
 "use client"
 
 import { BreadCrumbClient } from '@/components/Breadcrumb';
-import dynamic from 'next/dynamic';
 import OtherSettings from '@/components/Settings/OtherSettings';
 import Security from '@/components/Settings/Security';
 import Tabs from '@/components/utilities/SettingsTabs';
