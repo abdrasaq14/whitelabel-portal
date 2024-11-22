@@ -1,7 +1,8 @@
+import { Config } from "@/utilities/config";
 import { create } from "apisauce";
 
 const apiClient = create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: Config.apiUrl
 });
 
 apiClient.setHeaders({

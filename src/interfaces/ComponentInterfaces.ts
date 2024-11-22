@@ -1,8 +1,9 @@
 import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType, ModalType } from "@/enums/ComponentEnums";
-import { FormikHandlers } from "formik";
+import {  FieldAttributes, FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { User } from "./AppInterfaces";
+
 
 interface LoaderProps {
     loading?: boolean;
@@ -13,9 +14,11 @@ interface LoaderProps {
 export interface ButtonProps {
     type: ButtonType;
     icon?: IconType | null;
+    iconPosition?: "left" | "right";
     style?: string | null;
     text: string;
-    loader?: LoaderProps | null;
+  loader?: LoaderProps | null;
+  disabled?: boolean;
     handleClick: () => void;
 }
 
@@ -123,6 +126,108 @@ export interface SideNavProps {
     logout: () => void;
 }
 
+export interface FileUploadProps {
+  name: string;
+  wrapperClass?: string;
+  extraClass?: string;
+  disabled?: boolean;
+  onFileChange?: (file: File) => void;
+  children?: React.ReactNode;
+  fileType?: "image" | "document";
+  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
+
+export interface SideNavItemChild {
+    label: string; 
+    href: string
+}
+export interface SideNavItem {
+    children?: SideNavItemChild[] | undefined;
+    label: string;
+    href: string;
+    icon: any;
+}
+
+export interface SideNavProps {
+    items: SideNavItem[];
+}
+
+export interface FileUploadProps {
+  name: string;
+  wrapperClass?: string;
+  extraClass?: string;
+  disabled?: boolean;
+  onFileChange?: (file: File) => void;
+  children?: React.ReactNode;
+  fileType?: "image" | "document";
+  setIsBlogEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface IUseBlogBostProps {
+  id?: string;
+}
+export interface IBlogPayload {
+  _id?: string;
+  authorId: string;
+  title: string;
+  content: string;
+  // date?: string;
+  image: string;
+  comments: IComments[];
+  likes: number;
+  shares: number;
+  allowComments: boolean;
+  allowLikes: boolean;
+  status: string;
+  whiteLabelName: string;
+  publishedDate?: string;
+}
+
+export interface IPreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IComments {
+  _id?: string;
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
+  comment: string;
+  isDeleted: boolean;
+  createdAt: Date;
+}
+
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
+export interface FileUploadProps {
+  name: string;
+  wrapperClass?: string;
+  extraClass?: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  inputClass?: string;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
 export interface StatsCardActionButton {
     text: string;
     action: () => void;
@@ -227,4 +332,63 @@ export interface NavBarProps {
 export interface DashboardLayoutProps {
     children: ReactNode;
     businessName: string;
+}
+
+export interface IUseBlogBostProps {
+  id?: string;
+}
+export interface IBlogPayload {
+  _id?: string;
+  authorId: string;
+  title: string;
+  content: string;
+  // date?: string;
+  image: string;
+  comments: IComments[];
+  likes: number;
+  shares: number;
+  allowComments: boolean;
+  allowLikes: boolean;
+  status: string;
+  whiteLabelName: string;
+  publishedDate?: string;
+}
+
+export interface IPreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IComments {
+  _id?: string;
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
+  comment: string;
+  isDeleted: boolean;
+  createdAt: Date;
+}
+
+export interface ITextInputProps extends FieldAttributes<any> {
+  title: string;
+  name: string;
+  placeholder: string;
+  disabled?: boolean;
+  type: "text" | "date";
+  icon?: React.ReactNode;
+  wrapperClass: string;
+  inputClass?: string;
+}
+
+export interface IToggleInputProps {
+  name: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
+export interface ISearch {
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  value?: string;
+  onSubmit?: () => void;
+  onClear?: () => void;
+  className?: string;
 }

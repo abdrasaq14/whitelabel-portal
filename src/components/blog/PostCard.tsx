@@ -1,0 +1,81 @@
+import { FiEdit } from "react-icons/fi";
+import { IBlogPayload } from "@/interfaces/ComponentInterfaces";
+import { GoHeart, GoTrash } from "react-icons/go";
+import { BsChatSquareText } from "react-icons/bs";
+import { TiHeartFullOutline } from "react-icons/ti";
+import { truncateText } from "@/utilities/helperFunctions";
+import { stripHtml } from "@/utilities/helperFunctions";
+import Link from "next/link";
+import { noPostImage } from "../../../public/images/blog";
+// import { useNavigate } from "react-router-dom";
+export default function PostCard({
+  blog,
+  index,
+  handleDelete,
+}: {
+  blog: IBlogPayload;
+  index: number;
+  handleDelete: (id: string) => void;
+}) {
+  // const navigate  = useNavigate();
+
+  return (
+    <div
+      key={index}
+      className="w-[250px] xl:w-[300px] h-[22rem] max-h-[22rem] text-accent-darker border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
+    >
+      <div className="flex justify-between">
+        <Link href={`/blog/${blog._id}`} className="font-bold hidden xl:block max-h-[1.5rem] mb-3">
+          {truncateText(blog?.title, 65)}
+        </Link>
+        <Link href={`/blog/${blog._id}`} className="font-bold xl:hidden">
+          {truncateText(blog?.title, 45)}
+        </Link>
+        <span className="flex gap-2">
+          <Link href={`/blog/edit/${blog._id}`}>
+            <FiEdit size={20} color="#8f9092" className="cursor-pointer" />
+          </Link>
+          <GoTrash
+            onClick={() => handleDelete(blog._id as string)}
+            size={20}
+            color="#D42620"
+            className="cursor-pointer"
+          />
+        </span>
+      </div>
+      <Link
+        href={`/blog/${blog._id}`}
+        className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-purple-main bg-opacity-60 overflow-hidden"
+      >
+        <img
+          src={(blog?.image as string) || noPostImage.src}
+          alt=""
+          className="object-cover w-full max-h-[6rem]"
+        />
+      </Link>
+      <Link
+        href={`/blog/${blog._id}`}
+        className="w-full h-[10rem] max-h-[10rem] flex-1 overflow-y-hidden"
+      >
+        <p className="text-justify text-accent-light3">
+          {truncateText(stripHtml(blog?.content))}
+        </p>
+      </Link>
+      <div className="flex items-center gap-4 min-h-[1.5rem]">
+        <span className="flex items-center gap-2">
+          {blog?.likes >= 1 ? (
+            <TiHeartFullOutline size={20} className="text-[#D42620]" />
+          ) : (
+            <GoHeart size={20} className="text-[#D42620]" />
+          )}
+          {blog?.likes} {blog?.likes > 1 ? "Likes" : "Like"}
+        </span>
+        <span className="flex items-center gap-2">
+          <BsChatSquareText size={20} />
+          {blog?.comments?.length}
+          {blog?.comments?.length > 1 ? " Comments" : " Comment"}
+        </span>
+      </div>
+    </div>
+  );
+}

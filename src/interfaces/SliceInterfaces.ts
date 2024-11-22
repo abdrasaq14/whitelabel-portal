@@ -1,4 +1,20 @@
-import { Inventory, User } from "./AppInterfaces";
+import { User } from "./AppInterfaces";
+import { IBlogPayload } from "./ComponentInterfaces";
+
+interface StaffListResult {
+    limit: number;
+    page: number;
+    results: any[];
+    totalPages: number;
+    totalResults: number;
+}
+
+export interface AccountSlice {
+    loading: boolean;
+    error: string | null;
+    disableMode: boolean;
+    staffsResult: StaffListResult | null
+}
 
 interface ApiListResponse {
     limit: number;
@@ -69,6 +85,7 @@ export interface SettingSlice {
     error: string | null;
 }
 
+
 export interface NavSlice {
     messageCounter: number;
     newNotifications: null | any[];
@@ -77,6 +94,42 @@ export interface NavSlice {
     error: string | null;
     notifications: null | any[];
     activeNotification: any;
+    showLogoutModal: boolean;
+    activeLabel: string;
+    showStaffInfoModal: boolean;
+    activeStaff: User | null;
+    showCreateStaffModal: boolean;
+    }
+
+export interface BlogSlice {
+  posts: {
+    all: IBlogPayload[];
+    draft: IBlogPayload[];
+    published: IBlogPayload[];
+  };
+  counts: {
+    total: number;
+    draft: number;
+    published: number;
+  };
+    totalPages: number;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface IProductSlice{
+    products: {
+        all: any[];
+        blocked: any[];
+    };
+    total: number;
+    loading: boolean;
+    error: null | string;
+} 
+
+export interface IUpdatePostPayload { 
+    id: string;
+    updatedPayload: Partial<IBlogPayload>;
 }
 
 export interface UploadSlice {
@@ -85,3 +138,11 @@ export interface UploadSlice {
     uploading: boolean;
     imageHolder: string | null
 }
+
+
+export interface IUpdatePostPayload { 
+    id: string;
+    updatedPayload: Partial<IBlogPayload>;
+}
+
+

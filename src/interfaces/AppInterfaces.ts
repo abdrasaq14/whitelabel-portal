@@ -1,3 +1,5 @@
+import { IBlogPayload } from "./ComponentInterfaces";
+
 export interface UserLogin {
     email: string;
     password: string;
@@ -62,7 +64,8 @@ export interface CustomisationData {
 }
 
 export interface User {
-    _id: string;
+    authToken: string;
+    _id?: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -101,13 +104,45 @@ export interface User {
     };
     customisationData?: CustomisationData;
     blocked: boolean;
+    whiteLabelName: string;
+    _doc?: User;
 }
 
 export interface Otp {
     otp: string;
     otpReceiver: string;
 }
-
+export interface HandlePreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IQueryParams {
+    id?: string;
+    merchantId?: string;
+    whiteLabelName?: string;
+    whiteLabelClientId?: string;
+    page?: number;
+    limit?: number;
+    totalPages?: number;
+    totalResults?: number;
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    category?: string;
+}
+export interface HandlePreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IQueryParams {
+    whiteLabelName?: string;
+    page?: number;
+    limit?: number;
+    totalPages?: number;
+    totalResults?: number;
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    category?: string;
+}
 export interface AdminAccountInfo {
     companyName: string;
     companyEmail: string;
@@ -154,4 +189,16 @@ export interface ChangePasswordData {
     password: string,
     oldPassword: string,
     confirmPassword: string,
+}
+export interface HandlePreviewPayload extends IBlogPayload {
+  isFromEdit: boolean;
+}
+export interface IQueryParams {
+  whiteLabelName?: string;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+  totalResults?: number;
+  search?: string;
+  status?: string;
 }

@@ -1,9 +1,8 @@
-"use client"
+import Link from "next/link";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import useStorage from "@/customHooks/useStorage";
 import { FaChevronCircleLeft } from "react-icons/fa";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
