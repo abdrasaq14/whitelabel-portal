@@ -10,10 +10,11 @@ import { fDateTime } from '@/utilities/formatTime';
 import Spinner from '../feedbacks/Spinner';
 import { SpinnerType } from '@/enums/ComponentEnums';
 import Table from '../layouts/Table';
+import Pagination from '../feedbacks/Pagination'
 
 const OrderTransaction = () => {
   const { currentUser } = useStorage()
-  const { loading, orders } = useOrders()
+  const { loading, orders, page, handleCurrentPage } = useOrders()
 
   console.log(orders)
 
@@ -65,27 +66,32 @@ const OrderTransaction = () => {
           <div>
 
           </div>
-          
+
         </div>
         {loading ? (
-            <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
-          ) : orders && orders?.results?.length > 0 ? (
-            <div className="h-full flex-grow ">
-              <Table
-                columns={columns}
-                data={orders && orders?.results}
-              />
-            </div>
-          ) : (
-            <div className="h-auto flex-grow py-20 flex justify-center flex-col items-center">
-              (
-              <>
-                <img src="/images/no_transaction_history.svg" alt="No Product Found" />
-                <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
-              </>
-              )
-            </div>
-          )}
+          <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+        ) : orders && orders?.results?.length > 0 ? (
+          <div className="h-full flex-grow ">
+            <Table
+              columns={columns}
+              data={orders && orders?.results}
+            />
+            <Pagination
+              page={page}
+              totalPages={orders.totalPages}
+              onPageChange={handleCurrentPage}
+            />
+          </div>
+        ) : (
+          <div className="h-auto flex-grow py-20 flex justify-center flex-col items-center">
+            (
+            <>
+              <img src="/images/no_transaction_history.svg" alt="No Product Found" />
+              <p className='text-center text-xl mt-4 font-medium font-satoshiMedium text-primary-text'>“You currently have no transaction or order records to display."</p>
+            </>
+            )
+          </div>
+        )}
 
       </div>
 

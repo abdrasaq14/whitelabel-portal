@@ -48,6 +48,11 @@ const useOrders = () => {
   // Paginate (you can use next/prev buttons for this)
   const handleNextPage = () => setPage(prevPage => prevPage + 1)
   const handlePrevPage = () => setPage(prevPage => (prevPage > 1 ? prevPage - 1 : 1))
+  const handleCurrentPage = (val: any) => {
+    setPage(val);
+    // setFilterParams({ ...filterParams, pageNum: val - 1 });
+  };
+
 
   return {
     orders: orderSlice.orderResult, // The list of orders from your state
@@ -57,7 +62,8 @@ const useOrders = () => {
     handleNextPage,
     handlePrevPage,
     search,
-    setSearch
+    setSearch,
+    handleCurrentPage
   }
 }
 
