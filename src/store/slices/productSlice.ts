@@ -4,23 +4,32 @@ import { RootState } from "../store";
 import { ProductService } from "@/services/product";
 
 const initialState = {
+
   products: {
     all: [],
     blocked: []
   },
+  
   total: 0,
+  
   loading: false,
+  
   error: null
+
 };
 
 export const fetchProducts = createAsyncThunk<any, IQueryParams>(
+  
   "product/fetchAllProducts",
+  
   async (payload: IQueryParams) => {
+  
     const response = await ProductService.fetchAll(payload);
 
     return {
       //   @ts-ignore
       product: response.data?.result?.results,
+  
       status: payload.status,
       //   @ts-ignore
       total: response.data?.result?.totalPages
@@ -29,21 +38,37 @@ export const fetchProducts = createAsyncThunk<any, IQueryParams>(
 );
 
 const productSlice = createSlice({
+  
   name: "product",
+  
   initialState,
+  
   reducers: {
+  
     setProductError: (state, action) => {
+  
       state.error = action.payload;
+  
     },
+  
     startProductLoading: (state) => {
+  
       state.loading = true;
+  
     },
+  
     stopProductLoading: (state) => {
+  
       state.loading = false;
+  
     }
+  
   },
+  
   extraReducers: (builder) => {
+  
     builder
+  
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -66,12 +91,8 @@ const productSlice = createSlice({
   }
 });
 
-export const { setProductError, startProductLoading, stopProductLoading } =
-  productSlice.actions;
+export const { setProductError, startProductLoading, stopProductLoading } = productSlice.actions;
+
 export default productSlice.reducer;
 
-export const selectAllProduct = (state: RootState) => state.product.products;
-export const selectBlockedProduct = (state: RootState) =>
-  state.product.products.blocked;
-export const selectProductLoading = (state: RootState) => state.product.loading;
-export const selectProductError = (state: RootState) => state.product.error;
+export const getProductSlice = (state: RootState) => state.product;

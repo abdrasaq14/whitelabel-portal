@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import useProductRequest from "@/customHooks/Products/useProductRequest";
 import Filter from "../Filter/Filter";
 import { BreadCrumbClient } from "../Breadcrumb";
@@ -10,28 +10,34 @@ import Pagination from "../feedbacks/Pagination";
 import { formatDate, isEmpty } from "@/utilities/helperFunctions";
 import { SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
-import useStorage from "@/customHooks/useStorage";
-import { IQueryParams, User } from "@/interfaces/AppInterfaces";
-import { ProductService } from "@/services/product";
 
 function ProductRequest() {
+    
     const {
+      
       allRequest,
+      
       totalResults,
+    
       isLoading,
+    
       showFilter,
+    
       setShowFilter,
-      pageSize,
-        currentPage,
+    
+      currentPage,
+      
       setCurrentPage,
-      handlePageSize,
-      handleCurrentPage,
+      
       filterParams
+    
     } = useProductRequest();
 
 
   const columns = [
+  
     { key: "sn", label: "S/N" },
+  
     {
       key: "Product Name",
       label: "Product Name",
@@ -41,6 +47,7 @@ function ProductRequest() {
         </div>
       )
     },
+  
     {
       key: "Request Date",
       label: "Request Date",
@@ -48,6 +55,7 @@ function ProductRequest() {
         <div>{row.createdAt && formatDate(row.createdAt)}</div>
       )
     },
+  
     {
       key: "Status",
       label: "Status",
@@ -61,44 +69,66 @@ function ProductRequest() {
         </div>
       )
     }
+  
   ];
+  
   return (
+  
     <div className="px-4 pt-8 h-full">
+    
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
+    
       <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+    
         <BreadCrumbClient
           backText="Dashboard"
           currentPath="Product Request"
           brand="Landmark"
         />
+    
         <div className="flex justify-between">
+    
           <h1 className="text-primary-text text-sm font-normal">
             Products Request{" "}
+    
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
               {allRequest ? allRequest.length : 0}
             </span>
+    
           </h1>
+    
           <div className="flex mt-6 justify-center gap-2 ml-auto items-center">
+    
             <div>
+    
               <SearchInput placeholder="Search" />
+    
             </div>
+    
             <button
               onClick={() => setShowFilter(true)}
               className="px-3 py-2 border border-primary rounded text-sm flex items-center gap-2"
             >
+    
               <MdFilterList /> Filter
+    
             </button>
+    
           </div>
+    
         </div>
+    
         {isLoading ? (
           <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
         ) : allRequest && allRequest.length ? (
           <>
+    
             <Table
               columns={columns}
               data={allRequest && allRequest}
               //   additionalActions={additionalActions}
             />
+    
             <Pagination
               page={currentPage}
               totalPages={totalResults}
@@ -106,22 +136,33 @@ function ProductRequest() {
                 setCurrentPage(currentPage + 1);
               }}
             />
+    
           </>
         ) : (
           <div className="h-auto py-20 flex-grow flex justify-center flex-col items-center">
             <>
+    
               <img src="/images/NoVendor.svg" alt="No Product Found" />
+    
               <p className="font-normal text-primary-text text-sm sm:text-xl">
                 {isEmpty(filterParams)
                   ? "No products request available."
                   : "No search result found"}
+    
               </p>
+    
             </>
+    
           </div>
+    
         )}
+      
       </div>
+    
     </div>
+  
   );
+
 }
 
 export default ProductRequest;
