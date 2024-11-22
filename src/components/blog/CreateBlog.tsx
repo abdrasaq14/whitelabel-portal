@@ -129,13 +129,12 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                     Blog Image
                   </span>
                   <BlogFileUpload
-                    disabled={form.isSubmitting}
-                    setIsBlogEditing={setIsBlogEditing}
-                    // {...form.getFieldProps("image")}
-                    extraClass="min-h-[15rem]"
-                    name="image"
-                    fileType="image"
-                  />
+                        disabled={form.isSubmitting}
+                        setIsBlogEditing={setIsBlogEditing}
+                        // {...form.getFieldProps("image")}
+                        extraClass="min-h-[15rem]"
+                        name="image"
+                        fileType="image" type={"text"}                  />
                   {/* uploaded images for edit post */}
                   {id && form.values.image && isBlogEditing && (
                     <div className="flex flex-col w-full mt-4 gap-2">

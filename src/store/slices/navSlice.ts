@@ -12,6 +12,11 @@ const initialState: NavSlice = {
     isOpen: true,
     error: null,
     activeNotification: null,
+    showLogoutModal: false,
+    activeLabel: '',
+    showStaffInfoModal: false,
+    activeStaff: null,
+    showCreateStaffModal: false
 };
 
 //Actions

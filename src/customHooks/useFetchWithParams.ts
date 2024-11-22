@@ -1,5 +1,3 @@
-import { useQuery } from "react-query";
-
 const useFetchWithParams = (key: any, apiFunction: any, config: any) => {
   const fetchFunction = async ({ queryKey }: { queryKey: any }) => {
     // console.log(queryKey);
@@ -20,7 +18,7 @@ const useFetchWithParams = (key: any, apiFunction: any, config: any) => {
     return response.data;
   };
 
-  const data = useQuery(key, fetchFunction, config);
+  // const data = useQuery(key, fetchFunction, config);
 
   // const data = useQuery([key, value], apiFunction, {
   // 	keepPreviousData: false,
@@ -28,7 +26,7 @@ const useFetchWithParams = (key: any, apiFunction: any, config: any) => {
   // 	refetchOnMount: false,
   // });
 
-  return data;
+  // return data;
 };
 
 export default useFetchWithParams;

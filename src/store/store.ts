@@ -5,15 +5,12 @@ import navReducer from './slices/navSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import accountReducer from './slices/accountSlice';
 import uploadReducer from './slices/uploadSlice';
-<<<<<<< HEAD
 import inventoryReducer from './slices/inventorySlice';
 import messageReducer from './slices/messageSlice';
 import orderReducer from "./slices/orderSlice"
 
-=======
 import blogReducer from './slices/blogSlice';
 import productReducer from './slices/productSlice';
->>>>>>> feat/restructured-code
 // Define the store with your reducers
 export const store = configureStore({
   reducer: {
@@ -25,13 +22,10 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     account: accountReducer,
     upload: uploadReducer,
-<<<<<<< HEAD
     inventory: inventoryReducer,
     message: messageReducer,
     order: orderReducer,
-=======
     product: productReducer
->>>>>>> feat/restructured-code
   },
 });
 
