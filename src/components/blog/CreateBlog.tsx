@@ -126,7 +126,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 <div className="flex flex-col gap-2 col-span-1 h-fit">
                   <span className="text-accent-darker font-semibold">
                     Blog Image
-                  </span>
+                      </span>
                   <BlogFileUpload
                         disabled={form.isSubmitting}
                         setIsBlogEditing={setIsBlogEditing}

@@ -88,7 +88,7 @@ function ProductRequest() {
     
         <div className="flex justify-between">
     
-          <h1 className="text-primary-text text-sm font-normal">
+          <h1 className="text-accent-darker text-sm font-normal">
             Products Request{" "}
     
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
@@ -144,7 +144,7 @@ function ProductRequest() {
     
               <img src="/images/NoVendor.svg" alt="No Product Found" />
     
-              <p className="font-normal text-primary-text text-sm sm:text-xl">
+              <p className="font-normal text-accent-darker text-sm sm:text-xl">
                 {isEmpty(filterParams)
                   ? "No products request available."
                   : "No search result found"}

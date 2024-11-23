@@ -25,14 +25,14 @@ export default function PostCard({
       className="w-[250px] xl:w-[300px] h-[22rem] max-h-[22rem] text-accent-darker border border-[#C8CCD0] rounded-md p-4 flex flex-col gap-4 overflow-hidden"
     >
       <div className="flex justify-between">
-        <Link href={`/blog/${blog._id}`} className="font-bold hidden xl:block max-h-[1.5rem] mb-3">
+        <Link href={`/Blog/${blog._id}`} className="font-bold hidden xl:block max-h-[1.5rem] mb-3">
           {truncateText(blog?.title, 65)}
         </Link>
-        <Link href={`/blog/${blog._id}`} className="font-bold xl:hidden">
+        <Link href={`/Blog/${blog._id}`} className="font-bold xl:hidden">
           {truncateText(blog?.title, 45)}
         </Link>
         <span className="flex gap-2">
-          <Link href={`/blog/edit/${blog._id}`}>
+          <Link href={`/Blog/Edit/${blog._id}`}>
             <FiEdit size={20} color="#8f9092" className="cursor-pointer" />
           </Link>
           <GoTrash
@@ -44,7 +44,7 @@ export default function PostCard({
         </span>
       </div>
       <Link
-        href={`/blog/${blog._id}`}
+        href={`/Blog/${blog._id}`}
         className="h-[6rem] min-h-[6rem] max-h-[6rem] w-full rounded-md bg-purple-main bg-opacity-60 overflow-hidden"
       >
         <img
@@ -54,7 +54,7 @@ export default function PostCard({
         />
       </Link>
       <Link
-        href={`/blog/${blog._id}`}
+        href={`/Blog/${blog._id}`}
         className="w-full h-[10rem] max-h-[10rem] flex-1 overflow-y-hidden"
       >
         <p className="text-justify text-accent-light3">

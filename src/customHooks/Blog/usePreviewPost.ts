@@ -77,11 +77,11 @@ const usePreviewPost = () => {
 
     if (isView) {
 
-      push(`/blog/view/${blogId}`);
+      push(`/Blog/View/${blogId}`);
 
     } else {
 
-      push(`/blog`);
+      push(`/Blog`);
 
     }
 

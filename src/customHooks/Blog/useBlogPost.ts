@@ -126,7 +126,7 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
   
-    navigateTo.push("/blog/preview");
+    navigateTo.push("/Blog/Preview");
   
   };
 
@@ -136,11 +136,11 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   
     if (isView) {
   
-      navigateTo.push(`/blog/view/${id || blogId}`);
+      navigateTo.push(`/Blog/View/${id || blogId}`);
   
     } else {
   
-      navigateTo.push(`/blog`);
+      navigateTo.push(`/Blog`);
   
     }
   

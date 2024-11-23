@@ -120,8 +120,7 @@ function AllMerchants() {
         />
     
         <div className="flex justify-between mb-5">
-    
-          <h1 className="text-primary-text text-sm font-normal">
+          <h1 className="text-accent-darker text-sm font-normal">
             All Merchants{" "}
     
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
