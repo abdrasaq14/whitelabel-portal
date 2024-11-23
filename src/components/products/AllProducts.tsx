@@ -207,7 +207,7 @@ function AllProducts() {
                 </p>
 
                 <AppButton
-                  handleClick={() => push("/discover-products")}
+                  handleClick={() => push("/DiscoverProducts")}
                   iconPosition="right"
                   type={ButtonType.PRIMARY}
                   // icon={<FaArrowRight />}
