@@ -1,186 +1,174 @@
-"use client";
-import { useEffect, useState } from "react";
+"use client"
+import useFetchMerchantDetails from "@/customHooks/Merchants/useMerchantDetail";
 import { useParams } from "next/navigation";
-import { MerchantService } from "@/services/merchant";
-import { IQueryParams, User } from "@/interfaces/AppInterfaces";
-import { fDateTime } from "@/utilities/helperFunctions";
-import { ViewProductModal } from "../modals/ViewProductModal";
-import Table from "../layouts/Table";
-import useStorage from "@/customHooks/useStorage";
-import Pagination from "../feedbacks/Pagination";
-import { SpinnerType } from "@/enums/ComponentEnums";
+import { useRouter } from "next/navigation";
+import { BreadCrumbClient } from "../Breadcrumb";
+import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
+import AppButton from "../forms/AppButton";
+import { SuspendModal } from "../modals/SuspendMerchantModal";
+import Products from "./MerchantProduct";
+import ProductsSold from "./MerchantProductSold";
+import Overview from "./Overview";
 
-const ProductsSold = ({}) => {
-  
-  const [product, setProduct] = useState({});
-  
-  const [allProducts, setAllProduc] = useState([]);
-  
-  const [isLoading, setIsLoading] = useState(true);
-  
-  const [totalResults, setTotalResults] = useState(0);
-  
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  
-  const [pageSize, setPageSize] = useState(10);
-  
-  const [currentPage, setCurrentPage] = useState(1);
-
+function MerchantDetail() {
   const { id }: any = useParams();
-
-  const {currentUser} = useStorage();
-
-  const fetchMerchantProducts = async (query: IQueryParams) => {
-  
-    const res = await MerchantService.getMerchantProducts(query);
-  
-    // @ts-ignore
-    if (res.data.result.results) {
-  
-      // @ts-ignore
-      setAllProduct(res.data.result.results);
-  
-      // @ts-ignore
-      setTotalResults(res.data.result.totalPages);
-  
+  const router = useRouter();
+  const getReason = (action: string) => {
+    return action === "suspend"
+      ? "unauthorized product"
+      : "suspension reviewed";
+  };
+  const {
+    allProducts,
+    totalResults,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+    isViewModalOpen,
+    product,
+    closeViewModal,
+    merchant,
+    fetchMerchantDetails,
+    accountTabTitle,
+    tabIndex,
+    setTabIndex,
+    isSuspendOpen,
+    setIsSuspendOpen,
+    SuspendMerchant,
+    unSuspendMerchant,
+    // startConversation,
+    getStatusById,
+    currentUser
+  } = useFetchMerchantDetails(id);
+    
+    console.log("fetching merchant detailsMerchant", merchant, id);
+  const displayAccountContent = (tabIndex: number) => {
+    switch (tabIndex) {
+      case 0:
+        return <Overview merchant={merchant} />;
+      // return <BioProfile />
+      case 1:
+        return <Products id={id} />;
+      case 2:
+        return <ProductsSold id={id} />;
+      default:
+        return <Overview merchant={merchant} />;
+      // return <BioProfile />
     }
-  
-    setIsLoading(false);
-  
   };
-  
-  useEffect(() => {
-  
-    if (currentUser?.user?.whiteLabelName) {
-  
-      //   setIsLoading(true);
-      fetchMerchantProducts({
-  
-        merchantId: id,
-  
-        limit: pageSize,
-  
-        page: currentPage
-  
-      });
-  
-    }
-  
-  }, [id, pageSize, currentPage]);
-  
-  const closeViewModal = () => {
-  
-    setIsViewModalOpen(false);
-  
-  };
-
-  const handlePageSize = (val: any) => {
-  
-    setPageSize(val);
-    // setFilterParams({ ...filterParams, pageSize: val });
-  
-  };
-
-  const handleCurrentPage = (val: any) => {
-  
-    setCurrentPage(val);
-    // setFilterParams({ ...filterParams, pageNum: val - 1 });
-  
-  };
-  
-  const columns = [
-  
-    { key: "sn", label: "S/N" },
-  
-    {
-      key: "Product Name",
-      label: "Product Name",
-      render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
-          {row?.name}{" "}
-        </div>
-      )
-    },
-  
-    {
-      key: "Merchant",
-      label: "Merchant",
-      render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
-          {row?.productOwner}{" "}
-        </div>
-      )
-    },
-  
-    {
-      key: "Category",
-      label: "Category",
-      render: (row: any) => (
-        <div>{row?.categories.map((item: any) => item.title).join(" | ")} </div>
-      )
-    },
-  
-    {
-      key: "Date Listed",
-      label: "Date Listed",
-      render: (row: any) => (
-        <div>{row.createdAt && fDateTime(row.createdAt)}</div>
-      )
-    }
-  
-  ];
-  
   return (
-  
-    <div className="h-full flex-grow ">
-    
-      {isLoading ? (
-    
-        <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
-      
-      ) : allProducts && allProducts.length ? (
-      
-        <>
-        
-          <Table
-            columns={columns}
-            data={allProducts && allProducts}
-            // additionalActions={additionalActions}
-          />
-        
-          <Pagination
-            page={currentPage}
-            totalPages={totalResults}
-            onPageChange={() => {
-              setCurrentPage(currentPage + 1);
-            }}
-          />
-        
-        </>
-      
-      ) : (
-      
-        <>
-        
-          <img src="/images/NoProduct.svg" alt="No Product Found" />
-        
-          <p className="font-normal max-w-[539px] text-[#4D5154] text-center text-sm">
-            This merchant has not sold any product yet
-          </p>
-        
-        </>
-      
-      )}
-      
-      <ViewProductModal
-        isOpen={isViewModalOpen}
-        product={product}
-        closeViewModal={closeViewModal}
-      />
-    
-    </div>
-  
-  );
+    <div className="px-4 pt-8 h-full">
+      <div className="flex items-center gap-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center -mt-6 text-accent-darker gap-2"
+        >
+          <img className="h-4 w-auto" src="/icons/arrow-left.svg" />
+          Back
+        </button>
+        <BreadCrumbClient
+          backText="All Merchants"
+          currentPath="Account Details"
+          brand="Landmark"
+        />
+      </div>
 
-};
+      <div className="my-6 flex items-center justify-between px-6">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <img
+              src={
+                merchant && merchant?.image && merchant?.image.trim()
+                  ? merchant?.image
+                  : "/images/no-profile-pics.jpg"
+              }
+              className="w-8 h-8 bg-gray-500 border-primary border rounded-full"
+            />
+
+            <span className="h-2 w-2 absolute rounded-full bottom-0  right-0 bg-green-500" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-accent-darker">
+              {merchant && merchant?.businessName}
+            </h3>
+            <a
+              target="_blank"
+              href={`https://www.mymarketsq.com//${
+                merchant && merchant?.userName
+              }`}
+              className="text-xs text-[#6F7174]"
+            >{`https://www.mymarketsq.com/${
+              merchant && merchant?.userName
+            }`}</a>
+          </div>
+          <button
+            className="border border-primary flex items-center rounded bg-white px-3 py-2 whitespace-nowrap"
+            onClick={() => {}}
+          >
+            Message Merchant{" "}
+            {isLoading && (
+              <Spinner type={SpinnerType.PRIMARY} height={15} width={15} />
+            )}
+          </button>
+        </div>
+        {currentUser?.user?.role !== "Staff" && (
+          <>
+            {merchant &&
+            merchant?.platformAccess &&
+            getStatusById(
+              merchant?.platformAccess,
+              currentUser?.user?.whiteLabelName.toUpperCase()
+            ) == "active" ? (
+              <AppButton
+                type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
+                text="Suspend Merchant"
+                handleClick={() => setIsSuspendOpen(true)}
+                style="px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white"
+              />
+            ) : (
+              <AppButton
+                type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
+                text="Activate Merchant"
+                handleClick={() => unSuspendMerchant(getReason("unsuspend"))}
+                style="px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white"
+              />
+            )}
+          </>
+        )}
+      </div>
+      <div className="pt-4 pb-10 px-6 rounded-2xl mx-2">
+        <div className="flex items-center mb-10 justify-between gap-10 border-b w-full">
+          <div className="flex items-center w-5/6 gap-2 flex-wrap">
+            {accountTabTitle.map((val, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`py-3 px-6 border-b-2 border-b-transparent !rounded-none hover:text-accent-darker focus:text-accent-darker active:text-accent-darker transition-all
+                    ${
+                      tabIndex === index && "text-[#470E81] !border-b-[#470E81]"
+                    }
+                    ${tabIndex !== index && "text-[#6C6C73]"}
+                  `}
+                onClick={() => setTabIndex(index)}
+              >
+                {val}
+              </button>
+            ))}
+          </div>
+        </div>
+        {displayAccountContent(tabIndex)}
+      </div>
+      <SuspendModal
+        confirmDelete={() => {
+          SuspendMerchant(getReason("suspend"));
+        }}
+        isOpen={isSuspendOpen}
+        closeModal={() => setIsSuspendOpen(false)}
+        merchant={merchant ?? {}}
+      />
+    </div>
+  );
+}
+
+export default MerchantDetail;

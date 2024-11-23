@@ -16,10 +16,6 @@ function useAllMerchants() {
   const [filterParams, setFilterParams] = useState<IQueryParams>();
   const { currentUser } = useStorage();
 
-  const getStatusById = (arr: any, id: string) => {
-    const item = arr.find((element: any) => element.platform == id);
-    return item && item.status;
-  };
 
   const fetchAllMerchants = async (filterParams: IQueryParams) => {
     const res = await MerchantService.getallMerchants(filterParams);

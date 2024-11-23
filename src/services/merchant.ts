@@ -17,5 +17,10 @@ export const MerchantService = {
   getMerchantProducts: (payload: IQueryParams) =>
     apiClient.get(`/external-api/merchant/get-merchant-products/`, {
       ...payload
-    })
+    }),
+  suspendMerchant: (payload: any, id: string) =>
+    apiClient.put(
+      `/external-api/merchant/update-merchant-status/${id}`,
+      payload
+    )
 };

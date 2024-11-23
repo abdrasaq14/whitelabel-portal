@@ -121,7 +121,7 @@ function ProductRequest() {
         {isLoading ? (
           <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
         ) : allRequest && allRequest.length ? (
-          <>
+          <div className="mt-5">
     
             <Table
               columns={columns}
@@ -137,7 +137,7 @@ function ProductRequest() {
               }}
             />
     
-          </>
+          </div>
         ) : (
           <div className="h-auto py-20 flex-grow flex justify-center flex-col items-center">
             <>

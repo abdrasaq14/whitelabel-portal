@@ -173,7 +173,7 @@ function AllProducts() {
         
         </div>
         
-        <div className="h-full flex-grow ">
+        <div className="h-full flex-grow mt-5">
           
           {isLoading ? (
             <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
