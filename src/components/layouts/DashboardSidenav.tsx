@@ -29,12 +29,6 @@ const DashboardSidenav = ({ items, isOpen, currentUser, handleOpenModal, handleC
 
     if (!isClient) return null;
 
-  // console.log(pathname)
-
-  // const {conversations} = useMessage();
-
-  // console.log("Sidenav conversations", conversations)
-
   return (
     <div className={`side-nav ${isOpen ? 'w-80' : 'w-20'} overflow-auto border-e-[0.4px] border-r-purple-main px-5 bg-white text-accent-dark3 font-satoshiRegular text-sm h-full fixed transition-width duration-300`}>
       

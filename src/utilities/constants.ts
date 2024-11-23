@@ -30,5 +30,7 @@ export const Constants = {
         "Gifts",
         "Services",
         "Agriculture"
-    ]
+    ],
+
+    profitAllUrl: `${process.env.NEXT_PUBLIC_PROFITALL_URL}/onboarding/?whiteLabelName=`,
 }

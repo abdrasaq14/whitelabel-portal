@@ -1,5 +1,6 @@
 "use client"
 import AccountTab from '@/components/Tabs/Account/AccountTab'
+import InviteMerchantTab from '@/components/Tabs/Account/InviteMerchantTab'
 import MembersTab from '@/components/Tabs/Account/MembersTab'
 import AppCard from '@/components/utilities/AppCard'
 import Tabs from '@/components/utilities/Tabs'
@@ -15,7 +16,7 @@ const page = () => {
 
     const {handleOpenModal, handleCloseModal, showCreateStaffModal, showStaffInfoModal} = useModal();
 
-    const {staffsResult, loading} = useAccount();
+    const {staffsResult, loading, handleCopyLink} = useAccount();
 
     useEffect(() => checkUserAuthenticity(), []);
     
@@ -25,7 +26,7 @@ const page = () => {
         
         { label: 'Team Members', content: <MembersTab handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} showCreateStaffModal={showCreateStaffModal} showStaffInfoModal={showStaffInfoModal} staffsResult={staffsResult} loading={loading} /> },
         
-        { label: 'Invite Merchants', content: <p>Content for Tab 3</p> },
+        { label: 'Invite Merchants', content: <InviteMerchantTab handleCopyInviteLink={handleCopyLink} /> },
     
     ];
 

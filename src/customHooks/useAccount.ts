@@ -18,7 +18,7 @@ const useAccount = () => {
 
     const toggleEditMode = () => dispatch(setEditMode());
 
-    const {updateSessionData} = useStorage();
+    const {updateSessionData, currentUser} = useStorage();
 
     const {handleCloseModal} = useModal();
 
@@ -125,6 +125,28 @@ const useAccount = () => {
 
     }
 
+    const handleCopyLink = () => {
+        
+        const link = `${Constants.profitAllUrl}${currentUser?.user?._id}`;
+        
+        navigator.clipboard
+        
+        .writeText(link)
+        
+        .then(() => {
+        
+            toast.success("Link copied to clipboard");
+        
+        })
+        
+        .catch((err) => {
+        
+            toast.error("Failed to copy: ");
+        
+        });
+    
+    }
+
     return {
         
         editMode: accountSlice.disableMode,
@@ -139,7 +161,9 @@ const useAccount = () => {
 
         handleUpdateStaff,
 
-        handleCreateStaff
+        handleCreateStaff,
+
+        handleCopyLink
     }
 }
 

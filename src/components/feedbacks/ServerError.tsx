@@ -4,10 +4,12 @@ import Image from 'next/image'
 import AppButton from '../forms/AppButton'
 import { ButtonType } from '@/enums/ComponentEnums'
 import { RxReload } from "react-icons/rx";
-import { useRouter } from 'next/navigation';
+import useNavigation from '@/customHooks/useNavigation'
+import Link from 'next/link'
 
 const ServerError = () => {
-    const router = useRouter();
+
+    const {push, goBack} = useNavigation()
 
     const [isClient, setIsClient] = useState(false);
 
@@ -15,11 +17,11 @@ const ServerError = () => {
         setIsClient(typeof window !== 'undefined');
     }, []);
 
-    const goBack = () => {
+    const goBackNow = () => {
         if (isClient && window.history.length > 1) {
-            router.back();
+            goBack();
         } else {
-            router.push('/');
+            push('/');
         }
     };
 
@@ -30,7 +32,8 @@ const ServerError = () => {
             <Image src="/images/server.svg" width={456} height={456} alt="Server error image" />
             <h2 className='font-gooperSemibold text-3xl text-accent-dark3 mt-2'>Oops! Server is down 💔💔</h2>
             <p className='font-satoshiMedium text-lg text-center text-accent-dark mt-2'>Sorry for the disruption! Our server is down, but our tech team is on it. We'll be back online shortly.</p>
-            <div className='mt-2 w-[200px]'><AppButton text='Try Again' type={ButtonType.PRIMARY} icon={RxReload} handleClick={goBack} /></div>
+            <div className='mt-2 w-[200px]'><AppButton text='Try Again' type={ButtonType.PRIMARY} icon={RxReload} handleClick={goBackNow} /></div>
+            <Link href={'/Dashboard'} className='text-base text-accent-dark font-satoshiRegular mt-5'>Go Home</Link>
         </div>
     )
 }

@@ -10,11 +10,10 @@ import Spinner from "../feedbacks/Spinner";
 import AppButton from "../forms/AppButton";
 import { ViewProductModal } from "../modals/ViewProductModal";
 import Table from "../layouts/Table";
-import { useAppDispatch } from "@/store/hooks";
-import { useRouter } from "next/navigation";
 import Pagination from "../feedbacks/Pagination";
 import useFetchAllProducts from "@/customHooks/Products/useAllProducts";
 import { ButtonType } from "@/enums/ComponentEnums";
+import useNavigation from "@/customHooks/useNavigation";
 
 function AllProducts() {
   
@@ -55,8 +54,8 @@ function AllProducts() {
   } = useFetchAllProducts({ status: undefined });
 
   // console.log("isLoadingAllProducts", isLoading);
-  
-  const router = useRouter();
+
+  const {push} = useNavigation();
 
   const additionalActions = (row: any) => [
     
@@ -208,7 +207,7 @@ function AllProducts() {
                 </p>
 
                 <AppButton
-                  handleClick={() => router.push("/discover-products")}
+                  handleClick={() => push("/discover-products")}
                   iconPosition="right"
                   type={ButtonType.PRIMARY}
                   // icon={<FaArrowRight />}

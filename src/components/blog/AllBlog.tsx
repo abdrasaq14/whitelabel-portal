@@ -87,7 +87,7 @@ function AllBlog() {
             </div>
             
             <Link
-              href={"/blog/create"}
+              href={"/Blog/Create"}
               className="border border-primary font-semibold hover:bg-purple-main hover:text-white rounded-md text-accent-darker px-2"
             >
               Post Blog
