@@ -34,6 +34,7 @@ export const BlogValidationSchema = Yup.object({
   image: Yup.string()
     .url("Image must be a valid URL")
     .when("status", {
+      //@ts-ignore
       is: "published",
       then: Yup.string().required("Image is required"),
       otherwise: Yup.string().nullable().notRequired()

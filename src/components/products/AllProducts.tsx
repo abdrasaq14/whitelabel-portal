@@ -37,7 +37,7 @@ function AllProducts() {
     
     filterParams,
     
-    profile,
+    currentUser,
     
     setFilterParams,
     
@@ -94,8 +94,8 @@ function AllProducts() {
       label: "Selling Price",
       render: (row: any) => {
         const sellingPrice =
-          row?.price && profile?.commisionPecentage
-            ? (row.price * parseFloat(profile?.commisionPecentage)) / 100 +
+          row?.price && currentUser?.user?.commisionPecentage
+            ? (row.price * parseFloat(currentUser?.user?.commisionPecentage)) / 100 +
               row.price
             : row?.price; // Fallback to 0 if price or commission is missing
 

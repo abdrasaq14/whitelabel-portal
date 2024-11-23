@@ -16,10 +16,8 @@ const useBlogPosts = () => {
   
   const dispatch = useAppDispatch();
   
-  const { getSessionData } = useStorage();
+  const { currentUser } = useStorage();
   
-  const profile = getSessionData("UserData")?.user as User;
-
   // Selectors
   const blogSlice = useAppSelector(getBlogSlice);
   
@@ -58,7 +56,7 @@ const useBlogPosts = () => {
     
         fetchPosts({
     
-          whiteLabelName: profile?.whiteLabelName,
+          whiteLabelName: currentUser?.user?.whiteLabelName,
     
           page: currentPage,
     
@@ -105,7 +103,7 @@ const useBlogPosts = () => {
   
       dispatch(deletePost(idToDelete));
   
-      dispatch(fetchPostCounts({ whiteLabelName: profile.whiteLabelName }));
+      dispatch(fetchPostCounts({ whiteLabelName: currentUser?.user?.whiteLabelName }));
   
       setOpenModal(false);
   
@@ -146,13 +144,13 @@ const useBlogPosts = () => {
   // Fetch counts on mount
   useEffect(() => {
     
-    if (profile?.whiteLabelName) {
+    if (currentUser?.user?.whiteLabelName) {
     
-      dispatch(fetchPostCounts({ whiteLabelName: profile.whiteLabelName }));
+      dispatch(fetchPostCounts({ whiteLabelName: currentUser?.user?.whiteLabelName }));
     
     }
 
-  }, [dispatch, profile?.whiteLabelName]);
+  }, [dispatch, currentUser?.user?.whiteLabelName]);
 
 
   // Fetch posts on tab change or page change

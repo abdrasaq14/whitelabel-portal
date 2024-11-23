@@ -20,9 +20,7 @@ import { useAppDispatch } from "@/store/hooks";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   
-  const { getSessionData } = useStorage();
-  
-  const profile = getSessionData("userData") as User;
+  const { currentUser } = useStorage();
   
   const [error, setError] = useState("");
   
@@ -44,7 +42,7 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
     
     initialValues: {
     
-      authorId: profile?._id,
+      authorId: currentUser?.user?._id,
     
       title: "",
     
@@ -66,7 +64,7 @@ export const useBlogPost = ({ id }: IUseBlogBostProps) => {
     
       publishedDate: "",
     
-      whiteLabelName: profile?.whiteLabelName
+      whiteLabelName: currentUser?.user?.whiteLabelName
     
     },
     

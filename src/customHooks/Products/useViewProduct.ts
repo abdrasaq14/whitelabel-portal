@@ -1,5 +1,4 @@
 "use client"
-import { User } from "@/interfaces/AppInterfaces";
 import { ProductService } from "@/services/product";
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -15,8 +14,7 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
   const [isRequested, setIsRequested] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const { getSessionData } = useStorage();
-  const profile = getSessionData("UserData")?.user as User;
+  const { currentUser } = useStorage();
   //   const navigate = useNavigate();
   console.log("ViewProductModal", product);
   const modalRef = useRef<any>();
@@ -30,14 +28,14 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
       const body = {
         id: product._id || product.id,
         status: "block",
-        platform: profile.whiteLabelName
+        platform: currentUser?.user?.whiteLabelName
       };
       handleToggleBan(body);
     } else {
       const body = {
         id: product._id || product.id,
         status: "unblock",
-        platform: profile.whiteLabelName
+        platform: currentUser?.user?.whiteLabelName
       };
       handleToggleBan(body);
     }
@@ -99,9 +97,9 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
           productName: product.name
         },
         whiteLabelClient: {
-          whiteLabelClientId: profile._id,
-          email: profile.email,
-          whiteLabelName: profile.whiteLabelName
+          whiteLabelClientId: currentUser?.user?._id,
+          email: currentUser?.user?.email,
+          whiteLabelName: currentUser?.user?.whiteLabelName
         }
       }
     ];
@@ -109,13 +107,13 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
     handleProduct(body);
   };
   useEffect(() => {
-    if (isOpen && product && profile?.whiteLabelName) {
+    if (isOpen && product && currentUser?.user?.whiteLabelName) {
       checkIfProductAlreadyRequested({
         productId: product.id,
-        whiteLabelName: profile.whiteLabelName
+        whiteLabelName: currentUser?.user?.whiteLabelName
       });
     }
-  }, [isOpen, product, profile?.whiteLabelName]);
+  }, [isOpen, product, currentUser?.user?.whiteLabelName]);
 
     return {
         isProductBan,
@@ -123,8 +121,7 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
         isLoading,
         isConfirmModalOpen,
         setIsConfirmModalOpen,
-        profile,
-        // router,
+        currentUser,
         modalRef,
         toggleProductBan,
         handleToggleBan,

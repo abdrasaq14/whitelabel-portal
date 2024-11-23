@@ -39,22 +39,20 @@ function useFetchAllProducts({ status }: IUseFetchAllProducts) {
   
   const [filterParams, setFilterParams] = useState<IQueryParams>();
   
-  const { getSessionData } = useStorage();
-  
-  const profile = getSessionData("UserData")?.user as User;
+  const { currentUser } = useStorage();
   
   const dispatch = useAppDispatch();
 
   useEffect(() => {
   
-    if (profile?.whiteLabelName) {
+    if (currentUser?.user?.whiteLabelName) {
   
       dispatch(startProductLoading());
   
       dispatch(
   
         fetchProducts({
-          whiteLabelName: profile?.whiteLabelName,
+          whiteLabelName: currentUser?.user?.whiteLabelName,
           limit: pageSize,
           page: currentPage,
           status: status,
@@ -64,7 +62,7 @@ function useFetchAllProducts({ status }: IUseFetchAllProducts) {
     
     }
   
-  }, [dispatch, profile?.whiteLabelName, currentPage]);
+  }, [dispatch, currentUser?.user?.whiteLabelName, currentPage]);
 
   const handleViewProductInfo = (row: any) => {
   
@@ -110,7 +108,7 @@ function useFetchAllProducts({ status }: IUseFetchAllProducts) {
   
     filterParams,
   
-    profile,
+    currentUser,
   
     allProducts,
   

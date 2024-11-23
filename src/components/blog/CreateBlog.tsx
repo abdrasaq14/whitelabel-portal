@@ -9,7 +9,6 @@ import { GoTrash } from "react-icons/go";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
 import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRouter as dynamic } from "next/router";
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
 import AppButton from "../forms/AppButton";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";

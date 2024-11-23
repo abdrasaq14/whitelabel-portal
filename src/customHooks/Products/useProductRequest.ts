@@ -9,8 +9,7 @@ const useProductRequest = () => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterParams, setFilterParams] = useState<IQueryParams>();
-  const { getSessionData } = useStorage();
-  const profile = getSessionData("UserData")?.user as User;
+  const { currentUser } = useStorage();
   const [isLoading, setIsLoading] = useState(true);
   const [allRequest, setAllRequest] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -37,15 +36,15 @@ const useProductRequest = () => {
   };
 
   useEffect(() => {
-    if (profile?.whiteLabelName) {
+    if (currentUser?.user?.whiteLabelName) {
       //   setIsLoading(true);
       queryProductRequest({
-        whiteLabelClientId: profile?._id,
+        whiteLabelClientId: currentUser?.user?._id,
         limit: pageSize,
         page: currentPage
       });
     }
-  }, [profile?.whiteLabelName, pageSize, currentPage]);
+  }, [currentUser?.user?.whiteLabelName, pageSize, currentPage]);
   return {
       allRequest,
     totalResults,
@@ -56,7 +55,7 @@ const useProductRequest = () => {
     currentPage,
     setCurrentPage,
     filterParams,
-    profile,
+    currentUser,
     handlePageSize,
     handleCurrentPage
   };

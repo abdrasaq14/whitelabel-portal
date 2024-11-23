@@ -28,7 +28,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
     toggleProductBan,
     handleAddProduct,
     handleProductAddedSuccess,
-    profile
+    currentUser
   } = useViewProduct({ product, isOpen, closeViewModal });
   return (
     <AppModal isOpen={isOpen} hasClose={true} closeClicked={closeViewModal}>
@@ -119,7 +119,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
       </div>
       <div className="w-full flex flex-wrap justify-between gap-4">
         <div className="gap-4 flex w-full justify-between">
-          {profile?.role !== "Staff" && !isLoading && (
+          {currentUser?.user?.role !== "Staff" && !isLoading && (
             <div className="flex gap-4 justify-between w-full">
               {isRequested ? (
                 <div className="flex justify-between w-full items-center  mt-4">

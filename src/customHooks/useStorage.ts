@@ -118,7 +118,9 @@ const useStorage = () => {
 
     // Directly access session data when you need it
     const currentUser = getSessionData('UserData');
-console.log("SessionData", currentUser, storeSessionData);
+
+    // console.log("SessionData", currentUser, storeSessionData);
+    
     return {
     
         storeLocalData,
