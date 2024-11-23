@@ -1,10 +1,10 @@
 "use client";
 import CreateBlog from "@/components/blog/CreateBlog";
 
-const page = () => {
+const BlogPage = () => {
  
   return <CreateBlog />;
 
 }
 
-export default page;
+export default BlogPage;
