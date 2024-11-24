@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { IQueryParams, User } from "@/interfaces/AppInterfaces";
 import React, { useEffect, useState } from "react";
 import { MerchantService } from "@/services/merchant";
@@ -16,17 +16,18 @@ function useAllMerchants({ status }: { status?: string }) {
   const [filterParams, setFilterParams] = useState<IQueryParams>();
   const { currentUser } = useStorage();
 
-
   const fetchAllMerchants = async (filterParams: IQueryParams) => {
-    const res = await MerchantService.getallMerchants(filterParams);
-    // @ts-ignore
-    if (res.data.result.results) {
-      // @ts-ignore
-      setAllMerchants(res.data.result.results);
-      // @ts-ignore
-      setTotalResults(res.data.result.totalPages);
+    try {
+      const res: any = await MerchantService.getallMerchants(filterParams);
+      if (res.data.result.results) {
+        setIsLoading(false);
+        setAllMerchants(res.data.result.results);
+        setTotalResults(res.data.result.totalPages);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
     }
-    setIsLoading(false);
   };
 
   const handlePageSize = (val: any) => {
@@ -65,7 +66,7 @@ function useAllMerchants({ status }: { status?: string }) {
     setCurrentPage,
     handlePageSize,
     handleCurrentPage,
-    totalResults
+    totalResults,
   };
 }
 

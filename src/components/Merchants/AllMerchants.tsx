@@ -147,9 +147,11 @@ function AllMerchants() {
         </div>
 
         {isLoading ? (
-          <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+          <div className="h-full flex-grow flex justify-center items-center">
+            <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+          </div>
         ) : allMerchants && allMerchants.length > 0 ? (
-          <div className="h-full flex-grow ">
+          <div className="h-full flex- flex-col gap-6 flex-grow ">
             <Table
               columns={columns}
               data={allMerchants && allMerchants}

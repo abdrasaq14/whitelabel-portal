@@ -63,7 +63,9 @@ const ProductsSold = ({ id }: { id: string }) => {
   return (
     <div className="h-full flex-grow ">
       {isLoading ? (
-        <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+        <div className="h-full flex-grow flex justify-center items-center">
+          <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+        </div>
       ) : allProducts && allProducts.length ? (
         <>
           <Table

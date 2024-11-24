@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import useAllMerchants from "@/customHooks/Merchants/useAllMerchants";
 import Filter from "../Filter/Filter";
@@ -21,28 +21,29 @@ function SuspendedMerchants() {
     setFilterParams,
     setShowFilter,
     filterParams,
-      setCurrentPage,
-    currentPage, currentUser
-  } = useAllMerchants({ status: "SUSPENDED" });
+    setCurrentPage,
+    currentPage,
+    currentUser,
+  } = useAllMerchants({ status: "suspended" });
   const columns = [
     {
       key: "sn",
-      label: "S/N"
+      label: "S/N",
     },
     {
       key: "Store Name",
       label: "Store Name",
-      render: (row: any) => <div>{row.businessName}</div>
+      render: (row: any) => <div>{row.businessName}</div>,
     },
     {
       key: "Customer Rating",
       label: "Customer Rating",
-      render: (row: any) => <div>{row?.rating}</div>
+      render: (row: any) => <div>{row?.rating}</div>,
     },
     {
       key: "Category",
       label: "Category",
-      render: (row: any) => <div>{row?.category}</div>
+      render: (row: any) => <div>{row?.category}</div>,
     },
     {
       key: "Location",
@@ -55,7 +56,7 @@ function SuspendedMerchants() {
             <span className="text-gray-400 italic">Not available</span>
           )}
         </div>
-      )
+      ),
     },
     // {
     //   key: "Status",
@@ -83,7 +84,7 @@ function SuspendedMerchants() {
   return (
     <div className="px-4 pt-8 h-full">
       <Filter onClose={() => setShowFilter(false)} open={showFilter} />
-      <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+      <div className="bg-white rounded-md h-auto min-h-[60vh] w-full p-8 flex flex-col">
         <BreadCrumbClient
           backText="Dashboard"
           currentPath="All Merchants"
@@ -96,7 +97,7 @@ function SuspendedMerchants() {
               {totalResults ? totalResults : 0}
             </span>
           </h1>
-          <div className="flex mt-6 justify-center gap-2 ml-auto items-center">
+          <div className="flex my-6 justify-center gap-2 ml-auto items-center">
             <div>
               <SearchInput
                 value={search}
@@ -112,14 +113,10 @@ function SuspendedMerchants() {
         </div>
 
         {allMerchants && allMerchants.length ? (
-          <div className="h-full flex-grow ">
-              <Table
-              columns={columns}
-              data={allMerchants && allMerchants}
-              additionalActions={additionalActions}
-            />
-          
-                      <Pagination
+          <div className="h-full  flex flex-col gap-6 flex-grow ">
+            <Table columns={columns} data={allMerchants && allMerchants} />
+
+            <Pagination
               page={currentPage}
               totalPages={totalResults}
               onPageChange={() => {

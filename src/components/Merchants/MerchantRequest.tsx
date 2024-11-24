@@ -86,7 +86,9 @@ function MerchantRequest() {
         ) : (
           <div className="w-full h-[60vh] flex flex-col   items-center justify-center">
             {isLoading ? (
-              <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+              <div className="h-full flex-grow flex justify-center items-center">
+                <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+              </div>
             ) : (
               <>
                 <img src="/images/NoVendor.svg" alt="No Product Found" />
