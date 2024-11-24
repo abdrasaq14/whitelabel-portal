@@ -5,7 +5,7 @@ import { MerchantService } from "@/services/merchant";
 
 import useStorage from "../useStorage";
 
-function useAllMerchants() {
+function useAllMerchants({ status }: { status?: string }) {
   const [search, setSearch] = useState("");
   const [allMerchants, setAllMerchants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +45,8 @@ function useAllMerchants() {
       fetchAllMerchants({
         whiteLabelName: currentUser?.user?.whiteLabelName,
         limit: pageSize,
-        page: currentPage
+        page: currentPage,
+        status,
       });
     }
   }, [currentUser?.user?.whiteLabelName, pageSize, currentPage]);

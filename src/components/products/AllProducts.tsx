@@ -78,7 +78,7 @@ function AllProducts() {
       key: "Product Name",
       label: "Product Name",
       render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
           {row?.name}{" "}
         </div>
       )

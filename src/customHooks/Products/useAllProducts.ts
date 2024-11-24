@@ -78,13 +78,6 @@ function useFetchAllProducts({ status }: IUseFetchAllProducts) {
 
   const handleCurrentPage = (val: number) => setCurrentPage(val);
 
-  // const generateSerialNumber = (
-  //   index: number,
-  //   pageInfo: PaginationInfo
-  // ): number => {
-  //   const { currentPage, pageSize } = pageInfo;
-  //   return (currentPage - 1) * pageSize + index + 1;
-  // };
 
   return {
   

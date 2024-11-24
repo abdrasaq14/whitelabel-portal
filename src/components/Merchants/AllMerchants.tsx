@@ -12,6 +12,7 @@ import { isEmpty } from "@/utilities/helperFunctions";
 import AppButton from "../forms/AppButton";
 import useNavigation from "@/customHooks/useNavigation";
 import FilterButton from "../Filter/FilterButton";
+import Pagination from "../feedbacks/Pagination";
 
 function AllMerchants() {
   const {
@@ -31,9 +32,11 @@ function AllMerchants() {
 
     filterParams,
 
-    setCurrentPage
-  } = useAllMerchants();
-
+    setCurrentPage,
+    currentPage,
+    totalResults
+  } = useAllMerchants({ status: undefined });
+  console.log("allMerchants", allMerchants);
   const { push } = useNavigation();
 
   const columns = [
@@ -77,7 +80,9 @@ function AllMerchants() {
       render: (row: any) => (
         <div
           className={`py-1 px-2 flex items-center justify-center w-[70%] ${
-            row.status === "active" ? "bg-green-300" : "bg-red-300"
+            new RegExp("^active$", "i").test(row.status.trim())
+              ? "bg-green-300"
+              : "bg-red-300"
           } rounded-md`}
         >
           {row.status}
@@ -149,6 +154,13 @@ function AllMerchants() {
               columns={columns}
               data={allMerchants && allMerchants}
               additionalActions={additionalActions}
+            />
+            <Pagination
+              page={currentPage}
+              totalPages={totalResults}
+              onPageChange={() => {
+                setCurrentPage(currentPage + 1);
+              }}
             />
           </div>
         ) : (
