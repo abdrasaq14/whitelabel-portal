@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import useStorage from "../useStorage";
 import { customisationData } from "@/interfaces/AppInterfaces";
+import { CustomisationService } from "@/services/Customisation";
+import toast from "react-hot-toast";
 
 const customizationData = {
   theme: {
@@ -207,7 +209,7 @@ const useCustomisation = () => {
       // const newData = {...data, contact: {...data.contact, phone: phoneCode+data?.contact?.phone}}
       console.log("Processing data", data);
       setIsLoading(true);
-      const res = await CustomisationService.updateCustomisation({
+      const res = await CustomisationService.update({
         ...data,
         stage: 2,
       });
@@ -221,10 +223,10 @@ const useCustomisation = () => {
         setStep(2);
         toast.success("Stage1 setup completed");
       }
-    } catch (e) {
+    } catch (e:any) {
       setIsLoading(false);
-      console.log("erro", err);
-      toast.error(err);
+      console.log("erro", e);
+      toast.error(e);
     }
 
     const processStage2 = useMutation(
@@ -265,3 +267,5 @@ const useCustomisation = () => {
     );
   };
 };
+
+export default useCustomisation
