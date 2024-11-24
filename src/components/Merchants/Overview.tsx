@@ -1,8 +1,11 @@
-import { fDate } from "@/utilities/helperFunctions";
+import { fDate, getStatusById } from "@/utilities/helperFunctions";
 import StarRating from "../feedbacks/StarRating";
 import CopyToClipboard from "../feedbacks/CopytoClipboard";
+import useStorage from "@/customHooks/useStorage";
 
 const Overview = ({ merchant }: { merchant: any }) => {
+  console.log("overviewMerchant", merchant);
+  const { currentUser } = useStorage();
   return (
     <div className="w-full grid grid-cols-2 gap-3">
       <div className="w-full px-6 py-6 rounded border h-[504px] bg-white">
@@ -13,15 +16,23 @@ const Overview = ({ merchant }: { merchant: any }) => {
                 Status
               </p>
               <p className={`mt-1  text-sm font-medum font-satoshiMedium   `}>
-                <span
-                  className={`px-2 py-1 rounded-md   ${
-                    merchant?.status === "Active"
-                      ? "bg-green-300 text-green-900"
-                      : "text-red-900 bg-red-300"
-                  }`}
-                >
-                  {merchant?.status}
-                </span>
+                {merchant && merchant?.platformAccess && (
+                  <span
+                    className={`px-2 py-1 rounded-md   ${
+                      getStatusById(
+                        merchant?.platformAccess,
+                        currentUser?.user?.whiteLabelName.toUpperCase()
+                      ) == "active"
+                        ? "bg-green-300 text-green-900"
+                        : "text-red-900 bg-red-300"
+                    }`}
+                  >
+                    {getStatusById(
+                      merchant?.platformAccess,
+                      currentUser?.user?.whiteLabelName.toUpperCase()
+                    )}
+                  </span>
+                )}
               </p>
             </div>
             <div>
@@ -80,8 +91,7 @@ const Overview = ({ merchant }: { merchant: any }) => {
                   Date Joined
                 </p>
                 <p className="mt-1 text-accent-light text-base font-medum font-satoshiMedium ">
-                  {merchant?.createdAt &&
-                    fDate(merchant?.createdAt)}
+                  {merchant?.createdAt && fDate(merchant?.createdAt)}
                 </p>
               </div>
             </div>

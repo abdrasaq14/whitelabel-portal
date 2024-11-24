@@ -17,7 +17,7 @@ const useMerchantDetails = (merchantId: string) => {
   const merchantSlice = useAppSelector(selectMerchantDetail);
   const [allProducts, setAllProduct] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(merchantSlice.loading);
+  const [isLoading, setIsLoading] = useState(true);
   const merchantLoading = merchantSlice.loading;
   const [totalResults, setTotalResults] = useState(0);
 
