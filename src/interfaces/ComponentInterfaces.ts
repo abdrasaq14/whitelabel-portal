@@ -392,3 +392,10 @@ export interface ISearch {
   onClear?: () => void;
   className?: string;
 }
+
+export interface ISuspendMerchantPayload {
+  merchantId: string;
+  action: string;
+  platform: string;
+  reason: string;
+}

@@ -41,7 +41,7 @@ function MerchantDetail() {
     // startConversation,
     currentUser
   } = useFetchMerchantDetails(id);
-    
+     
     console.log("fetching merchant detailsMerchant", merchant, id);
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {
@@ -112,13 +112,13 @@ function MerchantDetail() {
             )}
           </button>
         </div>
-        {currentUser?.user?.role !== "Staff" && (
+        {currentUser?.role !== "Staff" && (
           <>
             {merchant &&
             merchant?.platformAccess &&
             getStatusById(
               merchant?.platformAccess,
-              currentUser?.user?.whiteLabelName.toUpperCase()
+              currentUser?.whiteLabelName.toUpperCase()
             ) == "active" ? (
               <AppButton
                 type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}

@@ -3,15 +3,19 @@ import useStorage from "../useStorage";
 import { IQueryParams } from "@/interfaces/AppInterfaces";
 import { MerchantService } from "@/services/merchant";
 import toast from "react-hot-toast";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectMerchantDetail } from "@/store/slices/merchantDetailSlice";
+import { fetchMerchantDetails, suspendMerchant } from "@/store/slices/merchantDetailSlice";
 
 const useMerchantDetails = (merchantId: string) => {
-    //   console.log("fetching merchant detailsHook", merchantId);
+  //   console.log("fetching merchant detailsHook", merchantId);
   const [product, setProduct] = useState({});
-
+  const dispatch = useAppDispatch();
+  const merchantSlice = useAppSelector(selectMerchantDetail);
   const [allProducts, setAllProduct] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(merchantSlice.loading);
+  const merchantLoading = merchantSlice.loading;
   const [totalResults, setTotalResults] = useState(0);
 
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -19,43 +23,56 @@ const useMerchantDetails = (merchantId: string) => {
   const [pageSize, setPageSize] = useState(10);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [merchant, setMerchant] = useState<any>({});
+  const merchant = merchantSlice.merchant;
   const { currentUser } = useStorage();
 
   const accountTabTitle = ["Overview", "All Products", "Product Sold"];
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isSuspendOpen, setIsSuspendOpen] = useState(false);
-  
-    const fetchMerchantDetails = async () => {
+
+  const fetchMerchantInfo = async () => {
     try {
-      const res: any = await MerchantService.getMerchantDetails(merchantId);
-      console.log(res, "merchant details");
-      if (res.data.result) {
-        setIsLoading(false);
-        setMerchant(res.data.result);
-      }
+      await dispatch(fetchMerchantDetails(merchantId));
     } catch (error) {
-        console.log("fetching merchant detailsHookError", error);
       setIsLoading(false);
     }
   };
 
-  const SuspendMerchant = async (reason: string, action:'suspend' | 'unsuspend') => {
+  // const SuspendMerchant = async (reason: string, action:'suspend' | 'unsuspend') => {
+  //   try {
+  //     const values = {
+  //       action,
+  //       platform: currentUser.user.whiteLabelName,
+  //       reason
+  //     };
+  //     const res: any = await MerchantService.suspendMerchant(
+  //       values,
+  //       merchantId
+  //     );
+  //     if (res.data.result) {
+  //       toast.success(action === 'suspend' ? "account suspended" : "account unsuspended");
+  //       return;
+  //     }
+  //     toast.error(action === 'suspend' ? "Failed to suspend account" : "Failed to unsuspend account");
+  //   } catch (error: any) {
+  //     toast.error(error || "An error occured");
+  //   }
+  // };
+
+  const SuspendMerchant = async (
+    reason: string,
+    action: "suspend" | "unsuspend"
+  ) => {
     try {
-      const values = {
-        action,
-        platform: currentUser.user.whiteLabelName,
-        reason: reason
-      };
-      const res: any = await MerchantService.suspendMerchant(
-        values,
-        merchantId
+      await dispatch(
+        suspendMerchant({
+          action,
+          platform: currentUser.user.whiteLabelName,
+          reason,
+          merchantId,
+        })
+
       );
-      if (res.data.result) {
-        toast.success(action === 'suspend' ? "account suspended" : "account unsuspended");
-        return;
-      }
-      toast.error(action === 'suspend' ? "Failed to suspend account" : "Failed to unsuspend account");  
     } catch (error: any) {
       toast.error(error || "An error occured");
     }
@@ -80,16 +97,15 @@ const useMerchantDetails = (merchantId: string) => {
 
         limit: pageSize,
 
-        page: currentPage
+        page: currentPage,
       });
     }
   }, [merchantId, pageSize, currentPage]);
 
-
-    useEffect(() => {
-      console.log("fetching merchant detailsHook", merchantId);
-    fetchMerchantDetails();
-  }, []);
+  useEffect(() => {
+    console.log("fetching merchant detailsHook", merchantId);
+    fetchMerchantInfo();
+  }, [dispatch, merchantId]);
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -111,6 +127,7 @@ const useMerchantDetails = (merchantId: string) => {
   return {
     product,
     allProducts,
+    merchantLoading,
     isLoading,
     totalResults,
     isViewModalOpen,
@@ -131,7 +148,7 @@ const useMerchantDetails = (merchantId: string) => {
     setIsSuspendOpen,
     SuspendMerchant,
     // startConversation,
-    currentUser
+    currentUser: currentUser?.user,
   };
 };
 
