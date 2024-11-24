@@ -5,6 +5,10 @@ import navReducer from './slices/navSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import accountReducer from './slices/accountSlice';
 import uploadReducer from './slices/uploadSlice';
+import inventoryReducer from './slices/inventorySlice';
+import messageReducer from './slices/messageSlice';
+import orderReducer from "./slices/orderSlice"
+
 import blogReducer from './slices/blogSlice';
 import productReducer from './slices/productSlice';
 // Define the store with your reducers
@@ -18,6 +22,9 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     account: accountReducer,
     upload: uploadReducer,
+    inventory: inventoryReducer,
+    message: messageReducer,
+    order: orderReducer,
     product: productReducer
   },
 });

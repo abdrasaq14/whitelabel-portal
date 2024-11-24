@@ -7,7 +7,8 @@ import toast from 'react-hot-toast'
 import useStorage from './useStorage'
 import { staffUpdated } from '@/store/slices/uploadSlice'
 import { Constants } from '@/utilities/constants'
-import useNavs from './useNavs'
+import useModal from './useModal'
+import { closeCreateStaffModal } from '@/store/slices/modalSlice'
 
 const useAccount = () => {
 
@@ -19,7 +20,7 @@ const useAccount = () => {
 
     const {updateSessionData, currentUser} = useStorage();
 
-    const {handleCloseCreateStaffModal} = useNavs();
+    const {handleCloseModal} = useModal();
 
     useEffect(() => {if (!accountSlice.staffsResult) handleFetchUsers()}, []);
 
@@ -120,8 +121,30 @@ const useAccount = () => {
 
         toast.success("Succefully added")
 
-        handleCloseCreateStaffModal();
+        handleCloseModal(closeCreateStaffModal);
 
+    }
+
+    const handleCopyLink = () => {
+        
+        const link = `${Constants.profitAllUrl}${currentUser?.user?._id}`;
+        
+        navigator.clipboard
+        
+        .writeText(link)
+        
+        .then(() => {
+        
+            toast.success("Link copied to clipboard");
+        
+        })
+        
+        .catch((err) => {
+        
+            toast.error("Failed to copy: ");
+        
+        });
+    
     }
 
     return {
@@ -138,7 +161,9 @@ const useAccount = () => {
 
         handleUpdateStaff,
 
-        handleCreateStaff
+        handleCreateStaff,
+
+        handleCopyLink
     }
 }
 

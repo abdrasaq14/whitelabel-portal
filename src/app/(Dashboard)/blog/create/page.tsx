@@ -1,8 +1,10 @@
 "use client";
 import CreateBlog from "@/components/blog/CreateBlog";
 
-function EditBlogPage() {
+const BlogPage = () => {
+ 
   return <CreateBlog />;
+
 }
 
-export default EditBlogPage;
+export default BlogPage;

@@ -117,8 +117,9 @@ export interface HandlePreviewPayload extends IBlogPayload {
 }
 export interface IQueryParams {
     id?: string;
+    merchantId?: string;
     whiteLabelName?: string;
-    whiteLabelClientId?: string;
+    whiteLabelId?: string;
     page?: number;
     limit?: number;
     totalPages?: number;
@@ -150,6 +151,44 @@ export interface AdminAccountInfo {
     companyPhoneNumber: string;
     adminPhoneNumber: string;
     companyAddress: string;
+}
+
+export interface Inventory {
+    name: string;
+    image: string;
+    categoryName: string,
+    quantityIn: number;
+    quantityOut: number;
+    unitPrice: number;
+    whiteLabelName: string;
+    createdBy: string;
+    stockHistory: Array<{
+        quantityIn: number;
+        quantityOut: number;
+        quantityAdded: number;
+        updatedBy: string
+    }>;
+    priceHistory: Array<{
+        oldPrice: number;
+        newPrice: number;
+        updatedBy: string;
+    }>;
+    nameHistory: Array<{
+        oldName: string;
+        newName: string;
+        updatedBy: string;
+    }>
+}
+
+export interface InventoryCategory {
+    name: string;
+    whiteLabelName: string;
+    createdBy: string;
+}
+export interface ChangePasswordData {
+    password: string,
+    oldPassword: string,
+    confirmPassword: string,
 }
 export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;

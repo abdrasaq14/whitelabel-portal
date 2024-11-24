@@ -1,4 +1,4 @@
-import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType } from "@/enums/ComponentEnums";
+import { ButtonType, ModalHeaderType, TextboxType, ModalFooterType, CardType, SpinnerType, ModalType } from "@/enums/ComponentEnums";
 import {  FieldAttributes, FormikHandlers } from "formik";
 import { ReactElement, ReactNode } from "react";
 import { IconType } from "react-icons";
@@ -65,7 +65,9 @@ export interface AppModalProps {
     footer?: AppModalFooter | null;
     hasClose?: boolean;
     isOpen?: boolean;
-    closeClicked: () => void;
+    closeClicked?: () => void;
+    style?: string;
+    type?: ModalType;
 }
 
 export interface CardProps {
@@ -111,10 +113,17 @@ export interface SideNavItem {
     label: string;
     href: string;
     icon: any;
+    counter?: number;
 }
 
 export interface SideNavProps {
     items: SideNavItem[];
+    isOpen: boolean;
+    currentUser: any;
+    handleOpenModal: () => void;
+    handleCloseModal: () => void;
+    showLogoutModal: boolean;
+    logout: () => void;
 }
 
 export interface FileUploadProps {
@@ -232,6 +241,11 @@ export interface StatsCardProps {
     loading: boolean;
 }
 
+export interface NoDataFoundProps {
+    image: any;
+    text: string;
+}
+
 export interface SummaryCardProps {
     title: string;
     actionButtons?: StatsCardActionButton[] | null;
@@ -256,6 +270,7 @@ export interface BarGraphProps {
 interface Tab {
     label: string;
     content: React.ReactNode;
+    counter?: number;
 }
   
 export interface TabsProps {
@@ -292,18 +307,32 @@ interface TableColumn {
     key: string;
     label: string;
     render?: (data: any) => React.ReactNode;
-  }
+}
   
-  interface TableRow {
+interface TableRow {
     id: string | number;
     [key: string]: any;
-  }
+}
   
-  export interface TableProps {
+export interface TableProps {
     columns: TableColumn[];
     data: any[] | undefined;
     additionalActions?: (row: TableRow) => { label: string; action: () => void }[];
-  }
+}
+
+export interface NavBarProps {
+    businessName: string; 
+    handleOpenModal: () => void;
+    handleCloseModal: () => void;
+    showNotificationModal: boolean;
+    newNotifications: any;
+    viewNotification: (notificationId: string) => void;
+}
+
+export interface DashboardLayoutProps {
+    children: ReactNode;
+    businessName: string;
+}
 
 export interface IUseBlogBostProps {
   id?: string;

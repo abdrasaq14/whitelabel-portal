@@ -1,11 +1,11 @@
-"use client"
+"use client";
 import { IQueryParams, User } from "@/interfaces/AppInterfaces";
 import React, { useEffect, useState } from "react";
 import { MerchantService } from "@/services/merchant";
 
 import useStorage from "../useStorage";
 
-function useAllMerchants() {
+function useAllMerchants({ status }: { status?: string }) {
   const [search, setSearch] = useState("");
   const [allMerchants, setAllMerchants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,26 +14,20 @@ function useAllMerchants() {
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterParams, setFilterParams] = useState<IQueryParams>();
-  const { getSessionData } = useStorage();
-  const profile = getSessionData("UserData")?.user as User;
-
-  console.log(profile);
-
-  const getStatusById = (arr: any, id: string) => {
-    const item = arr.find((element: any) => element.platform == id);
-    return item && item.status;
-  };
-
+  const { currentUser } = useStorage();
+// console.log("currentUSer", currentUser);
   const fetchAllMerchants = async (filterParams: IQueryParams) => {
-    const res = await MerchantService.getallMerchants(filterParams);
-    // @ts-ignore
-    if (res.data.result.results) {
-      // @ts-ignore
-      setAllMerchants(res.data.result.results);
-      // @ts-ignore
-      setTotalResults(res.data.result.totalPages);
+    try {
+      const res: any = await MerchantService.getallMerchants(filterParams);
+      if (res.data.result.results) {
+        setIsLoading(false);
+        setAllMerchants(res.data.result.results);
+        setTotalResults(res.data.result.totalPages);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
     }
-    setIsLoading(false);
   };
 
   const handlePageSize = (val: any) => {
@@ -47,15 +41,16 @@ function useAllMerchants() {
   };
 
   useEffect(() => {
-    if (profile?.whiteLabelName) {
+    if (currentUser?.user?.whiteLabelName) {
       //   setIsLoading(true);
       fetchAllMerchants({
-        whiteLabelName: profile?.whiteLabelName,
+        whiteLabelName: currentUser?.user?.whiteLabelName,
         limit: pageSize,
-        page: currentPage
+        page: currentPage,
+        status,
       });
     }
-  }, [profile?.whiteLabelName, pageSize, currentPage]);
+  }, [currentUser?.user?.whiteLabelName, pageSize, currentPage]);
   return {
     allMerchants,
     isLoading,
@@ -63,15 +58,15 @@ function useAllMerchants() {
     pageSize,
     currentPage,
     filterParams,
-    profile,
-      setFilterParams,
+    currentUser: currentUser?.user,
+    setFilterParams,
     search,
     setSearch,
     setShowFilter,
     setCurrentPage,
     handlePageSize,
     handleCurrentPage,
-    totalResults
+    totalResults,
   };
 }
 

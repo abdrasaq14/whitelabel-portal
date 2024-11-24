@@ -89,7 +89,7 @@ function ViewBlog() {
                   </div>
                 </div>
                 <Link
-                  href={`/blog/edit/${id}`}
+                  href={`/Blog/Edit/${id}`}
                   className="border border-primary font-semibold hover:bg-purple-main min-w-[7rem] flex items-center justify-center hover:text-white rounded-md text-accent-darker p-2"
                 >
                   Edit Blog
@@ -157,7 +157,7 @@ function ViewBlog() {
                   </div>
                   {comments?.length > 0 && activeTab === "all" && (
                     <Link
-                      href={`/blog/view/${id}/comments`}
+                      href={`/Blog/View/${id}/Comments`}
                       // onClick={() =>
                       //   saveCommentsToLocalStorage(blogDetails?.comments)
                       // }

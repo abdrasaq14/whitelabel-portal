@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import Filter from "../Filter/Filter";
 import { BreadCrumbClient } from "../Breadcrumb";
 import { MdFilterList } from "react-icons/md";
@@ -10,74 +10,101 @@ import Spinner from "../feedbacks/Spinner";
 import AppButton from "../forms/AppButton";
 import { ViewProductModal } from "../modals/ViewProductModal";
 import Table from "../layouts/Table";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useRouter } from "next/navigation";
 import Pagination from "../feedbacks/Pagination";
 import useFetchAllProducts from "@/customHooks/Products/useAllProducts";
 import { ButtonType } from "@/enums/ComponentEnums";
+import useNavigation from "@/customHooks/useNavigation";
+import FilterButton from "../Filter/FilterButton";
+
 function AllProducts() {
+  
   const {
+    
     product,
+    
     allProducts,
+    
     totalResults,
+    
     isLoading,
+    
     isViewModalOpen,
+    
     search,
+    
     showFilter,
-    pageSize,
+    
     currentPage,
+    
     filterParams,
-    profile,
+    
+    currentUser,
+    
     setFilterParams,
+    
     setSearch,
+    
     setShowFilter,
+    
     setCurrentPage,
-    handlePageSize,
-    handleCurrentPage,
+    
     handleViewProductInfo,
+    
     closeViewModal
+  
   } = useFetchAllProducts({ status: undefined });
-  console.log("isLoadingAllProducts", isLoading);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+
+  // console.log("isLoadingAllProducts", isLoading);
+
+  const {push} = useNavigation();
 
   const additionalActions = (row: any) => [
+    
     { label: "View Product", action: () => handleViewProductInfo(row) }
+  
   ];
+  
   const columns = [
+    
     { key: "sn", label: "S/N" },
+    
     {
       key: "Merchant",
       label: "Merchant",
       render: (row: any) => <div>{row.userId.businessName}</div>
     },
+    
     {
       key: "Product Name",
       label: "Product Name",
       render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
           {row?.name}{" "}
         </div>
       )
     },
+    
     {
       key: "Listing Price",
       label: "Listing Price",
       render: (row: any) => <div>{row?.price && formatAmount(row.price)} </div>
     },
+    
     {
       key: "Selling Price",
       label: "Selling Price",
       render: (row: any) => {
         const sellingPrice =
-          row?.price && profile?.commisionPecentage
-            ? (row.price * parseFloat(profile?.commisionPecentage)) / 100 +
+          row?.price && currentUser?.user?.commisionPecentage
+            ? (row.price * parseFloat(currentUser?.user?.commisionPecentage)) / 100 +
               row.price
             : row?.price; // Fallback to 0 if price or commission is missing
 
         return <div>{formatAmount(sellingPrice)}</div>;
       }
+      
     },
+    
     {
       key: "Date Listed",
       label: "Date Listed",
@@ -85,9 +112,13 @@ function AllProducts() {
         <div>{row.createdAt && fDateTime(row.createdAt)}</div>
       )
     }
+  
   ];
+  
   return (
+    
     <div className="px-4 pt-8 h-full">
+    
       <Filter
         isLoading={isLoading}
         type="product"
@@ -98,22 +129,30 @@ function AllProducts() {
         }}
         open={showFilter}
       />
+      
       <div className="bg-white rounded-md h-auto w-full p-8 flex flex-col">
+        
         <BreadCrumbClient
           backText="Dashboard"
           currentPath="All Products"
           brand="Landmark"
         />
+        
         <div className="flex justify-between mb-5">
+        
           <h1 className="text-accent-darker text-sm font-normal">
             All Products{" "}
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
               {allProducts ? allProducts.length : 0}
             </span>
           </h1>
+        
         </div>
+        
         <div className="flex mt-6 justify-center gap-2 ml-auto items-center">
+          
           <div>
+           
             <SearchInput
               onClear={() => setSearch("")}
               value={search}
@@ -123,15 +162,15 @@ function AllProducts() {
               }}
               placeholder="Search"
             />
+          
           </div>
-          <button
-            onClick={() => setShowFilter(true)}
-            className="px-3 py-2 border border-primary rounded text-sm flex items-center gap-2 text-accent-darker"
-          >
-            <MdFilterList /> Filter
-          </button>
+          
+          <FilterButton setShowFilter={setShowFilter} />
+        
         </div>
-        <div className="h-full flex-grow ">
+        
+        <div className="h-full flex-grow mt-5">
+          
           {isLoading ? (
             <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
           ) : allProducts && allProducts.length ? (
@@ -149,8 +188,11 @@ function AllProducts() {
                 }}
               />
             </>
+          
           ) : (
+            
             <div className="h-auto flex-grow py-20 flex justify-center flex-col items-center">
+            
               (
               <>
                 <img src="/images/NoProduct.svg" alt="No Product Found" />
@@ -161,7 +203,7 @@ function AllProducts() {
                 </p>
 
                 <AppButton
-                  handleClick={() => router.push("/discover-products")}
+                  handleClick={() => push("/DiscoverProducts")}
                   iconPosition="right"
                   type={ButtonType.PRIMARY}
                   // icon={<FaArrowRight />}
@@ -170,7 +212,9 @@ function AllProducts() {
                 />
               </>
               )
+              
             </div>
+          
           )}
 
           <ViewProductModal
@@ -178,10 +222,15 @@ function AllProducts() {
             product={product}
             closeViewModal={closeViewModal}
           />
+        
         </div>
+      
       </div>
+    
     </div>
+  
   );
+
 }
 
 export default AllProducts;

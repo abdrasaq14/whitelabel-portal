@@ -4,7 +4,10 @@ import {jwtDecode} from "jwt-decode";
 import useStorage from './useStorage';
 
 const protectedRoutes: string[] = [
-    '/Dashboard'
+    '/Dashboard',
+    '/Account',
+    '/inventory',
+    '/Message'
 ]
 
 const useNavigation = () => {

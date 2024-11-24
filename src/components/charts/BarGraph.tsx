@@ -1,6 +1,8 @@
+"use client"
 import { BarGraphProps } from '@/interfaces/ComponentInterfaces'
 import React from 'react'
-import ReactApexChart from 'react-apexcharts';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import dynamic from 'next/dynamic';
 
 const BarGraph = ({data}: BarGraphProps) => {
     const option = {

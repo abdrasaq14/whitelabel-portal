@@ -9,7 +9,6 @@ import { GoTrash } from "react-icons/go";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
 import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRouter as dynamic } from "next/router";
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
 import AppButton from "../forms/AppButton";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
@@ -127,15 +126,14 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 <div className="flex flex-col gap-2 col-span-1 h-fit">
                   <span className="text-accent-darker font-semibold">
                     Blog Image
-                  </span>
+                      </span>
                   <BlogFileUpload
-                    disabled={form.isSubmitting}
-                    setIsBlogEditing={setIsBlogEditing}
-                    // {...form.getFieldProps("image")}
-                    extraClass="min-h-[15rem]"
-                    name="image"
-                    fileType="image"
-                  />
+                        disabled={form.isSubmitting}
+                        setIsBlogEditing={setIsBlogEditing}
+                        // {...form.getFieldProps("image")}
+                        extraClass="min-h-[15rem]"
+                        name="image"
+                        fileType="image" type={"text"}                  />
                   {/* uploaded images for edit post */}
                   {id && form.values.image && isBlogEditing && (
                     <div className="flex flex-col w-full mt-4 gap-2">

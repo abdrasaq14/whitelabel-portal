@@ -28,7 +28,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
     toggleProductBan,
     handleAddProduct,
     handleProductAddedSuccess,
-    profile
+    currentUser
   } = useViewProduct({ product, isOpen, closeViewModal });
   return (
     <AppModal isOpen={isOpen} hasClose={true} closeClicked={closeViewModal}>
@@ -43,12 +43,12 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
             <h1 className=" text-2xl">{product.name}</h1>
             <p className="text-sm ">N{product.price}</p>
           </div>
-          <p className="text-primary-subtext font-normal text-sm">
+          <p className="text-accent-darker font-normal text-sm">
             {product.caption}
           </p>
           <div className="flex justify-between">
             <div>
-              <h2 className="font-bold font-satoshiBold text-sm text-primary-subtext">
+              <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
                 Product Type
               </h2>
               <p className="text-primary text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
@@ -56,7 +56,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               </p>
             </div>
             <div>
-              <h2 className="font-bold font-satoshiBold text-sm text-primary-subtext">
+              <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
                 Categories
               </h2>
               <div className="w-auto flex gap-2 mt-2">
@@ -69,7 +69,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
           <h2 className="font-bold font-satoshiBold text-base text-accent-darker">
             Product Description
           </h2>
-          <p className="text-primary-subtext font-normal text-sm">
+          <p className="text-accent-darker font-normal text-sm">
             {product?.description &&
               product?.description.trim() &&
               stripHtml(product?.description)}
@@ -79,7 +79,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               Merchant Description
             </h2>
             <div className="mt-4">
-              <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+              <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                 Store Name
               </p>
               <p className="mt-1 text-accent-darker text-base font-medum font-satoshiMedium ">
@@ -87,7 +87,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               </p>
             </div>
             <div className="mt-4">
-              <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+              <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                 Rating
               </p>
               <div className="flex gap-2 items-center mt-1">
@@ -98,7 +98,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               </div>
             </div>
             <div>
-              <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+              <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                 Store Link
               </p>
               <div className=" flex justify-between w-full">
@@ -109,7 +109,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               </div>
             </div>
             <div className="mt-4 w-full">
-              <p className="font-medum font-satoshiMedium text-sm text-primary-subtext">
+              <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                 Product Categories
               </p>
               <Categories categories={product.categories} />
@@ -119,7 +119,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
       </div>
       <div className="w-full flex flex-wrap justify-between gap-4">
         <div className="gap-4 flex w-full justify-between">
-          {profile?.role !== "Staff" && !isLoading && (
+          {currentUser?.user?.role !== "Staff" && !isLoading && (
             <div className="flex gap-4 justify-between w-full">
               {isRequested ? (
                 <div className="flex justify-between w-full items-center  mt-4">

@@ -1,9 +1,10 @@
-import React from 'react'
 import useNavigation from './useNavigation'
 import useStorage from './useStorage'
-import { closeCreateStaffModal, closeStaffInfoModal, getNavSlice, openCreateStaffModal, openStaffInfoModal, setActiveLabel } from '@/store/slices/navSlice'
+import { getNavSlice, toggleSideNav, newNotification, notification, setActiveNotification, notificationUpdated } from '@/store/slices/navSlice'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import { toggleSideNav, closeLogoutModal, openLogoutModal } from '@/store/slices/navSlice'
+import { useEffect } from 'react'
+import useModal from './useModal'
+import { closeNotificationModal } from '@/store/slices/modalSlice'
 
 const useNavs = () => {
     
@@ -11,11 +12,37 @@ const useNavs = () => {
 
     const { clearSessionData, clearLocalData, currentUser } = useStorage();
     
-    const { windowRedirect } = useNavigation();
+    const { windowRedirect, push } = useNavigation();
+
+    const { handleCloseModal } = useModal();
 
     const navSlice = useAppSelector(getNavSlice);
 
     const toggleNav = () => dispatch(toggleSideNav());
+
+    useEffect(() => {
+        
+        const fetchNewNotifications = async () => {
+            await dispatch(newNotification())
+        }
+
+        if(navSlice.newNotifications === null){
+            fetchNewNotifications()            
+        }
+
+    }, [navSlice.newNotifications])
+
+    useEffect(() => {
+        
+        const fetchNotifications = async () => {
+            await dispatch(notification())
+        }
+
+        if(navSlice.notifications === null){
+            fetchNotifications()            
+        }
+
+    }, [navSlice.notifications])
 
     const logout = () => {
         
@@ -27,19 +54,21 @@ const useNavs = () => {
     
     }
 
-    const handleCloseLogoutModal = () => dispatch(closeLogoutModal())
+    const viewNotification = async (notificationId: string) => {
 
-    const handleOpenLogoutModal = () => dispatch(openLogoutModal())
+        // console.log(notificationId);
 
-    const handleCloseStaffInfoModal = () => dispatch(closeStaffInfoModal())
+        dispatch(setActiveNotification(notificationId))
 
-    const handleOpenStaffInfoModal = (activeStaff: any) => dispatch(openStaffInfoModal(activeStaff))
+        handleCloseModal(closeNotificationModal)
 
-    const handleCloseCreateStaffModal = () => dispatch(closeCreateStaffModal())
+        await dispatch(notificationUpdated(notificationId))
 
-    const handleOpenCreateStaffModal = () => dispatch(openCreateStaffModal())
+        push(`/Notifications?id=${notificationId}`)
 
-    const handleSetActiveLabel = (label: string) => dispatch(setActiveLabel(label))
+    }
+
+    // const updateNotification = async (notificationId: string) => await dispatch(notificationUpdated(notificationId))
 
     return {
         
@@ -48,32 +77,16 @@ const useNavs = () => {
         isOpen: navSlice.isOpen,
         
         toggleNav,
-        
-        showLogoutModal: navSlice.showLogoutModal,
-
-        showStaffInfoModal: navSlice.showStaffInfoModal,
-
-        showCreateStaffModal: navSlice.showCreateStaffModal,
-        
-        handleCloseLogoutModal,
-        
-        handleOpenLogoutModal,
-
-        handleCloseStaffInfoModal,
-
-        handleOpenStaffInfoModal,
-
-        handleCloseCreateStaffModal,
-
-        handleOpenCreateStaffModal,
-
-        activeLabel: navSlice.activeLabel,
-
-        handleSetActiveLabel,
 
         currentUser,
 
-        activeStaff: navSlice.activeStaff
+        newNotifications: navSlice.newNotifications,
+
+        viewNotification,
+
+        notifications: navSlice.notifications,
+
+        activeNotification: navSlice.activeNotification
     }
 }
 

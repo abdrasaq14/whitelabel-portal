@@ -1,24 +1,25 @@
-import React, {useState, useEffect} from 'react'
+import React, {} from 'react'
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { AppModalProps } from '@/interfaces/ComponentInterfaces'
 import '@/app/styles/components.css'
 import AppButton from '../forms/AppButton'
 import { MdCancel } from "react-icons/md";
+import { ModalType } from '@/enums/ComponentEnums'
 
-const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked}: AppModalProps) => {
+const AppModal = ({header=null, footer=null, hasClose=false, children, isOpen=false, closeClicked, style=``, type=ModalType.DEFAULT}: AppModalProps) => {
     
   return (
     <Dialog open={isOpen} onClose={(isOpen) => {}} className="relative z-10">
       
       <DialogBackdrop transition className="modal-backdrop"/>
 
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="dialog-wrapper">
+      <div className="fixed inset-0 z-10 w-screen overflow-none">
+        <div className={type}>
           <DialogPanel
             transition
             className="dialog-panel"
           >
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className={`bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 ${style}`}>
               {hasClose && <div className="flex justify-end items-center"><MdCancel className="text-accent-main cursor-pointer" size={20} onClick={closeClicked}/></div>}
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">

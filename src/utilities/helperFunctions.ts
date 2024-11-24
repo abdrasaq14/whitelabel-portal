@@ -123,3 +123,8 @@ export const isEmpty = (value: any) =>
   (typeof value === "object" && Object.keys(value).length === 0) ||
   (typeof value === "string" && value.trim().length === 0) ||
   (typeof value === "object" && value.toString().length === 0);
+
+  export const getStatusById = (arr: any, id: string) => {
+    const item = arr.find((element: any) => element.platform == id);
+    return item && item.status;
+  };

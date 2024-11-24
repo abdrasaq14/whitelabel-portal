@@ -107,6 +107,7 @@ const blogSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
         const { posts, totalPages, tab } = action.payload;
@@ -125,6 +126,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Something went wrong";
       })
+
       .addCase(fetchPostCounts.fulfilled, (state, action) => {
         state.loading = false;
         const { total, draft, published } = action.payload;
@@ -135,6 +137,7 @@ const blogSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+
       .addCase(addPost.fulfilled, (state, action) => {
         state.posts.all.push(action.payload); 
       })
@@ -147,6 +150,7 @@ const blogSlice = createSlice({
         state.error = action.error.message || "Something went wrong";
         toast.error(state.error);
       })
+
       .addCase(updatePost.fulfilled, (state, action) => {
         const index = state.posts.all.findIndex(
           (post) => post._id === action.payload._id
@@ -164,6 +168,7 @@ const blogSlice = createSlice({
         state.error = action.error.message || "Something went wrong";
         toast.error(state.error);
       })
+
       .addCase(deletePost.pending, (state) => { 
         state.loading = true;
         state.error = null;
@@ -188,7 +193,7 @@ export const { setError, clearError, startLoading, stopLoading } = blogSlice.act
 export default blogSlice.reducer;
 
 // Selectors
-export const selectAllPosts = (state: RootState) => state.blog.posts;
-export const postLoadingState = (state: RootState) => state.blog.loading;
-export const postErrorState = (state: RootState) => state.blog.error;
-export const selectCounts = (state: RootState) => state.blog.counts;
+export const getBlogSlice = (state: RootState) => state.blog;
+// export const postLoadingState = (state: RootState) => state.blog.loading;
+// export const postErrorState = (state: RootState) => state.blog.error;
+// export const selectCounts = (state: RootState) => state.blog.counts;

@@ -9,10 +9,18 @@ export const MerchantService = {
   getMerchantDetails: (id: string) =>
     apiClient.get(`/external-api/merchant/get-by-merchantId/${id}`),
   getMerchantRequest: (payload: IQueryParams) =>
-    apiClient.get(
-      `/merchant-request/get-all-request-by-whitelabel-id/`, {...payload}
-    ),
+    apiClient.get(`/merchant-request/get-all-request-by-whitelabel-id/`, {
+      ...payload
+    }),
   updateMerchantRequest: (id: string, payload: any) =>
-    apiClient.put(`/merchant-request/${id}`, payload)
+    apiClient.put(`/merchant-request/${id}`, payload),
+  getMerchantProducts: (payload: IQueryParams) =>
+    apiClient.get(`/external-api/merchant/get-merchant-products/`, {
+      ...payload
+    }),
+  suspendMerchant: (payload: any, id: string) =>
+    apiClient.put(
+      `/external-api/merchant/update-merchant-status/${id}`,
+      payload
+    )
 };
-

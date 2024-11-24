@@ -1,10 +1,8 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RootState } from "@/store/store";
 import useStorage from "@/customHooks/useStorage";
-import { User } from "@/interfaces/AppInterfaces";
+import { FaChevronCircleLeft } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 interface BreadcrumbProp {
   handleBackAction: () => void;
@@ -18,7 +16,7 @@ export const BreadCrumb = ({
 }: BreadcrumbProp) => (
   <div className="flex mb-6">
     <div className="flex cursor-pointer" onClick={handleBackAction}>
-      <ChevronLeftIcon className="w-[16px] font-bold mr-2" />
+      <FaChevronCircleLeft className="w-[16px] font-bold mr-2" />
       <p className="pc-text-gray font-normal">
         {backText} <span className="mx-3 text-gray-300">{" / "}</span>{" "}
       </p>
@@ -38,19 +36,28 @@ export const BreadCrumbClient = ({
   backText,
   currentPath
 }: BreadcrumbPropClient) => {
-  const { getSessionData } = useStorage();
-  const profile = getSessionData("UserData")?.user as User;
-  
+  const [isClient, setIsClient] = useState(false);
+  const { currentUser } = useStorage()
+
+  useEffect(() => {
+    setIsClient(true); // Sets to true only on client side
+  }, []);
+
+  if (!isClient) {
+    // Avoids rendering until client-side mounting
+    return null;
+  }
+
   return (
     <div className="flex mb-6">
-      <div className="flex  font-medium  text-sm text-accent-darker">
+      <div className="flex  font-medium  text-sm text-accent-dark2">
         <p className=" ">
-          {profile?._doc?.role === 'Staff' ? profile?._doc?.firstName : profile?.whiteLabelName}
+          {currentUser?.user?._doc?.role === 'Staff' ? currentUser?.user?._doc?.firstName : currentUser?.user?.whiteLabelName}{" "}
           <span className="mx-3 text-gray-300">{" / "}</span>{" "}
         </p>
       </div>
 
-      <h6 className="text-foundation-darkPurple text-sm font-medium ">
+      <h6 className="text-purple-main text-sm font-medium ">
         {currentPath}
       </h6>
     </div>
@@ -71,11 +78,11 @@ export const BreadCrumbWithBackButton = ({
 }: BreadCrumbWithBackButtonProps) => {
   // const profile: any = useAuth((s) => s.profile);
   return (
-    <div className="flex mb-6 items-center text-accent-light3">
+    <div className="flex mb-6 items-center">
       <div className="flex cursor-pointer items-center">
         {showBackButton && (
           <span onClick={handleBackAction}>
-            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-[18px]" />
+            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-primary text-[18px]" />
           </span>
         )}
         {backText && (

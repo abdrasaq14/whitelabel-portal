@@ -1,6 +1,4 @@
-import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { closeOtpModal } from '@/store/slices/modalSlice';
 import { getModalSlice } from '@/store/slices/modalSlice';
 
 const useModal = () => {
@@ -8,16 +6,56 @@ const useModal = () => {
     
     const dispatch = useAppDispatch();
 
-    const handleCloseOtpModal = () => {
+    // const handleOpenStaffInfoModal = (activeStaff: any) => dispatch(openStaffInfoModal(activeStaff))
+
+    const handleOpenModal = (openModal: any, payload?: any) => {
+
+        // console.log("payload", payload);
         
-        dispatch(closeOtpModal())
+        payload ? dispatch(openModal(payload)) : dispatch(openModal())
+    
+    }
+
+    const handleCloseModal = (closeModal: any) => {
+        
+        dispatch(closeModal())
     
     }
 
     return {
         showOtpModal: modalSlice.showOtpModal,
         
-        closeOtpModal: handleCloseOtpModal
+        handleCloseModal,
+
+        handleOpenModal,
+
+        showLogoutModal: modalSlice.showLogoutModal,
+
+        showStaffInfoModal: modalSlice.showStaffInfoModal,
+
+        showCreateStaffModal: modalSlice.showCreateStaffModal,
+
+        activeStaff: modalSlice.activeStaff,
+
+        activeInventoryHistory: modalSlice.activeInventoryHistory,
+
+        activeInventoryRequest: modalSlice.activeInventoryRequest,
+
+        activeInventory: modalSlice.activeInventory,
+
+        showAddInventoryModal: modalSlice.showAddInventoryModal,
+
+        showInventoryHistoryModal: modalSlice.showInventoryHistoryModal,
+
+        showInventoryRequestModal: modalSlice.showInventoryRequestModal,
+
+        showViewInventoryModal: modalSlice.showViewInventoryModal,
+
+        showDialogModal: modalSlice.showDialogModal,
+
+        showEditInventoryModal: modalSlice.showEditInventoryModal,
+
+        showNotificationModal: modalSlice.showNotificationModal,
     }
 }
 

@@ -37,3 +37,8 @@ export enum SpinnerType {
     PRIMARY = "#4B0082",
     SECONDARY = "#EDE6F3"
 }
+
+export enum ModalType {
+    DEFAULT = "dialog-wrapper",
+    NOTIFICATION = "dialog-wrapper-notification"
+}
