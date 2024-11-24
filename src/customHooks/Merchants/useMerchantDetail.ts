@@ -40,16 +40,11 @@ const useMerchantDetails = (merchantId: string) => {
     }
   };
 
-  const getStatusById = (arr: any, id: string) => {
-    const item = arr.find((element: any) => element.platform == id);
-    return item && item.status;
-  };
-
-  const SuspendMerchant = async (reason: string) => {
+  const SuspendMerchant = async (reason: string, action:'suspend' | 'unsuspend') => {
     try {
       const values = {
-        action: "suspend",
-        platform: currentUser.whiteLabelName,
+        action,
+        platform: currentUser.user.whiteLabelName,
         reason: reason
       };
       const res: any = await MerchantService.suspendMerchant(
@@ -57,57 +52,14 @@ const useMerchantDetails = (merchantId: string) => {
         merchantId
       );
       if (res.data.result) {
-        toast.success("account suspended");
+        toast.success(action === 'suspend' ? "account suspended" : "account unsuspended");
         return;
       }
-      toast.error("Failed to suspend account");
+      toast.error(action === 'suspend' ? "Failed to suspend account" : "Failed to unsuspend account");  
     } catch (error: any) {
       toast.error(error || "An error occured");
     }
   };
-  const unSuspendMerchant = async (reason: string) => {
-    try {
-      const values = {
-        action: "unsuspend",
-        platform: currentUser.whiteLabelName,
-        reason: reason
-      };
-      const res: any = await MerchantService.suspendMerchant(
-        values,
-        merchantId
-      );
-      if (res.data.result) {
-        toast.success("account unsuspended");
-        return;
-      }
-      toast.error("Failed to unsuspend account");
-    } catch (error: any) {
-      toast.error(error || "An error occured");
-    }
-  };
-//   const startConversation = async (reason: string) => {
-//     const values = {
-//       firstUser: {
-//         id: currentUser._id,
-//         phone: currentUser.phoneNumber,
-//         image: currentUser.companyLogo,
-//         email: currentUser.email,
-//         businessName: currentUser.buinessName
-//       },
-//       secondUser: {
-//         id: merchant.result.id,
-//         userName: merchant.result.userName,
-//         firstName: merchant.result.firstName,
-//         lastName: merchant.result.lastName,
-//         phone: merchant.result.phone,
-//         image: merchant.result.image,
-//         email: merchant.result.email
-//       }
-//     };
-//     console.log("Conversation users", values);
-//     setIsLoading(true);
-//     return await MerchantService.startConversation(values);
-//   };
 
   const fetchMerchantProducts = async (query: IQueryParams) => {
     const res: any = await MerchantService.getMerchantProducts(query);
@@ -178,10 +130,8 @@ const useMerchantDetails = (merchantId: string) => {
     isSuspendOpen,
     setIsSuspendOpen,
     SuspendMerchant,
-    unSuspendMerchant,
     // startConversation,
-    currentUser,
-    getStatusById
+    currentUser
   };
 };
 

@@ -15,7 +15,7 @@ function useAllMerchants({ status }: { status?: string }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterParams, setFilterParams] = useState<IQueryParams>();
   const { currentUser } = useStorage();
-
+// console.log("currentUSer", currentUser);
   const fetchAllMerchants = async (filterParams: IQueryParams) => {
     try {
       const res: any = await MerchantService.getallMerchants(filterParams);
@@ -58,7 +58,7 @@ function useAllMerchants({ status }: { status?: string }) {
     pageSize,
     currentPage,
     filterParams,
-    currentUser,
+    currentUser: currentUser?.user,
     setFilterParams,
     search,
     setSearch,

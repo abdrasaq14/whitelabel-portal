@@ -11,6 +11,7 @@ import Products from "./MerchantProduct";
 import ProductsSold from "./MerchantProductSold";
 import Overview from "./Overview";
 import { IoArrowBack } from "react-icons/io5";
+import { getStatusById } from "@/utilities/helperFunctions";
 
 function MerchantDetail() {
   const { id }: any = useParams();
@@ -37,9 +38,7 @@ function MerchantDetail() {
     isSuspendOpen,
     setIsSuspendOpen,
     SuspendMerchant,
-    unSuspendMerchant,
     // startConversation,
-    getStatusById,
     currentUser
   } = useFetchMerchantDetails(id);
     
@@ -131,7 +130,7 @@ function MerchantDetail() {
               <AppButton
                 type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
                 text="Activate Merchant"
-                handleClick={() => unSuspendMerchant(getReason("unsuspend"))}
+                handleClick={() => SuspendMerchant(getReason("unsuspend"), 'unsuspend')}
                 style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#0F973D]  text-white"
               />
             )}
@@ -162,7 +161,7 @@ function MerchantDetail() {
       </div>
       <SuspendModal
         confirmDelete={() => {
-          SuspendMerchant(getReason("suspend"));
+          SuspendMerchant(getReason("suspend"), 'suspend');
         }}
         isOpen={isSuspendOpen}
         closeModal={() => setIsSuspendOpen(false)}

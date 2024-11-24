@@ -8,7 +8,7 @@ import { MdFilterList } from "react-icons/md";
 import Spinner from "../feedbacks/Spinner";
 import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Table from "../layouts/Table";
-import { isEmpty } from "@/utilities/helperFunctions";
+import { getStatusById, isEmpty } from "@/utilities/helperFunctions";
 import AppButton from "../forms/AppButton";
 import useNavigation from "@/customHooks/useNavigation";
 import FilterButton from "../Filter/FilterButton";
@@ -34,6 +34,7 @@ function AllMerchants() {
 
     setCurrentPage,
     currentPage,
+    currentUser,
     totalResults
   } = useAllMerchants({ status: undefined });
   console.log("allMerchants", allMerchants);
@@ -80,12 +81,12 @@ function AllMerchants() {
       render: (row: any) => (
         <div
           className={`py-1 px-2 flex items-center justify-center w-[70%] ${
-            new RegExp("^active$", "i").test(row.status.trim())
+            getStatusById(row.platformAccess, currentUser.whiteLabelName.toUpperCase()) === "active"
               ? "bg-green-300"
               : "bg-red-300"
           } rounded-md`}
         >
-          {row.status}
+          {getStatusById(row.platformAccess, currentUser.whiteLabelName.toUpperCase())} 
         </div>
       )
     }
