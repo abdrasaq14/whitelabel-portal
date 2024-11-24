@@ -5,7 +5,7 @@ import { ISuspendMerchantPayload } from "@/interfaces/ComponentInterfaces";
 import toast from "react-hot-toast";
 
 const initialState = {
-    merchant: {},
+    merchant: {} as any,
     error: undefined as string | undefined,
     loading: false,
 }
@@ -53,12 +53,11 @@ export const merchantDetailSlice = createSlice({
         builder.addCase(suspendMerchant.fulfilled, (state, action) => {
             state.loading = false;
             state.merchant = action.payload;
-            toast.success("merchant status updated");
         });
         builder.addCase(suspendMerchant.rejected, (state, action) => {
             state.loading = false;
             state.error = "An error occured";
-            toast.error("An error occured")
+           
         });
     }
 });

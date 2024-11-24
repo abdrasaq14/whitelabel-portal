@@ -5,7 +5,10 @@ import { MerchantService } from "@/services/merchant";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectMerchantDetail } from "@/store/slices/merchantDetailSlice";
-import { fetchMerchantDetails, suspendMerchant } from "@/store/slices/merchantDetailSlice";
+import {
+  fetchMerchantDetails,
+  suspendMerchant,
+} from "@/store/slices/merchantDetailSlice";
 
 const useMerchantDetails = (merchantId: string) => {
   //   console.log("fetching merchant detailsHook", merchantId);
@@ -64,15 +67,21 @@ const useMerchantDetails = (merchantId: string) => {
     action: "suspend" | "unsuspend"
   ) => {
     try {
-      await dispatch(
+      const res = await dispatch(
         suspendMerchant({
           action,
           platform: currentUser.user.whiteLabelName,
           reason,
           merchantId,
         })
-
       );
+      if (res.payload) {
+        toast.success(
+          action === "suspend" ? "account suspended" : "account unsuspended"
+        );
+        dispatch(fetchMerchantDetails(merchantId));
+        return;
+      }
     } catch (error: any) {
       toast.error(error || "An error occured");
     }
