@@ -204,33 +204,33 @@ const useCustomisation = () => {
     setStep(step - 1);
   };
 
-  const processStage1 = async () => {
-    try {
-      // const newData = {...data, contact: {...data.contact, phone: phoneCode+data?.contact?.phone}}
-      console.log("Processing data", data);
-      setIsLoading(true);
-      const res = await CustomisationService.update({
-        ...data,
-        stage: 2,
-      });
-      if (res.data.result) {
-        console.log("Inside success");
-        setIsLoading(false);
-        localStorage.setItem(
-          "setupData",
-          JSON.stringify({ ...data, stage: 2 })
-        );
-        setStep(2);
-        toast.success("Stage1 setup completed");
-      }
-    } catch (e:any) {
-      setIsLoading(false);
-      console.log("erro", e);
-      toast.error(e);
+    const processStage1 = async () => {
+        try {
+            // const newData = {...data, contact: {...data.contact, phone: phoneCode+data?.contact?.phone}}
+            console.log("Processing data", data);
+            setIsLoading(true);
+            const res: any = await CustomisationService.update({
+                ...data,
+                stage: 2,
+            });
+            if (res.data.result) {
+                console.log("Inside success");
+                setIsLoading(false);
+                localStorage.setItem(
+                    "setupData",
+                    JSON.stringify({ ...data, stage: 2 })
+                );
+                setStep(2);
+                toast.success("Stage1 setup completed");
+            }
+        } catch (e: any) {
+            setIsLoading(false);
+            console.log("erro", e);
+            toast.error(e);
+        }
     }
-
-    const processStage2 = useMutation(
-      async () => {
+    const processStage2 = async () => {
+      try {
         const mData: any = { ...data };
         console.log("Processing data", mData);
         const socialData: any = mData.socialMedia;
@@ -242,30 +242,30 @@ const useCustomisation = () => {
           .filter((item) => item.link);
         setIsLoading(true);
         mData["socialMedia"] = result;
-        return await CustomisationService.updateCustomisation({
+        const res: any = await CustomisationService.update({
           ...mData,
           stage: 3,
         });
-      },
-      {
-        onSuccess: (response) => {
-          console.log("Inside success");
-          setIsLoading(false);
-          localStorage.setItem(
-            "setupData",
-            JSON.stringify({ ...data, stage: 2 })
-          );
-          setStep(3);
+        console.log("Inside success");
+        setIsLoading(false);
+        localStorage.setItem(
+          "setupData",
+          JSON.stringify({ ...data, stage: 2 })
+        );
+        setStep(3);
+        if (res.data.result) {
           toast.success("Stage2 setup completed");
-        },
-        onError: (err: any) => {
           setIsLoading(false);
-          console.log("erro", err);
-          toast.success(err);
-        },
+        }
+      } catch (error:any) {
+        console.log("erro", error);
+        toast.success(error);
       }
-    );
-  };
+    };
+    return {
+        data,
+        
+    }
 };
 
-export default useCustomisation
+export default useCustomisation;
