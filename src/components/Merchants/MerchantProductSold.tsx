@@ -27,7 +27,7 @@ const ProductsSold = ({ id }: { id: string }) => {
       key: "Product Name",
       label: "Product Name",
       render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
           {row?.name}{" "}
         </div>
       )
@@ -37,7 +37,7 @@ const ProductsSold = ({ id }: { id: string }) => {
       key: "Merchant",
       label: "Merchant",
       render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal min-w-[300px]">
+        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
           {row?.productOwner}{" "}
         </div>
       )

@@ -39,7 +39,7 @@ const useProductRequest = () => {
     if (currentUser?.user?.whiteLabelName) {
       //   setIsLoading(true);
       queryProductRequest({
-        whiteLabelClientId: currentUser?.user?._id,
+        whiteLabelId: currentUser?.user?._id,
         limit: pageSize,
         page: currentPage
       });

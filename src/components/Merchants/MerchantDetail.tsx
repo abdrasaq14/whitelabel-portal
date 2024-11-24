@@ -10,6 +10,7 @@ import { SuspendModal } from "../modals/SuspendMerchantModal";
 import Products from "./MerchantProduct";
 import ProductsSold from "./MerchantProductSold";
 import Overview from "./Overview";
+import { IoArrowBack } from "react-icons/io5";
 
 function MerchantDetail() {
   const { id }: any = useParams();
@@ -64,7 +65,7 @@ function MerchantDetail() {
           onClick={() => router.back()}
           className="flex items-center -mt-6 text-accent-darker gap-2"
         >
-          <img className="h-4 w-auto" src="/icons/arrow-left.svg" />
+          <IoArrowBack size={14} />
           Back
         </button>
         <BreadCrumbClient
@@ -103,7 +104,7 @@ function MerchantDetail() {
             }`}</a>
           </div>
           <button
-            className="border border-primary flex items-center rounded bg-white px-3 py-2 whitespace-nowrap"
+            className="border border-primary flex items-center text-sm rounded bg-white p-2 text-accent-light whitespace-nowrap"
             onClick={() => {}}
           >
             Message Merchant{" "}
@@ -124,14 +125,14 @@ function MerchantDetail() {
                 type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
                 text="Suspend Merchant"
                 handleClick={() => setIsSuspendOpen(true)}
-                style="px-3 py-2 font-semibold text-sm rounded !bg-[#F03738]  text-white"
+                style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#F03738]  text-white"
               />
             ) : (
               <AppButton
                 type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
                 text="Activate Merchant"
                 handleClick={() => unSuspendMerchant(getReason("unsuspend"))}
-                style="px-3 py-2 font-semibold text-sm rounded !bg-[#0F973D]  text-white"
+                style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#0F973D]  text-white"
               />
             )}
           </>

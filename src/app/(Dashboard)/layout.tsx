@@ -24,7 +24,7 @@ const navItems: SideNavItem[] = [
     { label: 'Products Discovery', href: '#', icon: CompassIcon, children: [{label: 'Discover Products', href: '/DiscoverProducts'}, {label: 'Discover Merchant', href: '/DiscoverMerchant'}] },
     { label: 'Category', href: '/Category', icon: CategoryIcon },
     { label: 'Inventory', href: '/Inventory', icon: InventoryIcon },
-    { label: 'Merchant', href: '#', icon: MerchantIcon, children: [{label: 'All Merchants', href: '/Merchant/All'}, {label: 'Suspended Merchants', href: '/Merchant/Suspended'}, {label: 'Merchant Request', href: '/Merchant/Request'}] },
+    { label: 'Merchant', href: '#', icon: MerchantIcon, children: [{label: 'All Merchants', href: '/Merchant/All'}, {label: 'Suspended Merchants', href: '/Merchant/Suspended'}, {label: 'Merchant Request', href: '/Merchant/Requests'}] },
     { label: 'Product', href: '#', icon: ProductIcon, children: [{label: 'All Products', href: '/Product/All'}, {label: 'Blocked Product', href: '/Product/Blocked'}, {label: 'Product Request', href: '/Product/Requests'}] },
     { label: 'Order & Transaction', href: '/Order', icon: OrderIcon },
     { label: 'Blog', href: '/Blog', icon: BlogIcon },

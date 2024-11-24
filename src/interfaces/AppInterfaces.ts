@@ -119,7 +119,7 @@ export interface IQueryParams {
     id?: string;
     merchantId?: string;
     whiteLabelName?: string;
-    whiteLabelClientId?: string;
+    whiteLabelId?: string;
     page?: number;
     limit?: number;
     totalPages?: number;

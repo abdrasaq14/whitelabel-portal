@@ -14,6 +14,7 @@ import Pagination from "../feedbacks/Pagination";
 import useFetchAllProducts from "@/customHooks/Products/useAllProducts";
 import { ButtonType } from "@/enums/ComponentEnums";
 import useNavigation from "@/customHooks/useNavigation";
+import FilterButton from "../Filter/FilterButton";
 
 function AllProducts() {
   
@@ -164,12 +165,7 @@ function AllProducts() {
           
           </div>
           
-          <button
-            onClick={() => setShowFilter(true)}
-            className="px-3 py-2 border border-primary rounded text-sm flex items-center gap-2 text-accent-darker"
-          >
-            <MdFilterList /> Filter
-          </button>
+          <FilterButton setShowFilter={setShowFilter} />
         
         </div>
         
