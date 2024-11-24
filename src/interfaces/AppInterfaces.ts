@@ -202,3 +202,51 @@ export interface IQueryParams {
   search?: string;
   status?: string;
 }
+
+export interface customisationData {
+  theme?: {
+    primaryColor: string;
+    secondaryColor: string;
+    footerColor: string;
+  };
+  image?: {
+    logo: string;
+    favicon: string;
+  };
+  aboutUs?: {
+    shortText: string;
+    longText: string;
+    coreValues: {
+      title: string;
+      icon: string;
+    }[];
+  };
+  domain?: string;
+  socialMedia?: {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+    tiktok: string;
+  };
+  banner?: {
+    text: string;
+    imageUrl: string;
+    template: string;
+  };
+  blogHero?: {
+    text: string;
+    imageUrl: string;
+  };
+  contact?: {
+    phone?: { cCode?: string; val?: string };
+    email?: {
+      supportEmail?: string;
+      senderEmail?: string;
+    };
+    address?: string;
+  };
+  services?: string[];
+  completeSetup?: string;
+  stage?: number;
+}
