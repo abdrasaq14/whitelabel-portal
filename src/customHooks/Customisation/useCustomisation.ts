@@ -262,9 +262,23 @@ const useCustomisation = () => {
         toast.success(error);
       }
     };
-    return {
-        data,
-        
+  return {
+    data,
+    step,
+    setColor,
+    setServices,
+    setInfo,
+    setError,
+    setAboutError,
+    setAboutData,
+    setSocial,
+    prev,
+    processStage1,
+    processStage2,
+    isLoading,
+    isError,
+    isAboutError,
+    
     }
 };
 
