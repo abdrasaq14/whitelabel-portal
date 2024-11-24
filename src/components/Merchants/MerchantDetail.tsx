@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import useFetchMerchantDetails from "@/customHooks/Merchants/useMerchantDetail";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -22,27 +22,19 @@ function MerchantDetail() {
       : "suspension reviewed";
   };
   const {
-    allProducts,
-    totalResults,
-    currentPage,
-    setCurrentPage,
     isLoading,
-    isViewModalOpen,
-    product,
-    closeViewModal,
     merchant,
-    fetchMerchantDetails,
     accountTabTitle,
     tabIndex,
     setTabIndex,
     isSuspendOpen,
     setIsSuspendOpen,
+    merchantLoading,
     SuspendMerchant,
-    // startConversation,
-    currentUser
+    currentUser,
   } = useFetchMerchantDetails(id);
-     
-    console.log("fetching merchant detailsMerchant", merchant, id);
+
+  console.log("MErchantLoadingState", merchantLoading);
   const displayAccountContent = (tabIndex: number) => {
     switch (tabIndex) {
       case 0:
@@ -120,17 +112,29 @@ function MerchantDetail() {
               merchant?.platformAccess,
               currentUser?.whiteLabelName.toUpperCase()
             ) == "active" ? (
-              <AppButton
-                type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
-                text="Suspend Merchant"
-                handleClick={() => setIsSuspendOpen(true)}
-                style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#F03738]  text-white"
-              />
+              merchantLoading ? (
+                <Spinner type={SpinnerType.PRIMARY} height={30} width={30} />
+              ) : (
+                <AppButton
+                  type={
+                    merchantLoading ? ButtonType.DISABLED : ButtonType.PRIMARY
+                  }
+                  text="Suspend Merchant"
+                  handleClick={() => setIsSuspendOpen(true)}
+                  style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#F03738]  text-white"
+                />
+              )
+            ) : merchantLoading ? (
+              <Spinner type={SpinnerType.PRIMARY} height={30} width={30} />
             ) : (
               <AppButton
-                type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
+                type={
+                  merchantLoading ? ButtonType.DISABLED : ButtonType.PRIMARY
+                }
                 text="Activate Merchant"
-                handleClick={() => SuspendMerchant(getReason("unsuspend"), 'unsuspend')}
+                handleClick={() =>
+                  SuspendMerchant(getReason("unsuspend"), "unsuspend")
+                }
                 style="p-2 !max-w-[10rem] font-semibold text-sm rounded !bg-[#0F973D]  text-white"
               />
             )}
@@ -161,7 +165,7 @@ function MerchantDetail() {
       </div>
       <SuspendModal
         confirmDelete={() => {
-          SuspendMerchant(getReason("suspend"), 'suspend');
+          SuspendMerchant(getReason("suspend"), "suspend");
         }}
         isOpen={isSuspendOpen}
         closeModal={() => setIsSuspendOpen(false)}
