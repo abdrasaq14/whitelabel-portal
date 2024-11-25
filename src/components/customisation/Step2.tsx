@@ -1,0 +1,49 @@
+import SetupHeader from "./Setup/SetupHeader";
+import { FaArrowRightLong } from "react-icons/fa6";
+import LivePreview from "./Setup/LivePreview";
+import React from "react";
+import AddSocials from "./Setup/AddSocials";
+import AboutUs from "./Setup/AboutUs";
+import Spinner from "../feedbacks/Spinner";
+import { SpinnerType } from "@/enums/ComponentEnums";
+
+export default function Step2({
+  data,
+  isLoading,
+  setAboutData,
+  setSocial,
+  prev,
+  processStage2,
+  setError
+}: any) {
+  return (
+    <main className="bg-[#fffefe] grid grid-cols-5 gap-4 w-[95%] mx-2">
+      <div className="col-start-1 col-end-3 p-3">
+        <SetupHeader
+          stage={1}
+          prev={prev}
+          isBlogChosen={data?.services.includes("Blog")}
+        />
+        <AddSocials data={data.socialMedia} setSocial={setSocial} />
+        <AboutUs
+          data={data.aboutUs}
+          setAboutData={setAboutData}
+          setFormError={setError}
+        />
+        <button
+          onClick={processStage2}
+          className="mt-5 bg-primary w-full text-white text-center p-2.5 font-satoshiBold inline-flex items-center justify-center h-[48px]"
+        >
+          Continue &nbsp;{" "}
+          {isLoading ? (
+            <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
+          ) : (
+            <FaArrowRightLong color={"#ffffff"} size={20} className="ml-2" />
+          )}
+        </button>
+      </div>
+
+      <LivePreview processStage2={processStage2} data={data} stage={2} />
+    </main>
+  );
+}

@@ -285,7 +285,8 @@ export interface DocumentUploadProps {
     uploadInterface: ReactElement;
     validFormats: string;
     callback: (arg0: string, arg1?: any) => void;
-    otherData?: any | null
+  otherData?: any | null
+  onBlur?: () => void;
 }
 
 export interface ChangeLogoButtonProps {

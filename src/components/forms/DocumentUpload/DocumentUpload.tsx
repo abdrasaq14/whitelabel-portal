@@ -2,7 +2,7 @@ import { DocumentUploadProps } from '@/interfaces/ComponentInterfaces'
 import React from 'react'
 import useUpload from '@/customHooks/useUpload';
 
-const DocumentUpload: React.FC<DocumentUploadProps> = ({ uploadInterface, validFormats, callback, otherData=null }) => {
+const DocumentUpload: React.FC<DocumentUploadProps> = ({ uploadInterface, validFormats, callback, otherData=null, onBlur }) => {
 
   const { uploading, error, handleUpload } = useUpload();
 
@@ -14,7 +14,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ uploadInterface, validF
       className="hidden"
       type="file"
       accept={validFormats}
-      onChange={(event) => handleUpload(event, callback, otherData)}
+        onChange={(event) => handleUpload(event, callback, otherData)}
+        onBlur={onBlur}
       disabled={uploading}
       />
       {error && <p className="text-xs text-danger-main">{error}</p>}

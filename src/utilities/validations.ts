@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { countSpecialCharacters } from "./helperFunctions";
+import { countSpecialCharacters, stripHtml } from "./helperFunctions";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/;
 const PASSWORD_ERROR_MESSAGE = "Password must contain at least one uppercase, lowercase and number";
@@ -123,3 +123,18 @@ export const emailValidation = Yup.object({
     .required("Email is required"),
 });
 
+
+export const CustomisationStage3Validation = Yup.object({
+  heroText: Yup.string()
+    .trim()
+    .test(
+      "max-length",
+      "Hero Text must not be greater than 70 characters",
+      function (value) {
+        const plainText = stripHtml(value);
+        return plainText.length <= 70;
+      }
+    )
+    .required("Hero Section text is required"),
+  heroImage: Yup.string().trim().required("Hero Image is required")
+});
