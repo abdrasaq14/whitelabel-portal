@@ -208,7 +208,8 @@ const useCustomisation = () => {
         try {
             // const newData = {...data, contact: {...data.contact, phone: phoneCode+data?.contact?.phone}}
             console.log("Processing data", data);
-            setIsLoading(true);
+          setIsLoading(true);
+          // @ts-ignore
             const res: any = await CustomisationService.update({
                 ...data,
                 stage: 2,
