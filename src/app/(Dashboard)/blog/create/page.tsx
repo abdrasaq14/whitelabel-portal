@@ -3,7 +3,7 @@ import CreateBlog from "@/components/blog/CreateBlog";
 
 const BlogPage = () => {
  
-  return <CreateBlog />;
+  return <CreateBlog id=""  />;
 
 }
 

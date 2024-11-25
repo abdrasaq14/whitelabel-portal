@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useComments } from "@/customHooks/Blog/useComments";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { BreadCrumbWithBackButton } from "@/components/Breadcrumb";
 import Spinner from "@/components/feedbacks/Spinner";
 import { SpinnerType } from "@/enums/ComponentEnums";
