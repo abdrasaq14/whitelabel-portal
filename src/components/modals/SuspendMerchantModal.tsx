@@ -59,7 +59,7 @@ export const SuspendModal = ({
               handleClick={handleConfirmDelete}
               text="Submit"
               type={ButtonType.PRIMARY}
-            //   icon={<MdOutlineArrowForward size={12} />}
+              //   icon={<MdOutlineArrowForward size={12} />}
             />
           </div>
         </div>
@@ -77,27 +77,18 @@ export const SuspendModal = ({
               Are you sure you want to suspend this Account ?
             </p>
           </div>
-          <div className="w-full flex mt-4 justify-between  ">
-            <button
-              type="button"
-              onClick={() => closeModal()}
-              disabled={false}
-              className="border-primary-subtext border-[1px] rounded-lg text-primary text-sm inline-flex gap-2  items-center justify-center text-center sm:w-[40%] px-8 py-3 font-medium hover:bg-purple-700 hover:text-white "
-            >
-              Cancel
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsConfirm(true)}
-              disabled={false}
-              className="bg-primary hover:bg-purple-700 rounded-lg text-white text-sm inline-flex gap-2  items-center justify-center text-center  sm:w-[40%] px-12 py-3  font-medium "
-            >
-              Yes{" "}
-              <span>
-                <MdOutlineArrowForward size={12} />
-              </span>
-            </button>
+          <div className="w-full flex mt-4 gap-4 justify-between  ">
+            <AppButton
+              text="Cancel"
+              handleClick={() => closeModal()}
+              type={ButtonType.SECONDARY}
+            />
+            <AppButton
+              text="Yes"
+              handleClick={() => setIsConfirm(true)}
+              type={ButtonType.PRIMARY}
+              //   icon={<MdOutlineArrowForward size={12} />}
+/>
           </div>
         </>
       )}

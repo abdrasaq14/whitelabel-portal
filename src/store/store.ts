@@ -11,6 +11,7 @@ import orderReducer from "./slices/orderSlice"
 
 import blogReducer from './slices/blogSlice';
 import productReducer from './slices/productSlice';
+import merchantDetailReducer from './slices/merchantDetailSlice'
 // Define the store with your reducers
 export const store = configureStore({
   reducer: {
@@ -25,7 +26,9 @@ export const store = configureStore({
     inventory: inventoryReducer,
     message: messageReducer,
     order: orderReducer,
-    product: productReducer
+    product: productReducer,
+    merchantDetail: merchantDetailReducer
+
   },
 });
 
