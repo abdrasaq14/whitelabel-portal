@@ -8,7 +8,7 @@ const useMerchantRequest = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const { currentUser } = useStorage();
-  const profile = currentUser.user;
+  // const profile = currentUser?.user;
   const [allRequest, setAllRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterParams, setFilterParams] = useState<any>({});
@@ -19,7 +19,10 @@ const useMerchantRequest = () => {
         page: currentPage,
         limit: pageSize,
         status: "pending",
-        whiteLabelId: profile._id || profile.id || profile.clientId
+        whiteLabelId:
+          currentUser?.user?._id ||
+          currentUser?.user.id ||
+          currentUser?.user.clientId,
       });
       if (data.data.result.results) {
         setIsLoading(false);
