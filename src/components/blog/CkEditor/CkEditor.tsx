@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect, useRef } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 

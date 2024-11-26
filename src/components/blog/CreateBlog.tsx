@@ -17,10 +17,14 @@ import BlogPubLishedModal from "../modals/blog/PublishedModal";
 import { useEffect, useState } from "react";
 import { useCustomFormik } from "@/customHooks/useCustomFormik";
 import { BlogValidationSchema } from "@/utilities/validations";
-
+import dynamic from "next/dynamic";
 interface CreateBlogProps {
   id?: string;
 }
+const CustomEditor = dynamic(
+  () => import("@/components/blog/CkEditor/CkEditor"),
+  { ssr: false }
+);
 const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
   const [isClient, setIsClient] = useState(false);
 
@@ -48,8 +52,18 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
     handleClickOutside,
     handlePreview,
   } = useBlogPost({ id: id?.trim() ? id : undefined });
-  const { handleBlur, handleChange, errors, values, isSubmitting, setFieldValue, setFieldTouched, validateField,  handleSubmit, touched } =
-    useCustomFormik(initialValues, onSubmit, BlogValidationSchema);
+  const {
+    handleBlur,
+    handleChange,
+    errors,
+    values,
+    isSubmitting,
+    setFieldValue,
+    setFieldTouched,
+    validateField,
+    handleSubmit,
+    touched,
+  } = useCustomFormik(initialValues, onSubmit, BlogValidationSchema);
 
   // console.log("formDetails", form.values, form.errors);
   return (
@@ -131,10 +145,10 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 <span className="text-accent-darker font-semibold">
                   Content (Blog Description)
                 </span>
-                {/* <BlogDescription
+                <CustomEditor
                   {...values.getFieldProps("content")}
                   name="content"
-                /> */}
+                />
                 {/* comment and like management */}
               </div>
 
