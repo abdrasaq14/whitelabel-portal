@@ -22,7 +22,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
 
   return (
     <div>
-      <button onClick={handleCopy} className="text-primary">
+      <button onClick={handleCopy} className="text-accent-darker">
         <FaCopy />
       </button>
     </div>

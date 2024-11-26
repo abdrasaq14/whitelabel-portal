@@ -184,7 +184,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         <h3 className="mt-2">
           Drag & Drop files or{" "}
           <label
-            className="text-primary cursor-pointer underline font-semibold"
+            className="text-accent-darker cursor-pointer underline font-semibold"
             htmlFor={name}
           >
             Browse

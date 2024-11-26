@@ -91,7 +91,7 @@ function SuspendedMerchants() {
           brand={`${currentUser?.user?.whiteLabelName}`}
         />
         <div className="flex justify-between">
-          <h1 className="text-primary-text text-sm font-normal">
+          <h1 className="text-accent-darker text-sm font-normal">
             Suspended Merchants{" "}
             <span className="ml-2 bg-[#EEEFF0] py-1 px-2 rounded-full font-medium text-black">
               {totalResults ? totalResults : 0}
@@ -131,7 +131,7 @@ function SuspendedMerchants() {
             ) : (
               <>
                 <img src="/images/NoVendor.svg" alt="No Product Found" />
-                <p className="font-normal text-primary-text text-sm">
+                <p className="font-normal text-accent-darker text-sm">
                   Hurray! You have not suspended any merchants yet.
                 </p>
               </>

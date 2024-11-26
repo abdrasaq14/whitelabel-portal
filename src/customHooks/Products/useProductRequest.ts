@@ -15,15 +15,19 @@ const useProductRequest = () => {
   const [totalResults, setTotalResults] = useState(0);
 
   const queryProductRequest = async (filterParams: IQueryParams) => {
-    const res = await ProductService.getProductRequest(filterParams);
-    // @ts-ignore
-    if (res.data.result.results) {
+    try {
+      const res = await ProductService.getProductRequest(filterParams);
       // @ts-ignore
-      setAllRequest(res.data.result.results);
-      // @ts-ignore
-      setTotalResults(res.data.result.totalPages);
+      if (res.data.result.results) {
+        // @ts-ignore
+        setAllRequest(res.data.result.results);
+        // @ts-ignore
+        setTotalResults(res.data.result.totalPages);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      
     }
-    setIsLoading(false);
   };
   const handlePageSize = (val: any) => {
     setPageSize(val);

@@ -52,7 +52,7 @@ const DeleteBlogModal: React.FC<BlogModalProps> = ({
                 ? ButtonType.DISABLED
                 : ButtonType.SECONDARY
             }
-            style="border w-[50%] border-primary font-semibold rounded-md !text-primary p-2"
+            style="border w-[50%] border-primary font-semibold rounded-md !text-accent-darker p-2"
           />
           <AppButton
             disabled={isLoading}

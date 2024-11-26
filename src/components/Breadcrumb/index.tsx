@@ -82,7 +82,7 @@ export const BreadCrumbWithBackButton = ({
       <div className="flex cursor-pointer items-center">
         {showBackButton && (
           <span onClick={handleBackAction}>
-            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-primary text-[18px]" />
+            <MdOutlineKeyboardBackspace className="font-bold mr-2 text-accent-darker text-[18px]" />
           </span>
         )}
         {backText && (
@@ -95,7 +95,7 @@ export const BreadCrumbWithBackButton = ({
         )}
       </div>
 
-      <span className="ml-1 text-primary font-semibold">{currentPath}</span>
+      <span className="ml-1 text-accent-darker font-semibold">{currentPath}</span>
     </div>
   );
 };

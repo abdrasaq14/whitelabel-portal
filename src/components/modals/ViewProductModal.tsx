@@ -51,7 +51,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
               <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
                 Product Type
               </h2>
-              <p className="text-primary text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
+              <p className="text-accent-darker text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
                 {product.type} Product
               </p>
             </div>
