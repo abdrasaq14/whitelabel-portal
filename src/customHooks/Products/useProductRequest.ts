@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { ProductService } from "@/services/product";
 import { IQueryParams, User } from "@/interfaces/AppInterfaces";
@@ -26,7 +26,7 @@ const useProductRequest = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      
+      setIsLoading(false);
     }
   };
   const handlePageSize = (val: any) => {
@@ -50,7 +50,7 @@ const useProductRequest = () => {
     }
   }, [currentUser?.user?.whiteLabelName, pageSize, currentPage]);
   return {
-      allRequest,
+    allRequest,
     totalResults,
     isLoading,
     showFilter,
