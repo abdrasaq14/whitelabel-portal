@@ -36,31 +36,11 @@ const useMerchantDetails = (merchantId: string) => {
   const fetchMerchantInfo = async () => {
     try {
       await dispatch(fetchMerchantDetails(merchantId));
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
   };
-
-  // const SuspendMerchant = async (reason: string, action:'suspend' | 'unsuspend') => {
-  //   try {
-  //     const values = {
-  //       action,
-  //       platform: currentUser.user.whiteLabelName,
-  //       reason
-  //     };
-  //     const res: any = await MerchantService.suspendMerchant(
-  //       values,
-  //       merchantId
-  //     );
-  //     if (res.data.result) {
-  //       toast.success(action === 'suspend' ? "account suspended" : "account unsuspended");
-  //       return;
-  //     }
-  //     toast.error(action === 'suspend' ? "Failed to suspend account" : "Failed to unsuspend account");
-  //   } catch (error: any) {
-  //     toast.error(error || "An error occured");
-  //   }
-  // };
 
   const SuspendMerchant = async (
     reason: string,
@@ -88,20 +68,24 @@ const useMerchantDetails = (merchantId: string) => {
   };
 
   const fetchMerchantProducts = async (query: IQueryParams) => {
-    
-    const res: any = await MerchantService.getMerchantProducts(query);
+    try {
+      const res: any = await MerchantService.getMerchantProducts(query);
 
-    if (res.data.result.results) {
-      setAllProduct(res.data.result.results);
-      setTotalResults(res.data.result.totalPages);
+      if (res.data.result.results) {
+        setAllProduct(res.data.result.results);
+        setTotalResults(res.data.result.totalPages);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
     }
-
-    setIsLoading(false);
   };
 
-  const fetchProductSold = async (query: IQueryParams) => { 
+  const fetchProductSold = async (query: IQueryParams) => {
     try {
-      const res: any = await MerchantService.getProductSoldByMerchant(query);
+      const res: any = await MerchantService.getMerchantProducts(query);
       if (res.data.result.results) {
         setProductSold(res.data.result.results);
         setTotalResults(res.data.result.totalPages);
@@ -111,11 +95,9 @@ const useMerchantDetails = (merchantId: string) => {
       setIsLoading(false);
       console.log(error);
     }
-  }
-
+  };
   useEffect(() => {
     if (tabIndex === 1) {
-      setIsLoading(true);
       fetchMerchantProducts({
         merchantId,
         limit: pageSize,
@@ -123,19 +105,19 @@ const useMerchantDetails = (merchantId: string) => {
       });
     }
     if (tabIndex === 2) {
-      setIsLoading(true);
       fetchProductSold({
         merchantId,
         limit: pageSize,
         page: currentPage,
       });
     }
-  }, [tabIndex, pageSize, currentPage, merchantId]);
-
+  }, [merchantId, pageSize, currentPage]);
 
   useEffect(() => {
     console.log("fetching merchant detailsHook", merchantId);
-    fetchMerchantInfo();
+    if (!merchant) {
+      fetchMerchantInfo();
+    }
   }, [dispatch, merchantId]);
   const closeViewModal = () => {
     setIsViewModalOpen(false);
