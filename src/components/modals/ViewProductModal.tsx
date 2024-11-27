@@ -18,7 +18,7 @@ interface ViewProductModalProps {
 export const ViewProductModal: React.FC<ViewProductModalProps> = ({
   product,
   closeViewModal,
-  isOpen
+  isOpen,
 }) => {
   const {
     isRequested,
@@ -28,7 +28,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
     toggleProductBan,
     handleAddProduct,
     handleProductAddedSuccess,
-    currentUser
+    currentUser,
   } = useViewProduct({ product, isOpen, closeViewModal });
   return (
     <AppModal isOpen={isOpen} hasClose={true} closeClicked={closeViewModal}>
@@ -38,23 +38,21 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
             media={[product?.image, ...(product?.gallery_image || [])]}
           />
         </div>
-        <div className="col-span-2 sm:col-span-1 flex flex-col gap-4 ">
-          <div className="w-full flex justify-between font-satoshiBold text-accent-darker items-center">
+        <div className="col-span-2  sm:col-span-1 flex flex-col gap-4 items-start">
+          <div className="w-full flex flex-col items-start justify-between font-satoshiBold text-accent-darker">
             <h1 className=" text-2xl">{product.name}</h1>
             <p className="text-sm ">N{product.price}</p>
           </div>
           <p className="text-accent-darker font-normal text-sm">
             {product.caption}
           </p>
-          <div className="flex justify-between">
-            <div>
-              <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
-                Product Type
-              </h2>
-              <p className="text-accent-darker text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
-                {product.type} Product
-              </p>
-            </div>
+          <div className="flex flex-col items-start justify-between">
+            <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
+              Product Type
+            </h2>
+            <p className="text-accent-darker text-xs bg-foundation-lightPurple px-2 py-1 w-auto text-center mt-2 ">
+              {product.type} Product
+            </p>
             <div>
               <h2 className="font-bold font-satoshiBold text-sm text-accent-darker">
                 Categories
