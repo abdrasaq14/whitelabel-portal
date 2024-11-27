@@ -13,6 +13,7 @@ export enum TextboxType {
     TEXT = "text",
     PASSWORD = "password",
     EMAIL = "email"
+    DATE = "date"
 }
 
 export enum ModalHeaderType {

@@ -170,7 +170,7 @@ export interface FileUploadProps {
 }
 
 export interface IUseBlogBostProps {
-  id?: string;
+  id?: string | undefined;
 }
 export interface IBlogPayload {
   _id?: string;

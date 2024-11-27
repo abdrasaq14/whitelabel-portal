@@ -7,6 +7,6 @@ export const useCustomFormik = (initialValues: any, onSubmit: (values: any) => v
       validationSchema,
       onSubmit,
     });
-  
+   console.log("Formik object in useCustomFormik:", formik); // Log everything
     return formik;
 };

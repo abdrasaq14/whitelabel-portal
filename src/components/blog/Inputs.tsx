@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { useField } from "formik";
 import axios from "axios";
@@ -19,6 +20,7 @@ export function TextInput({
   icon,
   ...restProps
 }: ITextInputProps) {
+  console.log("TextInput", name);
   const [field, meta] = useField(name);
 
   return (
@@ -69,6 +71,7 @@ export const Toggle: React.FC<IToggleInputProps> = ({
   );
 };
 
+
 const BlogFileUpload: React.FC<FileUploadProps> = ({
   name,
   wrapperClass,
@@ -81,6 +84,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
   ...restProps
 }) => {
   const [_, meta, helpers] = useField(name);
+    console.log("helpers", helpers);
   const [fileName, setFileName] = useState("");
   const [mainError, setMainError] = useState("");
   const [uploadError, setUploadError] = useState("");
@@ -93,7 +97,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         ? [
             "application/pdf",
             "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           ]
         : ["image/jpeg", "image/png", "image/jpg"];
     const minSize = 50 * 1024; // 50 KB
@@ -136,6 +140,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         formData
       );
       const fileUrl = response.data.secure_url;
+    
       helpers.setValue(fileUrl);
       setIsUploading(false);
     } catch (error) {
@@ -184,7 +189,7 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         <h3 className="mt-2">
           Drag & Drop files or{" "}
           <label
-            className="text-accent-darker cursor-pointer underline font-semibold"
+            className="text-primary cursor-pointer underline font-semibold"
             htmlFor={name}
           >
             Browse
@@ -205,13 +210,13 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
         <input
           onChange={handleFileChange}
           id={name}
-          // type="file"
+          type="file"
           disabled={disabled || isUploading}
           accept={
             fileType === "document" ? ".pdf,.doc,.docx" : ".png,.jpg,.jpeg,.svg"
           }
           className="cursor-pointer absolute opacity-0 h-full w-full"
-          {...restProps}
+          // {...restProps}
         />
       </div>
       <span className="text-red-500">{mainError}</span>
@@ -251,5 +256,6 @@ const BlogFileUpload: React.FC<FileUploadProps> = ({
     </div>
   );
 };
+
 
 export default BlogFileUpload;

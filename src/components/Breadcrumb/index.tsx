@@ -87,7 +87,7 @@ export const BreadCrumbWithBackButton = ({
         )}
         {backText && (
           <>
-            <Link href="/blog" className="mx-1">
+            <Link href="/Blog" className="mx-1">
               {backText}{" "}
             </Link>
             <span className="text-gray-300"> {" / "}</span>
