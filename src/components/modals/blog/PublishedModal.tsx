@@ -7,11 +7,11 @@ import { IPreviewPayload } from "@/interfaces/ComponentInterfaces";
 interface BlogModalProps {
   isOpen: boolean;
   handleClose: (isView: boolean) => void;
-  form?: any;
+  values?: any;
   blogDetails?: IPreviewPayload;
 }
-const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, form, blogDetails }) => {
-  const status = form ? form.values.status : blogDetails?.status;
+const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, values, blogDetails }) => {
+  const status = values ? values.status : blogDetails?.status;
   return (
     <AppModal
       hasClose={true}
@@ -37,7 +37,7 @@ const BlogPubLishedModal: React.FC<BlogModalProps> = ({ isOpen, handleClose, for
             Your post has been published and its now live!!
           </p>
         )}
-        <div className="w-full flex justify-between items-center gap-4 mt-6 mb-4">
+        <div className="w-full flex justify-between items-center gap-4 mt-8 mb-4">
           <AppButton
             text="Dismiss"
             handleClick={()=>handleClose(false)}

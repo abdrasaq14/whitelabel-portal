@@ -7,11 +7,12 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ uploadInterface, validF
   const { uploading, error, handleUpload } = useUpload();
 
   return (
-    <div>
+    // to make the whole div clickable
+    <div className='relative'>
       {uploadInterface}
       <input
       id="file-upload"
-      className="hidden"
+      className="cursor-pointer left-0 top-0 absolute opacity-0 h-full w-full"
       type="file"
       accept={validFormats}
       onChange={(event) => handleUpload(event, callback, otherData)}

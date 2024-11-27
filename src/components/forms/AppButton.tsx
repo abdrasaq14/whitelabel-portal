@@ -64,6 +64,7 @@ import Spinner from '../feedbacks/Spinner'
  */
 
 const AppButton = ({type, icon: Icon=null, iconPosition = "left", style=null, text, loader=null, handleClick, ...rest}: ButtonProps): ReactElement => {
+  console.log("TypeofButton", type)
   return (
     <button 
       type="submit" 

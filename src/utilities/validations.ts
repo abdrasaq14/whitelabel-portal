@@ -16,6 +16,8 @@ export const loginValidation = Yup.object({
 });
 
 
+
+
 export const BlogValidationSchema = Yup.object({
   title: Yup.string()
     .test("has-alphabet", "Title must contain at least one letter", (value) =>
@@ -30,19 +32,28 @@ export const BlogValidationSchema = Yup.object({
     .required("Title is required")
     .min(2, "Title is too short")
     .max(100, "Title is too long"),
+
   content: Yup.string().trim().required("Description is required"),
+
   image: Yup.string()
     .url("Image must be a valid URL")
-    .when("status", {
-      //@ts-ignore
-      is: "published",
-      then: Yup.string().required("Image is required"),
-      otherwise: Yup.string().nullable().notRequired()
-    }),
+    .nullable()
+    .test(
+      "required-if-published",
+      "Image is required when the status is 'published'",
+      function (value) {
+        const { status } = this.parent; // Access sibling field
+        return status === "published" ? !!value : true;
+      }
+    ),
+
   status: Yup.string().trim().required("Status is required"),
+
   allowComments: Yup.boolean(),
-  allowLikes: Yup.boolean()
+
+  allowLikes: Yup.boolean(),
 });
+
 export const AdminAccountInfoValidation = Yup.object().shape({
   companyName: Yup.string().required('Company name is required'),
   companyEmail: Yup.string().email('Invalid email').required('Company email is required'),

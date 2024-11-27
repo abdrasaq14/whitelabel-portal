@@ -1,5 +1,5 @@
 "use client";
-import { TextInput, Toggle } from "@/components/blog/Inputs";
+import { Toggle } from "@/components/blog/Inputs";
 import { IoCalendarOutline } from "react-icons/io5";
 import BlogFileUpload from "@/components/blog/Inputs";
 import { FormikProvider, useFormik } from "formik";
@@ -11,14 +11,20 @@ import { useBlogPost } from "@/customHooks/Blog/useBlogPost";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HandlePreviewPayload } from "@/interfaces/AppInterfaces";
 import AppButton from "../forms/AppButton";
-import { ButtonType, SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
 import BlogPubLishedModal from "../modals/blog/PublishedModal";
 import { useEffect, useState } from "react";
 import { useCustomFormik } from "@/customHooks/useCustomFormik";
 import { BlogValidationSchema } from "@/utilities/validations";
 import dynamic from "next/dynamic";
-
+import { ButtonType, SpinnerType, TextboxType } from "@/enums/ComponentEnums";
+import ValidationError from "../forms/ValidationError";
+import { BsExclamationCircle } from "react-icons/bs";
+import AppTextBox from "../forms/AppTextBox";
+import DocumentUpload from "../forms/DocumentUpload/DocumentUpload";
+import useUpload from "@/customHooks/useUpload";
+import AddInventoryImage from "../forms/DocumentUpload/AddInventoryImage";
+import UploadBlogImage from "./UploadBlogImage";
 interface CreateBlogProps {
   id?: string;
 }
@@ -29,9 +35,10 @@ const CustomEditor = dynamic(
 const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
   const router = useRouter();
   const {
-      error,
-      form,
-    setError,
+    blogError,
+    initialValues,
+    setBlogError,
+    onSubmit,
     setIsBlogEditing,
     setOpenModal,
     isLoading,
@@ -42,8 +49,38 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
     handleClickOutside,
     handlePreview,
   } = useBlogPost({ id });
-  
-  // console.log("formDetails", form.values, form.errors);
+  // const {
+  //   handleBlur,
+  //   handleChange,
+  //   getFieldProps,
+  //   errors,
+  //   values,
+  //   isSubmitting,
+  //   setFieldValue,
+  //   setFieldTouched,
+  //   validateField,
+  //   handleSubmit,
+  //   touched,
+  // } = useCustomFormik(initialValues, onSubmit, BlogValidationSchema);
+  const formik = useCustomFormik(initialValues, onSubmit, BlogValidationSchema);
+  console.log("formDetails", openModal);
+  console.log(
+    "getFieldProps for title:",
+    formik.getFieldProps("image"),
+    initialValues
+  );
+  const {
+    uploading,
+    handleHoldImage,
+    imageHolder,
+    error,
+  } = useUpload();
+  useEffect(() => {
+    if (imageHolder) {
+      formik.setFieldValue("image", imageHolder);
+    }
+  }, [imageHolder]);
+  // console.log("formDetailsFileName", fileName);
   return (
     <div className="px-4 pt-8 h-full">
       <div className="bg-white rounded-md h-auto min-h-[90%] w-full p-8 flex flex-col">
@@ -66,13 +103,15 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
               type="button"
               onClick={() =>
                 handlePreview({
-                  ...form.values,
+                  ...formik.values,
                   isFromEdit: id ? true : false,
                   publishedDate: new Date().toISOString(),
                 } as HandlePreviewPayload)
               } // pass isFromEdit to differentiate between edit and create
               disabled={
-                form.isSubmitting || !form.values.title || !form.values.content
+                formik.isSubmitting ||
+                !formik.values.title ||
+                !formik.values.content
               }
               className="border border-primary font-semibold hover:bg-purple-main disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-white hover:text-white rounded-md text-accent-darker p-2"
             >
@@ -82,7 +121,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
 
           {isLoading ? (
             <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
-          ) : error.trim() ? (
+          ) : blogError.trim() ? (
             <div className="w-full flex  flex-col items-center justify-center mt-8">
               <img
                 src={postNotAvailableImage.src}
@@ -93,40 +132,84 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 Oopss!!!
               </p>
               <p className="text-accent-darker text-center">
-                {error || "Post not found"}
+                {blogError || "Post not found"}
               </p>
             </div>
           ) : (
-            <FormikProvider value={form}>
-              <form className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8">
-                <TextInput
-                  maxLength={100}
-                  {...form.getFieldProps("title")}
-                  title="Blog Title"
-                  type="text"
-                  placeholder="Blog title"
-                  wrapperClass=""
-                />
-                <TextInput
-                  name="publishedDate"
-                  value={today}
-                  icon={<IoCalendarOutline />}
-                  disabled={true}
-                  title="Date"
-                  type="date"
-                  min={today}
-                  placeholder="Blog title"
-                  wrapperClass=" !w-[50%]"
-                />
+            <FormikProvider value={formik}>
+              <form
+                onSubmit={formik.handleSubmit}
+                className="w-full md:gap-8 grid grid-cols-1 md:grid-cols-2 justify-center mt-8"
+              >
+                <div className="w-full">
+                  <AppTextBox
+                    name="title"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.title}
+                    topLabel="Blog Title"
+                    type={TextboxType.TEXT}
+                    placeholder="Blog title"
+                    bottomLabel={
+                      formik.touched.title && formik.errors.title ? (
+                        <ValidationError
+                          icon={BsExclamationCircle}
+                          message={String(formik.errors.title)}
+                        />
+                      ) : (
+                        ""
+                      )
+                    }
+                  />
+                </div>
+                {/* <TextInput
+                maxLength={100}
+                {...getFieldProps("title")}
+                title="Blog Title"
+                type="text"
+                placeholder="Blog title"
+                wrapperClass=""
+              /> */}
+                <div className="!w-[50%]">
+                  <AppTextBox
+                    name="publishedDate"
+                    value={today}
+                    // leftIcon={<IoCalendarOutline />}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    topLabel="Date"
+                    type={TextboxType.DATE}
+                    disabled={true}
+                    placeholder=""
+                    bottomLabel={
+                      formik.touched.publishedDate &&
+                      formik.errors.publishedDate ? (
+                        <ValidationError
+                          icon={BsExclamationCircle}
+                          message={String(formik.errors.publishedDate)}
+                        />
+                      ) : (
+                        ""
+                      )
+                    }
+                  />
+                </div>
+                {/* <TextInput
+                name="publishedDate"
+                value={today}
+                disabled={true}
+                title="Date"
+                type="date"
+                min={today}
+                placeholder="Blog title"
+                wrapperClass=" !w-[50%]"
+              /> */}
                 {/* content */}
                 <div className="flex flex-col gap-2 col-span-1">
                   <span className="text-accent-darker font-semibold">
                     Content (Blog Description)
                   </span>
-                  <CustomEditor
-                    {...form.getFieldProps("content")}
-                    name="content"
-                  />
+                  <CustomEditor {...formik.getFieldProps("content")} />
                   {/* comment and like management */}
                 </div>
 
@@ -135,17 +218,44 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                   <span className="text-accent-darker font-semibold">
                     Blog Image
                   </span>
-                  <BlogFileUpload
-                    disabled={form.isSubmitting}
-                    setIsBlogEditing={setIsBlogEditing}
-                    // {...form.getFieldProps("image")}
-                    extraClass="min-h-[15rem]"
-                    name="image"
-                    fileType="image"
-                    type={"text"}
+                  <DocumentUpload
+                    uploadInterface={
+                      <UploadBlogImage
+                        loader={{
+                          loading: uploading,
+                          type: SpinnerType.PRIMARY,
+                          height: 25,
+                          width: 25,
+                        }}
+                        image={imageHolder}
+                        fileName={""}
+                        setFileName={() => {}}
+                        error={error || ""}
+                      />
+                    }
+                    validFormats=".jpeg,.png,.jpg"
+                    callback={handleHoldImage}
+                    // otherData={activeStaff?._id}
                   />
+                  {imageHolder == null ? (
+                    <ValidationError
+                      icon={BsExclamationCircle}
+                      message="image is required"
+                    />
+                  ) : (
+                    ""
+                  )}
+                  {/* <BlogFileUpload
+                  disabled={isSubmitting}
+                  setIsBlogEditing={setIsBlogEditing}
+                  {...getFieldProps("image")}
+                  extraClass="min-h-[15rem]"
+                  name="image"
+                  fileType="image"
+                  type={"text"}
+                /> */}
                   {/* uploaded images for edit post */}
-                  {id && form.values.image && isBlogEditing && (
+                  {id && formik.values.image && isBlogEditing && (
                     <div className="flex flex-col w-full mt-4 gap-2">
                       <span className="font-semibold">Uploaded Post Image</span>
                       <div
@@ -156,7 +266,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                           size={20}
                           color="#D42620"
                           onClick={() => {
-                            form.setFieldValue("image", "");
+                            formik.setFieldValue("image", "");
                             setIsBlogEditing(false);
                           }}
                           className="cursor-pointer"
@@ -172,9 +282,9 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                       <span className="text-accent-light3">Add comments</span>
                       <Toggle
                         name="allowComment"
-                        value={form.values.allowComments}
+                        value={formik.values.allowComments}
                         onChange={(value: boolean) =>
-                          form.setFieldValue("allowComments", value)
+                          formik.setFieldValue("allowComments", value)
                         }
                       />
                     </div>
@@ -182,9 +292,9 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                       <span className="text-accent-light3">Add Likes</span>
                       <Toggle
                         name="allowLikes"
-                        value={form.values.allowLikes}
+                        value={formik.values.allowLikes}
                         onChange={(value: boolean) =>
-                          form.setFieldValue("allowLikes", value)
+                          formik.setFieldValue("allowLikes", value)
                         }
                       />
                     </div>
@@ -195,60 +305,65 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
                 <div className="flex flex-col  col-span-1 sm:flex-row sm:justify-between gap-2 sm:gap-6 text-accent-darker mt-4">
                   <AppButton
                     text={`${
-                      form.isSubmitting && form.values.status === "draft"
+                      formik.isSubmitting && formik.values.status === "draft"
                         ? "Saving..."
                         : "Save as Draft"
                     }`}
                     type={
-                      form.isSubmitting && form.values.status === "draft"
+                      formik.isSubmitting && formik.values.status === "draft"
                         ? ButtonType.DISABLED
                         : ButtonType.SECONDARY
                     }
                     disabled={
-                      form.isSubmitting ||
-                      !form.values.title ||
-                      !form.values.content
+                      formik.isSubmitting ||
+                      !formik.values.title ||
+                      !formik.values.content
                     }
                     handleClick={async () => {
                       // Set the status to 'draft' before validation
-                      await form.setFieldValue("status", "draft");
+                      await formik.setFieldValue("status", "draft");
 
                       // Manually reset the validation for the 'image' field since it's optional for draft
-                      await form.setFieldTouched("image", false);
-                      await form.validateField("image"); // Re-run validation on image
+                      await formik.setFieldTouched("image", false);
+                      await formik.validateField("image"); // Re-run validation on image
 
                       // Submit form without worrying about image when draft
-                      form.handleSubmit();
+                      formik.handleSubmit();
                     }}
                     style="border font-semibold rounded-md min-w-[7.5rem] w-[50%] py-3"
                   />
                   <AppButton
                     text={`${
-                      form.isSubmitting && form.values.status === "published"
+                      formik.isSubmitting &&
+                      formik.values.status === "published"
                         ? "Publishing..."
                         : "Publish"
                     }`}
                     type={
-                      form.isSubmitting && form.values.status === "published"
+                      formik.isSubmitting &&
+                      formik.values.status === "published"
                         ? ButtonType.DISABLED
                         : ButtonType.PRIMARY
                     }
                     disabled={
-                      form.isSubmitting ||
-                      !form.values.title ||
-                      !form.values.content
+                      formik.isSubmitting ||
+                      !formik.values.title ||
+                      !formik.values.content
                     }
                     handleClick={async () => {
                       // Set status to 'published'
                       const publishedDate = new Date().toISOString();
-                      await form.setFieldValue("status", "published");
-                      await form.setFieldValue("publishedDate", publishedDate);
+                      await formik.setFieldValue("status", "published");
+                      await formik.setFieldValue(
+                        "publishedDate",
+                        publishedDate
+                      );
 
                       // Mark the image field as touched so the validation message can be shown
-                      await form.setFieldTouched("image", true);
+                      await formik.setFieldTouched("image", true);
 
                       // Trigger form validation and handle form submission
-                      form.handleSubmit();
+                      formik.handleSubmit();
                     }}
                     style="font-semibold rounded-md  min-w-[7.5rem] w-[50%] py-2"
                   />
@@ -261,7 +376,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ id }) => {
       <BlogPubLishedModal
         isOpen={openModal}
         handleClose={(isView) => handleClickOutside(isView)}
-        form={form}
+        values={formik.values}
       />
     </div>
   );

@@ -1,204 +1,140 @@
-import { useState, useEffect } from "react";
-import { useFormik } from "formik";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter as navigate } from "next/navigation";
 import { BlogService } from "@/services/blog";
 import { encrypt, decrypt } from "@/utilities/helperFunctions";
 import toast from "react-hot-toast";
 import useStorage from "../useStorage";
 import { addPost, updatePost } from "@/store/slices/blogSlice";
-import { BlogValidationSchema } from "@/utilities/validations";
 import {
   IBlogPayload,
   IComments,
   IUseBlogBostProps,
 } from "@/interfaces/ComponentInterfaces";
-import { User } from "@/interfaces/AppInterfaces";
 import { useAppDispatch } from "@/store/hooks";
 
 export const useBlogPost = ({ id }: IUseBlogBostProps) => {
   const { currentUser } = useStorage();
-
-  const [error, setError] = useState("");
-
+  const [blogError, setBlogError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
   const [isBlogEditing, setIsBlogEditing] = useState(true);
-
   const [openModal, setOpenModal] = useState(false);
-
   const [blogId, setBlogId] = useState("");
-
   const navigateTo = navigate();
-
   const today = new Date().toISOString().split("T")[0];
-
   const dispatch = useAppDispatch();
 
-  const form = useFormik({
-    initialValues: {
-      authorId: currentUser?.user?._id,
+  // Default Initial Values
+  const defaultValues = {
+    authorId: currentUser?.user?._id,
+    title: "",
+    content: "",
+    image: "",
+    comments: [] as IComments[],
+    status: "draft",
+    likes: 0,
+    shares: 0,
+    allowComments: true,
+    allowLikes: true,
+    publishedDate: "",
+    whiteLabelName: currentUser?.user?.whiteLabelName,
+  };
 
-      title: "",
-
-      content: "",
-
-      image: "",
-
-      comments: [] as IComments[],
-
-      status: "draft",
-
-      likes: 0,
-
-      shares: 0,
-
-      allowComments: true,
-
-      allowLikes: true,
-
-      publishedDate: "",
-
-      whiteLabelName: currentUser?.user?.whiteLabelName,
-    },
-
-    validationSchema: BlogValidationSchema,
-
-    onSubmit: (values) => {
-      handleSubmit(values as IBlogPayload);
-    },
-  });
+  const [initialValues, setInitialValues] = useState(defaultValues);
 
   const handleSubmit = async (values: IBlogPayload) => {
     try {
       if (id) {
         await dispatch(updatePost({ id, updatedPayload: values }));
-
-        // return await BlogService.updateBlog(id, values);
       } else {
         const postToAdd = await dispatch(addPost(values));
-
+        console.log("formDetails", postToAdd);
         if (postToAdd.payload) {
+          
           setBlogId(postToAdd.payload.result._id);
-
-          return postToAdd;
         }
       }
-
-      form.setSubmitting(false);
-
       localStorage.removeItem("_Blog");
-
       toast.success(id ? "Blog post updated" : "Blog post created");
-
       setOpenModal(true);
     } catch (error: any) {
-      form.setSubmitting(false);
-
-      setError(error);
+      console.log("formDetailserror", error);
+      setBlogError(error.message || "An error occurred");
     }
-
-    // return await BlogService.create(values);
   };
 
   const handlePreview = (value: IBlogPayload & { isFromEdit: boolean }) => {
     localStorage.setItem("_Blog", encrypt(JSON.stringify(value)));
-
     navigateTo.push("/Blog/Preview");
   };
 
   const handleClickOutside = (isView: boolean) => {
-    form.resetForm();
-
     if (isView) {
-      navigateTo.push(`/Blog/View/${id || blogId}`);
+      navigateTo.push(`/Blog/${id || blogId}`);
     } else {
       navigateTo.push(`/Blog`);
     }
-
     setOpenModal(false);
   };
 
   useEffect(() => {
-    if (id) {
-      const localBlogDetails = localStorage.getItem("_Blog");
-
-      if (localBlogDetails) {
-        const blogDetails: IBlogPayload = decrypt(localBlogDetails);
-
-        if (blogDetails._id === id) {
-          form.setValues({
-            ...blogDetails,
-
-            publishedDate: blogDetails.publishedDate || "",
-          });
-
-          setIsLoading(false);
-
-          return;
-        }
-      }
-
-      BlogService.viewBlog(id)
-
-        .then((res: any) => {
-          if (res.data.result) {
-            setError("");
-
-            const blogDetails = res.data.result;
-
-            blogDetails.publishedDate = new Date(blogDetails.publishedDate)
-
-              .toISOString()
-
-              .split("T")[0];
-
-            form.setValues(blogDetails);
-
+    const loadInitialValues = async () => {
+      if (id) {
+        const localBlogDetails = localStorage.getItem("_Blog");
+        if (localBlogDetails) {
+          const blogDetails: IBlogPayload = decrypt(localBlogDetails);
+          if (blogDetails._id === id) {
+            setInitialValues({
+              ...blogDetails,
+              publishedDate: blogDetails.publishedDate || "",
+            });
             setIsLoading(false);
-          } else {
-            setError("Post Detail not found");
+            return;
           }
-        })
-
-        .catch(() => {
-          setError("Failed to fetch blog post");
-
+        }
+        try {
+          const res:any = await BlogService.viewBlog(id);
+          const blogDetails = res.data.result;
+          if (blogDetails) {
+            setInitialValues({
+              ...blogDetails,
+              publishedDate: new Date(blogDetails.publishedDate)
+                .toISOString()
+                .split("T")[0],
+            });
+            setBlogError("");
+          } else {
+            setBlogError("Post Detail not found");
+          }
+        } catch {
+          setBlogError("Failed to fetch blog post");
+        } finally {
           setIsLoading(false);
-        });
-    } else {
-      const localBlogDetails = localStorage.getItem("_Blog");
+        }
+      } else {
+        const localBlogDetails = localStorage.getItem("_Blog");
+        if (localBlogDetails) {
+          setInitialValues(decrypt(localBlogDetails));
+        }
+        setIsLoading(false);
+      }
+    };
 
-      if (localBlogDetails) {
-        form.setValues(decrypt(localBlogDetails));
-
-    }
-    setIsLoading(false);
-    }
+    loadInitialValues();
   }, [id]);
 
   return {
-    form,
-
+    initialValues,
+    onSubmit: handleSubmit,
     isLoading,
-
     setIsLoading,
-
-    error,
-
-    setError,
-
+    blogError,
+    setBlogError,
     isBlogEditing,
-
     setIsBlogEditing,
-
     openModal,
-
     setOpenModal,
-
     handleClickOutside,
-
     handlePreview,
-
     today,
   };
 };

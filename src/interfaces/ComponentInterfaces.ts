@@ -5,7 +5,7 @@ import { IconType } from "react-icons";
 import { User } from "./AppInterfaces";
 
 
-interface LoaderProps {
+export interface LoaderProps {
     loading?: boolean;
     width?: number;
     height?: number;
