@@ -90,7 +90,7 @@ const AppTextBox = ({leftIcon: LeftIcon=null, rightIcon: RightIcon=null, placeho
             {TopLabel && typeof TopLabel === "string" ? <span className="input-label">{TopLabel}</span> : TopLabel}
             <div className="input-wrapper">
                 {LeftIcon && <LeftIcon size={20} className='text-accent-light3' />}
-                <input className='input-box' name={name} value={value} onChange={onChange} onBlur={onBlur} disabled={disabled} placeholder={placeholder} type={type === "password" ? localType : type} />
+                <input className='input-box text-accent-darker' name={name} value={value} onChange={onChange} onBlur={onBlur} disabled={disabled} placeholder={placeholder} type={type === "password" ? localType : type} />
                 {(type === "password" && (localType === "password" ? <AiOutlineEye onClick={() => handlePasswordView("text")} className="cursor-pointer text-accent-light3"/> : <AiOutlineEyeInvisible onClick={() => handlePasswordView("password")}  className="cursor-pointer text-accent-light3"/>)) || RightIcon && <RightIcon size={20} className='text-accent-light3' />}
             </div>
             {BottomLabel && typeof BottomLabel === "string" ? <span className="input-label">{BottomLabel}</span> : BottomLabel}
