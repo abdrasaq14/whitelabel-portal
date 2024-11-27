@@ -32,7 +32,7 @@ const useMerchantDetails = (merchantId: string) => {
   const accountTabTitle = ["Overview", "All Products", "Product Sold"];
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isSuspendOpen, setIsSuspendOpen] = useState(false);
-
+console.log("TabeIndex", tabIndex);
   const fetchMerchantInfo = async () => {
     try {
       await dispatch(fetchMerchantDetails(merchantId));
@@ -85,7 +85,7 @@ const useMerchantDetails = (merchantId: string) => {
 
   const fetchProductSold = async (query: IQueryParams) => {
     try {
-      const res: any = await MerchantService.getMerchantProducts(query);
+      const res: any = await MerchantService.getProductSoldByMerchant(query);
       if (res.data.result.results) {
         setProductSold(res.data.result.results);
         setTotalResults(res.data.result.totalPages);
@@ -95,75 +95,93 @@ const useMerchantDetails = (merchantId: string) => {
       setIsLoading(false);
       console.log(error);
     }
-  };
-  useEffect(() => {
-    if (tabIndex === 1) {
+  }
+    // };
+    // useEffect(() => {
+    //   if (tabIndex === 1) {
+    //     fetchMerchantProducts({
+    //       merchantId,
+    //       limit: pageSize,
+    //       page: currentPage,
+    //     });
+    //   }
+    //   if (tabIndex === 2) {
+    //     fetchProductSold({
+    //       merchantId,
+    //       limit: pageSize,
+    //       page: currentPage,
+    //     });
+    //   }
+    // }, [merchantId, pageSize, currentPage]);
+
+    // not ideal, i need to fix the re-render issue in the parent componentn
+    useEffect(() => {
       fetchMerchantProducts({
         merchantId,
         limit: pageSize,
         page: currentPage,
       });
-    }
-    if (tabIndex === 2) {
+    }, [merchantId, pageSize, currentPage]);
+
+    useEffect(() => {
       fetchProductSold({
         merchantId,
         limit: pageSize,
         page: currentPage,
       });
-    }
-  }, [merchantId, pageSize, currentPage]);
+    }, [merchantId, pageSize, currentPage]);
 
-  useEffect(() => {
-    console.log("fetching merchant detailsHook", merchantId);
-    if (!merchant) {
-      fetchMerchantInfo();
-    }
-  }, [dispatch, merchantId]);
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+    useEffect(() => {
+      console.log("fetching merchant detailsHook", merchantId);
+      if (!merchant?.businessName) {
+        fetchMerchantInfo();
+      }
+    }, [dispatch, merchantId]);
+    const closeViewModal = () => {
+      setIsViewModalOpen(false);
+    };
 
-  const handlePageSize = (val: any) => {
-    setPageSize(val);
-    // setFilterParams({ ...filterParams, pageSize: val });
-  };
+    const handlePageSize = (val: any) => {
+      setPageSize(val);
+      // setFilterParams({ ...filterParams, pageSize: val });
+    };
 
-  const handleCurrentPage = (val: any) => {
-    setCurrentPage(val);
-    // setFilterParams({ ...filterParams, pageNum: val - 1 });
-  };
-  const handleViewProductInfo = (row: any) => {
-    setProduct(row);
-    setIsViewModalOpen(true);
-    console.log(row, "row");
-  };
-  return {
-    product,
-    allProducts,
-    productSold,
-    merchantLoading,
-    isLoading,
-    totalResults,
-    isViewModalOpen,
-    setIsViewModalOpen,
-    pageSize,
-    currentPage,
-    setCurrentPage,
-    handlePageSize,
-    handleCurrentPage,
-    closeViewModal,
-    handleViewProductInfo,
-    fetchMerchantDetails,
-    merchant,
-    accountTabTitle,
-    tabIndex,
-    setTabIndex,
-    isSuspendOpen,
-    setIsSuspendOpen,
-    SuspendMerchant,
-    // startConversation,
-    currentUser: currentUser?.user,
-  };
-};
+    const handleCurrentPage = (val: any) => {
+      setCurrentPage(val);
+      // setFilterParams({ ...filterParams, pageNum: val - 1 });
+    };
+    const handleViewProductInfo = (row: any) => {
+      setProduct(row);
+      setIsViewModalOpen(true);
+      console.log(row, "row");
+    };
+    return {
+      product,
+      allProducts,
+      productSold,
+      merchantLoading,
+      isLoading,
+      totalResults,
+      isViewModalOpen,
+      setIsViewModalOpen,
+      pageSize,
+      currentPage,
+      setCurrentPage,
+      handlePageSize,
+      handleCurrentPage,
+      closeViewModal,
+      handleViewProductInfo,
+      fetchMerchantDetails,
+      merchant,
+      accountTabTitle,
+      tabIndex,
+      setTabIndex,
+      isSuspendOpen,
+      setIsSuspendOpen,
+      SuspendMerchant,
+      // startConversation,
+      currentUser: currentUser?.user,
+    };
+  }
 
 export default useMerchantDetails;
