@@ -15,7 +15,9 @@ const Overview = ({ merchant }: { merchant: any }) => {
               <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                 Status
               </p>
-              <p className={`mt-1  text-sm font-medum font-satoshiMedium   `}>
+              <p
+                className={`mt-1  text-sm font-medum font-satoshiMedium   text-accent-dark4`}
+              >
                 {merchant && merchant?.platformAccess && (
                   <span
                     className={`px-2 py-1 rounded-md   ${
@@ -35,19 +37,19 @@ const Overview = ({ merchant }: { merchant: any }) => {
                 )}
               </p>
             </div>
-            <div>
-              <div className="mt-2">
+            <div className="flex flex-col gap-4 mt-4">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Rating
                 </p>
-                <div className="flex gap-2 items-center mt-1">
+                <div className="flex gap-2 items-center mt-1 ">
                   <p className=" text-accent-light text-base font-medum font-satoshiMedium">
                     {merchant?.rating}/5
                   </p>
                   <StarRating totalRatings={merchant?.rating} />
                 </div>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Store Name
                 </p>
@@ -55,7 +57,7 @@ const Overview = ({ merchant }: { merchant: any }) => {
                   {merchant?.businessName}
                 </p>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Store Link
                 </p>
@@ -66,19 +68,19 @@ const Overview = ({ merchant }: { merchant: any }) => {
                   <CopyToClipboard text={merchant?.storeLink} />
                 </div>
               </div>
-              <div className="mt-2 w-full">
+              <div className=" w-full">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Product Categories
                 </p>
                 <h3>{merchant?.category}</h3>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Location
                 </p>
                 <p className="mt-1 text-accent-light text-base font-medum font-satoshiMedium "></p>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Store Address
                 </p>
@@ -86,7 +88,7 @@ const Overview = ({ merchant }: { merchant: any }) => {
                   {merchant?.location?.address}
                 </p>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <p className="font-medum font-satoshiMedium text-sm text-accent-darker">
                   Date Joined
                 </p>

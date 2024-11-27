@@ -40,7 +40,7 @@ export const SuspendModal = ({
           </h3>
 
           <div className="mt-4 w-full">
-            <label className="text-xs text-gray-600">
+            <label className="text-xs text-accent-dark4">
               Kindly provide a reason
             </label>
             <textarea
@@ -49,16 +49,18 @@ export const SuspendModal = ({
               placeholder="Provide reason"
             />
           </div>
-          <div className="w-full flex mt-4 justify-center gap-2  ">
+          <div className="w-[80%] mx-auto flex mt-4 justify-between gap-2  ">
             <AppButton
               text="Cancel"
               handleClick={() => closeModal()}
               type={ButtonType.SECONDARY}
+              style={"w-[45%] max-w-[45%]"}
             />
             <AppButton
               handleClick={handleConfirmDelete}
               text="Submit"
               type={ButtonType.PRIMARY}
+              style={"w-[45%] max-w-[45%]"}
               //   icon={<MdOutlineArrowForward size={12} />}
             />
           </div>
@@ -77,18 +79,20 @@ export const SuspendModal = ({
               Are you sure you want to suspend this Account ?
             </p>
           </div>
-          <div className="w-full flex mt-4 gap-4 justify-between  ">
+          <div className="w-[80%] mx-auto flex mt-4 gap-4 justify-between  ">
             <AppButton
               text="Cancel"
               handleClick={() => closeModal()}
               type={ButtonType.SECONDARY}
+              style={"w-[45%] max-w-[45%]"}
             />
             <AppButton
               text="Yes"
               handleClick={() => setIsConfirm(true)}
               type={ButtonType.PRIMARY}
+              style={"w-[45%] max-w-[45%]"}
               //   icon={<MdOutlineArrowForward size={12} />}
-/>
+            />
           </div>
         </>
       )}

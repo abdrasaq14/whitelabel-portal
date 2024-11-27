@@ -16,7 +16,7 @@ const useMerchantDetails = (merchantId: string) => {
   const dispatch = useAppDispatch();
   const merchantSlice = useAppSelector(selectMerchantDetail);
   const [allProducts, setAllProduct] = useState([]);
-
+  const [productSold, setProductSold] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const merchantLoading = merchantSlice.loading;
   const [totalResults, setTotalResults] = useState(0);
@@ -88,6 +88,7 @@ const useMerchantDetails = (merchantId: string) => {
   };
 
   const fetchMerchantProducts = async (query: IQueryParams) => {
+    
     const res: any = await MerchantService.getMerchantProducts(query);
 
     if (res.data.result.results) {
@@ -98,18 +99,39 @@ const useMerchantDetails = (merchantId: string) => {
     setIsLoading(false);
   };
 
+  const fetchProductSold = async (query: IQueryParams) => { 
+    try {
+      const res: any = await MerchantService.getProductSoldByMerchant(query);
+      if (res.data.result.results) {
+        setProductSold(res.data.result.results);
+        setTotalResults(res.data.result.totalPages);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    if (currentUser?.user?.whiteLabelName) {
-      //   setIsLoading(true);
+    if (tabIndex === 1) {
+      setIsLoading(true);
       fetchMerchantProducts({
         merchantId,
-
         limit: pageSize,
-
         page: currentPage,
       });
     }
-  }, [merchantId, pageSize, currentPage]);
+    if (tabIndex === 2) {
+      setIsLoading(true);
+      fetchProductSold({
+        merchantId,
+        limit: pageSize,
+        page: currentPage,
+      });
+    }
+  }, [tabIndex, pageSize, currentPage, merchantId]);
+
 
   useEffect(() => {
     console.log("fetching merchant detailsHook", merchantId);
@@ -136,6 +158,7 @@ const useMerchantDetails = (merchantId: string) => {
   return {
     product,
     allProducts,
+    productSold,
     merchantLoading,
     isLoading,
     totalResults,

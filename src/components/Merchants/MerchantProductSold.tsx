@@ -9,7 +9,7 @@ import useMerchantDetails from "@/customHooks/Merchants/useMerchantDetail";
 
 const ProductsSold = ({ id }: { id: string }) => {
   const {
-    allProducts,
+    productSold,
     totalResults,
     currentPage,
     setCurrentPage,
@@ -66,11 +66,11 @@ const ProductsSold = ({ id }: { id: string }) => {
         <div className="h-full flex-grow flex justify-center items-center">
           <Spinner type={SpinnerType.PRIMARY} height={50} width={50} />
         </div>
-      ) : allProducts && allProducts.length ? (
+      ) : productSold && productSold.length ? (
         <>
           <Table
             columns={columns}
-            data={allProducts && allProducts}
+            data={productSold && productSold}
             // additionalActions={additionalActions}
           />
 
