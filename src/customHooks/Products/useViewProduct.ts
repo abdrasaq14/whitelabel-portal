@@ -78,6 +78,7 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
       const res: any = await ProductService.sendProductRequest(values);
       if (res.data.status === "Fail") {
         toast.error(res.data.message);
+        return
       } else {
         setIsConfirmModalOpen(false);
         toast.success("Request to add the this product has been sent.");
@@ -93,7 +94,7 @@ const useViewProduct = ({product, isOpen, closeViewModal}: useViewProductProps) 
       {
         product: {
           productId: product.id,
-          productOwnerId: product.userId,
+          productOwnerId: product.userId.id,
           productName: product.name
         },
         whiteLabelClient: {

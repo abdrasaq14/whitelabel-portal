@@ -7,7 +7,7 @@ import SearchInput from "../forms/SearchInput";
 import { MdFilterList } from "react-icons/md";
 import Table from "../layouts/Table";
 import Pagination from "../feedbacks/Pagination";
-import { formatDate, isEmpty } from "@/utilities/helperFunctions";
+import { fDate, isEmpty } from "@/utilities/helperFunctions";
 import { SpinnerType } from "@/enums/ComponentEnums";
 import Spinner from "../feedbacks/Spinner";
 import FilterButton from "../Filter/FilterButton";
@@ -48,7 +48,7 @@ function ProductRequest() {
       key: "Request Date",
       label: "Request Date",
       render: (row: any) => (
-        <div>{row.createdAt && formatDate(row.createdAt)}</div>
+        <div>{row.createdAt && fDate(row.createdAt)}</div>
       )
     },
 

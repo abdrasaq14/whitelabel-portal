@@ -30,10 +30,16 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
     handleProductAddedSuccess,
     currentUser,
   } = useViewProduct({ product, isOpen, closeViewModal });
+  console.log(
+    "Viewmodal",
+    currentUser,
+    isLoading,
+    currentUser?.user?.role !== "Staff"
+  );
   return (
-    <AppModal isOpen={isOpen} hasClose={true} closeClicked={closeViewModal}>
-      <div className="grid grid-cols-2 w-full gap-8">
-        <div className="col-span-2 sm:col-span-1 flex flex-col gap-4">
+    <AppModal isOpen={isOpen} hasClose={true} closeClicked={closeViewModal} style="overflow-y-auto">
+      <div className="grid grid-cols-2 w-full gap-4 sm:min-w-[450px] overflow-y-auto">
+        <div className=" col-span-2 sm:col-span-1 flex flex-col gap-4">
           <ProductImageCarousel
             media={[product?.image, ...(product?.gallery_image || [])]}
           />
@@ -115,7 +121,7 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-wrap justify-between gap-4">
+      <div className="w-full flex flex-wrap justify-between gap-4 mt-10">
         <div className="gap-4 flex w-full justify-between">
           {currentUser?.user?.role !== "Staff" && !isLoading && (
             <div className="flex gap-4 justify-between w-full">
@@ -142,14 +148,12 @@ export const ViewProductModal: React.FC<ViewProductModalProps> = ({
                   />
                 </div>
               ) : (
-                <button
-                  type="button"
-                  onClick={handleAddProduct}
-                  disabled={false}
-                  className={` text-sm inline-flex gap-2 rounded-lg items-center justify-center text-center   px-12 py-3  font-medium bg-primary text-white`}
-                >
-                  Add Product
-                </button>
+                  <AppButton
+                    style={"!w-[80%] !mx-auto"}
+                  handleClick={handleAddProduct}
+                  text="Add Product"
+                    type={isLoading ? ButtonType.DISABLED : ButtonType.PRIMARY}
+                  />
               )}
             </div>
           )}

@@ -22,8 +22,6 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
   const thumbnailContainerRef = useRef<HTMLDivElement>(null);
 
   const mainCarouselSettings = {
-    className: "!max-w-[250px]",
-  
     dots: false,
   
     infinite: media.length > 1,
@@ -105,7 +103,7 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
     
         {media.map((item, index) => (
     
-          <div key={index} className="w-full flex h-[150px] !max-w-[250px]">
+          <div key={index} className="w-full flex h-[150px] ">
           
             {isVideo(item) ? (
           
