@@ -27,11 +27,11 @@ const Products = ({ id }: { id: string }) => {
       label: "Product Name",
       render: (row: any) => <div>{row.name}</div>
     },
-    {
-      key: "Merchant",
-      label: "Merchant",
-      render: (row: any) => <div>{row.productOwner}</div>
-    },
+    // {
+    //   key: "Merchant",
+    //   label: "Merchant",
+    //   render: (row: any) => <div>{row.productOwner}</div>
+    // },
     {
       key: "Category",
       label: "Category",

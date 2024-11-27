@@ -33,15 +33,15 @@ const ProductsSold = ({ id }: { id: string }) => {
       )
     },
 
-    {
-      key: "Merchant",
-      label: "Merchant",
-      render: (row: any) => (
-        <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
-          {row?.productOwner}{" "}
-        </div>
-      )
-    },
+    // {
+    //   key: "Merchant",
+    //   label: "Merchant",
+    //   render: (row: any) => (
+    //     <div className="whitespace-wrap text-wrap text-ellipsis !whitespace-normal">
+    //       {row?.productOwner}{" "}
+    //     </div>
+    //   )
+    // },
 
     {
       key: "Category",

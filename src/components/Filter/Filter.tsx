@@ -112,7 +112,7 @@ const Filter: FunctionComponent<FilterITF> = ({
         <div className="fixed top-0 border left-0 right-0 bottom-0 items-center max-w-44 min-w-44 h-screen">
           <div
             ref={filterRef}
-            className="items-center py-2 px-2 w-[300px] h-screen bg-white rounded"
+            className="items-center py-2 px-2 w-[300px] h-screen bg-white rounded text-accent-darker"
           >
             <div className="modal-head flex justify-between items-center px-3 pt-6">
               <div className="">

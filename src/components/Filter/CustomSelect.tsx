@@ -67,7 +67,7 @@ const Select: React.FC<SelectProps> = ({ options, name, onSelect = (f) => f, isM
   return (
     <div ref={inputRef} className="w-full relative">
 
-      <button onClick={() => setIsOpen(!isOpen)} className='flex items-center my-1 rounded px-3 py-2 gap-2 mx-auto w-full border border-primary'><MdFilterList /> {name}</button>
+      <button onClick={() => setIsOpen(!isOpen)} className='flex items-center my-1 rounded px-3 py-2 gap-2 mx-auto w-full border border-accent-darker'><MdFilterList /> {name}</button>
 
       {isOpen && (
         <div className="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-md">

@@ -49,11 +49,11 @@ function AllMerchants() {
       render: (row: any) => <div>{row.businessName}</div>
     },
 
-    {
-      key: "Customer Rating",
-      label: "Customer Rating",
-      render: (row: any) => <div>{row?.rating}</div>
-    },
+    // {
+    //   key: "Customer Rating",
+    //   label: "Customer Rating",
+    //   render: (row: any) => <div>{row?.rating}</div>
+    // },
 
     {
       key: "Category",

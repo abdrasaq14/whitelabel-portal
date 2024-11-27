@@ -127,7 +127,8 @@ export interface IQueryParams {
     search?: string;
     status?: string;
     sortBy?: string;
-    category?: string;
+  category?: string;
+  location?: string;
 }
 export interface HandlePreviewPayload extends IBlogPayload {
   isFromEdit: boolean;

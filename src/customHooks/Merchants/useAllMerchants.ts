@@ -13,7 +13,7 @@ function useAllMerchants({ status }: { status?: string }) {
   const [showFilter, setShowFilter] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterParams, setFilterParams] = useState<IQueryParams>();
+  const [filterParams, setFilterParams] = useState<any>({});
   const { currentUser } = useStorage();
 // console.log("currentUSer", currentUser);
   const fetchAllMerchants = async (filterParams: IQueryParams) => {
@@ -43,14 +43,22 @@ function useAllMerchants({ status }: { status?: string }) {
   useEffect(() => {
     if (currentUser?.user?.whiteLabelName) {
       //   setIsLoading(true);
-      fetchAllMerchants({
+      const params:IQueryParams = {
         whiteLabelName: currentUser?.user?.whiteLabelName,
         limit: pageSize,
         page: currentPage,
         status,
-      });
+      }
+      if (search) {
+        params.search = search;
+      }
+      if (filterParams) {
+        params.location = filterParams.location;
+        params.sortBy = filterParams.sortBy;
+      }
+      fetchAllMerchants(params);
     }
-  }, [currentUser?.user?.whiteLabelName, pageSize, currentPage]);
+  }, [currentUser?.user?.whiteLabelName, pageSize, currentPage, search]);
   return {
     allMerchants,
     isLoading,
